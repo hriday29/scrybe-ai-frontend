@@ -87,7 +87,7 @@ const FeedbackWidget = () => {
                             onChange={(e) => setFeedbackText(e.target.value)}
                             rows="5"
                             className="w-full bg-slate-900/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-blue-500"
-                            placeholder={category === 'Share a Testimonial' ? "How has Scrybe AI helped you?" : "Please provide as much detail as possible..."}
+                            placeholder={category === 'Share a Testimonial' ? "Share your experience with the app..." : "Please provide as much detail as possible..."}
                             required
                         />
                         {/* New Email Input Field */}
