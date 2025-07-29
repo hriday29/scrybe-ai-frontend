@@ -15,7 +15,7 @@ const ConfidencePoll = ({ analysisId }) => {
         const fetchVotes = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`${API_BASE_URL}/api/analysis/vote/${analysisId}`);
+                const response = await fetch(`${API_BASE_URL}/api/analysis/votes/${analysisId}`);
                 if (!response.ok) throw new Error("Failed to fetch votes.");
                 const data = await response.json();
                 setVotes(data);
