@@ -13,7 +13,7 @@ import FeedbackWidget from './FeedbackWidget';
 import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
 const CORRELATION_DEFINITIONS = {
@@ -151,7 +151,7 @@ const IndexAnalysisView = () => {
     };
 
     useEffect(() => {
-        fetch('http://localhost:5001/api/indices')
+        fetch('${API_BASE_URL}/api/indices')
             .then(res => res.json())
             .then(data => setIndices(data))
             .catch(err => setError("Failed to load index list."));
@@ -164,7 +164,7 @@ const IndexAnalysisView = () => {
         setError(null);
         setAnalysisData(null);
         try {
-            const res = await fetch(`http://localhost:5001/api/index-analysis/${index.ticker}`);
+            const res = await fetch(`${API_BASE_URL}/api/index-analysis/${index.ticker}`);
             if (!res.ok) {
                 const errData = await res.json();
                 throw new Error(errData.error || "Analysis failed.");
@@ -788,7 +788,7 @@ const MarketPulsePopover = () => {
         const fetchPulse = async () => {
             setPulseError(null);
             try {
-                const res = await fetch('http://localhost:5001/api/market-pulse');
+                const res = await fetch(`${API_BASE_URL}/api/market-pulse`);
                 if (!res.ok) {
                     const errorData = await res.json().catch(() => null);
                     throw new Error(errorData?.error || `A server error occurred: ${res.status}`);
@@ -861,7 +861,7 @@ const StockSelector = ({ onAnalyze }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        fetch('http://localhost:5001/api/stock-list')
+        fetch(`${API_BASE_URL}/api/stock-list`)
             .then(res => {
                 if (!res.ok) throw new Error("Failed to load stock list.");
                 return res.json();
@@ -1213,7 +1213,7 @@ const AITrackRecord = () => {
     useEffect(() => {
         const fetchTrackRecord = async () => {
             try {
-                const res = await fetch('http://localhost:5001/api/track-record');
+                const res = await fetch(`${API_BASE_URL}/api/track-record`);
                 if (!res.ok) throw new Error("Server failed to return track record.");
                 const data = await res.json();
                 data.sort((a, b) => new Date(b.close_date) - new Date(a.close_date));
