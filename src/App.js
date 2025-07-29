@@ -432,7 +432,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen }) => {
                     <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
                         <PulseIcon /> Market Pulse
                     </button>
-                    {isPulseOpen && <MarketPulsePopover />}
+                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
                 </div>
             </div>
             <div className="flex-1 flex justify-end items-center gap-4">
@@ -786,7 +786,7 @@ let pulseCache = {
   timestamp: null,
 };
 
-const MarketPulsePopover = () => {
+const MarketPulsePopover = ({ onClose }) => {
   const [marketPulseData, setMarketPulseData] = useState(null);
   const [pulseError, setPulseError] = useState(null);
 
@@ -816,14 +816,12 @@ const MarketPulsePopover = () => {
     fetchPulse();
   }, []);
 
-  // --- NEW WRAPPER STRUCTURE FOR GUARANTEED CENTERING ---
   return (
-    // This new outer div is a full-screen, transparent flex container
-    <div className="fixed inset-0 z-30 flex justify-center items-start pt-20">
+    <div className="fixed inset-0 z-30 flex justify-center items-start pt-20" onClick={onClose}>
       {(() => {
         if (pulseError) {
           return (
-            <div className="w-80 bg-slate-900/80 backdrop-blur-lg border border-red-500/50 rounded-lg shadow-2xl p-4 animate-fadeIn">
+            <div className="w-80 bg-slate-900/80 backdrop-blur-lg border border-red-500/50 rounded-lg shadow-2xl p-4 animate-fadeIn" onClick={e => e.stopPropagation()}>
               <div className="text-center">
                 <h3 className="font-bold text-red-400 mb-2">Market Pulse Unavailable</h3>
                 <p className="text-sm text-red-300">{pulseError}</p>
@@ -834,7 +832,7 @@ const MarketPulsePopover = () => {
 
         if (!marketPulseData) {
           return (
-            <div className="w-80 bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-4 animate-fadeIn">
+            <div className="w-80 bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-4 animate-fadeIn" onClick={e => e.stopPropagation()}>
               <h3 className="font-bold text-white animate-pulse text-center">Loading Market Data...</h3>
             </div>
           );
@@ -853,8 +851,7 @@ const MarketPulsePopover = () => {
         const momentum = { '1D': performance_1_day, '5D': performance_5_day, '1M': performance_1_month };
 
         return (
-          // This is the actual popover, now without any positioning classes
-          <div className="w-[70vw] max-w-xl bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-6 animate-fadeIn">
+          <div className="w-[70vw] max-w-xl bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-6 animate-fadeIn" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-bold text-white text-lg">Nifty50 Market Health</h3>
               {stale && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full" title={`Live data failed. Showing data from: ${new Date(last_updated).toLocaleTimeString()}`}></div>}
@@ -928,7 +925,7 @@ const Header = ({ onReset }) => {
                     <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
                         <PulseIcon /> Market Pulse
                     </button>
-                    {isPulseOpen && <MarketPulsePopover />}
+                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
                 </div>
             </div>
             <div className="flex-1 flex justify-end items-center gap-4">
