@@ -1,0 +1,56 @@
+
+.App {
+  text-align: center;
+  perspective: 1000px;
+}
+
+/* Default logo: no transform or animation */
+.rotating-logo {
+  transform-origin: center;
+  display: block;
+  will-change: transform;
+}
+
+/* On hover: smooth 360° 3D rotation */
+.rotating-logo:hover {
+  animation: clean-rotate 10s linear infinite;
+}
+
+/* Keyframes: clean 3D full rotation */
+@keyframes clean-rotate {
+  0% {
+    transform: rotate3d(1, 1, 0, 0deg);
+  }
+  100% {
+    transform: rotate3d(1, 1, 0, 360deg);
+  }
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.transform-style {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+  transition: transform 0.7s ease-in-out;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
