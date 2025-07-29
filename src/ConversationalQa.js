@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from './apiConfig.js';
 
 const ConversationalQa = ({ analysisContext }) => {
     const [question, setQuestion] = useState('');
@@ -17,7 +18,7 @@ const ConversationalQa = ({ analysisContext }) => {
         setError(null);
 
         try {
-            const response = await fetch('http://localhost:5001/api/analysis/ask', {
+            const response = await fetch(`${API_BASE_URL}/api/analysis/ask`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: currentQuestion, context: analysisContext })

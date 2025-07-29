@@ -151,7 +151,7 @@ const IndexAnalysisView = () => {
     };
 
     useEffect(() => {
-        fetch('${API_BASE_URL}/api/indices')
+        fetch(`${API_BASE_URL}/api/indices`)
             .then(res => res.json())
             .then(data => setIndices(data))
             .catch(err => setError("Failed to load index list."));

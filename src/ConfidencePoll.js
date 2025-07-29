@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from './apiConfig.js';
 
 const ConfidencePoll = ({ analysisId }) => {
     const [votes, setVotes] = useState({ agree_votes: 0, unsure_votes: 0, disagree_votes: 0 });
@@ -14,7 +15,7 @@ const ConfidencePoll = ({ analysisId }) => {
         const fetchVotes = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:5001/api/analysis/votes/${analysisId}`);
+                const response = await fetch(`${API_BASE_URL}/api/analysis/vote/${analysisId}`);
                 if (!response.ok) throw new Error("Failed to fetch votes.");
                 const data = await response.json();
                 setVotes(data);
@@ -46,7 +47,7 @@ const ConfidencePoll = ({ analysisId }) => {
              setVotes(prevVotes => ({ ...prevVotes, [`${voteType}_votes`]: prevVotes[`${voteType}_votes`] + 1 }));
 
             try {
-                await fetch('http://localhost:5001/api/analysis/vote', {
+                await fetch(`${API_BASE_URL}/api/analysis/vote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ analysis_id: analysisId, vote_type: voteType }),

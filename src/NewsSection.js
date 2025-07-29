@@ -40,7 +40,7 @@ const NewsSection = ({ ticker }) => {
             setError(null);
             setAnalyses({});
             try {
-                const res = await fetch(`http://localhost:5001/api/news/${ticker}`);
+                const res = await fetch(`${API_BASE_URL}/api/news/${ticker}`);
                 if (!res.ok) throw new Error("Failed to fetch news.");
                 const data = await res.json();
                 // --- FIX 2: We set the entire data object in the state ---
@@ -59,7 +59,7 @@ const NewsSection = ({ ticker }) => {
         const key = index;
         setAnalyses(prev => ({ ...prev, [key]: { loading: true, error: null, data: null } }));
         try {
-            const response = await fetch('http://localhost:5001/api/news/analyze-one', {
+            const response = await fetch(`${API_BASE_URL}/api/news/analyze-one`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(article)

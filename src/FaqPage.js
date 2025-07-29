@@ -28,7 +28,7 @@ const FaqPage = ({ onBack }) => {
         e.preventDefault();
         setStatus('submitting');
         try {
-            const response = await fetch('http://localhost:5001/api/faq/submit', {
+            const response = await fetch(`${API_BASE_URL}/api/faq/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question_text: questionText }),

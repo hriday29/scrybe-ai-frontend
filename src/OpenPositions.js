@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from './apiConfig.js';
 
 // You can reuse your icon components if they are in a separate file
 const ArrowUpRightIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>);
@@ -16,7 +16,7 @@ const OpenPositions = () => {
             setIsLoading(true);
             setError(null);
             try {
-                const res = await fetch('http://localhost:5001/api/open-trades');
+                const res = await fetch(`${API_BASE_URL}/api/open-trades`);
                 if (!res.ok) {
                     throw new Error("Failed to fetch open positions from the server.");
                 }

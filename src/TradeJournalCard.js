@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from './apiConfig.js';
 
 const TradeJournalCard = ({ analysisData }) => {
     const [step, setStep] = useState('initial'); // 'initial', 'logging', 'submitted', 'error'
@@ -28,7 +29,7 @@ const TradeJournalCard = ({ analysisData }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:5001/api/trades/log', {
+            const response = await fetch(`${API_BASE_URL}/api/trades/log`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
