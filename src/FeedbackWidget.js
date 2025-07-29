@@ -6,10 +6,19 @@ const FeedbackWidget = () => {
     const [step, setStep] = useState('initial'); // 'initial', 'form', 'submitted'
     const [category, setCategory] = useState('');
     const [feedbackText, setFeedbackText] = useState('');
+    const [userEmail, setUserEmail] = useState(''); // New state for email
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
+    const handleClose = () => {
+        setIsOpen(false);
+        // Reset state when closing
+        setTimeout(() => {
+            setStep('initial');
+            setFeedbackText('');
+            setUserEmail('');
+        }, 300);
+    };
 
     const selectCategory = (cat) => {
         setCategory(cat);
@@ -20,15 +29,21 @@ const FeedbackWidget = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
+            const payload = {
+                category,
+                feedback_text: feedbackText,
+                email: userEmail // Include email in the payload
+            };
             const response = await fetch(`${API_BASE_URL}/api/feedback/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ category, feedback_text: feedbackText }),
+                body: JSON.stringify(payload),
             });
             if (!response.ok) throw new Error('Submission failed.');
             setStep('submitted');
         } catch (error) {
             console.error("Feedback submission error:", error);
+            // Optionally show an error message to the user
         } finally {
             setIsSubmitting(false);
         }
@@ -50,12 +65,14 @@ const FeedbackWidget = () => {
             <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="font-bold text-white">Feedback & Support</h3>
-                    <button onClick={handleClose} className="text-gray-400 hover:text-white">&times;</button>
+                    <button onClick={handleClose} className="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
                 </div>
 
                 {step === 'initial' && (
                     <div className="space-y-2">
                         <p className="text-sm text-gray-300 mb-3">What would you like to do?</p>
+                        {/* New "Share a Testimonial" button */}
+                        <button onClick={() => selectCategory('Share a Testimonial')} className="w-full text-left bg-green-500/20 p-3 rounded-lg hover:bg-green-500/30 text-green-300 font-semibold">Share a Testimonial</button>
                         <button onClick={() => selectCategory('Suggest an Improvement')} className="w-full text-left bg-slate-700/50 p-3 rounded-lg hover:bg-slate-600/80">Suggest an Improvement</button>
                         <button onClick={() => selectCategory('Report a Bug')} className="w-full text-left bg-slate-700/50 p-3 rounded-lg hover:bg-slate-600/80">Report a Bug</button>
                         <button onClick={() => selectCategory('Ask a Question')} className="w-full text-left bg-slate-700/50 p-3 rounded-lg hover:bg-slate-600/80">Ask a Question</button>
@@ -70,9 +87,19 @@ const FeedbackWidget = () => {
                             onChange={(e) => setFeedbackText(e.target.value)}
                             rows="5"
                             className="w-full bg-slate-900/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-blue-500"
-                            placeholder="Please provide as much detail as possible..."
+                            placeholder={category === 'Share a Testimonial' ? "How has Scrybe AI helped you?" : "Please provide as much detail as possible..."}
                             required
                         />
+                        {/* New Email Input Field */}
+                        {category === 'Share a Testimonial' && (
+                            <input
+                                type="email"
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                                className="w-full mt-2 bg-slate-900/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                                placeholder="Your Email (Optional)"
+                            />
+                        )}
                         <button type="submit" disabled={isSubmitting} className="w-full mt-2 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 disabled:bg-slate-600">
                             {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
                         </button>
@@ -81,7 +108,7 @@ const FeedbackWidget = () => {
                 
                 {step === 'submitted' && (
                     <div className="text-center py-4">
-                        <p className="text-green-400 font-semibold">✅ Thank you!</p>
+                        <p className="text-green-400 font-semibold text-lg">✅ Thank you!</p>
                         <p className="text-sm text-gray-400">Your feedback has been received.</p>
                     </div>
                 )}

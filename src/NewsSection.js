@@ -117,7 +117,7 @@ const NewsSection = ({ ticker }) => {
             <summary className="font-bold text-xl text-white list-none flex justify-between items-center cursor-pointer">
                 {/* --- FIX 5: The title is now dynamic based on the type of news --- */}
                 {newsData.type || 'Recent News'}
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-open:rotate-180 transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-open:rotate-180 transition-transform"><path d="m6 9 6 6 6-6"/></svg>
             </summary>
             {renderContent()}
         </details>

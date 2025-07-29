@@ -781,50 +781,130 @@ const FeatureCards = () => {
     );
 };
 
+let pulseCache = {
+  data: null,
+  timestamp: null,
+};
+
 const MarketPulsePopover = () => {
-    const [marketPulseData, setMarketPulseData] = useState(null);
-    const [pulseError, setPulseError] = useState(null);
-    useEffect(() => {
-        const fetchPulse = async () => {
-            setPulseError(null);
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/market-pulse`);
-                if (!res.ok) {
-                    const errorData = await res.json().catch(() => null);
-                    throw new Error(errorData?.error || `A server error occurred: ${res.status}`);
-                }
-                const data = await res.json();
-                setMarketPulseData(data);
-            } catch (err) {
-                console.error("Failed to fetch market pulse:", err);
-                setPulseError(err.message);
-            }
-        };
-        fetchPulse();
-    }, []);
-    if (pulseError) { return ( <div className="fixed top-20 left-1/2 -translate-x-1/2 w-80 bg-slate-900/80 backdrop-blur-lg border border-red-500/50 rounded-lg shadow-2xl p-4 animate-fadeIn"><div className="text-center"><h3 className="font-bold text-red-400 mb-2">Market Pulse Unavailable</h3><p className="text-sm text-red-300">{pulseError}</p></div></div> ); }
-    if (!marketPulseData) { return ( <div className="fixed top-20 left-1/2 -translate-x-1/2 w-80 bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-4 animate-fadeIn"><h3 className="font-bold text-white animate-pulse text-center">Loading Market Data...</h3></div> ); }
-    const { overall_performance = 0, sector_performance = {}, stale = false, last_updated, performance_1_day, performance_5_day, performance_1_month } = marketPulseData;
-    const isBullish = overall_performance >= 0;
-    let sentiment;
-    if (overall_performance > 0.5) { sentiment = "Strongly Bullish"; } else if (overall_performance > 0) { sentiment = "Slightly Bullish"; } else if (overall_performance < -0.5) { sentiment = "Strongly Bearish"; } else { sentiment = "Slightly Bearish"; }
-    const sentiment_color = isBullish ? 'text-green-400' : 'text-red-400';
-    const sortedSectors = Object.entries(sector_performance).sort(([, a], [, b]) => b - a);
-    const gainers = sortedSectors.filter(([, v]) => v >= 0);
-    const losers = sortedSectors.filter(([, v]) => v < 0);
-    const bar_width = Math.min(50, (Math.abs(overall_performance) / 2) * 100);
-    const formatPercentage = (num) => { if (num === undefined || num === null) return 'N/A'; const fixedNum = num.toFixed(2); return num > 0 ? `+${fixedNum}%` : `${fixedNum}%`; };
-    const momentum = { '1D': performance_1_day, '5D': performance_5_day, '1M': performance_1_month, };
+  const [marketPulseData, setMarketPulseData] = useState(null);
+  const [pulseError, setPulseError] = useState(null);
+
+  useEffect(() => {
+    const fetchPulse = async () => {
+      setPulseError(null);
+      
+      const CACHE_DURATION_MINUTES = 15;
+      const now = new Date();
+      if (pulseCache.data && pulseCache.timestamp && (now - pulseCache.timestamp < CACHE_DURATION_MINUTES * 60 * 1000)) {
+        setMarketPulseData(pulseCache.data);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/market-pulse`);
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          throw new Error(errorData?.error || `A server error occurred: ${res.status}`);
+        }
+        const data = await res.json();
+        setMarketPulseData(data);
+        pulseCache = { data: data, timestamp: now };
+      } catch (err) {
+        console.error("Failed to fetch market pulse:", err);
+        setPulseError(err.message);
+      }
+    };
+
+    fetchPulse();
+  }, []);
+
+  if (pulseError) {
     return (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 w-[70vw] max-w-xl bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-6 animate-fadeIn">
-            <div className="flex justify-between items-center mb-4"><h3 className="font-bold text-white text-lg">Nifty50 Market Health</h3>{stale && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full" title={`Live data failed. Showing data from: ${new Date(last_updated).toLocaleTimeString()}`}></div>}</div>
-            <div><div className="flex justify-between items-baseline"><p className="text-sm text-gray-400">Overall Sentiment</p><p className="text-sm text-gray-400">Average Change</p></div><div className="flex justify-between items-baseline"><p className={`font-semibold text-xl ${sentiment_color}`}>{sentiment}</p><p className={`font-mono font-semibold text-lg ${sentiment_color}`}>{formatPercentage(overall_performance)}</p></div><div className="w-full flex items-center h-1.5 mt-2"><div className="w-1/2 bg-red-500/20 h-full rounded-l-full flex justify-end">{!isBullish && <div className="bg-red-500 h-full rounded-l-full" style={{ width: `${bar_width}%` }}></div>}</div><div className="w-1/2 bg-green-500/20 h-full rounded-r-full">{isBullish && <div className="bg-green-500 h-full rounded-r-full" style={{ width: `${bar_width}%` }}></div>}</div></div></div>
-            <hr className="border-slate-700 my-4"/>
-            <div><h4 className="font-semibold text-white mb-3 text-center">Recent Price Momentum (Nifty50)</h4><div className="flex justify-around items-center text-center">{Object.entries(momentum).map(([period, value]) => (<Fragment key={period}><div><p className={`text-xl font-bold ${value >= 0 ? 'text-green-400' : 'text-red-400'}`}>{formatPercentage(value)}</p><p className="text-xs text-gray-400 uppercase tracking-wider">{period}</p></div>{period !== '1M' && <div className="h-10 border-l border-slate-700"></div>}</Fragment>))}</div></div>
-            <hr className="border-slate-700 my-4"/>
-            <div><h4 className="font-semibold text-white mb-2 text-center">Sector Spotlight</h4><div className="grid grid-cols-2 gap-4"><div><h5 className="font-semibold text-green-400 text-sm mb-1">Top Gainers</h5><ul className="text-xs text-gray-300 space-y-1">{gainers.length > 0 ? gainers.slice(0, 3).map(([name, val]) => <li key={name}>{name}: {formatPercentage(val)}</li>) : <li>None</li>}</ul></div><div><h5 className="font-semibold text-red-400 text-sm mb-1">Top Losers</h5><ul className="text-xs text-gray-300 space-y-1">{losers.length > 0 ? losers.slice(0, 3).map(([name, val]) => <li key={name}>{name}: {formatPercentage(val)}</li>) : <li>None</li>}</ul></div></div></div>
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 w-80 bg-slate-900/80 backdrop-blur-lg border border-red-500/50 rounded-lg shadow-2xl p-4 animate-fadeIn">
+        <div className="text-center">
+          <h3 className="font-bold text-red-400 mb-2">Market Pulse Unavailable</h3>
+          <p className="text-sm text-red-300">{pulseError}</p>
         </div>
+      </div>
     );
+  }
+
+  if (!marketPulseData) {
+    return (
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 w-80 bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-4 animate-fadeIn">
+        <h3 className="font-bold text-white animate-pulse text-center">Loading Market Data...</h3>
+      </div>
+    );
+  }
+
+  const { overall_performance = 0, sector_performance = {}, stale = false, last_updated, performance_1_day, performance_5_day, performance_1_month } = marketPulseData;
+  const isBullish = overall_performance >= 0;
+  let sentiment;
+  if (overall_performance > 0.5) { sentiment = "Strongly Bullish"; } else if (overall_performance > 0) { sentiment = "Slightly Bullish"; } else if (overall_performance < -0.5) { sentiment = "Strongly Bearish"; } else { sentiment = "Slightly Bearish"; }
+  const sentiment_color = isBullish ? 'text-green-400' : 'text-red-400';
+  const sortedSectors = Object.entries(sector_performance).sort(([, a], [, b]) => b - a);
+  const gainers = sortedSectors.filter(([, v]) => v >= 0);
+  const losers = sortedSectors.filter(([, v]) => v < 0);
+  const bar_width = Math.min(50, (Math.abs(overall_performance) / 2) * 100);
+  const formatPercentage = (num) => { if (num === undefined || num === null) return 'N/A'; const fixedNum = num.toFixed(2); return num > 0 ? `+${fixedNum}%` : `${fixedNum}%`; };
+  const momentum = { '1D': performance_1_day, '5D': performance_5_day, '1M': performance_1_month };
+
+  return (
+    <div className="fixed top-20 left-1/2 -translate-x-1/2 w-[70vw] max-w-xl bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-lg shadow-2xl p-6 animate-fadeIn">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-bold text-white text-lg">Nifty50 Market Health</h3>
+        {stale && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full" title={`Live data failed. Showing data from: ${new Date(last_updated).toLocaleTimeString()}`}></div>}
+      </div>
+      <div>
+        <div className="flex justify-between items-baseline">
+          <p className="text-sm text-gray-400">Overall Sentiment</p>
+          <p className="text-sm text-gray-400">Average Change</p>
+        </div>
+        <div className="flex justify-between items-baseline">
+          <p className={`font-semibold text-xl ${sentiment_color}`}>{sentiment}</p>
+          <p className={`font-mono font-semibold text-lg ${sentiment_color}`}>{formatPercentage(overall_performance)}</p>
+        </div>
+        <div className="w-full flex items-center h-1.5 mt-2">
+          <div className="w-1/2 bg-red-500/20 h-full rounded-l-full flex justify-end">
+            {!isBullish && <div className="bg-red-500 h-full rounded-l-full" style={{ width: `${bar_width}%` }}></div>}
+          </div>
+          <div className="w-1/2 bg-green-500/20 h-full rounded-r-full">
+            {isBullish && <div className="bg-green-500 h-full rounded-r-full" style={{ width: `${bar_width}%` }}></div>}
+          </div>
+        </div>
+      </div>
+      <hr className="border-slate-700 my-4"/>
+      <div>
+        <h4 className="font-semibold text-white mb-3 text-center">Recent Price Momentum (Nifty50)</h4>
+        <div className="flex justify-around items-center text-center">
+          {Object.entries(momentum).map(([period, value]) => (
+            <React.Fragment key={period}>
+              <div>
+                <p className={`text-xl font-bold ${value >= 0 ? 'text-green-400' : 'text-red-400'}`}>{formatPercentage(value)}</p>
+                <p className="text-xs text-gray-400 uppercase tracking-wider">{period}</p>
+              </div>
+              {period !== '1M' && <div className="h-10 border-l border-slate-700"></div>}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+      <hr className="border-slate-700 my-4"/>
+      <div>
+        <h4 className="font-semibold text-white mb-2 text-center">Sector Spotlight</h4>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h5 className="font-semibold text-green-400 text-sm mb-1">Top Gainers</h5>
+            <ul className="text-xs text-gray-300 space-y-1">{gainers.length > 0 ? gainers.slice(0, 3).map(([name, val]) => <li key={name}>{name}: {formatPercentage(val)}</li>) : <li>None</li>}</ul>
+          </div>
+          <div>
+            <h5 className="font-semibold text-red-400 text-sm mb-1">Top Losers</h5>
+            <ul className="text-xs text-gray-300 space-y-1">{losers.length > 0 ? losers.slice(0, 3).map(([name, val]) => <li key={name}>{name}: {formatPercentage(val)}</li>) : <li>None</li>}</ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const Header = ({ onReset }) => {
