@@ -14,10 +14,16 @@ import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
 import OnTheRadar from './OnTheRadar.js';
+import UserGuidePage from './UserGuidePage.js';
+import Footer from './Footer.js';
+import PrivacyPolicyPage from './PrivacyPolicyPage.js';
+import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
+
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
+
 const OurStrategySection = () => {
     const pillars = [
         {
@@ -438,7 +444,7 @@ const DemoModal = ({ onClose }) => {
   );
 };
 
-const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
+const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen }) => { 
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex items-center gap-3">
@@ -446,8 +452,14 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
                 <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
             </div>
             
-            {/* Group the buttons together */}
             <div className="flex items-center gap-4">
+                {/* --- ADDITION: New "User Guide" button --- */}
+                <button 
+                    onClick={onUserGuideOpen} 
+                    className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
+                >
+                    User Guide
+                </button>
                 <button 
                     onClick={onFaqOpen} 
                     className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
@@ -1416,7 +1428,11 @@ export default function App() {
     const [view, setView] = useState('landing'); // 'landing' or 'app'
     
     // --- NEW STATE for FaqPage ---
+    const [showUserGuide, setShowUserGuide] = useState(false);
     const [showFaq, setShowFaq] = useState(false);
+    const [showPrivacy, setShowPrivacy] = useState(false); // Add this
+    const [showTerms, setShowTerms] = useState(false);
+    
 
     // State for the tabbed interface inside the app
     const [activeTab, setActiveTab] = useState('stock_analysis');
@@ -1496,12 +1512,12 @@ export default function App() {
             <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
                 setTabIndex(index);
                 if (index === 0) setActiveTab('app_guide');
-                if (index === 0) setActiveTab('stock_analysis');
-                if (index === 1) setActiveTab('on_the_radar'); 
-                if (index === 2) setActiveTab('open_positions');
-                if (index === 3) setActiveTab('index_analysis');
-                if (index === 4) setActiveTab('track_record');
-                if (index === 5) setActiveTab('rulebook');
+                if (index === 1) setActiveTab('stock_analysis'); // Corrected index
+                if (index === 2) setActiveTab('on_the_radar');   // Corrected index
+                if (index === 3) setActiveTab('open_positions'); // Corrected index
+                if (index === 4) setActiveTab('index_analysis'); // Corrected index
+                if (index === 5) setActiveTab('track_record'); // Corrected index
+                if (index === 6) setActiveTab('rulebook');     // Corrected index
             }}>
                 <Tab.List>
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
@@ -1576,7 +1592,15 @@ export default function App() {
             default: return <StockSelector onAnalyze={handleAnalysis} />;
         }
     };
-
+    if (showPrivacy) {
+        return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />;
+    }
+    if (showTerms) {
+        return <TermsPage onBack={() => setShowTerms(false)} />;
+    }
+    if (showUserGuide) {
+        return <UserGuidePage onBack={() => setShowUserGuide(false)} />;
+    }
     if (showFaq) {
         return <FaqPage onBack={() => setShowFaq(false)} />;
     }
@@ -1593,7 +1617,7 @@ export default function App() {
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
                 {/* This is the conditional logic to show the correct header */}
                 {view === 'landing' ? (
-                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} />
+                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} onUserGuideOpen={() => setShowUserGuide(true)} />
                 ) : (
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
@@ -1611,7 +1635,12 @@ export default function App() {
             </div>
             
             <TickerTape />
-            
+            <Footer 
+                onPrivacyClick={() => setShowPrivacy(true)}
+                onTermsClick={() => setShowTerms(true)}
+                onUserGuideClick={() => setShowUserGuide(true)}
+                onFaqClick={() => setShowFaq(true)}
+            />
             {/* This renders the demo modal only when it's open */}
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
 
