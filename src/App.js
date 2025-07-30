@@ -21,17 +21,19 @@ import { API_BASE_URL } from './apiConfig.js';
 const OurStrategySection = () => {
     const pillars = [
         {
-            icon: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>,
+            icon: <BrainCircuitIcon className="w-7 h-7" />,
             title: "1. We Check the Weather",
             description: "Before analyzing any single stock, our AI first looks at the 'big picture'—the overall market health and which sectors are the strongest. We don't try to swim against the current."
         },
         {
+            icon: <PulseIcon className="w-7 h-7" />,
             title: "2. We Look for a Healthy Pulse",
             description: "Next, the AI puts the stock through a rigorous health check. It looks for confirmation from big institutional players (by checking for a 'Volume Surge') and ensures the stock's price trend is strong and clear. A weak pulse means we wait."
         },
         {
+            icon: <ShieldCheckIcon className="w-7 h-7" />,
             title: "3. We Demand a Safety Net",
-            description: "No trade is ever considered, no matter how good it looks, unless the potential reward is significantly greater than the potential risk. Every signal comes with a pre-defined exit plan for both profit and loss, ensuring disciplined risk management."
+            description: "No trade is ever considered, no matter how good it looks, unless the potential reward is significantly greater than the potential risk. Every signal comes with a pre-defined exit plan, ensuring disciplined risk management."
         }
     ];
 
@@ -49,7 +51,7 @@ const OurStrategySection = () => {
             <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
                 {pillars.map((pillar) => (
                     <div key={pillar.title} className="bg-gradient-to-br from-slate-900 to-slate-800/60 border border-slate-700/60 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
-                        <div className="flex items-center justify-center w-12 h-12 bg-blue-600/20 border-2 border-blue-500/60 rounded-xl text-blue-300 mb-6">
+                        <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 border-2 border-blue-500/60 rounded-2xl text-blue-300 mb-6">
                             {pillar.icon}
                         </div>
                         <h3 className="text-2xl font-bold text-white mb-3">{pillar.title}</h3>
@@ -1133,7 +1135,7 @@ const DVMScores = ({ scores }) => {
                 <p className={`text-4xl font-bold ${textColor}`}>{score.toFixed(0)}<span className="text-2xl text-gray-400/80">/100</span></p>
                 <p className="text-sm text-gray-400 mt-1 h-10">{phrase}</p>
                 
-                {/* This is the visual bar section */}
+                {/* Visual bar section */}
                 <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
                     <div className={`${barColor} h-2 rounded-full`} style={{ width: `${score}%` }}></div>
                 </div>
