@@ -88,60 +88,6 @@ const getCorrelationInterpretation = (value) => {
     return "Strong negative correlation.";
 };
 
-const WhyScrybeAI = () => {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div
-      onClick={() => setFlipped(!flipped)}
-      className="w-80 h-52 md:w-96 md:h-60 mx-auto cursor-pointer perspective"
-    >
-      <div
-        className={`relative w-full h-full duration-700 transform-style preserve-3d ${
-          flipped ? "rotate-y-180" : ""
-        }`}
-      >
-        {/* Front Side */}
-        <div className="absolute w-full h-full rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 shadow-[0_0_30px_#0f172a40] backdrop-blur-md flex flex-col items-center justify-center text-center text-white p-6 space-y-2 backface-hidden transition-transform duration-300">
-          <h3 className="text-2xl font-semibold tracking-tight text-white">
-            <span className="inline-block scale-95 origin-bottom">🧠</span> Why Scrybe AI?
-          </h3>
-          <p className="text-sm text-slate-400">
-            Tap to uncover your trading edge.
-          </p>
-        </div>
-
-        {/* Back Side */}
-        <div className="absolute w-full h-full rotate-y-180 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-[0_0_50px_rgba(80,80,255,0.1)] backdrop-blur-xl flex flex-col justify-between p-6 text-sm text-white backface-hidden">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🦬/🐻</span>
-              <span className="font-medium">Wall Street Grade Analysis</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">✅</span>
-              <span className="font-medium">Built for Swing Traders</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">📊</span>
-              <span className="font-medium">Hybrid Tech & Fundamentals</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">⚡</span>
-              <span className="font-medium">Real-Time Market Insights</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🤖</span>
-              <span className="font-medium">Transparent, Updating AI</span>
-            </div>
-          </div>
-          <div className="w-full h-1 bg-gradient-to-r from-indigo-500 via-sky-500 to-purple-500 rounded-full opacity-20 mt-4" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const getStatusColor = (status) => {
     if (!status) return 'text-gray-400';
     const lowerStatus = status.toLowerCase();
@@ -745,7 +691,6 @@ const LandingPage = ({ onLaunch }) => {
             <FeatureCards />
             <OurStrategySection />
             <HowItWorks />
-            <WhyScrybeAI />
         </div>
     );
 };
