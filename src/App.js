@@ -14,9 +14,53 @@ import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
 import OnTheRadar from './OnTheRadar.js';
+import AppGuide from './AppGuide.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
+const OurStrategySection = () => {
+    const pillars = [
+        {
+            icon: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>,
+            title: "1. We Check the Weather",
+            description: "Before analyzing any single stock, our AI first looks at the 'big picture'—the overall market health and which sectors are the strongest. We don't try to swim against the current."
+        },
+        {
+            title: "2. We Look for a Healthy Pulse",
+            description: "Next, the AI puts the stock through a rigorous health check. It looks for confirmation from big institutional players (by checking for a 'Volume Surge') and ensures the stock's price trend is strong and clear. A weak pulse means we wait."
+        },
+        {
+            title: "3. We Demand a Safety Net",
+            description: "No trade is ever considered, no matter how good it looks, unless the potential reward is significantly greater than the potential risk. Every signal comes with a pre-defined exit plan for both profit and loss, ensuring disciplined risk management."
+        }
+    ];
+
+    return (
+        <div className="w-full max-w-7xl mx-auto my-16 px-4 py-16">
+            <div className="text-center">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+                    An AI Strategy You Can Understand
+                </h2>
+                <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
+                    Our AI isn't a magic black box. It's a disciplined analyst that follows a clear, three-pillar strategy for every stock.
+                </p>
+            </div>
+
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {pillars.map((pillar) => (
+                    <div key={pillar.title} className="bg-gradient-to-br from-slate-900 to-slate-800/60 border border-slate-700/60 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
+                        <div className="flex items-center justify-center w-12 h-12 bg-blue-600/20 border-2 border-blue-500/60 rounded-xl text-blue-300 mb-6">
+                            {pillar.icon}
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">{pillar.title}</h3>
+                        <p className="text-gray-300 leading-relaxed">{pillar.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const CORRELATION_DEFINITIONS = {
     'Nifty50': 'Measures how closely the stock moves with the overall Indian market. High positive values are common.',
     'USD-INR': 'Shows the relationship with the Rupee-Dollar exchange rate. Important for import/export heavy companies.',
@@ -685,6 +729,7 @@ const LandingPage = ({ onLaunch }) => {
             <AIStrategyInsights />
             <PerformanceShowcase />
             <FeatureCards />
+            <OurStrategySection />
             <HowItWorks />
             <WhyScrybeAI />
         </div>
@@ -1072,23 +1117,34 @@ const TradingPlanCard = ({ plan, signal, reasonForHold }) => {
 const DVMScores = ({ scores }) => {
     if (!scores) return null;
     const scoreDefinitions = { Durability: "Measures the company's financial strength and stability, based on profitability and institutional ownership.", Valuation: "Measures how reasonably the stock is priced relative to its earnings and book value. Lower is often better.", Momentum: "Measures the strength of the stock's recent price trend, based on technical indicators like RSI and ADX." };
+    
     const ScoreCard = ({ title, scoreData }) => {
         const score = scoreData?.score || 0;
         const phrase = scoreData?.phrase || 'N/A';
+        const barColor = score >= 70 ? 'bg-green-500' : score >= 40 ? 'bg-amber-500' : 'bg-red-500';
+        const textColor = score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400';
+
         return (
             <div className="flex-1 bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 text-center transition-all hover:border-slate-500/80 hover:bg-slate-800/60">
                 <div className="flex justify-between items-center text-sm text-gray-400 mb-2">
                     <p className="font-bold text-lg text-white">{title}</p>
                     <span title={scoreDefinitions[title]} className="cursor-help"><InfoIcon /></span>
                 </div>
-                <p className={`text-4xl font-bold ${score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{score.toFixed(1)}<span className="text-2xl text-gray-400/80">/100</span></p>
-                <p className="text-sm text-gray-400 mt-1">{phrase}</p>
+                <p className={`text-4xl font-bold ${textColor}`}>{score.toFixed(0)}<span className="text-2xl text-gray-400/80">/100</span></p>
+                <p className="text-sm text-gray-400 mt-1 h-10">{phrase}</p>
+
+                {/* --- NEW VISUAL BAR --- */}
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`${barColor} h-2 rounded-full`} style={{ width: `${score}%` }}></div>
+                </div>
             </div>
         );
     };
+    
     const overallScore = (scores.durability.score + scores.valuation.score + scores.momentum.score) / 3;
     let overallStatus = "Balanced Profile";
     if (overallScore >= 65) { overallStatus = "Strong Performer"; } else if (overallScore <= 45) { overallStatus = "Needs Caution"; }
+    
     return (
         <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -1103,6 +1159,7 @@ const DVMScores = ({ scores }) => {
         </div>
     );
 };
+
 const ConversationalAnswerDisplay = ({ answer }) => {
     if (!answer) return null;
     return (
@@ -1374,6 +1431,11 @@ export default function App() {
     const [isPulseOpen, setIsPulseOpen] = useState(false);
 
     const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [tabIndex, setTabIndex] = useState(0); 
+
+    const navigateToTab = (index) => { 
+        setTabIndex(index);
+    };
 
     // --- Core Application Logic ---
 
@@ -1429,23 +1491,21 @@ export default function App() {
 
     const renderMainApp = () => (
         <div className="w-full">
-            <Tab.Group onChange={(index) => {
+            <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
+                setTabIndex(index);
+                if (index === 0) setActiveTab('app_guide');
                 if (index === 0) setActiveTab('stock_analysis');
-                // --- CHANGE: Added 'on_the_radar' and updated the following indices ---
                 if (index === 1) setActiveTab('on_the_radar'); 
                 if (index === 2) setActiveTab('open_positions');
                 if (index === 3) setActiveTab('index_analysis');
                 if (index === 4) setActiveTab('track_record');
                 if (index === 5) setActiveTab('rulebook');
-                // --- END CHANGE ---
             }}>
                 <Tab.List>
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
-                        
-                        {/* --- ADDITION: New "On The Radar" Tab for Desktop --- */}
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>On The Radar</button>)}</Tab>
-                        
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
@@ -1456,18 +1516,16 @@ export default function App() {
                         <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
                             <div>
                                 <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
-                                    {activeTab.replace('_', ' ')}
+                                    {activeTab.replace(/_/g, ' ')}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                                 </Menu.Button>
                             </div>
                             <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
-
-                                        {/* --- ADDITION: New "On The Radar" Tab for Mobile --- */}
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</Tab>)}</Menu.Item>
-
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
@@ -1480,6 +1538,9 @@ export default function App() {
                 </Tab.List>
                 <div className="w-full py-8">
                     <Tab.Panels>
+                        <Tab.Panel>
+                            {activeTab === 'app_guide' && <AppGuide navigateToTab={navigateToTab} />}
+                        </Tab.Panel>
                         <Tab.Panel>
                             {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
                         </Tab.Panel>

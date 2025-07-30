@@ -16,7 +16,7 @@ const OnTheRadar = () => {
                 const allStocks = await res.json();
 
                 // Filter for stocks that have a 'HOLD' signal and a reason
-                const filteredStocks = allStocks.filter(stock => stock.signal === 'HOLD' && stock.reasonForHold);
+                const filteredStocks = allStocks.filter(stock => stock.isOnRadar === true);
                 setRadarStocks(filteredStocks);
 
             } catch (err) {
