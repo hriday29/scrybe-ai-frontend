@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// Helper component for clean section styling
 const Section = ({ title, children, id }) => (
     <div id={id} className="mb-12 scroll-mt-20">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-3">{title}</h2>
@@ -11,7 +10,6 @@ const Section = ({ title, children, id }) => (
 
 const UserGuidePage = ({ onBack }) => {
     
-    // Data for the Table of Contents
     const sections = [
         { title: "Welcome to Scrybe AI", id: "welcome" },
         { title: "Quickstart: Your First Analysis", id: "quickstart" },
@@ -27,21 +25,6 @@ const UserGuidePage = ({ onBack }) => {
         { title: "Feedback & Contact", id: "contact" },
     ];
 
-    const faqs = [
-        { q: "What is Scrybe AI?", a: "Scrybe AI is a research tool that uses advanced AI to analyze stock market data. It provides data-driven insights based on a VST (Very Short-Term) swing trading strategy to help users in their own research process." },
-        { q: "Is this financial advice?", a: "No. Absolutely not. Scrybe AI provides informational research outcomes based on historical data. It is not financial advice, and all users are 100% responsible for their own trading decisions and risks." },
-    ];
-
-    const FaqItem = ({ question, answer }) => (
-        <details className="border-b border-gray-200 py-4 group">
-            <summary className="font-semibold text-lg list-none flex justify-between items-center cursor-pointer hover:text-blue-600">
-                {question}
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-            </summary>
-            <p className="text-gray-600 mt-2">{answer}</p>
-        </details>
-    );
-
     return (
         <div className="bg-white min-h-screen text-gray-800 font-sans">
             <div className="max-w-4xl mx-auto px-4 py-8">
@@ -51,7 +34,6 @@ const UserGuidePage = ({ onBack }) => {
                     <h1 className="text-5xl font-bold text-center mb-4">Documentation</h1>
                     <p className="text-center text-gray-500 mb-12">Everything you need to know to get the most out of Scrybe AI.</p>
                     
-                    {/* Table of Contents */}
                     <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 mb-16">
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">Table of Contents</h2>
                         <ul className="list-none grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
@@ -63,40 +45,40 @@ const UserGuidePage = ({ onBack }) => {
                         </ul>
                     </div>
                     
-                    {/* Content Sections */}
                     <Section title="1. Welcome to Scrybe AI" id="welcome">
-                        <p>Welcome! Scrybe AI is designed to be your personal AI analyst, doing the heavy lifting of market research so you can focus on making informed decisions. Our system analyzes dozens of top stocks every day to find high-probability swing trading opportunities based on a disciplined, data-driven strategy.</p>
+                        <p>Welcome! Scrybe AI is your personal AI analyst, designed to cut through market noise and save you hours of research. Our system performs a deep, institutional-grade analysis on dozens of top stocks every day to find high-probability swing trading opportunities based on a disciplined, data-driven strategy.</p>
                     </Section>
 
                     <Section title="2. Quickstart: Your First Analysis" id="quickstart">
                         <p>Getting a detailed report is simple:</p>
                         <ol>
                             <li><strong>Go to the "Stock Analysis" Tab:</strong> This is your main dashboard for selecting a stock.</li>
-                            <li><strong>Choose a Stock:</strong> You can either scroll through the pre-analyzed list or use the search bar to find a specific company.</li>
+                            <li><strong>Choose a Stock:</strong> You can scroll through the pre-analyzed list or use the search bar to find a specific company.</li>
                             <li><strong>View the Analysis:</strong> Clicking a stock will instantly load the AI's full report, including its signal, trade plan, and data breakdowns.</li>
                         </ol>
                     </Section>
 
                     <Section title="3. The Main Dashboard: A Deep Dive" id="dashboard">
-                        <p>The analysis dashboard is broken down into key sections:</p>
+                        <p>The analysis dashboard contains everything you need to understand the AI's reasoning.</p>
                         <ul>
-                            <li><strong>The Verdict:</strong> The most important section, showing the final Signal (BUY/SELL/HOLD) and the AI's Confidence level.</li>
-                            <li><strong>The Trade Plan:</strong> An actionable plan with specific price levels for Entry, a Target to take profits, and a Stop-Loss to manage risk.</li>
-                            <li><strong>DVM Scores:</strong> A quick visual score (out of 100) for the stock's Durability, Valuation, and Momentum.</li>
-                            <li><strong>Bull vs. Bear Case:</strong> The AI's written arguments for why the stock might go up (Bull Case) or down (Bear Case).</li>
+                            <li><strong>The Verdict:</strong> This is the final output. It shows the Signal (BUY/SELL/HOLD) and the AI's Confidence level in that signal, from Low to Very High.</li>
+                            <li><strong>The Trade Plan:</strong> An actionable plan with specific price levels for Entry, a Target to take profits, and a Stop-Loss to manage risk. This is the core of a disciplined trade.</li>
+                            <li><strong>DVM Scores:</strong> A quick visual score (out of 100) for the stock's Durability (financial health), Valuation (is it cheap or expensive?), and Momentum (how strong is its current trend?).</li>
+                            <li><strong>Bull vs. Bear Case:</strong> The AI's written arguments for why the stock might go up (Bull Case) or down (Bear Case), helping you understand both sides of the trade.</li>
+                            <li><strong>Charts:</strong> Visual charts for different timeframes (1-Week Tactical, 1-Month Contextual) to help you see the patterns the AI is analyzing.</li>
                         </ul>
                     </Section>
 
                     <Section title="4. Feature Guide: On The Radar" id="radar">
-                        <p>This isn't just a list of 'HOLDs'. It's a curated watchlist of stocks the AI has identified as being on the verge of a signal. It tells you the exact condition the AI is waiting for (e.g., "Waiting for a stronger trend"), helping you anticipate future trades.</p>
+                        <p>This is one of our most powerful features. It's a curated watchlist of stocks that are currently 'HOLD' signals but are very close to becoming a BUY or SELL. The AI tells you the exact condition it's waiting for (e.g., "Waiting for a stronger trend"), which helps you anticipate future trades and learn what a high-quality setup looks like.</p>
                     </Section>
 
                     <Section title="5. Feature Guide: Market & Index Analysis" id="market">
-                        <p>This provides the "big picture" view of the market's health. By analyzing key indices like the Nifty 50, the AI understands the overall market "weather," ensuring its signals are aligned with the broader market trend.</p>
+                        <p>A great trader never ignores the bigger picture. This section provides a high-level strategic overview of the entire market. The AI analyzes key indices like the Nifty 50 to determine the overall market "weather"—are we in a storm or clear skies? This ensures your trading decisions are aligned with the broader market trend.</p>
                     </Section>
 
                     <Section title="6. Feature Guide: The AI Track Record" id="track-record">
-                        <p>A fully transparent performance log of every trade signal the AI has ever closed. You can review the wins, the losses, and the overall historical performance to understand the strategy's effectiveness over time.</p>
+                        <p>Transparency is a core value. This page provides a fully transparent performance log of every trade signal the AI has ever closed. You can review the wins, the losses, the holding periods, and the overall historical performance to understand the strategy's effectiveness over time.</p>
                     </Section>
                     
                     <Section title="7. Our AI's Philosophy" id="philosophy">
@@ -110,9 +92,9 @@ const UserGuidePage = ({ onBack }) => {
                     
                     <Section title="8. Best Practices: How to Use Scrybe AI" id="best-practices">
                         <ul>
-                            <li><strong>Use as a Research Tool:</strong> Scrybe AI is a powerful tool to speed up your research and screening process. It is not a replacement for your own due diligence.</li>
+                            <li><strong>Use as a Research Tool:</strong> Scrybe AI is a powerful tool to speed up your research and screening process. It is not a replacement for your own due diligence and is not financial advice.</li>
                             <li><strong>Understand the Timeframe:</strong> The VST strategy is designed for a 1-5 day holding period. It is not for long-term investing or intraday scalping.</li>
-                            <li><strong>A 'HOLD' is a Valuable Signal:</strong> The most frequent signal is 'HOLD'. This is the AI's capital preservation strategy in action. It means "wait for a better opportunity."</li>
+                            <li><strong>A 'HOLD' is a Valuable Signal:</strong> A 'HOLD' signal is a core part of our capital preservation strategy. It means the AI has analyzed the stock but concluded that the conditions are not optimal for a high-probability trade. It's an instruction to be patient and wait for a better opportunity.</li>
                         </ul>
                     </Section>
                     
@@ -122,20 +104,23 @@ const UserGuidePage = ({ onBack }) => {
                     
                     <Section title="10. Glossary of Key Terms" id="glossary">
                         <ul>
-                            <li><strong>ADX (Average Directional Index):</strong> An indicator that measures the strength of a trend, not its direction. A high ADX (above 25) indicates a strong trend.</li>
+                            <li><strong>ADX (Average Directional Index):</strong> An indicator that measures the strength of a trend. A high ADX (above 25) indicates a strong trend.</li>
                             <li><strong>RSI (Relative Strength Index):</strong> A momentum indicator that measures the speed and change of price movements to identify overbought or oversold conditions.</li>
-                            <li><strong>Stop-Loss:</strong> A pre-determined price at which you exit a trade to limit your potential loss.</li>
+                             <li><strong>Swing Trading:</strong> A style of trading that attempts to capture gains in a stock within a period of a few days to several weeks.</li>
+                            <li><strong>Volume Surge:</strong> Indicates that trading volume is significantly higher than its recent average, suggesting strong participation from large players.</li>
+                             <li><strong>Market Regime:</strong> Our AI's assessment of the overall market trend (Bullish, Bearish, or Neutral).</li>
+                             <li><strong>P/E Ratio (Price-to-Earnings):</strong> A valuation metric that measures a company's current share price relative to its per-share earnings.</li>
+                             <li><strong>Stop-Loss:</strong> A pre-determined price at which you exit a trade to limit your potential loss.</li>
                         </ul>
                     </Section>
 
                     <Section title="11. Frequently Asked Questions (FAQ)" id="faq">
-                        {faqs.map((faq, i) => <FaqItem key={i} question={faq.q} answer={faq.a} />)}
+                        <p>For answers to the most common questions, please visit our dedicated Q&A page, which you can access from the links in the site footer. You can also submit your own questions there!</p>
                     </Section>
                     
                     <Section title="12. Feedback & Contact" id="contact">
                         <p>Have a question that wasn't answered here, or a suggestion for a new feature? We'd love to hear from you! Please use the **"Feedback"** button on the main application to get in touch with our team.</p>
                     </Section>
-
                 </motion.div>
             </div>
         </div>
