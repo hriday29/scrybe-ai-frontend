@@ -13,9 +13,62 @@ import FeedbackWidget from './FeedbackWidget';
 import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
+import OnTheRadar from './OnTheRadar.js';
+import UserGuidePage from './UserGuidePage.js';
+import Footer from './Footer.js';
+import PrivacyPolicyPage from './PrivacyPolicyPage.js';
+import TermsPage from './TermsPage.js';
+import AppGuide from './AppGuide.js';
+
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
+
+const OurStrategySection = () => {
+    const pillars = [
+        {
+            icon: <BrainCircuitIcon className="w-7 h-7" />,
+            title: "1. We Check the Weather",
+            description: "Before analyzing any single stock, our AI first looks at the 'big picture'—the overall market health and which sectors are the strongest. We don't try to swim against the current."
+        },
+        {
+            icon: <PulseIcon className="w-7 h-7" />,
+            title: "2. We Look for a Healthy Pulse",
+            description: "Next, the AI puts the stock through a rigorous health check. It looks for confirmation from big institutional players (by checking for a 'Volume Surge') and ensures the stock's price trend is strong and clear. A weak pulse means we wait."
+        },
+        {
+            icon: <ShieldCheckIcon className="w-7 h-7" />,
+            title: "3. We Demand a Safety Net",
+            description: "No trade is ever considered, no matter how good it looks, unless the potential reward is significantly greater than the potential risk. Every signal comes with a pre-defined exit plan, ensuring disciplined risk management."
+        }
+    ];
+
+    return (
+        <div className="w-full max-w-7xl mx-auto my-16 px-4 py-16">
+            <div className="text-center">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+                    An AI Strategy You Can Understand
+                </h2>
+                <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
+                    Our AI isn't a magic black box. It's a disciplined analyst that follows a clear, three-pillar strategy for every stock.
+                </p>
+            </div>
+
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {pillars.map((pillar) => (
+                    <div key={pillar.title} className="bg-gradient-to-br from-slate-900 to-slate-800/60 border border-slate-700/60 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
+                        <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 border-2 border-blue-500/60 rounded-2xl text-blue-300 mb-6">
+                            {pillar.icon}
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">{pillar.title}</h3>
+                        <p className="text-gray-300 leading-relaxed">{pillar.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const CORRELATION_DEFINITIONS = {
     'Nifty50': 'Measures how closely the stock moves with the overall Indian market. High positive values are common.',
     'USD-INR': 'Shows the relationship with the Rupee-Dollar exchange rate. Important for import/export heavy companies.',
@@ -33,60 +86,6 @@ const getCorrelationInterpretation = (value) => {
     if (value > -0.3) return "No significant correlation.";
     if (value > -0.7) return "Moderate negative correlation.";
     return "Strong negative correlation.";
-};
-
-const WhyScrybeAI = () => {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div
-      onClick={() => setFlipped(!flipped)}
-      className="w-80 h-52 md:w-96 md:h-60 mx-auto cursor-pointer perspective"
-    >
-      <div
-        className={`relative w-full h-full duration-700 transform-style preserve-3d ${
-          flipped ? "rotate-y-180" : ""
-        }`}
-      >
-        {/* Front Side */}
-        <div className="absolute w-full h-full rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 shadow-[0_0_30px_#0f172a40] backdrop-blur-md flex flex-col items-center justify-center text-center text-white p-6 space-y-2 backface-hidden transition-transform duration-300">
-          <h3 className="text-2xl font-semibold tracking-tight text-white">
-            <span className="inline-block scale-95 origin-bottom">🧠</span> Why Scrybe AI?
-          </h3>
-          <p className="text-sm text-slate-400">
-            Tap to uncover your trading edge.
-          </p>
-        </div>
-
-        {/* Back Side */}
-        <div className="absolute w-full h-full rotate-y-180 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-[0_0_50px_rgba(80,80,255,0.1)] backdrop-blur-xl flex flex-col justify-between p-6 text-sm text-white backface-hidden">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🦬/🐻</span>
-              <span className="font-medium">Wall Street Grade Analysis</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">✅</span>
-              <span className="font-medium">Built for Swing Traders</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">📊</span>
-              <span className="font-medium">Hybrid Tech & Fundamentals</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">⚡</span>
-              <span className="font-medium">Real-Time Market Insights</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🤖</span>
-              <span className="font-medium">Transparent, Updating AI</span>
-            </div>
-          </div>
-          <div className="w-full h-1 bg-gradient-to-r from-indigo-500 via-sky-500 to-purple-500 rounded-full opacity-20 mt-4" />
-        </div>
-      </div>
-    </div>
-  );
 };
 
 const getStatusColor = (status) => {
@@ -391,7 +390,7 @@ const DemoModal = ({ onClose }) => {
   );
 };
 
-const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
+const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen }) => { 
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex items-center gap-3">
@@ -399,8 +398,14 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
                 <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
             </div>
             
-            {/* Group the buttons together */}
             <div className="flex items-center gap-4">
+                {/* --- ADDITION: New "User Guide" button --- */}
+                <button 
+                    onClick={onUserGuideOpen} 
+                    className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
+                >
+                    User Guide
+                </button>
                 <button 
                     onClick={onFaqOpen} 
                     className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
@@ -684,8 +689,8 @@ const LandingPage = ({ onLaunch }) => {
             <AIStrategyInsights />
             <PerformanceShowcase />
             <FeatureCards />
+            <OurStrategySection />
             <HowItWorks />
-            <WhyScrybeAI />
         </div>
     );
 };
@@ -1071,23 +1076,34 @@ const TradingPlanCard = ({ plan, signal, reasonForHold }) => {
 const DVMScores = ({ scores }) => {
     if (!scores) return null;
     const scoreDefinitions = { Durability: "Measures the company's financial strength and stability, based on profitability and institutional ownership.", Valuation: "Measures how reasonably the stock is priced relative to its earnings and book value. Lower is often better.", Momentum: "Measures the strength of the stock's recent price trend, based on technical indicators like RSI and ADX." };
+    
     const ScoreCard = ({ title, scoreData }) => {
         const score = scoreData?.score || 0;
         const phrase = scoreData?.phrase || 'N/A';
+        const barColor = score >= 70 ? 'bg-green-500' : score >= 40 ? 'bg-amber-500' : 'bg-red-500';
+        const textColor = score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400';
+
         return (
             <div className="flex-1 bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 text-center transition-all hover:border-slate-500/80 hover:bg-slate-800/60">
                 <div className="flex justify-between items-center text-sm text-gray-400 mb-2">
                     <p className="font-bold text-lg text-white">{title}</p>
                     <span title={scoreDefinitions[title]} className="cursor-help"><InfoIcon /></span>
                 </div>
-                <p className={`text-4xl font-bold ${score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{score.toFixed(1)}<span className="text-2xl text-gray-400/80">/100</span></p>
-                <p className="text-sm text-gray-400 mt-1">{phrase}</p>
+                <p className={`text-4xl font-bold ${textColor}`}>{score.toFixed(0)}<span className="text-2xl text-gray-400/80">/100</span></p>
+                <p className="text-sm text-gray-400 mt-1 min-h-[2.5rem]">{phrase}</p>
+                
+                {/* Visual bar section */}
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`${barColor} h-2 rounded-full`} style={{ width: `${score}%` }}></div>
+                </div>
             </div>
         );
     };
+    
     const overallScore = (scores.durability.score + scores.valuation.score + scores.momentum.score) / 3;
     let overallStatus = "Balanced Profile";
     if (overallScore >= 65) { overallStatus = "Strong Performer"; } else if (overallScore <= 45) { overallStatus = "Needs Caution"; }
+    
     return (
         <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -1102,6 +1118,7 @@ const DVMScores = ({ scores }) => {
         </div>
     );
 };
+
 const ConversationalAnswerDisplay = ({ answer }) => {
     if (!answer) return null;
     return (
@@ -1356,7 +1373,11 @@ export default function App() {
     const [view, setView] = useState('landing'); // 'landing' or 'app'
     
     // --- NEW STATE for FaqPage ---
+    const [showUserGuide, setShowUserGuide] = useState(false);
     const [showFaq, setShowFaq] = useState(false);
+    const [showPrivacy, setShowPrivacy] = useState(false); // Add this
+    const [showTerms, setShowTerms] = useState(false);
+    
 
     // State for the tabbed interface inside the app
     const [activeTab, setActiveTab] = useState('stock_analysis');
@@ -1373,6 +1394,11 @@ export default function App() {
     const [isPulseOpen, setIsPulseOpen] = useState(false);
 
     const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [tabIndex, setTabIndex] = useState(0); 
+
+    const navigateToTab = (index) => { 
+        setTabIndex(index);
+    };
 
     // --- Core Application Logic ---
 
@@ -1428,44 +1454,41 @@ export default function App() {
 
     const renderMainApp = () => (
         <div className="w-full">
-            <Tab.Group onChange={(index) => {
-                if (index === 0) setActiveTab('stock_analysis');
-                if (index === 1) setActiveTab('open_positions');
-                if (index === 2) setActiveTab('index_analysis');
-                if (index === 3) setActiveTab('track_record');
-                if (index === 4) setActiveTab('rulebook');
+            <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
+                setTabIndex(index);
+                if (index === 0) setActiveTab('app_guide');
+                if (index === 1) setActiveTab('stock_analysis'); // Corrected index
+                if (index === 2) setActiveTab('on_the_radar');   // Corrected index
+                if (index === 3) setActiveTab('open_positions'); // Corrected index
+                if (index === 4) setActiveTab('index_analysis'); // Corrected index
+                if (index === 5) setActiveTab('track_record'); // Corrected index
+                if (index === 6) setActiveTab('rulebook');     // Corrected index
             }}>
                 <Tab.List>
-                    {/* --- 1. Full Tab Bar for Medium Screens and Up (hidden on mobile) --- */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>On The Radar</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Rulebook</button>)}</Tab>
                     </div>
 
-                    {/* --- 2. Dropdown Menu for Mobile Screens (hidden on medium and up) --- */}
                     <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
                         <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
                             <div>
                                 <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
-                                    {activeTab.replace('_', ' ')}
+                                    {activeTab.replace(/_/g, ' ')}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                                 </Menu.Button>
                             </div>
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
+                            <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
@@ -1479,19 +1502,25 @@ export default function App() {
                 <div className="w-full py-8">
                     <Tab.Panels>
                         <Tab.Panel>
-                            {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
+                            <AppGuide navigateToTab={navigateToTab} />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'open_positions' && <OpenPositions />}
+                            {renderStockAnalysisContent()}
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'index_analysis' && <IndexAnalysisView />}
+                            <OnTheRadar />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'track_record' && <AITrackRecord />}
+                            <OpenPositions />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'rulebook' && <Rulebook />}
+                            <IndexAnalysisView />
+                        </Tab.Panel>
+                        <Tab.Panel>
+                            <AITrackRecord />
+                        </Tab.Panel>
+                        <Tab.Panel>
+                            <Rulebook />
                         </Tab.Panel>
                     </Tab.Panels>
                 </div>
@@ -1508,7 +1537,15 @@ export default function App() {
             default: return <StockSelector onAnalyze={handleAnalysis} />;
         }
     };
-
+    if (showPrivacy) {
+        return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />;
+    }
+    if (showTerms) {
+        return <TermsPage onBack={() => setShowTerms(false)} />;
+    }
+    if (showUserGuide) {
+        return <UserGuidePage onBack={() => setShowUserGuide(false)} />;
+    }
     if (showFaq) {
         return <FaqPage onBack={() => setShowFaq(false)} />;
     }
@@ -1525,7 +1562,7 @@ export default function App() {
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
                 {/* This is the conditional logic to show the correct header */}
                 {view === 'landing' ? (
-                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} />
+                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} onUserGuideOpen={() => setShowUserGuide(true)} />
                 ) : (
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
@@ -1543,7 +1580,12 @@ export default function App() {
             </div>
             
             <TickerTape />
-            
+            <Footer 
+                onPrivacyClick={() => setShowPrivacy(true)}
+                onTermsClick={() => setShowTerms(true)}
+                onUserGuideClick={() => setShowUserGuide(true)}
+                onFaqClick={() => setShowFaq(true)}
+            />
             {/* This renders the demo modal only when it's open */}
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
 
