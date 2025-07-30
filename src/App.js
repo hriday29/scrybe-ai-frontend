@@ -1539,28 +1539,25 @@ export default function App() {
                 <div className="w-full py-8">
                     <Tab.Panels>
                         <Tab.Panel>
-                            {activeTab === 'app_guide' && <AppGuide navigateToTab={navigateToTab} />}
+                            <AppGuide navigateToTab={navigateToTab} />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
-                        </Tab.Panel>
-
-                        {/* --- ADDITION: New Tab.Panel for the Component --- */}
-                        <Tab.Panel>
-                            {activeTab === 'on_the_radar' && <OnTheRadar />}
-                        </Tab.Panel>
-
-                        <Tab.Panel>
-                            {activeTab === 'open_positions' && <OpenPositions />}
+                            {renderStockAnalysisContent()}
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'index_analysis' && <IndexAnalysisView />}
+                            <OnTheRadar />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'track_record' && <AITrackRecord />}
+                            <OpenPositions />
                         </Tab.Panel>
                         <Tab.Panel>
-                            {activeTab === 'rulebook' && <Rulebook />}
+                            <IndexAnalysisView />
+                        </Tab.Panel>
+                        <Tab.Panel>
+                            <AITrackRecord />
+                        </Tab.Panel>
+                        <Tab.Panel>
+                            <Rulebook />
                         </Tab.Panel>
                     </Tab.Panels>
                 </div>
