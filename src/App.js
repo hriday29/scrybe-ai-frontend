@@ -1133,7 +1133,7 @@ const DVMScores = ({ scores }) => {
                     <span title={scoreDefinitions[title]} className="cursor-help"><InfoIcon /></span>
                 </div>
                 <p className={`text-4xl font-bold ${textColor}`}>{score.toFixed(0)}<span className="text-2xl text-gray-400/80">/100</span></p>
-                <p className="text-sm text-gray-400 mt-1 h-10">{phrase}</p>
+                <p className="text-sm text-gray-400 mt-1 min-h-[2.5rem]">{phrase}</p>
                 
                 {/* Visual bar section */}
                 <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
