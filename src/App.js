@@ -13,6 +13,7 @@ import FeedbackWidget from './FeedbackWidget';
 import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
+import OnTheRadar from './OnTheRadar.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -1430,22 +1431,27 @@ export default function App() {
         <div className="w-full">
             <Tab.Group onChange={(index) => {
                 if (index === 0) setActiveTab('stock_analysis');
-                if (index === 1) setActiveTab('open_positions');
-                if (index === 2) setActiveTab('index_analysis');
-                if (index === 3) setActiveTab('track_record');
-                if (index === 4) setActiveTab('rulebook');
+                // --- CHANGE: Added 'on_the_radar' and updated the following indices ---
+                if (index === 1) setActiveTab('on_the_radar'); 
+                if (index === 2) setActiveTab('open_positions');
+                if (index === 3) setActiveTab('index_analysis');
+                if (index === 4) setActiveTab('track_record');
+                if (index === 5) setActiveTab('rulebook');
+                // --- END CHANGE ---
             }}>
                 <Tab.List>
-                    {/* --- 1. Full Tab Bar for Medium Screens and Up (hidden on mobile) --- */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
+                        
+                        {/* --- ADDITION: New "On The Radar" Tab for Desktop --- */}
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>On The Radar</button>)}</Tab>
+                        
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Rulebook</button>)}</Tab>
                     </div>
 
-                    {/* --- 2. Dropdown Menu for Mobile Screens (hidden on medium and up) --- */}
                     <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
                         <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
                             <div>
@@ -1454,18 +1460,14 @@ export default function App() {
                                     <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                                 </Menu.Button>
                             </div>
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
+                            <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
+
+                                        {/* --- ADDITION: New "On The Radar" Tab for Mobile --- */}
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</Tab>)}</Menu.Item>
+
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
@@ -1481,6 +1483,12 @@ export default function App() {
                         <Tab.Panel>
                             {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
                         </Tab.Panel>
+
+                        {/* --- ADDITION: New Tab.Panel for the Component --- */}
+                        <Tab.Panel>
+                            {activeTab === 'on_the_radar' && <OnTheRadar />}
+                        </Tab.Panel>
+
                         <Tab.Panel>
                             {activeTab === 'open_positions' && <OpenPositions />}
                         </Tab.Panel>
