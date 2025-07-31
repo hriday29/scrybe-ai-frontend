@@ -1374,7 +1374,7 @@ export default function App() {
 
     const [showDisclaimer, setShowDisclaimer] = useState(false);
 
-    const MAINTENANCE_MODE = true; // Set to true to show maintenance page
+    const MAINTENANCE_MODE = false; // Set to true to show maintenance page
 
     if (MAINTENANCE_MODE) {
         return (
