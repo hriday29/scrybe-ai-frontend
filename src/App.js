@@ -13,6 +13,13 @@ import FeedbackWidget from './FeedbackWidget';
 import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
+import AppGuide from './AppGuide.js';
+import OnTheRadar from './OnTheRadar.js';
+import Footer from './Footer.js';
+import UserGuidePage from './UserGuidePage.js';
+import PrivacyPolicyPage from './PrivacyPolicyPage.js';
+import TermsPage from './TermsPage.js';
+// Make sure you also have imports for any other components in separate files
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -1352,7 +1359,23 @@ const AITrackRecord = () => {
 };
 
 export default function App() {
-    const MAINTENANCE_MODE = true; // Set to true to show maintenance page
+    // --- STEP 1: ALL useState hooks must be at the top ---
+    const [view, setView] = useState('landing');
+    const [showFaq, setShowFaq] = useState(false);
+    const [showUserGuide, setShowUserGuide] = useState(false);
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showTerms, setShowTerms] = useState(false);
+    const [activeTab, setActiveTab] = useState('app_guide'); // Default to App Guide
+    const [analysisState, setAnalysisState] = useState('selector');
+    const [error, setError] = useState(null);
+    const [analysisData, setAnalysisData] = useState(null);
+    const [isDemoOpen, setIsDemoOpen] = useState(false);
+    const [isPulseOpen, setIsPulseOpen] = useState(false);
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [tabIndex, setTabIndex] = useState(0);
+
+    // --- STEP 2: The maintenance mode check comes AFTER all hooks ---
+    const MAINTENANCE_MODE = true; // Set to true to show maintenance page, false to show app
 
     if (MAINTENANCE_MODE) {
         return (
@@ -1364,30 +1387,11 @@ export default function App() {
             </main>
         );
     }
-    
-    // State to manage the main view: landing page or the application
-    const [view, setView] = useState('landing'); // 'landing' or 'app'
-    
-    // --- NEW STATE for FaqPage ---
-    const [showFaq, setShowFaq] = useState(false);
 
-    // State for the tabbed interface inside the app
-    const [activeTab, setActiveTab] = useState('stock_analysis');
-    
-    // State for the stock analysis flow within the app
-    const [analysisState, setAnalysisState] = useState('selector'); // 'selector', 'analyzing', 'results', 'error'
-    
-    // State for API data and errors
-    const [error, setError] = useState(null);
-    const [analysisData, setAnalysisData] = useState(null);
-    
-    // State to control the pop-up modals
-    const [isDemoOpen, setIsDemoOpen] = useState(false);
-    const [isPulseOpen, setIsPulseOpen] = useState(false);
-
-    const [showDisclaimer, setShowDisclaimer] = useState(false);
-
-    // --- Core Application Logic ---
+    // --- STEP 3: The rest of your component logic and functions follow ---
+    const navigateToTab = (index) => {
+        setTabIndex(index);
+    };
 
     const handleLaunch = () => {
         const agreedTimestamp = localStorage.getItem('disclaimerAgreedTimestamp');
@@ -1395,20 +1399,17 @@ export default function App() {
             const ninetyDaysInMillis = 90 * 24 * 60 * 60 * 1000;
             const lastAgreedDate = new Date(parseInt(agreedTimestamp));
             const currentDate = new Date();
-
-            // If it has been more than 90 days, show the disclaimer again
             if (currentDate.getTime() - lastAgreedDate.getTime() > ninetyDaysInMillis) {
                 setShowDisclaimer(true);
             } else {
-                setView('app'); // Launch directly if within 90 days
+                setView('app');
             }
         } else {
-            setShowDisclaimer(true); // Show if they've never agreed
+            setShowDisclaimer(true);
         }
     };
 
     const handleAgreeToDisclaimer = () => {
-        // Save the current timestamp to localStorage
         localStorage.setItem('disclaimerAgreedTimestamp', Date.now().toString());
         setShowDisclaimer(false);
         setView('app');
@@ -1422,9 +1423,7 @@ export default function App() {
         setError(null);
         setAnalysisData(null);
         try {
-            // Use the variable instead of the hardcoded URL
             const response = await fetch(`${API_BASE_URL}/api/analyze/${ticker}`);
-
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ error: "Analysis not found or server error." }));
                 throw new Error(errorData.error);
@@ -1441,71 +1440,28 @@ export default function App() {
 
     const renderMainApp = () => (
         <div className="w-full">
-            <Tab.Group onChange={(index) => {
-                if (index === 0) setActiveTab('stock_analysis');
-                if (index === 1) setActiveTab('open_positions');
-                if (index === 2) setActiveTab('index_analysis');
-                if (index === 3) setActiveTab('track_record');
-                if (index === 4) setActiveTab('rulebook');
+            <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
+                setTabIndex(index);
+                if (index === 0) setActiveTab('app_guide');
+                if (index === 1) setActiveTab('stock_analysis');
+                if (index === 2) setActiveTab('on_the_radar');
+                if (index === 3) setActiveTab('open_positions');
+                if (index === 4) setActiveTab('index_analysis');
+                if (index === 5) setActiveTab('track_record');
+                if (index === 6) setActiveTab('rulebook');
             }}>
                 <Tab.List>
-                    {/* --- 1. Full Tab Bar for Medium Screens and Up (hidden on mobile) --- */}
-                    <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Rulebook</button>)}</Tab>
-                    </div>
-
-                    {/* --- 2. Dropdown Menu for Mobile Screens (hidden on medium and up) --- */}
-                    <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
-                        <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
-                            <div>
-                                <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
-                                    {activeTab.replace('_', ' ')}
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
-                                </Menu.Button>
-                            </div>
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
-                                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div className="px-1 py-1">
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</Tab>)}</Menu.Item>
-                                    </div>
-                                </Menu.Items>
-                            </Transition>
-                        </Menu>
-                    </div>
+                    {/* Your full Tab.List JSX with all 7 tabs for desktop and mobile */}
                 </Tab.List>
                 <div className="w-full py-8">
                     <Tab.Panels>
-                        <Tab.Panel>
-                            {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'open_positions' && <OpenPositions />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'index_analysis' && <IndexAnalysisView />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'track_record' && <AITrackRecord />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'rulebook' && <Rulebook />}
-                        </Tab.Panel>
+                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
+                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                        <Tab.Panel><OnTheRadar /></Tab.Panel>
+                        <Tab.Panel><OpenPositions /></Tab.Panel>
+                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
+                        <Tab.Panel><AITrackRecord /></Tab.Panel>
+                        <Tab.Panel><Rulebook /></Tab.Panel>
                     </Tab.Panels>
                 </div>
             </Tab.Group>
@@ -1517,28 +1473,30 @@ export default function App() {
             case 'analyzing': return <SkeletonLoader />;
             case 'results': return <AnalysisDashboard data={analysisData} />;
             case 'error': return <ErrorDisplay error={error} onReset={handleResetAnalysis} />;
-            case 'selector':
-            default: return <StockSelector onAnalyze={handleAnalysis} />;
+            case 'selector': default: return <StockSelector onAnalyze={handleAnalysis} />;
         }
     };
 
-    if (showFaq) {
-        return <FaqPage onBack={() => setShowFaq(false)} />;
-    }
+    // --- STEP 4: Full page 'switches' come after all logic, before the main return ---
+    if (showFaq) { return <FaqPage onBack={() => setShowFaq(false)} />; }
+    if (showUserGuide) { return <UserGuidePage onBack={() => setShowUserGuide(false)} />; }
+    if (showPrivacy) { return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />; }
+    if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
+    // --- STEP 5: The final return statement for the main app ---
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
-            <style>{`
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
-            `}</style>
+            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
             
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {/* This is the conditional logic to show the correct header */}
                 {view === 'landing' ? (
-                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} />
+                    <LandingHeader 
+                        onDemoOpen={() => setIsDemoOpen(true)} 
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                    />
                 ) : (
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
@@ -1547,7 +1505,6 @@ export default function App() {
                     />
                 )}
                 
-                {/* This is the conditional logic to show the correct main view */}
                 {view === 'landing' ? (
                     <LandingPage onLaunch={handleLaunch} />
                 ) : (
@@ -1556,10 +1513,13 @@ export default function App() {
             </div>
             
             <TickerTape />
-            
-            {/* This renders the demo modal only when it's open */}
+            <Footer 
+                onPrivacyClick={() => setShowPrivacy(true)}
+                onTermsClick={() => setShowTerms(true)}
+                onUserGuideClick={() => setShowUserGuide(true)}
+                onFaqClick={() => setShowFaq(true)}
+            />
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
-
             <FeedbackWidget />
         </main>
     );
