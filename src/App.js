@@ -1161,9 +1161,8 @@ const ConversationalAnswerDisplay = ({ answer }) => {
 };
 
 const AnalysisDashboard = ({ data }) => {
-    // This corrected block safely defines all variables with default values.
     const {
-        scrybeScore = 0,
+        scrybeScore, // Let's handle the default below
         signal = 'N/A',
         signalQualifier = '',
         confidence = 'N/A',
@@ -1176,25 +1175,29 @@ const AnalysisDashboard = ({ data }) => {
         tradePlan = {},
         charts = {},
         technicalBreakdown = {},
-        fundamentalBreakdown = {}, // <-- Correctly defined here
+        fundamentalBreakdown = {},
         performanceSnapshot = {},
         correlations = {},
         dvmScores
     } = data || {};
 
-    const scoreColor = scrybeScore > 49 ? 'text-green-400' 
-                    : scrybeScore < -49 ? 'text-red-400'
-                    : 'text-amber-400';
-    const scoreBorderColor = scrybeScore > 49 ? 'border-green-500/40' 
-                           : scrybeScore < -49 ? 'border-red-500/40'
+    // This safety check is the critical fix.
+    // It ensures scrybeScore is always a number.
+    const score = (typeof scrybeScore === 'number' && !isNaN(scrybeScore)) ? scrybeScore : 0;
+
+    const scoreColor = score > 49 ? 'text-green-400' 
+                     : score < -49 ? 'text-red-400'
+                     : 'text-amber-400';
+    const scoreBorderColor = score > 49 ? 'border-green-500/40' 
+                           : score < -49 ? 'border-red-500/40'
                            : 'border-amber-500/40';
-    const scoreBgColor = scrybeScore > 49 ? 'bg-green-500/10' 
-                       : scrybeScore < -49 ? 'bg-red-500/10'
+    const scoreBgColor = score > 49 ? 'bg-green-500/10' 
+                       : score < -49 ? 'bg-red-500/10'
                        : 'bg-amber-500/10';
-    const scoreGlowColor = scrybeScore > 49 ? 'shadow-green-500/20' 
-                         : scrybeScore < -49 ? 'shadow-red-500/20'
+    const scoreGlowColor = score > 49 ? 'shadow-green-500/20' 
+                         : score < -49 ? 'shadow-red-500/20'
                          : 'shadow-amber-500/20';
-    const scoreText = scrybeScore > 0 ? `+${scrybeScore.toFixed(0)}` : scrybeScore.toFixed(0);
+    const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
 
     const qualifierConfig = { 'Steady Climb': { Icon: ArrowUpRightIcon, colors: 'bg-green-500/10 text-green-400 border-green-500/30' }, 'Volatile Move': { Icon: ZapIcon, colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30' }, 'Quiet Consolidation': { Icon: PauseIcon, colors: 'bg-slate-700/40 text-slate-300 border-slate-600/50' } };
     const qConfig = qualifierConfig[signalQualifier];
@@ -1218,23 +1221,21 @@ const AnalysisDashboard = ({ data }) => {
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn">
             <h2 className="text-3xl font-bold text-white mb-2">{companyName}</h2>
-            <p className="text-gray-400 mb-8">AI Analysis as of {new Date(timestamp).toLocaleString()}</p>
+            <p className="text-gray-400 mb-8">AI Analysis as of {timestamp ? new Date(timestamp).toLocaleString() : 'N/A'}</p>
             
             <div className={`p-8 rounded-xl border ${scoreBorderColor} ${scoreBgColor} shadow-2xl ${scoreGlowColor} text-center mb-8`}>
                 <p className={`font-semibold tracking-wider uppercase ${scoreColor}`}>Scrybe Score</p>
                 <div className="flex justify-center items-center gap-x-4">
                     <h1 className={`text-7xl font-extrabold my-2 font-mono ${scoreColor}`}>{scoreText}</h1>
-                    
-                    {/* This part adds the qualifier badge back in */}
                     {qConfig && ( 
                         <span title={qConfig.description} className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border ${qConfig.colors}`}> 
                             <qConfig.Icon className="h-4 w-4" /> {signalQualifier} 
                         </span> 
                     )}
                 </div>
-                
                 <p className="text-xl font-semibold text-gray-300">Signal: <span className={scoreColor}>{signal} ({confidence})</span></p>
             </div>
+            
             <ConfidencePoll analysisId={data?.analysis_id} />
             <PerformanceBar />
             {dvmScores && <DVMScores scores={dvmScores} />}
@@ -1274,13 +1275,13 @@ const AnalysisDashboard = ({ data }) => {
             <div className="space-y-8 mb-8">
                 {charts && charts['1M'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Tactical View)</h3>
+                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Contextual View)</h3>
                         <img src={`data:image/png;base64,${charts['1M']}`} alt="1-Month Technical Analysis Chart" className="rounded-md" />
                     </div>
                 )}
                 {charts && charts['1W'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-                        <h3 className="font-bold text-xl text-white mb-4">1-Week Chart (Contextual View)</h3>
+                        <h3 className="font-bold text-xl text-white mb-4">1-Week Chart (Tactical View)</h3>
                         <img src={`data:image/png;base64,${charts['1W']}`} alt="1-Week Technical Analysis Chart" className="rounded-md" />
                     </div>
                 )}
@@ -1290,7 +1291,7 @@ const AnalysisDashboard = ({ data }) => {
                 <h3 className="font-bold text-xl text-white mb-4">Inter-Market Correlations (90-Day)</h3>
                 <p className="text-center text-sm text-gray-400 mb-6 max-w-2xl mx-auto">
                     This shows how the stock's price has moved in relation to key global markets over the last 90 days. A value near +1 means they move together; near -1 means they move in opposite directions.
-                </p>               
+                </p> 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {Object.entries(correlations).map(([key, value]) => {
                         const cleanKey = key.replace(' Correlation', '');
@@ -1346,10 +1347,6 @@ const AnalysisDashboard = ({ data }) => {
                     </div>
                 </div>
             </details>
-            {/* <div className="mt-8">
-                <ConversationalQa analysisContext={data} />
-            </div> */}
-
             <DisclaimerFooter />
         </div>
     );
