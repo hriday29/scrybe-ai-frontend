@@ -19,7 +19,6 @@ import Footer from './Footer.js';
 import PrivacyPolicyPage from './PrivacyPolicyPage.js';
 import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
-
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -1369,36 +1368,20 @@ const AITrackRecord = () => {
 };
 
 export default function App() {
-    // State to manage the main view: landing page or the application
-    const [view, setView] = useState('landing'); // 'landing' or 'app'
-    
-    // --- NEW STATE for FaqPage ---
-    const [showUserGuide, setShowUserGuide] = useState(false);
-    const [showFaq, setShowFaq] = useState(false);
-    const [showPrivacy, setShowPrivacy] = useState(false); // Add this
-    const [showTerms, setShowTerms] = useState(false);
-    
 
-    // State for the tabbed interface inside the app
-    const [activeTab, setActiveTab] = useState('stock_analysis');
-    
-    // State for the stock analysis flow within the app
-    const [analysisState, setAnalysisState] = useState('selector'); // 'selector', 'analyzing', 'results', 'error'
-    
-    // State for API data and errors
+    const [view, setView] = useState('landing');
+    const [showFaq, setShowFaq] = useState(false);
+    const [showUserGuide, setShowUserGuide] = useState(false);
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showTerms, setShowTerms] = useState(false);
+    const [activeTab, setActiveTab] = useState('app_guide'); // New default tab
+    const [analysisState, setAnalysisState] = useState('selector');
     const [error, setError] = useState(null);
     const [analysisData, setAnalysisData] = useState(null);
-    
-    // State to control the pop-up modals
     const [isDemoOpen, setIsDemoOpen] = useState(false);
     const [isPulseOpen, setIsPulseOpen] = useState(false);
-
     const [showDisclaimer, setShowDisclaimer] = useState(false);
-    const [tabIndex, setTabIndex] = useState(0); 
-
-    const navigateToTab = (index) => { 
-        setTabIndex(index);
-    };
+    const [tabIndex, setTabIndex] = useState(0);
 
     // --- Core Application Logic ---
 
@@ -1425,6 +1408,10 @@ export default function App() {
         localStorage.setItem('disclaimerAgreedTimestamp', Date.now().toString());
         setShowDisclaimer(false);
         setView('app');
+    };
+
+    const navigateToTab = (index) => {
+        setTabIndex(index);
     };
 
     const handleResetAnalysis = () => setAnalysisState('selector');
@@ -1457,12 +1444,12 @@ export default function App() {
             <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
                 setTabIndex(index);
                 if (index === 0) setActiveTab('app_guide');
-                if (index === 1) setActiveTab('stock_analysis'); // Corrected index
-                if (index === 2) setActiveTab('on_the_radar');   // Corrected index
-                if (index === 3) setActiveTab('open_positions'); // Corrected index
-                if (index === 4) setActiveTab('index_analysis'); // Corrected index
-                if (index === 5) setActiveTab('track_record'); // Corrected index
-                if (index === 6) setActiveTab('rulebook');     // Corrected index
+                if (index === 1) setActiveTab('stock_analysis');
+                if (index === 2) setActiveTab('on_the_radar');
+                if (index === 3) setActiveTab('open_positions');
+                if (index === 4) setActiveTab('index_analysis');
+                if (index === 5) setActiveTab('track_record');
+                if (index === 6) setActiveTab('rulebook');
             }}>
                 <Tab.List>
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
@@ -1501,27 +1488,13 @@ export default function App() {
                 </Tab.List>
                 <div className="w-full py-8">
                     <Tab.Panels>
-                        <Tab.Panel>
-                            <AppGuide navigateToTab={navigateToTab} />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {renderStockAnalysisContent()}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <OnTheRadar />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <OpenPositions />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <IndexAnalysisView />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <AITrackRecord />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <Rulebook />
-                        </Tab.Panel>
+                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
+                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                        <Tab.Panel><OnTheRadar /></Tab.Panel>
+                        <Tab.Panel><OpenPositions /></Tab.Panel>
+                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
+                        <Tab.Panel><AITrackRecord /></Tab.Panel>
+                        <Tab.Panel><Rulebook /></Tab.Panel>
                     </Tab.Panels>
                 </div>
             </Tab.Group>
@@ -1537,32 +1510,26 @@ export default function App() {
             default: return <StockSelector onAnalyze={handleAnalysis} />;
         }
     };
-    if (showPrivacy) {
-        return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />;
-    }
-    if (showTerms) {
-        return <TermsPage onBack={() => setShowTerms(false)} />;
-    }
-    if (showUserGuide) {
-        return <UserGuidePage onBack={() => setShowUserGuide(false)} />;
-    }
-    if (showFaq) {
-        return <FaqPage onBack={() => setShowFaq(false)} />;
-    }
+    
+    if (showFaq) { return <FaqPage onBack={() => setShowFaq(false)} />; }
+    if (showUserGuide) { return <UserGuidePage onBack={() => setShowUserGuide(false)} />; }
+    if (showPrivacy) { return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />; }
+    if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
+    // This is the final return statement for your main application
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
-            <style>{`
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
-            `}</style>
+            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
             
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {/* This is the conditional logic to show the correct header */}
                 {view === 'landing' ? (
-                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} onUserGuideOpen={() => setShowUserGuide(true)} />
+                    <LandingHeader 
+                        onDemoOpen={() => setIsDemoOpen(true)} 
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                    />
                 ) : (
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
@@ -1571,7 +1538,6 @@ export default function App() {
                     />
                 )}
                 
-                {/* This is the conditional logic to show the correct main view */}
                 {view === 'landing' ? (
                     <LandingPage onLaunch={handleLaunch} />
                 ) : (
@@ -1586,9 +1552,7 @@ export default function App() {
                 onUserGuideClick={() => setShowUserGuide(true)}
                 onFaqClick={() => setShowFaq(true)}
             />
-            {/* This renders the demo modal only when it's open */}
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
-
             <FeedbackWidget />
         </main>
     );
