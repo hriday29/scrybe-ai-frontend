@@ -958,17 +958,27 @@ const StockSelector = ({ onAnalyze }) => {
     }, [stocks, searchTerm, activeFilter]);
 
     const ScoreBadge = ({ score }) => {
+        // This safety check prevents the crash.
+        if (typeof score !== 'number' || isNaN(score)) {
+            return (
+                <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">
+                    N/A
+                </span>
+            );
+        }
+
         const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
-                       : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
-                       : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
+                    : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
+                    : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
         const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
+        
         return (
             <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
                 {scoreText}
             </span>
         );
     };
-    
+        
     const FilterButton = ({ filterType }) => {
         const isActive = activeFilter === filterType;
         return (
