@@ -914,47 +914,21 @@ const MarketPulsePopover = ({ onClose }) => {
   );
 };
 
-const Header = ({ onReset }) => {
-    const [isPulseOpen, setIsPulseOpen] = useState(false);
-    return (
-        <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
-            <div className="flex-1 flex justify-start">
-                <div className="flex items-center gap-3">
-                    <ScrybeLogo />
-                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                </div>
-            </div>
-            <div className="flex-1 flex justify-center">
-                <div className="relative">
-                    <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <PulseIcon /> Market Pulse
-                    </button>
-                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
-                </div>
-            </div>
-            <div className="flex-1 flex justify-end items-center gap-4">
-                {onReset && (
-                    <button onClick={onReset} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <ArrowLeftIcon /> New Analysis
-                    </button>
-                )}
-            </div>
-        </header>
-    );
-};
-
 const StockSelector = ({ onAnalyze }) => {
     const [stocks, setStocks] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/stock-list`)
+        // 1. Fetch from the new endpoint to get all data, including scores
+        fetch(`${API_BASE_URL}/api/all-analysis`)
             .then(res => {
-                if (!res.ok) throw new Error("Failed to load stock list.");
+                if (!res.ok) throw new Error("Failed to load stock analysis list.");
                 return res.json();
             })
             .then(data => {
-                console.log(`✅ Received ${data.length} stocks from the API.`);
+                // 2. Sort the data by the absolute value of the Scrybe Score
+                data.sort((a, b) => Math.abs(b.scrybeScore || 0) - Math.abs(a.scrybeScore || 0));
                 setStocks(data);
                 setIsLoading(false);
             })
@@ -963,6 +937,7 @@ const StockSelector = ({ onAnalyze }) => {
                 setIsLoading(false);
             });
     }, []);
+
     const filteredStocks = useMemo(() => {
         if (!searchTerm) return stocks;
         return stocks.filter(stock =>
@@ -970,35 +945,49 @@ const StockSelector = ({ onAnalyze }) => {
             stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [stocks, searchTerm]);
+
+    const ScoreBadge = ({ score }) => {
+        const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
+                       : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
+                       : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
+        const scoreText = score > 0 ? `+${score}` : score;
+        return (
+            <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
+                {scoreText}
+            </span>
+        );
+    };
+
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-20 md:pt-20 md:pb-24">
-            <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Select a Stock for Analysis</h2>
-            <p className="mt-4 max-w-2xl text-lg text-gray-400">Choose from the pre-analyzed Nifty 50 companies to get an instant, in-depth report from Scrybe AI.</p>
-            <div className="mt-12 w-full max-w-md">
+            <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Today's Top Setups</h2>
+            <p className="mt-4 max-w-2xl text-lg text-gray-400">A daily ranked list of Nifty 50 companies, sorted by the AI's Scrybe Score.</p>
+            <div className="mt-12 w-full max-w-2xl">
                 <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <SearchIcon />
-                    </div>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><SearchIcon /></div>
                     <input
                         type="text"
-                        placeholder={isLoading ? "Loading stocks..." : "Search for a stock..."}
+                        placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full bg-slate-900/40 backdrop-blur-md border border-slate-700 text-white placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
                         disabled={isLoading}
                     />
                 </div>
-                <div className="mt-4 max-h-80 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
+                <div className="mt-4 max-h-96 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
                     {isLoading && <p className="text-gray-400 text-center p-4">Loading...</p>}
-                    {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No stocks found.</p>}
-                    {!isLoading && filteredStocks.map(stock => (
+                    {!isLoading && filteredStocks.map((stock, index) => (
                         <button
                             key={stock.ticker}
                             onClick={() => onAnalyze(stock.ticker)}
                             className="w-full text-left p-3 rounded-lg hover:bg-blue-600/50 transition-colors flex justify-between items-center"
                         >
-                            <span className="font-semibold text-white">{stock.companyName}</span>
-                            <span className="text-sm text-gray-400">{stock.ticker}</span>
+                            <div className="flex items-center">
+                                <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
+                                <span className="font-semibold text-white">{stock.companyName}</span>
+                            </div>
+                            {/* 3. Display the new Score Badge */}
+                            <ScoreBadge score={stock.scrybeScore} />
                         </button>
                     ))}
                 </div>
@@ -1133,6 +1122,7 @@ const ConversationalAnswerDisplay = ({ answer }) => {
 const AnalysisDashboard = ({ data }) => {
     // This corrected block safely defines all variables with default values.
     const {
+        scrybeScore = 0,
         signal = 'N/A',
         signalQualifier = '',
         confidence = 'N/A',
@@ -1151,8 +1141,19 @@ const AnalysisDashboard = ({ data }) => {
         dvmScores
     } = data || {};
 
-    const signalConfig = { BUY: { color: 'text-green-400', borderColor: 'border-green-500/40', bgColor: 'bg-green-500/10', glowColor: 'shadow-green-500/20' }, SELL: { color: 'text-red-400', borderColor: 'border-red-500/40', bgColor: 'bg-red-500/10', glowColor: 'shadow-red-500/20' }, HOLD: { color: 'text-amber-400', borderColor: 'border-amber-500/40', bgColor: 'bg-amber-500/10', glowColor: 'shadow-amber-500/20' }, DEFAULT: { color: 'text-gray-400', borderColor: 'border-gray-500/40', bgColor: 'bg-gray-500/10', glowColor: 'shadow-gray-500/20' } };
-    const config = signalConfig[signal] || signalConfig.DEFAULT;
+    const scoreColor = scrybeScore > 49 ? 'text-green-400' 
+                    : scrybeScore < -49 ? 'text-red-400'
+                    : 'text-amber-400';
+    const scoreBorderColor = scrybeScore > 49 ? 'border-green-500/40' 
+                           : scrybeScore < -49 ? 'border-red-500/40'
+                           : 'border-amber-500/40';
+    const scoreBgColor = scrybeScore > 49 ? 'bg-green-500/10' 
+                       : scrybeScore < -49 ? 'bg-red-500/10'
+                       : 'bg-amber-500/10';
+    const scoreGlowColor = scrybeScore > 49 ? 'shadow-green-500/20' 
+                         : scrybeScore < -49 ? 'shadow-red-500/20'
+                         : 'shadow-amber-500/20';
+    const scoreText = scrybeScore > 0 ? `+${scrybeScore.toFixed(0)}` : scrybeScore.toFixed(0);
 
     const qualifierConfig = { 'Steady Climb': { Icon: ArrowUpRightIcon, colors: 'bg-green-500/10 text-green-400 border-green-500/30' }, 'Volatile Move': { Icon: ZapIcon, colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30' }, 'Quiet Consolidation': { Icon: PauseIcon, colors: 'bg-slate-700/40 text-slate-300 border-slate-600/50' } };
     const qConfig = qualifierConfig[signalQualifier];
@@ -1178,13 +1179,20 @@ const AnalysisDashboard = ({ data }) => {
             <h2 className="text-3xl font-bold text-white mb-2">{companyName}</h2>
             <p className="text-gray-400 mb-8">AI Analysis as of {new Date(timestamp).toLocaleString()}</p>
             
-            <div className={`p-8 rounded-xl border ${config.borderColor} ${config.bgColor} shadow-2xl ${config.glowColor} text-center mb-8`}>
-                <p className={`font-semibold tracking-wider uppercase ${config.color}`}>Overall Signal</p>
+            <div className={`p-8 rounded-xl border ${scoreBorderColor} ${scoreBgColor} shadow-2xl ${scoreGlowColor} text-center mb-8`}>
+                <p className={`font-semibold tracking-wider uppercase ${scoreColor}`}>Scrybe Score</p>
                 <div className="flex justify-center items-center gap-x-4">
-                    <h1 className={`text-7xl font-extrabold my-2 ${config.color}`}>{signal}</h1>
-                    {qConfig && ( <span title={qConfig.description} className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border ${qConfig.colors}`}> <qConfig.Icon className="h-4 w-4" /> {signalQualifier} </span> )}
+                    <h1 className={`text-7xl font-extrabold my-2 font-mono ${scoreColor}`}>{scoreText}</h1>
+                    
+                    {/* This part adds the qualifier badge back in */}
+                    {qConfig && ( 
+                        <span title={qConfig.description} className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border ${qConfig.colors}`}> 
+                            <qConfig.Icon className="h-4 w-4" /> {signalQualifier} 
+                        </span> 
+                    )}
                 </div>
-                <p className="text-xl font-semibold text-gray-300">Confidence: <span className={config.color}>{confidence}</span></p>
+                
+                <p className="text-xl font-semibold text-gray-300">Signal: <span className={scoreColor}>{signal} ({confidence})</span></p>
             </div>
             <ConfidencePoll analysisId={data?.analysis_id} />
             <PerformanceBar />
