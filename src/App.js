@@ -1352,6 +1352,19 @@ const AITrackRecord = () => {
 };
 
 export default function App() {
+    const MAINTENANCE_MODE = true; // Set to true to show maintenance page
+
+    if (MAINTENANCE_MODE) {
+        return (
+            <main className="bg-[#0A0F1E] min-h-screen text-white font-sans flex flex-col items-center justify-center text-center p-4">
+                <h1 className="text-4xl font-bold mb-4">Under Maintenance</h1>
+                <p className="text-lg text-slate-400 max-w-md">
+                    We're currently upgrading the Scrybe AI engine with a more powerful analysis system. Please check back shortly.
+                </p>
+            </main>
+        );
+    }
+    
     // State to manage the main view: landing page or the application
     const [view, setView] = useState('landing'); // 'landing' or 'app'
     
