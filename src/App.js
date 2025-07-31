@@ -918,16 +918,15 @@ const StockSelector = ({ onAnalyze }) => {
     const [stocks, setStocks] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [activeFilter, setActiveFilter] = useState('All'); // New state for filters
 
     useEffect(() => {
-        // 1. Fetch from the new endpoint to get all data, including scores
         fetch(`${API_BASE_URL}/api/all-analysis`)
             .then(res => {
                 if (!res.ok) throw new Error("Failed to load stock analysis list.");
                 return res.json();
             })
             .then(data => {
-                // 2. Sort the data by the absolute value of the Scrybe Score
                 data.sort((a, b) => Math.abs(b.scrybeScore || 0) - Math.abs(a.scrybeScore || 0));
                 setStocks(data);
                 setIsLoading(false);
@@ -939,22 +938,46 @@ const StockSelector = ({ onAnalyze }) => {
     }, []);
 
     const filteredStocks = useMemo(() => {
-        if (!searchTerm) return stocks;
-        return stocks.filter(stock =>
+        let filtered = stocks;
+
+        // Apply the active filter first
+        if (activeFilter === 'BUY') {
+            filtered = stocks.filter(stock => stock.signal === 'BUY');
+        } else if (activeFilter === 'SELL') {
+            filtered = stocks.filter(stock => stock.signal === 'SELL');
+        } else if (activeFilter === 'On The Radar') {
+            filtered = stocks.filter(stock => stock.isOnRadar === true);
+        }
+
+        // Then apply the search term
+        if (!searchTerm) return filtered;
+        return filtered.filter(stock =>
             stock.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [stocks, searchTerm]);
+    }, [stocks, searchTerm, activeFilter]);
 
     const ScoreBadge = ({ score }) => {
         const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
                        : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
                        : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
-        const scoreText = score > 0 ? `+${score}` : score;
+        const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
         return (
             <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
                 {scoreText}
             </span>
+        );
+    };
+    
+    const FilterButton = ({ filterType }) => {
+        const isActive = activeFilter === filterType;
+        return (
+            <button 
+                onClick={() => setActiveFilter(filterType)}
+                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-700/50 text-gray-300 hover:bg-slate-600/50'}`}
+            >
+                {filterType}
+            </button>
         );
     };
 
@@ -963,6 +986,14 @@ const StockSelector = ({ onAnalyze }) => {
             <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Today's Top Setups</h2>
             <p className="mt-4 max-w-2xl text-lg text-gray-400">A daily ranked list of Nifty 50 companies, sorted by the AI's Scrybe Score.</p>
             <div className="mt-12 w-full max-w-2xl">
+                {/* --- NEW FILTER BUTTONS --- */}
+                <div className="flex justify-center gap-2 mb-4">
+                    <FilterButton filterType="All" />
+                    <FilterButton filterType="BUY" />
+                    <FilterButton filterType="SELL" />
+                    <FilterButton filterType="On The Radar" />
+                </div>
+
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><SearchIcon /></div>
                     <input
@@ -976,6 +1007,7 @@ const StockSelector = ({ onAnalyze }) => {
                 </div>
                 <div className="mt-4 max-h-96 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
                     {isLoading && <p className="text-gray-400 text-center p-4">Loading...</p>}
+                    {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No setups found for the current filter.</p>}
                     {!isLoading && filteredStocks.map((stock, index) => (
                         <button
                             key={stock.ticker}
@@ -986,7 +1018,6 @@ const StockSelector = ({ onAnalyze }) => {
                                 <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
                                 <span className="font-semibold text-white">{stock.companyName}</span>
                             </div>
-                            {/* 3. Display the new Score Badge */}
                             <ScoreBadge score={stock.scrybeScore} />
                         </button>
                     ))}
