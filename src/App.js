@@ -1585,7 +1585,7 @@ export default function App() {
                         <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
                         <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
                         <Tab.Panel><OnTheRadar /></Tab.Panel>
-                        <Tab.Panel><OpenPositions /></Tab.Panel>
+                        <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
                         <Tab.Panel><IndexAnalysisView /></Tab.Panel>
                         <Tab.Panel><AITrackRecord /></Tab.Panel>
                         <Tab.Panel><Rulebook /></Tab.Panel>

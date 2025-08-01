@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from './apiConfig.js';
 
-// You can reuse your icon components if they are in a separate file
-const ArrowUpRightIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>);
-const ArrowDownRightIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m7 7 10 10-10 10"/></svg>);
-
-
-const OpenPositions = () => {
+const OpenPositions = ({ onAnalyze }) => {
     const [openTrades, setOpenTrades] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -48,6 +43,22 @@ const OpenPositions = () => {
         );
     }
 
+    const PnlProgressBar = ({ trade }) => {
+        const totalRange = Math.abs(trade.target - trade.stop_loss);
+        const progress = Math.abs(trade.current_price - trade.entry_price);
+        const progressPercent = Math.min((progress / totalRange) * 100, 100);
+        const isProfit = trade.pnl_percent >= 0;
+
+        return (
+            <div className="w-full bg-slate-700 rounded-full h-2 my-1">
+                <div 
+                    className={`h-2 rounded-full ${isProfit ? 'bg-green-500' : 'bg-red-500'}`}
+                    style={{ width: `${progressPercent}%` }}
+                ></div>
+            </div>
+        );
+    };
+
     return (
         <div className="w-full max-w-7xl mx-auto p-4 md:p-8 animate-fadeIn">
             <h2 className="text-4xl font-bold text-white mb-2 text-center">Trade Cockpit</h2>
@@ -55,42 +66,39 @@ const OpenPositions = () => {
 
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left min-w-[800px]">
+                    <table className="w-full text-left min-w-[900px]">
                         <thead className="bg-slate-800/50">
                             <tr>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Signal</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">P&L</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">P&L</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Days Held</th>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Entry Price</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Current Price</th>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Target</th>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Stop-Loss</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Entry Date</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">R/R</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             {openTrades.map(trade => {
                                 const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
-                                const signalConfig = trade.signal === 'BUY'
-                                    ? { color: 'text-green-400', icon: <ArrowUpRightIcon /> }
-                                    : { color: 'text-red-400', icon: <ArrowDownRightIcon /> };
-
                                 return (
                                     <tr key={trade.ticker} className="border-b border-slate-800 last:border-b-0 hover:bg-slate-800/40 transition-colors">
-                                        <td className="p-4 text-white font-semibold">{trade.companyName} ({trade.ticker})</td>
-                                        <td className="p-4">
-                                            <span className={`flex items-center gap-1 font-bold ${signalConfig.color}`}>
-                                                {signalConfig.icon} {trade.signal}
-                                            </span>
+                                        <td className="p-4 text-white font-semibold">{trade.companyName}</td>
+                                        <td className="p-4 font-mono font-semibold w-48">
+                                            <span className={pnlColor}>{trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%</span>
+                                            <PnlProgressBar trade={trade} />
                                         </td>
-                                        <td className={`p-4 font-mono font-semibold text-right ${pnlColor}`}>
-                                            {trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%
-                                        </td>
+                                        <td className="p-4 text-gray-300">{trade.days_held}</td>
                                         <td className="p-4 font-mono text-gray-300 text-right">{trade.entry_price.toFixed(2)}</td>
-                                        <td className="p-4 font-mono text-white text-right">{trade.current_price.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-green-400 text-right">{trade.target.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-red-400 text-right">{trade.stop_loss.toFixed(2)}</td>
-                                        <td className="p-4 text-gray-400">{new Date(trade.entry_date).toLocaleDateString()}</td>
+                                        <td className="p-4 font-mono text-sky-400 text-right">{trade.risk_reward_ratio}</td>
+                                        <td className="p-4 text-right">
+                                            <button onClick={() => onAnalyze(trade.ticker)} className="text-blue-400 hover:text-blue-300 font-semibold text-sm">
+                                                View Analysis
+                                            </button>
+                                        </td>
                                     </tr>
                                 )
                             })}
