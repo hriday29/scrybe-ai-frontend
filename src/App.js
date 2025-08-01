@@ -391,16 +391,26 @@ const DemoModal = ({ onClose }) => {
   );
 };
 
-const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen }) => { 
+const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex items-center gap-3">
                 <ScrybeLogo />
-                <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                    
+                    {/* --- NEW, CLICKABLE BETA BADGE --- */}
+                    <button 
+                        onClick={onBetaModalOpen}
+                        className="px-2 py-0.5 text-xs font-bold text-slate-200 bg-gradient-to-br from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-slate-400/50"
+                        style={{textShadow: '0 1px 0 rgb(0 0 0 / 40%)'}}
+                    >
+                        BETA
+                    </button>
+                </div>
             </div>
             
             <div className="flex items-center gap-4">
-                {/* --- ADDITION: New "User Guide" button --- */}
                 <button 
                     onClick={onUserGuideOpen} 
                     className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
@@ -1607,6 +1617,7 @@ export default function App() {
                         onDemoOpen={() => setIsDemoOpen(true)} 
                         onFaqOpen={() => setShowFaq(true)}
                         onUserGuideOpen={() => setShowUserGuide(true)}
+                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
                     />
                 ) : (
                     <AppHeader 
