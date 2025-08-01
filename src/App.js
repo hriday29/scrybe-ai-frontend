@@ -49,7 +49,7 @@ const OurStrategySection = () => {
                     An AI Strategy You Can Understand
                 </h2>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
-                    Our AI isn't a magic black box. It's a disciplined analyst that follows a clear, three-pillar strategy for every stock.
+                    Our AI isn't a magic black box. It's a disciplined analyst that follows a clear, three-pillar scoring system for every stock.
                 </p>
             </div>
 

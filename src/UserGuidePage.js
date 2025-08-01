@@ -46,47 +46,46 @@ const UserGuidePage = ({ onBack }) => {
                     </div>
                     
                     <Section title="1. Welcome to Scrybe AI" id="welcome">
-                        <p>Welcome! Scrybe AI is your personal AI analyst, designed to cut through market noise and save you hours of research. Our system performs a deep, institutional-grade analysis on dozens of top stocks every day to find high-probability swing trading opportunities based on a disciplined, data-driven strategy.</p>
+                        <p>Welcome! Scrybe AI is designed to be your personal AI analyst, doing the heavy lifting of market research so you can focus on making informed decisions. Our system analyzes dozens of top stocks every day to find high-probability swing trading opportunities based on a disciplined, data-driven strategy.</p>
                     </Section>
 
                     <Section title="2. Quickstart: Your First Analysis" id="quickstart">
                         <p>Getting a detailed report is simple:</p>
                         <ol>
-                            <li><strong>Go to the "Stock Analysis" Tab:</strong> This is your main dashboard for selecting a stock.</li>
-                            <li><strong>Choose a Stock:</strong> You can scroll through the pre-analyzed list or use the search bar to find a specific company.</li>
-                            <li><strong>View the Analysis:</strong> Clicking a stock will instantly load the AI's full report, including its signal, trade plan, and data breakdowns.</li>
+                            <li><strong>Go to the "Stock Analysis" Tab:</strong> This is your main dashboard. It displays a ranked list of the day's top setups.</li>
+                            <li><strong>Choose a Stock:</strong> You can either scroll through the ranked list or use the search bar to find a specific company.</li>
+                            <li><strong>View the Analysis:</strong> Clicking a stock will instantly load the AI's full report, including its Scrybe Score, trade plan, and data breakdowns.</li>
                         </ol>
                     </Section>
 
                     <Section title="3. The Main Dashboard: A Deep Dive" id="dashboard">
                         <p>The analysis dashboard contains everything you need to understand the AI's reasoning.</p>
                         <ul>
-                            <li><strong>The Verdict:</strong> This is the final output. It shows the Signal (BUY/SELL/HOLD) and the AI's Confidence level in that signal, from Low to Very High.</li>
-                            <li><strong>The Trade Plan:</strong> An actionable plan with specific price levels for Entry, a Target to take profits, and a Stop-Loss to manage risk. This is the core of a disciplined trade.</li>
+                            <li><strong>The Scrybe Score:</strong> This is the most important output, ranging from -100 (high-conviction short) to +100 (high-conviction long). The magnitude of the score shows the AI's conviction, and the sign (+/-) shows the direction.</li>
+                            <li><strong>The Signal & Confidence:</strong> A simple BUY, SELL, or HOLD signal derived from the score, along with a confidence level (Low to Very High).</li>
+                            <li><strong>The Trade Plan:</strong> An actionable plan with specific price levels for Entry, a Target to take profits, and a Stop-Loss to manage risk.</li>
                             <li><strong>DVM Scores:</strong> A quick visual score (out of 100) for the stock's Durability (financial health), Valuation (is it cheap or expensive?), and Momentum (how strong is its current trend?).</li>
-                            <li><strong>Bull vs. Bear Case:</strong> The AI's written arguments for why the stock might go up (Bull Case) or down (Bear Case), helping you understand both sides of the trade.</li>
-                            <li><strong>Charts:</strong> Visual charts for different timeframes (1-Week Tactical, 1-Month Contextual) to help you see the patterns the AI is analyzing.</li>
                         </ul>
                     </Section>
 
                     <Section title="4. Feature Guide: On The Radar" id="radar">
-                        <p>This is one of our most powerful features. It's a curated watchlist of stocks that are currently 'HOLD' signals but are very close to becoming a BUY or SELL. The AI tells you the exact condition it's waiting for (e.g., "Waiting for a stronger trend"), which helps you anticipate future trades and learn what a high-quality setup looks like.</p>
+                        <p>This is a powerful, curated watchlist of stocks that are currently 'HOLD' signals but are very close to becoming a BUY or SELL. The AI tells you the exact condition it's waiting for (e.g., "Waiting for a stronger trend"), helping you anticipate future trades.</p>
                     </Section>
 
                     <Section title="5. Feature Guide: Market & Index Analysis" id="market">
-                        <p>A great trader never ignores the bigger picture. This section provides a high-level strategic overview of the entire market. The AI analyzes key indices like the Nifty 50 to determine the overall market "weather"—are we in a storm or clear skies? This ensures your trading decisions are aligned with the broader market trend.</p>
+                        <p>This provides the "big picture" view of the market's health. By analyzing key indices like the Nifty 50, the AI understands the overall market "weather," ensuring its signals are aligned with the broader market trend.</p>
                     </Section>
 
                     <Section title="6. Feature Guide: The AI Track Record" id="track-record">
-                        <p>Transparency is a core value. This page provides a fully transparent performance log of every trade signal the AI has ever closed. You can review the wins, the losses, the holding periods, and the overall historical performance to understand the strategy's effectiveness over time.</p>
+                        <p>A fully transparent performance log of every trade signal the AI has ever closed. You can review the wins, the losses, and the overall historical performance to understand the strategy's effectiveness over time.</p>
                     </Section>
                     
                     <Section title="7. Our AI's Philosophy" id="philosophy">
-                        <p>Our AI is not a magic black box. It follows a disciplined, unemotional strategy based on three pillars:</p>
+                        <p>Our AI is not a magic black box. It follows a disciplined, unemotional strategy based on a weighted scoring system that evaluates three core pillars:</p>
                         <ol>
-                            <li><strong>Check the Weather:</strong> The AI first analyzes the overall market trend and will not issue signals that go against the market's momentum.</li>
-                            <li><strong>Look for a Healthy Pulse:</strong> Every potential trade must be confirmed by strong technical data, including a clear trend and high trading volume from institutional players.</li>
-                            <li><strong>Demand a Safety Net:</strong> No trade is signaled unless the potential reward is significantly greater than the potential risk.</li>
+                            <li><strong>Market & Sector Context (The Weather):</strong> The AI first analyzes the overall market trend. It will not assign a high score to a trade that goes against the market's momentum.</li>
+                            <li><strong>Technical Confirmation (The Pulse):</strong> Every potential trade is checked for strong technical data, including a clear trend (ADX) and high trading volume from institutional players (Volume Surge).</li>
+                            <li><strong>Risk Management (The Safety Net):</strong> No trade is scored highly unless the potential reward is significantly greater than the potential risk, with risk levels defined by the stock's actual volatility (ATR).</li>
                         </ol>
                     </Section>
                     
@@ -94,33 +93,33 @@ const UserGuidePage = ({ onBack }) => {
                         <ul>
                             <li><strong>Use as a Research Tool:</strong> Scrybe AI is a powerful tool to speed up your research and screening process. It is not a replacement for your own due diligence and is not financial advice.</li>
                             <li><strong>Understand the Timeframe:</strong> The VST strategy is designed for a 1-5 day holding period. It is not for long-term investing or intraday scalping.</li>
-                            <li><strong>A 'HOLD' is a Valuable Signal:</strong> A 'HOLD' signal is a core part of our capital preservation strategy. It means the AI has analyzed the stock but concluded that the conditions are not optimal for a high-probability trade. It's an instruction to be patient and wait for a better opportunity.</li>
+                            <li><strong>A 'HOLD' is a Valuable Signal:</strong> A 'HOLD' signal, especially one with a low Scrybe Score, is a core part of our capital preservation strategy. It means the AI has analyzed the stock but concluded that the conditions are not optimal for a high-probability trade. It's an instruction to be patient.</li>
                         </ul>
                     </Section>
                     
                     <Section title="9. Data & Updates" id="data">
-                        <p>Our primary source for market data is the yfinance library, which provides publicly available data. Our news is sourced from MarketAux. The full analysis for all stocks is refreshed once every trading day after the market closes.</p>
+                        <p>Our primary source for market data is the yfinance library. Our news is sourced from MarketAux. The full analysis for all stocks is refreshed once every trading day via a scheduled job.</p>
                     </Section>
                     
                     <Section title="10. Glossary of Key Terms" id="glossary">
                         <ul>
                             <li><strong>ADX (Average Directional Index):</strong> An indicator that measures the strength of a trend. A high ADX (above 25) indicates a strong trend.</li>
-                            <li><strong>RSI (Relative Strength Index):</strong> A momentum indicator that measures the speed and change of price movements to identify overbought or oversold conditions.</li>
+                            <li><strong>ATR (Average True Range):</strong> A measure of a stock's volatility. We use it to set objective, data-driven stop-losses.</li>
+                            <li><strong>RSI (Relative Strength Index):</strong> A momentum indicator that measures the speed and change of price movements.</li>
                              <li><strong>Swing Trading:</strong> A style of trading that attempts to capture gains in a stock within a period of a few days to several weeks.</li>
                             <li><strong>Volume Surge:</strong> Indicates that trading volume is significantly higher than its recent average, suggesting strong participation from large players.</li>
                              <li><strong>Market Regime:</strong> Our AI's assessment of the overall market trend (Bullish, Bearish, or Neutral).</li>
-                             <li><strong>P/E Ratio (Price-to-Earnings):</strong> A valuation metric that measures a company's current share price relative to its per-share earnings.</li>
-                             <li><strong>Stop-Loss:</strong> A pre-determined price at which you exit a trade to limit your potential loss.</li>
                         </ul>
                     </Section>
 
                     <Section title="11. Frequently Asked Questions (FAQ)" id="faq">
-                        <p>For answers to the most common questions, please visit our dedicated Q&A page, which you can access from the links in the site footer. You can also submit your own questions there!</p>
+                        <p>For answers to the most common questions, please visit our dedicated Q&A page, which you can access from the links in the site footer. You can also submit your own questions there.</p>
                     </Section>
                     
                     <Section title="12. Feedback & Contact" id="contact">
                         <p>Have a question that wasn't answered here, or a suggestion for a new feature? We'd love to hear from you! Please use the **"Feedback"** button on the main application to get in touch with our team.</p>
                     </Section>
+
                 </motion.div>
             </div>
         </div>
