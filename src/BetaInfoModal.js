@@ -39,7 +39,7 @@ const BetaInfoModal = ({ onClose }) => {
                     You're currently using a beta version of <span className="text-white font-semibold">Scrybe AI</span>. We're actively refining the AI and evolving based on your feedback.
                 </p>
                 <p className="text-gray-400 mt-4 text-sm">
-                    Thanks for being part of this journey — you’re helping shape the future of financial analysis.
+                    Thanks for being part of this journey, you’re helping shape the future of financial analysis.
                 </p>
             </motion.div>
         </div>

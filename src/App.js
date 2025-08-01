@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
 import { Tab, Menu, Transition } from '@headlessui/react';
 import './App.css';
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Bot, BrainCircuit, RefreshCw, Zap, Timer } from "lucide-react";
+import { Bot, BrainCircuit, RefreshCw, Zap, Timer, Home } from "lucide-react";
 import OpenPositions from './OpenPositions';
 import NewsSection from './NewsSection';
 import Rulebook from './Rulebook';
@@ -438,24 +438,30 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBeta
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex-1 flex justify-start">
-                <button onClick={onGoToLanding} title="Back to Landing Page" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                <button 
+                    onClick={onGoToLanding} 
+                    title="Back to Landing Page" 
+                    className="group flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-slate-800"
+                >
+                    {/* --- ADDITION: Home Icon --- */}
+                    <Home className="w-5 h-5 text-slate-400 transition-colors group-hover:text-white" />
+
                     <ScrybeLogo />
                     <div className="flex items-center gap-2">
                         <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                        {/* --- NEW BETA BADGE --- */}
                         <button 
                             onClick={(e) => {
-                                e.stopPropagation(); // Prevents the home navigation
+                                e.stopPropagation();
                                 onBetaModalOpen();
                             }}
-                            className="px-2 py-0.5 text-xs font-bold text-cyan-200 bg-cyan-500/10 border border-cyan-500/30 rounded-md transition-all hover:bg-cyan-500/20"
+                            className="px-2.5 py-1 text-xs font-bold text-slate-200 bg-gradient-to-b from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-inset ring-slate-400/50 shadow-md"
+                            style={{textShadow: '0 1px 1px #000'}}
                         >
                             BETA
                         </button>
                     </div>
                 </button>
             </div>
-            {/* ... rest of the AppHeader remains the same ... */}
             <div className="flex-1 flex justify-center">
                 <div className="relative">
                     <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
