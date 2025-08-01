@@ -423,14 +423,15 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen }) => {
     );
 };
 
-const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen }) => {
+const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex-1 flex justify-start">
-                <div className="flex items-center gap-3">
+                {/* This entire block is now a clickable button */}
+                <button onClick={onGoToLanding} className="flex items-center gap-3 transition-opacity hover:opacity-80">
                     <ScrybeLogo />
                     <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                </div>
+                </button>
             </div>
             <div className="flex-1 flex justify-center">
                 <div className="relative">
@@ -1439,6 +1440,10 @@ export default function App() {
     const [tabIndex, setTabIndex] = useState(0);
 
     // --- Core Application Logic ---
+    const handleGoToLanding = () => {
+        setView('landing');
+        setAnalysisState('selector'); // This resets the analysis page for the next visit
+    };
 
     const handleLaunch = () => {
         const agreedTimestamp = localStorage.getItem('disclaimerAgreedTimestamp');
@@ -1593,7 +1598,8 @@ export default function App() {
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
                         isPulseOpen={isPulseOpen} 
-                        setIsPulseOpen={setIsPulseOpen} 
+                        setIsPulseOpen={setIsPulseOpen}
+                        onGoToLanding={handleGoToLanding}
                     />
                 )}
                 
