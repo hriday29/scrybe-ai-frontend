@@ -656,7 +656,7 @@ const HowItWorks = () => {
     );
 };
 
-const LandingPage = ({ onLaunch, setShowFaq, setShowUserGuide, setShowPrivacy, setShowTerms }) => {
+const LandingPage = ({ onLaunch, handleLaunchAndNavigate, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen, onDemoOpen }) => {
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-12 pb-20 md:pt-16 md:pb-24 animate-fadeIn">
             
@@ -690,11 +690,12 @@ const LandingPage = ({ onLaunch, setShowFaq, setShowUserGuide, setShowPrivacy, s
             <PerformanceShowcase />
             <FeatureCards />
             <LandingWalkthrough 
-                onLaunch={onLaunch}
-                onUserGuideOpen={() => setShowUserGuide(true)}
-                onFaqOpen={() => setShowFaq(true)}
-                onPrivacyOpen={() => setShowPrivacy(true)}
-                onTermsOpen={() => setShowTerms(true)}
+                handleLaunchAndNavigate={handleLaunchAndNavigate}
+                onUserGuideOpen={onUserGuideOpen}
+                onFaqOpen={onFaqOpen}
+                onPrivacyOpen={onPrivacyOpen}
+                onTermsOpen={onTermsOpen}
+                onDemoOpen={onDemoOpen}
             />
             <OurStrategySection />
             <HowItWorks />
@@ -1467,6 +1468,10 @@ export default function App() {
     const navigateToTab = (index) => {
         setTabIndex(index);
     };
+    const handleLaunchAndNavigate = (index) => {
+        setView('app');      // First, switch to the main app view
+        setTabIndex(index);  // Then, immediately set the active tab
+    };
 
     const handleResetAnalysis = () => setAnalysisState('selector');
 
@@ -1595,10 +1600,12 @@ export default function App() {
                 {view === 'landing' ? (
                     <LandingPage 
                         onLaunch={handleLaunch}
-                        setShowFaq={setShowFaq}
-                        setShowUserGuide={setShowUserGuide}
-                        setShowPrivacy={setShowPrivacy}
-                        setShowTerms={setShowTerms}
+                        handleLaunchAndNavigate={handleLaunchAndNavigate} // Add this
+                        onDemoOpen={() => setIsDemoOpen(true)}
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                        onPrivacyOpen={() => setShowPrivacy(true)}
+                        onTermsOpen={() => setShowTerms(true)}
                     />
                 ) : (
                     renderMainApp()

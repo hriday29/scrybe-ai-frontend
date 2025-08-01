@@ -7,40 +7,40 @@ const TargetIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24
 const ShieldCheckIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>);
 const BookOpenIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>);
 
-const LandingWalkthrough = ({ onLaunch, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen }) => {
+const LandingWalkthrough = ({ handleLaunchAndNavigate, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen, onDemoOpen }) => {
     
     const sections = [
         {
             icon: <BrainCircuitIcon className="w-8 h-8 text-purple-400" />,
             title: "The Core Engine",
-            description: "At the heart of Scrybe AI is a powerful analytical engine. It goes beyond simple signals to provide a nuanced 'Scrybe Score' for every stock, giving you a clear measure of quality for any trading setup.",
+            description: "At the heart of Scrybe AI is our proprietary 'Scrybe Score' system. The AI performs a deep, multi-layered analysis of every stock and assigns a single, objective score from -100 (a perfect short setup) to +100 (a perfect long setup), giving you an instant measure of quality.",
             links: [
-                { text: "Launch the Analysis Tool", action: onLaunch },
+                { text: "Launch the Ranked List", action: () => handleLaunchAndNavigate(1) }, // Jumps to Stock Analysis tab
                 { text: "Read the Full Strategy", action: onUserGuideOpen },
             ]
         },
         {
             icon: <TargetIcon className="w-8 h-8 text-blue-400" />,
             title: "Actionable Features",
-            description: "Discover opportunities with our suite of tools. The 'On The Radar' list shows you what's next, while the 'Index Analysis' gives you the big picture. We provide the data you need to make informed decisions.",
+            description: "Go beyond a simple list. Our 'On The Radar' feature shows you which stocks are on the verge of a signal and tells you the exact condition the AI is waiting for. Use the 'Index Analysis' to understand the big picture before you make a move.",
             links: [
-                { text: "See a Live Demo", action: onLaunch }, // Assuming demo opens the app
-                { text: "Explore All Features in the Guide", action: onUserGuideOpen },
+                { text: "See a Live Demo", action: onDemoOpen },
+                { text: "Explore 'On The Radar'", action: () => handleLaunchAndNavigate(2) }, // Jumps to On The Radar tab
             ]
         },
         {
             icon: <ShieldCheckIcon className="w-8 h-8 text-green-400" />,
             title: "Trust & Transparency",
-            description: "We believe in a transparent process. You can review the AI's full historical track record to see its performance over time and read our detailed Rulebook to understand the logic behind every signal.",
+            description: "We believe in a transparent process. You can review the AI's full historical 'Track Record' to see its performance over time and read our detailed 'Rulebook' to understand the disciplined logic behind every single score.",
             links: [
-                { text: "View AI Track Record", action: onLaunch }, // Needs app launch
-                { text: "Read the Rulebook", action: onUserGuideOpen },
+                { text: "View AI Track Record", action: () => handleLaunchAndNavigate(5) }, // Jumps to Track Record tab
+                { text: "Read the Rulebook", action: () => handleLaunchAndNavigate(6) }, // Jumps to Rulebook tab
             ]
         },
         {
             icon: <BookOpenIcon className="w-8 h-8 text-slate-400" />,
             title: "Support & Legal",
-            description: "Your trust and privacy are paramount. Our comprehensive documentation and legal pages are always available to provide clarity on how our service works and how your data is handled.",
+            description: "Your trust and privacy are paramount. Our comprehensive documentation and legal pages are always available to provide clarity on how our service works and how your data is handled. Have a question? Our FAQ has you covered.",
             links: [
                 { text: "Frequently Asked Questions (FAQ)", action: onFaqOpen },
                 { text: "Privacy Policy", action: onPrivacyOpen },
