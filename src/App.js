@@ -656,7 +656,7 @@ const HowItWorks = () => {
     );
 };
 
-const LandingPage = ({ onLaunch }) => {
+const LandingPage = ({ onLaunch, setShowFaq, setShowUserGuide, setShowPrivacy, setShowTerms }) => {
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-12 pb-20 md:pt-16 md:pb-24 animate-fadeIn">
             
@@ -1593,7 +1593,13 @@ export default function App() {
                 )}
                 
                 {view === 'landing' ? (
-                    <LandingPage onLaunch={handleLaunch} />
+                    <LandingPage 
+                        onLaunch={handleLaunch}
+                        setShowFaq={setShowFaq}
+                        setShowUserGuide={setShowUserGuide}
+                        setShowPrivacy={setShowPrivacy}
+                        setShowTerms={setShowTerms}
+                    />
                 ) : (
                     renderMainApp()
                 )}
