@@ -19,6 +19,7 @@ import Footer from './Footer.js';
 import PrivacyPolicyPage from './PrivacyPolicyPage.js';
 import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
+import LandingWalkthrough from './LandingWalkthrough.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -688,6 +689,13 @@ const LandingPage = ({ onLaunch }) => {
             <AIStrategyInsights />
             <PerformanceShowcase />
             <FeatureCards />
+            <LandingWalkthrough 
+                onLaunch={onLaunch}
+                onUserGuideOpen={() => setShowUserGuide(true)}
+                onFaqOpen={() => setShowFaq(true)}
+                onPrivacyOpen={() => setShowPrivacy(true)}
+                onTermsOpen={() => setShowTerms(true)}
+            />
             <OurStrategySection />
             <HowItWorks />
         </div>

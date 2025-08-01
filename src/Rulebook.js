@@ -84,6 +84,13 @@ const Rulebook = () => {
                     <p className="text-sm text-gray-400">Measures the strength of the stock's recent price trend. A high score indicates a strong, ongoing trend.</p>
                 </div>
             </div>
+            <div className="flex items-start gap-4">
+              <TargetIcon className="w-6 h-6 text-purple-400 flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold text-white">Target Alignment (T)</h4>
+                <p className="text-sm text-gray-400">Measures how closely the current price aligns with historical swing targets or projected price zones. A high score suggests proximity to a high-probability breakout or reversal zone.</p>
+              </div>
+            </div>
         </div>
       </Section>
 
