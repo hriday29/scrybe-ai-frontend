@@ -20,6 +20,7 @@ import PrivacyPolicyPage from './PrivacyPolicyPage.js';
 import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
 import LandingWalkthrough from './LandingWalkthrough.js';
+import BetaInfoModal from './BetaInfoModal.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -423,16 +424,28 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen }) => {
     );
 };
 
-const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding }) => {
+const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex-1 flex justify-start">
-                {/* This entire block is now a clickable button */}
-                <button onClick={onGoToLanding} className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                <button onClick={onGoToLanding} title="Back to Landing Page" className="flex items-center gap-3 transition-opacity hover:opacity-80">
                     <ScrybeLogo />
-                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                        {/* --- NEW BETA BADGE --- */}
+                        <button 
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevents the home navigation
+                                onBetaModalOpen();
+                            }}
+                            className="px-2 py-0.5 text-xs font-bold text-cyan-200 bg-cyan-500/10 border border-cyan-500/30 rounded-md transition-all hover:bg-cyan-500/20"
+                        >
+                            BETA
+                        </button>
+                    </div>
                 </button>
             </div>
+            {/* ... rest of the AppHeader remains the same ... */}
             <div className="flex-1 flex justify-center">
                 <div className="relative">
                     <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
@@ -1438,6 +1451,7 @@ export default function App() {
     const [isPulseOpen, setIsPulseOpen] = useState(false);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
+    const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
 
     // --- Core Application Logic ---
     const handleGoToLanding = () => {
@@ -1600,6 +1614,7 @@ export default function App() {
                         isPulseOpen={isPulseOpen} 
                         setIsPulseOpen={setIsPulseOpen}
                         onGoToLanding={handleGoToLanding}
+                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
                     />
                 )}
                 
@@ -1626,6 +1641,7 @@ export default function App() {
                 onFaqClick={() => setShowFaq(true)}
             />
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
+            {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
             <FeedbackWidget />
         </main>
     );
