@@ -1,21 +1,75 @@
-import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import { Tab, Menu, Transition } from '@headlessui/react';
 import './App.css';
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Bot, BrainCircuit, RefreshCw, Zap, Timer } from "lucide-react";
+import { motion } from 'framer-motion';
+import { useMotionValue, useTransform, animate } from "framer-motion";
+import { Bot, BrainCircuit, RefreshCw, Zap, Timer, Home } from "lucide-react";
 import OpenPositions from './OpenPositions';
 import NewsSection from './NewsSection';
 import Rulebook from './Rulebook';
-import ConversationalQa from './ConversationalQa';
 import TradeJournalCard from './TradeJournalCard';
 import ConfidencePoll from './ConfidencePoll';
 import FeedbackWidget from './FeedbackWidget';
 import DisclaimerModal from './DisclaimerModal';
 import DisclaimerFooter from './DisclaimerFooter';
 import FaqPage from './FaqPage';
+import OnTheRadar from './OnTheRadar.js';
+import UserGuidePage from './UserGuidePage.js';
+import Footer from './Footer.js';
+import PrivacyPolicyPage from './PrivacyPolicyPage.js';
+import TermsPage from './TermsPage.js';
+import AppGuide from './AppGuide.js';
+import LandingWalkthrough from './LandingWalkthrough.js';
+import BetaInfoModal from './BetaInfoModal.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
+
+const OurStrategySection = () => {
+    const pillars = [
+        {
+            icon: <BrainCircuitIcon className="w-7 h-7" />,
+            title: "1. We Check the Weather",
+            description: "Before analyzing any single stock, our AI first looks at the 'big picture'—the overall market health and which sectors are the strongest. We don't try to swim against the current."
+        },
+        {
+            icon: <PulseIcon className="w-7 h-7" />,
+            title: "2. We Look for a Healthy Pulse",
+            description: "Next, the AI puts the stock through a rigorous health check. It looks for confirmation from big institutional players (by checking for a 'Volume Surge') and ensures the stock's price trend is strong and clear. A weak pulse means we wait."
+        },
+        {
+            icon: <ShieldCheckIcon className="w-7 h-7" />,
+            title: "3. We Demand a Safety Net",
+            description: "No trade is ever considered, no matter how good it looks, unless the potential reward is significantly greater than the potential risk. Every signal comes with a pre-defined exit plan, ensuring disciplined risk management."
+        }
+    ];
+
+    return (
+        <div className="w-full max-w-7xl mx-auto my-16 px-4 py-16">
+            <div className="text-center">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+                    An AI Strategy You Can Understand
+                </h2>
+                <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
+                    Our AI isn't a magic black box. It's a disciplined analyst that follows a clear, three-pillar scoring system for every stock.
+                </p>
+            </div>
+
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {pillars.map((pillar) => (
+                    <div key={pillar.title} className="bg-gradient-to-br from-slate-900 to-slate-800/60 border border-slate-700/60 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
+                        <div className="flex items-center justify-center w-14 h-14 bg-blue-600/20 border-2 border-blue-500/60 rounded-2xl text-blue-300 mb-6">
+                            {pillar.icon}
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">{pillar.title}</h3>
+                        <p className="text-gray-300 leading-relaxed">{pillar.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const CORRELATION_DEFINITIONS = {
     'Nifty50': 'Measures how closely the stock moves with the overall Indian market. High positive values are common.',
     'USD-INR': 'Shows the relationship with the Rupee-Dollar exchange rate. Important for import/export heavy companies.',
@@ -33,60 +87,6 @@ const getCorrelationInterpretation = (value) => {
     if (value > -0.3) return "No significant correlation.";
     if (value > -0.7) return "Moderate negative correlation.";
     return "Strong negative correlation.";
-};
-
-const WhyScrybeAI = () => {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div
-      onClick={() => setFlipped(!flipped)}
-      className="w-80 h-52 md:w-96 md:h-60 mx-auto cursor-pointer perspective"
-    >
-      <div
-        className={`relative w-full h-full duration-700 transform-style preserve-3d ${
-          flipped ? "rotate-y-180" : ""
-        }`}
-      >
-        {/* Front Side */}
-        <div className="absolute w-full h-full rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 shadow-[0_0_30px_#0f172a40] backdrop-blur-md flex flex-col items-center justify-center text-center text-white p-6 space-y-2 backface-hidden transition-transform duration-300">
-          <h3 className="text-2xl font-semibold tracking-tight text-white">
-            <span className="inline-block scale-95 origin-bottom">🧠</span> Why Scrybe AI?
-          </h3>
-          <p className="text-sm text-slate-400">
-            Tap to uncover your trading edge.
-          </p>
-        </div>
-
-        {/* Back Side */}
-        <div className="absolute w-full h-full rotate-y-180 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-[0_0_50px_rgba(80,80,255,0.1)] backdrop-blur-xl flex flex-col justify-between p-6 text-sm text-white backface-hidden">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🦬/🐻</span>
-              <span className="font-medium">Wall Street Grade Analysis</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">✅</span>
-              <span className="font-medium">Built for Swing Traders</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">📊</span>
-              <span className="font-medium">Hybrid Tech & Fundamentals</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">⚡</span>
-              <span className="font-medium">Real-Time Market Insights</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70">🤖</span>
-              <span className="font-medium">Transparent, Updating AI</span>
-            </div>
-          </div>
-          <div className="w-full h-1 bg-gradient-to-r from-indigo-500 via-sky-500 to-purple-500 rounded-full opacity-20 mt-4" />
-        </div>
-      </div>
-    </div>
-  );
 };
 
 const getStatusColor = (status) => {
@@ -286,37 +286,6 @@ const IndexAnalysisView = () => {
     );
 };
 
-const AnimatedStat = ({ target, label, suffix = '', color = 'text-white' }) => {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        let start = 0;
-        const end = parseInt(target);
-        if (start === end) { setCount(end); return; }
-        const duration = 2500;
-        const incrementTime = 1000 / 60;
-        const totalFrames = Math.round(duration / incrementTime);
-        const increment = end / totalFrames;
-        let currentFrame = 0;
-        const timer = setInterval(() => {
-            currentFrame += 1;
-            const newCount = Math.round(start + (increment * currentFrame));
-            if (newCount >= end) {
-                setCount(end);
-                clearInterval(timer);
-            } else {
-                setCount(newCount);
-            }
-        }, incrementTime);
-        return () => clearInterval(timer);
-    }, [target]);
-    return (
-        <div className="text-center">
-            <p className={`text-4xl font-bold font-mono ${color}`}>{count.toLocaleString()}{suffix}</p>
-            <p className="text-xs text-gray-500 mt-1 tracking-wider uppercase">{label}</p>
-        </div>
-    );
-};
-
 const ScrybeLogo = () => (<svg className="rotating-logo" width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="logoGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop stopColor="#3b82f6" /><stop offset="1" stopColor="#818cf8" /></linearGradient></defs><rect x="30" y="12" width="4" height="10" rx="2" fill="url(#logoGradient)" /><rect x="26" y="22" width="12" height="18" rx="2" fill="url(#logoGradient)" /><rect x="30" y="40" width="4" height="12" rx="2" fill="url(#logoGradient)" /><path d="M8 48 L20 38 L32 32 L44 28 L56 18" stroke="url(#logoGradient)" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>);
 const SearchIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
 const ArrowLeftIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>);
@@ -325,8 +294,6 @@ const LightbulbIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" 
 const BullIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10h10"/><path d="m10 7 2-3 2 3"/><path d="M12 21V4"/><path d="M7 21h10"/></svg>);
 const BearIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 14h10"/><path d="m10 17 2 3 2-3"/><path d="M12 3v17"/><path d="M7 3h10"/></svg>);
 const ChevronDownIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>);
-const CalendarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>);
-const TargetIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>);
 const ArrowUpRightIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>);
 const PauseIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg>);
 const InfoIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400/80"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>);
@@ -391,16 +358,32 @@ const DemoModal = ({ onClose }) => {
   );
 };
 
-const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
+const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex items-center gap-3">
                 <ScrybeLogo />
-                <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                    
+                    {/* --- NEW, CLICKABLE BETA BADGE --- */}
+                    <button 
+                        onClick={onBetaModalOpen}
+                        className="px-2 py-0.5 text-xs font-bold text-slate-200 bg-gradient-to-br from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-slate-400/50"
+                        style={{textShadow: '0 1px 0 rgb(0 0 0 / 40%)'}}
+                    >
+                        BETA
+                    </button>
+                </div>
             </div>
             
-            {/* Group the buttons together */}
             <div className="flex items-center gap-4">
+                <button 
+                    onClick={onUserGuideOpen} 
+                    className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
+                >
+                    User Guide
+                </button>
                 <button 
                     onClick={onFaqOpen} 
                     className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
@@ -418,14 +401,33 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen }) => { // Add onFaqOpen prop
     );
 };
 
-const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen }) => {
+const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex-1 flex justify-start">
-                <div className="flex items-center gap-3">
+                <button 
+                    onClick={onGoToLanding} 
+                    title="Back to Landing Page" 
+                    className="group flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-slate-800"
+                >
+                    {/* --- ADDITION: Home Icon --- */}
+                    <Home className="w-5 h-5 text-slate-400 transition-colors group-hover:text-white" />
+
                     <ScrybeLogo />
-                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                </div>
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
+                        <button 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onBetaModalOpen();
+                            }}
+                            className="px-2.5 py-1 text-xs font-bold text-slate-200 bg-gradient-to-b from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-inset ring-slate-400/50 shadow-md"
+                            style={{textShadow: '0 1px 1px #000'}}
+                        >
+                            BETA
+                        </button>
+                    </div>
+                </button>
             </div>
             <div className="flex-1 flex justify-center">
                 <div className="relative">
@@ -458,10 +460,8 @@ const PerformanceShowcase = () => {
 
   const AnimatedNumber = ({ value, prefix = '', suffix = '' }) => {
     const [count, setCount] = useState(0);
-    const ref = useRef();
 
     useEffect(() => {
-      let start = 0;
       const duration = 1500;
       const startTime = performance.now();
 
@@ -524,96 +524,64 @@ const PerformanceShowcase = () => {
   );
 };
 
-const SuccessRateDonut = () => {
-    // Input values
-    const winRate = 63.16;
-    const profitFactor = 1.65;
-    const maxDrawdown = 3.33;
+const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 3.33 }) => {
+    // 1. We use useMemo to calculate the score only when the props change.
+    const successScore = useMemo(() => {
+        return (winRate * profitFactor) / (maxDrawdown * 10);
+    }, [winRate, profitFactor, maxDrawdown]);
 
-    // Success Score formula
-    const successScore = (winRate * profitFactor) / (maxDrawdown * 10); // ≈ 3.13
+    const maxScore = 5;
+    const normalizedScore = Math.min(successScore, maxScore) / maxScore;
 
     // Circle setup
     const radius = 54;
-    const strokeWidth = 12;
+    const strokeWidth = 10;
     const circumference = 2 * Math.PI * radius;
-    const maxScore = 5;
-    const normalizedScore = Math.min(successScore, maxScore) / maxScore;
     const offset = circumference * (1 - normalizedScore);
 
-    // Animation
     const count = useMotionValue(0);
-    const rounded = useTransform(count, (latest) => `${latest.toFixed(2)}`);
+    const rounded = useTransform(count, (latest) => latest.toFixed(2));
 
     useEffect(() => {
         const controls = animate(count, successScore, {
-            duration: 1.5,
+            duration: 2,
             ease: "easeOut",
         });
         return controls.stop;
-    }, []);
+    // 2. The dependency array now correctly uses the source value.
+    }, [successScore, count]); // The warning will now be gone.
 
     return (
-        <div className="relative w-48 h-48 hover:scale-105 transition-transform duration-300 group">
-            {/* Pulse Glow */}
-            {successScore >= 3 && (
-                <motion.div
-                    className="absolute inset-0 rounded-full"
-                    animate={{
-                        boxShadow: [
-                            "0 0 0px #22c55e",
-                            "0 0 20px #22c55e",
-                            "0 0 0px #22c55e",
-                        ],
-                    }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                />
-            )}
-
-            <svg className="w-full h-full drop-shadow-lg" viewBox="0 0 120 120">
-                {/* Background Circle */}
-                <circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
-                    strokeWidth={strokeWidth}
-                    className="stroke-slate-800"
-                    fill="transparent"
-                />
-                {/* Progress Circle */}
+        <div className="relative w-44 h-44 sm:w-48 sm:h-48">
+            <svg className="w-full h-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r={radius} strokeWidth={strokeWidth} fill="none" stroke="#1e293b" />
                 <motion.circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
+                    cx="60" cy="60" r={radius}
                     strokeWidth={strokeWidth}
-                    className="stroke-[url(#gradient)]"
-                    fill="transparent"
+                    fill="none"
+                    stroke="url(#gradient)"
                     strokeDasharray={circumference}
-                    strokeDashoffset={offset}
                     strokeLinecap="round"
                     transform="rotate(-90 60 60)"
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ strokeDashoffset: offset }}
                     transition={{ duration: 2, ease: "easeOut" }}
                 />
-                {/* Gradient Definition */}
                 <defs>
-                    <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stopColor="#22c55e" />
-                        <stop offset="100%" stopColor="#4ade80" />
+                    <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120">
+                        <stop offset="0%" stopColor="#16a34a" />
+                        <stop offset="100%" stopColor="#22c55e" />
                     </linearGradient>
                 </defs>
             </svg>
-
-            {/* Center Text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <motion.span className="text-5xl font-extrabold text-white drop-shadow-sm">
+                <motion.span className="text-4xl font-semibold text-white">
                     {rounded}
                 </motion.span>
-                <span className="text-xs mt-1 text-gray-400 tracking-widest uppercase">
+                <span className="text-xs text-gray-400 tracking-wide uppercase mt-1">
                     Success Score
                 </span>
-                <span className="text-[10px] text-gray-500 mt-1 w-36 leading-tight">
+                <span className="text-[10px] text-gray-500 mt-1 leading-tight w-32 sm:w-36 font-light">
                     (Win Rate × Profit Factor) ÷ (Max Drawdown × 10)
                 </span>
             </div>
@@ -651,7 +619,7 @@ const HowItWorks = () => {
     );
 };
 
-const LandingPage = ({ onLaunch }) => {
+const LandingPage = ({ onLaunch, handleLaunchAndNavigate, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen, onDemoOpen }) => {
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-12 pb-20 md:pt-16 md:pb-24 animate-fadeIn">
             
@@ -684,8 +652,16 @@ const LandingPage = ({ onLaunch }) => {
             <AIStrategyInsights />
             <PerformanceShowcase />
             <FeatureCards />
+            <LandingWalkthrough 
+                handleLaunchAndNavigate={handleLaunchAndNavigate}
+                onUserGuideOpen={onUserGuideOpen}
+                onFaqOpen={onFaqOpen}
+                onPrivacyOpen={onPrivacyOpen}
+                onTermsOpen={onTermsOpen}
+                onDemoOpen={onDemoOpen}
+            />
+            <OurStrategySection />
             <HowItWorks />
-            <WhyScrybeAI />
         </div>
     );
 };
@@ -910,47 +886,20 @@ const MarketPulsePopover = ({ onClose }) => {
   );
 };
 
-const Header = ({ onReset }) => {
-    const [isPulseOpen, setIsPulseOpen] = useState(false);
-    return (
-        <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
-            <div className="flex-1 flex justify-start">
-                <div className="flex items-center gap-3">
-                    <ScrybeLogo />
-                    <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                </div>
-            </div>
-            <div className="flex-1 flex justify-center">
-                <div className="relative">
-                    <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <PulseIcon /> Market Pulse
-                    </button>
-                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
-                </div>
-            </div>
-            <div className="flex-1 flex justify-end items-center gap-4">
-                {onReset && (
-                    <button onClick={onReset} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <ArrowLeftIcon /> New Analysis
-                    </button>
-                )}
-            </div>
-        </header>
-    );
-};
-
 const StockSelector = ({ onAnalyze }) => {
     const [stocks, setStocks] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [activeFilter, setActiveFilter] = useState('All'); // New state for filters
+
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/stock-list`)
+        fetch(`${API_BASE_URL}/api/all-analysis`)
             .then(res => {
-                if (!res.ok) throw new Error("Failed to load stock list.");
+                if (!res.ok) throw new Error("Failed to load stock analysis list.");
                 return res.json();
             })
             .then(data => {
-                console.log(`✅ Received ${data.length} stocks from the API.`);
+                data.sort((a, b) => Math.abs(b.scrybeScore || 0) - Math.abs(a.scrybeScore || 0));
                 setStocks(data);
                 setIsLoading(false);
             })
@@ -959,42 +908,99 @@ const StockSelector = ({ onAnalyze }) => {
                 setIsLoading(false);
             });
     }, []);
+
     const filteredStocks = useMemo(() => {
-        if (!searchTerm) return stocks;
-        return stocks.filter(stock =>
+        let filtered = stocks;
+
+        // Apply the active filter first
+        if (activeFilter === 'BUY') {
+            filtered = stocks.filter(stock => stock.signal === 'BUY');
+        } else if (activeFilter === 'SELL') {
+            filtered = stocks.filter(stock => stock.signal === 'SELL');
+        } else if (activeFilter === 'On The Radar') {
+            filtered = stocks.filter(stock => stock.isOnRadar === true);
+        }
+
+        // Then apply the search term
+        if (!searchTerm) return filtered;
+        return filtered.filter(stock =>
             stock.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [stocks, searchTerm]);
+    }, [stocks, searchTerm, activeFilter]);
+
+    const ScoreBadge = ({ score }) => {
+        // This safety check prevents the crash.
+        if (typeof score !== 'number' || isNaN(score)) {
+            return (
+                <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">
+                    N/A
+                </span>
+            );
+        }
+
+        const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
+                    : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
+                    : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
+        const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
+        
+        return (
+            <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
+                {scoreText}
+            </span>
+        );
+    };
+        
+    const FilterButton = ({ filterType }) => {
+        const isActive = activeFilter === filterType;
+        return (
+            <button 
+                onClick={() => setActiveFilter(filterType)}
+                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-700/50 text-gray-300 hover:bg-slate-600/50'}`}
+            >
+                {filterType}
+            </button>
+        );
+    };
+
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-20 md:pt-20 md:pb-24">
-            <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Select a Stock for Analysis</h2>
-            <p className="mt-4 max-w-2xl text-lg text-gray-400">Choose from the pre-analyzed Nifty 50 companies to get an instant, in-depth report from Scrybe AI.</p>
-            <div className="mt-12 w-full max-w-md">
+            <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Today's Top Setups</h2>
+            <p className="mt-4 max-w-2xl text-lg text-gray-400">A daily ranked list of Nifty 50 companies, sorted by the AI's Scrybe Score.</p>
+            <div className="mt-12 w-full max-w-2xl">
+                {/* --- NEW FILTER BUTTONS --- */}
+                <div className="flex justify-center gap-2 mb-4">
+                    <FilterButton filterType="All" />
+                    <FilterButton filterType="BUY" />
+                    <FilterButton filterType="SELL" />
+                    <FilterButton filterType="On The Radar" />
+                </div>
+
                 <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <SearchIcon />
-                    </div>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><SearchIcon /></div>
                     <input
                         type="text"
-                        placeholder={isLoading ? "Loading stocks..." : "Search for a stock..."}
+                        placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full bg-slate-900/40 backdrop-blur-md border border-slate-700 text-white placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
                         disabled={isLoading}
                     />
                 </div>
-                <div className="mt-4 max-h-80 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
+                <div className="mt-4 max-h-96 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
                     {isLoading && <p className="text-gray-400 text-center p-4">Loading...</p>}
-                    {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No stocks found.</p>}
-                    {!isLoading && filteredStocks.map(stock => (
+                    {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No setups found for the current filter.</p>}
+                    {!isLoading && filteredStocks.map((stock, index) => (
                         <button
                             key={stock.ticker}
                             onClick={() => onAnalyze(stock.ticker)}
                             className="w-full text-left p-3 rounded-lg hover:bg-blue-600/50 transition-colors flex justify-between items-center"
                         >
-                            <span className="font-semibold text-white">{stock.companyName}</span>
-                            <span className="text-sm text-gray-400">{stock.ticker}</span>
+                            <div className="flex items-center">
+                                <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
+                                <span className="font-semibold text-white">{stock.companyName}</span>
+                            </div>
+                            <ScoreBadge score={stock.scrybeScore} />
                         </button>
                     ))}
                 </div>
@@ -1071,23 +1077,34 @@ const TradingPlanCard = ({ plan, signal, reasonForHold }) => {
 const DVMScores = ({ scores }) => {
     if (!scores) return null;
     const scoreDefinitions = { Durability: "Measures the company's financial strength and stability, based on profitability and institutional ownership.", Valuation: "Measures how reasonably the stock is priced relative to its earnings and book value. Lower is often better.", Momentum: "Measures the strength of the stock's recent price trend, based on technical indicators like RSI and ADX." };
+    
     const ScoreCard = ({ title, scoreData }) => {
         const score = scoreData?.score || 0;
         const phrase = scoreData?.phrase || 'N/A';
+        const barColor = score >= 70 ? 'bg-green-500' : score >= 40 ? 'bg-amber-500' : 'bg-red-500';
+        const textColor = score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400';
+
         return (
             <div className="flex-1 bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 text-center transition-all hover:border-slate-500/80 hover:bg-slate-800/60">
                 <div className="flex justify-between items-center text-sm text-gray-400 mb-2">
                     <p className="font-bold text-lg text-white">{title}</p>
                     <span title={scoreDefinitions[title]} className="cursor-help"><InfoIcon /></span>
                 </div>
-                <p className={`text-4xl font-bold ${score >= 70 ? 'text-green-400' : score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{score.toFixed(1)}<span className="text-2xl text-gray-400/80">/100</span></p>
-                <p className="text-sm text-gray-400 mt-1">{phrase}</p>
+                <p className={`text-4xl font-bold ${textColor}`}>{score.toFixed(0)}<span className="text-2xl text-gray-400/80">/100</span></p>
+                <p className="text-sm text-gray-400 mt-1 min-h-[2.5rem]">{phrase}</p>
+                
+                {/* Visual bar section */}
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`${barColor} h-2 rounded-full`} style={{ width: `${score}%` }}></div>
+                </div>
             </div>
         );
     };
+    
     const overallScore = (scores.durability.score + scores.valuation.score + scores.momentum.score) / 3;
     let overallStatus = "Balanced Profile";
     if (overallScore >= 65) { overallStatus = "Strong Performer"; } else if (overallScore <= 45) { overallStatus = "Needs Caution"; }
+    
     return (
         <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -1102,21 +1119,10 @@ const DVMScores = ({ scores }) => {
         </div>
     );
 };
-const ConversationalAnswerDisplay = ({ answer }) => {
-    if (!answer) return null;
-    return (
-        <div className="w-full max-w-5xl mx-auto p-6 mb-8 bg-blue-900/30 backdrop-blur-md border border-blue-500/60 rounded-xl animate-fadeIn">
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 bg-blue-500/20 p-3 rounded-full mt-1"><LightbulbIcon className="text-blue-300 h-6 w-6" /></div>
-                <div><h3 className="font-bold text-xl text-white mb-2">Direct Answer</h3><p className="text-blue-200 leading-relaxed whitespace-pre-line">{answer}</p></div>
-            </div>
-        </div>
-    );
-};
 
 const AnalysisDashboard = ({ data }) => {
-    // This corrected block safely defines all variables with default values.
     const {
+        scrybeScore, // Let's handle the default below
         signal = 'N/A',
         signalQualifier = '',
         confidence = 'N/A',
@@ -1129,14 +1135,29 @@ const AnalysisDashboard = ({ data }) => {
         tradePlan = {},
         charts = {},
         technicalBreakdown = {},
-        fundamentalBreakdown = {}, // <-- Correctly defined here
+        fundamentalBreakdown = {},
         performanceSnapshot = {},
         correlations = {},
         dvmScores
     } = data || {};
 
-    const signalConfig = { BUY: { color: 'text-green-400', borderColor: 'border-green-500/40', bgColor: 'bg-green-500/10', glowColor: 'shadow-green-500/20' }, SELL: { color: 'text-red-400', borderColor: 'border-red-500/40', bgColor: 'bg-red-500/10', glowColor: 'shadow-red-500/20' }, HOLD: { color: 'text-amber-400', borderColor: 'border-amber-500/40', bgColor: 'bg-amber-500/10', glowColor: 'shadow-amber-500/20' }, DEFAULT: { color: 'text-gray-400', borderColor: 'border-gray-500/40', bgColor: 'bg-gray-500/10', glowColor: 'shadow-gray-500/20' } };
-    const config = signalConfig[signal] || signalConfig.DEFAULT;
+    // This safety check is the critical fix.
+    // It ensures scrybeScore is always a number.
+    const score = (typeof scrybeScore === 'number' && !isNaN(scrybeScore)) ? scrybeScore : 0;
+
+    const scoreColor = score > 49 ? 'text-green-400' 
+                     : score < -49 ? 'text-red-400'
+                     : 'text-amber-400';
+    const scoreBorderColor = score > 49 ? 'border-green-500/40' 
+                           : score < -49 ? 'border-red-500/40'
+                           : 'border-amber-500/40';
+    const scoreBgColor = score > 49 ? 'bg-green-500/10' 
+                       : score < -49 ? 'bg-red-500/10'
+                       : 'bg-amber-500/10';
+    const scoreGlowColor = score > 49 ? 'shadow-green-500/20' 
+                         : score < -49 ? 'shadow-red-500/20'
+                         : 'shadow-amber-500/20';
+    const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
 
     const qualifierConfig = { 'Steady Climb': { Icon: ArrowUpRightIcon, colors: 'bg-green-500/10 text-green-400 border-green-500/30' }, 'Volatile Move': { Icon: ZapIcon, colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30' }, 'Quiet Consolidation': { Icon: PauseIcon, colors: 'bg-slate-700/40 text-slate-300 border-slate-600/50' } };
     const qConfig = qualifierConfig[signalQualifier];
@@ -1160,16 +1181,21 @@ const AnalysisDashboard = ({ data }) => {
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn">
             <h2 className="text-3xl font-bold text-white mb-2">{companyName}</h2>
-            <p className="text-gray-400 mb-8">AI Analysis as of {new Date(timestamp).toLocaleString()}</p>
+            <p className="text-gray-400 mb-8">AI Analysis as of {timestamp ? new Date(timestamp).toLocaleString() : 'N/A'}</p>
             
-            <div className={`p-8 rounded-xl border ${config.borderColor} ${config.bgColor} shadow-2xl ${config.glowColor} text-center mb-8`}>
-                <p className={`font-semibold tracking-wider uppercase ${config.color}`}>Overall Signal</p>
+            <div className={`p-8 rounded-xl border ${scoreBorderColor} ${scoreBgColor} shadow-2xl ${scoreGlowColor} text-center mb-8`}>
+                <p className={`font-semibold tracking-wider uppercase ${scoreColor}`}>Scrybe Score</p>
                 <div className="flex justify-center items-center gap-x-4">
-                    <h1 className={`text-7xl font-extrabold my-2 ${config.color}`}>{signal}</h1>
-                    {qConfig && ( <span title={qConfig.description} className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border ${qConfig.colors}`}> <qConfig.Icon className="h-4 w-4" /> {signalQualifier} </span> )}
+                    <h1 className={`text-7xl font-extrabold my-2 font-mono ${scoreColor}`}>{scoreText}</h1>
+                    {qConfig && ( 
+                        <span title={qConfig.description} className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border ${qConfig.colors}`}> 
+                            <qConfig.Icon className="h-4 w-4" /> {signalQualifier} 
+                        </span> 
+                    )}
                 </div>
-                <p className="text-xl font-semibold text-gray-300">Confidence: <span className={config.color}>{confidence}</span></p>
+                <p className="text-xl font-semibold text-gray-300">Signal: <span className={scoreColor}>{signal} ({confidence})</span></p>
             </div>
+            
             <ConfidencePoll analysisId={data?.analysis_id} />
             <PerformanceBar />
             {dvmScores && <DVMScores scores={dvmScores} />}
@@ -1209,13 +1235,13 @@ const AnalysisDashboard = ({ data }) => {
             <div className="space-y-8 mb-8">
                 {charts && charts['1M'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Tactical View)</h3>
+                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Contextual View)</h3>
                         <img src={`data:image/png;base64,${charts['1M']}`} alt="1-Month Technical Analysis Chart" className="rounded-md" />
                     </div>
                 )}
                 {charts && charts['1W'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-                        <h3 className="font-bold text-xl text-white mb-4">1-Week Chart (Contextual View)</h3>
+                        <h3 className="font-bold text-xl text-white mb-4">1-Week Chart (Tactical View)</h3>
                         <img src={`data:image/png;base64,${charts['1W']}`} alt="1-Week Technical Analysis Chart" className="rounded-md" />
                     </div>
                 )}
@@ -1225,7 +1251,7 @@ const AnalysisDashboard = ({ data }) => {
                 <h3 className="font-bold text-xl text-white mb-4">Inter-Market Correlations (90-Day)</h3>
                 <p className="text-center text-sm text-gray-400 mb-6 max-w-2xl mx-auto">
                     This shows how the stock's price has moved in relation to key global markets over the last 90 days. A value near +1 means they move together; near -1 means they move in opposite directions.
-                </p>               
+                </p> 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {Object.entries(correlations).map(([key, value]) => {
                         const cleanKey = key.replace(' Correlation', '');
@@ -1281,10 +1307,6 @@ const AnalysisDashboard = ({ data }) => {
                     </div>
                 </div>
             </details>
-            {/* <div className="mt-8">
-                <ConversationalQa analysisContext={data} />
-            </div> */}
-
             <DisclaimerFooter />
         </div>
     );
@@ -1352,28 +1374,27 @@ const AITrackRecord = () => {
 };
 
 export default function App() {
-    // State to manage the main view: landing page or the application
-    const [view, setView] = useState('landing'); // 'landing' or 'app'
 
-    // --- NEW STATE for FaqPage ---
+    const [view, setView] = useState('landing');
     const [showFaq, setShowFaq] = useState(false);
-
-    // State for the tabbed interface inside the app
-    const [activeTab, setActiveTab] = useState('stock_analysis');
-
-    // State for the stock analysis flow within the app
-    const [analysisState, setAnalysisState] = useState('selector'); // 'selector', 'analyzing', 'results', 'error'
-
-    // State for API data and errors
+    const [showUserGuide, setShowUserGuide] = useState(false);
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showTerms, setShowTerms] = useState(false);
+    const [activeTab, setActiveTab] = useState('app_guide'); // New default tab
+    const [analysisState, setAnalysisState] = useState('selector');
     const [error, setError] = useState(null);
     const [analysisData, setAnalysisData] = useState(null);
-
-    // State to control the pop-up modals
     const [isDemoOpen, setIsDemoOpen] = useState(false);
     const [isPulseOpen, setIsPulseOpen] = useState(false);
-
     const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [tabIndex, setTabIndex] = useState(0);
+    const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
+
     // --- Core Application Logic ---
+    const handleGoToLanding = () => {
+        setView('landing');
+        setAnalysisState('selector'); // This resets the analysis page for the next visit
+    };
 
     const handleLaunch = () => {
         const agreedTimestamp = localStorage.getItem('disclaimerAgreedTimestamp');
@@ -1398,6 +1419,14 @@ export default function App() {
         localStorage.setItem('disclaimerAgreedTimestamp', Date.now().toString());
         setShowDisclaimer(false);
         setView('app');
+    };
+
+    const navigateToTab = (index) => {
+        setTabIndex(index);
+    };
+    const handleLaunchAndNavigate = (index) => {
+        setView('app');      // First, switch to the main app view
+        setTabIndex(index);  // Then, immediately set the active tab
     };
 
     const handleResetAnalysis = () => setAnalysisState('selector');
@@ -1427,44 +1456,41 @@ export default function App() {
 
     const renderMainApp = () => (
         <div className="w-full">
-            <Tab.Group onChange={(index) => {
-                if (index === 0) setActiveTab('stock_analysis');
-                if (index === 1) setActiveTab('open_positions');
-                if (index === 2) setActiveTab('index_analysis');
-                if (index === 3) setActiveTab('track_record');
-                if (index === 4) setActiveTab('rulebook');
+            <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
+                setTabIndex(index);
+                if (index === 0) setActiveTab('app_guide');
+                if (index === 1) setActiveTab('stock_analysis');
+                if (index === 2) setActiveTab('on_the_radar');
+                if (index === 3) setActiveTab('open_positions');
+                if (index === 4) setActiveTab('index_analysis');
+                if (index === 5) setActiveTab('track_record');
+                if (index === 6) setActiveTab('rulebook');
             }}>
                 <Tab.List>
-                    {/* --- 1. Full Tab Bar for Medium Screens and Up (hidden on mobile) --- */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
+                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>On The Radar</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Rulebook</button>)}</Tab>
                     </div>
 
-                    {/* --- 2. Dropdown Menu for Mobile Screens (hidden on medium and up) --- */}
                     <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
                         <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
                             <div>
                                 <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
-                                    {activeTab.replace('_', ' ')}
+                                    {activeTab.replace(/_/g, ' ')}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
                                 </Menu.Button>
                             </div>
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
+                            <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
@@ -1477,21 +1503,13 @@ export default function App() {
                 </Tab.List>
                 <div className="w-full py-8">
                     <Tab.Panels>
-                        <Tab.Panel>
-                            {activeTab === 'stock_analysis' && renderStockAnalysisContent()}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'open_positions' && <OpenPositions />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'index_analysis' && <IndexAnalysisView />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'track_record' && <AITrackRecord />}
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            {activeTab === 'rulebook' && <Rulebook />}
-                        </Tab.Panel>
+                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
+                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                        <Tab.Panel><OnTheRadar /></Tab.Panel>
+                        <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
+                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
+                        <Tab.Panel><AITrackRecord /></Tab.Panel>
+                        <Tab.Panel><Rulebook /></Tab.Panel>
                     </Tab.Panels>
                 </div>
             </Tab.Group>
@@ -1507,45 +1525,61 @@ export default function App() {
             default: return <StockSelector onAnalyze={handleAnalysis} />;
         }
     };
+    
+    if (showFaq) { return <FaqPage onBack={() => setShowFaq(false)} />; }
+    if (showUserGuide) { return <UserGuidePage onBack={() => setShowUserGuide(false)} />; }
+    if (showPrivacy) { return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />; }
+    if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
-    if (showFaq) {
-        return <FaqPage onBack={() => setShowFaq(false)} />;
-    }
-
+    // This is the final return statement for your main application
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
-            <style>{`
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
-            `}</style>
+            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
 
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {/* This is the conditional logic to show the correct header */}
                 {view === 'landing' ? (
-                    <LandingHeader onDemoOpen={() => setIsDemoOpen(true)} onFaqOpen={() => setShowFaq(true)} />
+                    <LandingHeader 
+                        onDemoOpen={() => setIsDemoOpen(true)} 
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
+                    />
                 ) : (
-                    <AppHeader
-                        onReset={analysisState !== 'selector' ? handleResetAnalysis : null}
-                        isPulseOpen={isPulseOpen}
+                    <AppHeader 
+                        onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
+                        isPulseOpen={isPulseOpen} 
                         setIsPulseOpen={setIsPulseOpen}
+                        onGoToLanding={handleGoToLanding}
+                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
                     />
                 )}
-
-                {/* This is the conditional logic to show the correct main view */}
+                
                 {view === 'landing' ? (
-                    <LandingPage onLaunch={handleLaunch} />
+                    <LandingPage 
+                        onLaunch={handleLaunch}
+                        handleLaunchAndNavigate={handleLaunchAndNavigate} // Add this
+                        onDemoOpen={() => setIsDemoOpen(true)}
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                        onPrivacyOpen={() => setShowPrivacy(true)}
+                        onTermsOpen={() => setShowTerms(true)}
+                    />
                 ) : (
                     renderMainApp()
                 )}
             </div>
 
             <TickerTape />
-
-            {/* This renders the demo modal only when it's open */}
+            <Footer 
+                onPrivacyClick={() => setShowPrivacy(true)}
+                onTermsClick={() => setShowTerms(true)}
+                onUserGuideClick={() => setShowUserGuide(true)}
+                onFaqClick={() => setShowFaq(true)}
+            />
             {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
-
+            {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
             <FeedbackWidget />
         </main>
     );
