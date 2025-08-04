@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import { Tab, Menu, Transition } from '@headlessui/react';
 import './App.css';
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion } from 'framer-motion';
+import { useMotionValue, useTransform, animate } from "framer-motion";
 import { Bot, BrainCircuit, RefreshCw, Zap, Timer, Home } from "lucide-react";
 import OpenPositions from './OpenPositions';
 import NewsSection from './NewsSection';
 import Rulebook from './Rulebook';
-import ConversationalQa from './ConversationalQa';
 import TradeJournalCard from './TradeJournalCard';
 import ConfidencePoll from './ConfidencePoll';
 import FeedbackWidget from './FeedbackWidget';
@@ -286,37 +286,6 @@ const IndexAnalysisView = () => {
     );
 };
 
-const AnimatedStat = ({ target, label, suffix = '', color = 'text-white' }) => {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        let start = 0;
-        const end = parseInt(target);
-        if (start === end) { setCount(end); return; }
-        const duration = 2500;
-        const incrementTime = 1000 / 60;
-        const totalFrames = Math.round(duration / incrementTime);
-        const increment = end / totalFrames;
-        let currentFrame = 0;
-        const timer = setInterval(() => {
-            currentFrame += 1;
-            const newCount = Math.round(start + (increment * currentFrame));
-            if (newCount >= end) {
-                setCount(end);
-                clearInterval(timer);
-            } else {
-                setCount(newCount);
-            }
-        }, incrementTime);
-        return () => clearInterval(timer);
-    }, [target]);
-    return (
-        <div className="text-center">
-            <p className={`text-4xl font-bold font-mono ${color}`}>{count.toLocaleString()}{suffix}</p>
-            <p className="text-xs text-gray-500 mt-1 tracking-wider uppercase">{label}</p>
-        </div>
-    );
-};
-
 const ScrybeLogo = () => (<svg className="rotating-logo" width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="logoGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop stopColor="#3b82f6" /><stop offset="1" stopColor="#818cf8" /></linearGradient></defs><rect x="30" y="12" width="4" height="10" rx="2" fill="url(#logoGradient)" /><rect x="26" y="22" width="12" height="18" rx="2" fill="url(#logoGradient)" /><rect x="30" y="40" width="4" height="12" rx="2" fill="url(#logoGradient)" /><path d="M8 48 L20 38 L32 32 L44 28 L56 18" stroke="url(#logoGradient)" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>);
 const SearchIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
 const ArrowLeftIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>);
@@ -325,8 +294,6 @@ const LightbulbIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" 
 const BullIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10h10"/><path d="m10 7 2-3 2 3"/><path d="M12 21V4"/><path d="M7 21h10"/></svg>);
 const BearIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 14h10"/><path d="m10 17 2 3 2-3"/><path d="M12 3v17"/><path d="M7 3h10"/></svg>);
 const ChevronDownIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>);
-const CalendarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>);
-const TargetIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>);
 const ArrowUpRightIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>);
 const PauseIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg>);
 const InfoIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400/80"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>);
@@ -493,10 +460,8 @@ const PerformanceShowcase = () => {
 
   const AnimatedNumber = ({ value, prefix = '', suffix = '' }) => {
     const [count, setCount] = useState(0);
-    const ref = useRef();
 
     useEffect(() => {
-      let start = 0;
       const duration = 1500;
       const startTime = performance.now();
 
@@ -559,96 +524,64 @@ const PerformanceShowcase = () => {
   );
 };
 
-const SuccessRateDonut = () => {
-    // Input values
-    const winRate = 63.16;
-    const profitFactor = 1.65;
-    const maxDrawdown = 3.33;
+const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 3.33 }) => {
+    // 1. We use useMemo to calculate the score only when the props change.
+    const successScore = useMemo(() => {
+        return (winRate * profitFactor) / (maxDrawdown * 10);
+    }, [winRate, profitFactor, maxDrawdown]);
 
-    // Success Score formula
-    const successScore = (winRate * profitFactor) / (maxDrawdown * 10); // ≈ 3.13
+    const maxScore = 5;
+    const normalizedScore = Math.min(successScore, maxScore) / maxScore;
 
     // Circle setup
     const radius = 54;
-    const strokeWidth = 12;
+    const strokeWidth = 10;
     const circumference = 2 * Math.PI * radius;
-    const maxScore = 5;
-    const normalizedScore = Math.min(successScore, maxScore) / maxScore;
     const offset = circumference * (1 - normalizedScore);
 
-    // Animation
     const count = useMotionValue(0);
-    const rounded = useTransform(count, (latest) => `${latest.toFixed(2)}`);
+    const rounded = useTransform(count, (latest) => latest.toFixed(2));
 
     useEffect(() => {
         const controls = animate(count, successScore, {
-            duration: 1.5,
+            duration: 2,
             ease: "easeOut",
         });
         return controls.stop;
-    }, []);
+    // 2. The dependency array now correctly uses the source value.
+    }, [successScore, count]); // The warning will now be gone.
 
     return (
-        <div className="relative w-48 h-48 hover:scale-105 transition-transform duration-300 group">
-            {/* Pulse Glow */}
-            {successScore >= 3 && (
-                <motion.div
-                    className="absolute inset-0 rounded-full"
-                    animate={{
-                        boxShadow: [
-                            "0 0 0px #22c55e",
-                            "0 0 20px #22c55e",
-                            "0 0 0px #22c55e",
-                        ],
-                    }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                />
-            )}
-
-            <svg className="w-full h-full drop-shadow-lg" viewBox="0 0 120 120">
-                {/* Background Circle */}
-                <circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
-                    strokeWidth={strokeWidth}
-                    className="stroke-slate-800"
-                    fill="transparent"
-                />
-                {/* Progress Circle */}
+        <div className="relative w-44 h-44 sm:w-48 sm:h-48">
+            <svg className="w-full h-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r={radius} strokeWidth={strokeWidth} fill="none" stroke="#1e293b" />
                 <motion.circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
+                    cx="60" cy="60" r={radius}
                     strokeWidth={strokeWidth}
-                    className="stroke-[url(#gradient)]"
-                    fill="transparent"
+                    fill="none"
+                    stroke="url(#gradient)"
                     strokeDasharray={circumference}
-                    strokeDashoffset={offset}
                     strokeLinecap="round"
                     transform="rotate(-90 60 60)"
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ strokeDashoffset: offset }}
                     transition={{ duration: 2, ease: "easeOut" }}
                 />
-                {/* Gradient Definition */}
                 <defs>
-                    <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stopColor="#22c55e" />
-                        <stop offset="100%" stopColor="#4ade80" />
+                    <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120">
+                        <stop offset="0%" stopColor="#16a34a" />
+                        <stop offset="100%" stopColor="#22c55e" />
                     </linearGradient>
                 </defs>
             </svg>
-
-            {/* Center Text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <motion.span className="text-5xl font-extrabold text-white drop-shadow-sm">
+                <motion.span className="text-4xl font-semibold text-white">
                     {rounded}
                 </motion.span>
-                <span className="text-xs mt-1 text-gray-400 tracking-widest uppercase">
+                <span className="text-xs text-gray-400 tracking-wide uppercase mt-1">
                     Success Score
                 </span>
-                <span className="text-[10px] text-gray-500 mt-1 w-36 leading-tight">
+                <span className="text-[10px] text-gray-500 mt-1 leading-tight w-32 sm:w-36 font-light">
                     (Win Rate × Profit Factor) ÷ (Max Drawdown × 10)
                 </span>
             </div>
@@ -1182,18 +1115,6 @@ const DVMScores = ({ scores }) => {
                 <ScoreCard title="Durability" scoreData={scores.durability} />
                 <ScoreCard title="Valuation" scoreData={scores.valuation} />
                 <ScoreCard title="Momentum" scoreData={scores.momentum} />
-            </div>
-        </div>
-    );
-};
-
-const ConversationalAnswerDisplay = ({ answer }) => {
-    if (!answer) return null;
-    return (
-        <div className="w-full max-w-5xl mx-auto p-6 mb-8 bg-blue-900/30 backdrop-blur-md border border-blue-500/60 rounded-xl animate-fadeIn">
-            <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 bg-blue-500/20 p-3 rounded-full mt-1"><LightbulbIcon className="text-blue-300 h-6 w-6" /></div>
-                <div><h3 className="font-bold text-xl text-white mb-2">Direct Answer</h3><p className="text-blue-200 leading-relaxed whitespace-pre-line">{answer}</p></div>
             </div>
         </div>
     );
