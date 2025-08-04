@@ -1233,16 +1233,22 @@ const AnalysisDashboard = ({ data }) => {
             <TradeJournalCard analysisData={data} />
 
             <div className="space-y-8 mb-8">
-                {charts && charts['1M'] && (
+                {charts && charts['1D'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Contextual View)</h3>
-                        <img src={`data:image/png;base64,${charts['1M']}`} alt="1-Month Technical Analysis Chart" className="rounded-md" />
+                        <h3 className="font-bold text-xl text-white mb-4">1-Day Chart (Intraday View)</h3>
+                        <img src={`data:image/png;base64,${charts['1D']}`} alt="1-Day Intraday Chart" className="rounded-md" />
                     </div>
                 )}
                 {charts && charts['1W'] && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
                         <h3 className="font-bold text-xl text-white mb-4">1-Week Chart (Tactical View)</h3>
                         <img src={`data:image/png;base64,${charts['1W']}`} alt="1-Week Technical Analysis Chart" className="rounded-md" />
+                    </div>
+                )}
+                {charts && charts['1M'] && (
+                    <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
+                        <h3 className="font-bold text-xl text-white mb-4">1-Month Chart (Contextual View)</h3>
+                        <img src={`data:image/png;base64,${charts['1M']}`} alt="1-Month Technical Analysis Chart" className="rounded-md" />
                     </div>
                 )}
             </div>
