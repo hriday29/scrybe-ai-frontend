@@ -6,7 +6,7 @@ import App from './App';
 import { ClerkProvider } from '@clerk/clerk-react';
 
 // --- ADD THIS LINE ---
-const PUBLISHABLE_KEY = "your_publishable_key_from_clerk";
+const PUBLISHABLE_KEY = "pk_test_cmVsYXhlZC1sZW11ci0yNi5jbGVyay5hY2NvdW50cy5kZXYk";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
