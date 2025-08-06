@@ -21,6 +21,7 @@ import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
 import LandingWalkthrough from './LandingWalkthrough.js';
 import BetaInfoModal from './BetaInfoModal.js';
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -438,11 +439,15 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBeta
                 </div>
             </div>
             <div className="flex-1 flex justify-end items-center gap-4">
-                {onReset && (
-                    <button onClick={onReset} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <ArrowLeftIcon /> New Analysis
-                    </button>
-                )}
+            {onReset && (
+                <button
+                onClick={onReset}
+                className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2"
+                >
+                <ArrowLeftIcon /> New Analysis
+                </button>
+            )}
+            <UserButton afterSignOutUrl="/" />
             </div>
         </header>
     );
@@ -632,14 +637,15 @@ const LandingPage = ({ onLaunch, handleLaunchAndNavigate, onUserGuideOpen, onFaq
                     <p className="mt-4 max-w-xl text-lg text-gray-400">
                         Scrybe AI combines frontier intelligence with a disciplined, data-driven process to identify high-probability trading setups.
                     </p>
-                    <motion.button
-                        onClick={onLaunch}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="mt-8 bg-blue-600 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Launch Analysis Tool
-                    </motion.button>
+                    <SignInButton mode="modal" redirectUrl="/app">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="mt-8 bg-blue-600 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
+                        >
+                            Launch Analysis Tool
+                        </motion.button>
+                    </SignInButton>
                 </div>
 
                 {/* Right Side: The new Success Rate Donut */}
@@ -1537,22 +1543,35 @@ export default function App() {
     if (showPrivacy) { return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />; }
     if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
-    // This is the final return statement for your main application
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
+            {/* Your modals and background can stay here */}
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
 
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {view === 'landing' ? (
+                <SignedOut>
+                    {/* --- CONTENT FOR SIGNED-OUT USERS --- */}
                     <LandingHeader 
                         onDemoOpen={() => setIsDemoOpen(true)} 
                         onFaqOpen={() => setShowFaq(true)}
                         onUserGuideOpen={() => setShowUserGuide(true)}
                         onBetaModalOpen={() => setIsBetaModalOpen(true)}
                     />
-                ) : (
+                    <LandingPage 
+                        // onLaunch is no longer needed here
+                        handleLaunchAndNavigate={handleLaunchAndNavigate}
+                        onDemoOpen={() => setIsDemoOpen(true)}
+                        onFaqOpen={() => setShowFaq(true)}
+                        onUserGuideOpen={() => setShowUserGuide(true)}
+                        onPrivacyOpen={() => setShowPrivacy(true)}
+                        onTermsOpen={() => setShowTerms(true)}
+                    />
+                </SignedOut>
+
+                <SignedIn>
+                    {/* --- CONTENT FOR SIGNED-IN USERS --- */}
                     <AppHeader 
                         onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
                         isPulseOpen={isPulseOpen} 
@@ -1560,23 +1579,11 @@ export default function App() {
                         onGoToLanding={handleGoToLanding}
                         onBetaModalOpen={() => setIsBetaModalOpen(true)}
                     />
-                )}
-                
-                {view === 'landing' ? (
-                    <LandingPage 
-                        onLaunch={handleLaunch}
-                        handleLaunchAndNavigate={handleLaunchAndNavigate} // Add this
-                        onDemoOpen={() => setIsDemoOpen(true)}
-                        onFaqOpen={() => setShowFaq(true)}
-                        onUserGuideOpen={() => setShowUserGuide(true)}
-                        onPrivacyOpen={() => setShowPrivacy(true)}
-                        onTermsOpen={() => setShowTerms(true)}
-                    />
-                ) : (
-                    renderMainApp()
-                )}
+                    {renderMainApp()}
+                </SignedIn>
             </div>
 
+            {/* These can remain outside as they are universal */}
             <TickerTape />
             <Footer 
                 onPrivacyClick={() => setShowPrivacy(true)}
