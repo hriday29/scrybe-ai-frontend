@@ -32,10 +32,10 @@ const TermsPage = ({ onBack }) => {
             <h2>4. User Eligibility</h2>
             <p>You must be at least 18 years old to use this Service. By using the Service, you represent and warrant that you meet this age requirement and have the legal capacity to enter into this agreement.</p>
 
-            <h2>5. Account and Access</h2>
+            <h2>5. Beta Access and Account</h2>
             <p>During the beta phase, access may be limited, restricted, or terminated at our discretion without notice. We may suspend or terminate your access for violation of these terms, technical issues, or for any reason related to the beta testing process.</p>
 
-            <h2>6. Use of the Service</h2>
+            <h2>6. Acceptable Use</h2>
             <p>You agree to use the Service only for lawful purposes and in accordance with these Terms. You agree not to:</p>
             <ul>
                 <li>Use the Service for any unlawful purpose or in violation of any applicable laws</li>
@@ -51,19 +51,18 @@ const TermsPage = ({ onBack }) => {
             <p>Your use of the Service is also governed by our Privacy Policy. During the beta phase, we may collect additional diagnostic and usage data to improve the Service. All data practices are described in our Privacy Policy.</p>
 
             <h2>8. Intellectual Property</h2>
-            <p>The Service and its original content, features, and functionality are and will remain the exclusive property of Scrybe AI and its licensors. The Service is protected by copyright, trademark, and other laws. You may not reproduce, distribute, or create derivative works without our express written permission.</p>
+            <p>The Service and its original content, features, and functionality are and will remain the exclusive property of Scrybe AI and its licensors. The Service is protected by copyright, trademark, and other laws.</p>
 
-            <h2>9. Beta Feedback and Suggestions</h2>
+            <h2>9. Beta Feedback</h2>
             <p>We welcome and encourage feedback during the beta phase. Any feedback, suggestions, or ideas you provide become our property and may be used to improve the Service without compensation or attribution to you.</p>
 
-            <h2>10. Disclaimer of Warranties</h2>
+            <h2>10. Disclaimers</h2>
             <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis, especially during the beta phase. We make no warranties, expressed or implied, regarding:</p>
             <ul>
                 <li>The accuracy, timeliness, reliability, or completeness of information</li>
                 <li>Uninterrupted or error-free operation</li>
                 <li>Security or data protection</li>
                 <li>Fitness for any particular purpose</li>
-                <li>Compatibility with your systems or devices</li>
             </ul>
 
             <h2 className="text-red-600">11. Limitation of Liability</h2>
@@ -73,21 +72,20 @@ const TermsPage = ({ onBack }) => {
                 <li>Indirect, incidental, special, or consequential damages</li>
                 <li>Loss of profits, data, or business opportunities</li>
                 <li>Damages resulting from Service interruptions, errors, or data loss</li>
-                <li>Damages exceeding $100 USD in total</li>
             </ul>
             <p>This limitation applies regardless of the cause of action and even if we have been advised of the possibility of such damages.</p>
 
-            <h2>12. Indemnification</h2>
-            <p>You agree to indemnify and hold harmless Scrybe AI from any claims, damages, or expenses arising from your use of the Service, violation of these Terms, or infringement of any rights of another party.</p>
-
-            <h2>13. Termination</h2>
+            <h2>12. Termination</h2>
             <p>We may terminate or suspend your access to the Service immediately, without prior notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties. The beta phase may end at any time without notice.</p>
 
+            <h2>13. Beta Phase Changes</h2>
+            <p>During our beta phase, these terms may be updated frequently as we refine our service. We reserve the right to modify features, access, or terms with minimal notice to improve the user experience.</p>
+
             <h2>14. Governing Law</h2>
-            <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions. Any disputes shall be resolved in the courts of [Your Jurisdiction].</p>
+            <p>These Terms are governed by the laws of India. Any disputes will be resolved through good faith negotiations first, and if necessary, through appropriate legal channels in India.</p>
 
             <h2>15. Changes to Terms</h2>
-            <p>We reserve the right to modify or replace these Terms at any time, especially during the beta phase as we refine our Service. We will provide notice by posting the new Terms & Conditions on this page and updating the "Last Updated" date. Continued use after changes constitutes acceptance of the new Terms.</p>
+            <p>We reserve the right to modify or replace these Terms at any time, especially during the beta phase. We will provide notice by updating the "Last Updated" date. Continued use after changes constitutes acceptance of the new Terms.</p>
 
             <h2>16. Contact Us</h2>
             <p>If you have any questions about these Terms, please contact us through the "Feedback" widget on our application.</p>

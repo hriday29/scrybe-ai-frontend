@@ -48,10 +48,10 @@ const PrivacyPolicyPage = ({ onBack }) => {
             <p>Depending on your location, you may have certain rights regarding your personal information, including the right to access, update, or delete your data. To exercise these rights, please contact us through the Feedback widget.</p>
 
             <h2>8. Children's Privacy</h2>
-            <p>Our Service is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information.</p>
+            <p>Our Service is not intended for children under 18 years of age. We do not knowingly collect personal information from children under 18. If we become aware that we have collected personal information from a child under 18, we will take steps to delete such information.</p>
 
             <h2>9. Changes to This Privacy Policy</h2>
-            <p>We may update this Privacy Policy from time to time. We will notify users of any material changes by updating the "Last Updated" date at the top of this policy. Your continued use of the Service after such changes constitutes acceptance of the updated policy.</p>
+            <p>We may update this Privacy Policy from time to time, especially during the beta phase as we refine our Service. We will notify users of any material changes by updating the "Last Updated" date at the top of this policy. Your continued use of the Service after such changes constitutes acceptance of the updated policy.</p>
 
             <h2>10. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy, please contact us through the "Feedback" widget on our application.</p>
