@@ -24,6 +24,7 @@ import BetaInfoModal from './BetaInfoModal.js';
 import { useAuth } from './AuthContext';
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from './firebase';
+import SignInModal from './SignInModal';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -1406,7 +1407,20 @@ export default function App() {
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
     const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
-
+    const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+    useEffect(() => {
+      // This effect runs whenever 'currentUser' changes.
+      if (currentUser) {
+        // If a user is detected (from a previous session or after a new login),
+        // automatically switch to the main app view.
+        setView('app');
+      } else {
+        // If there's no user (they logged out or are a new visitor),
+        // ensure we are on the landing page.
+        setView('landing');
+      }
+    }, [currentUser]);
+    
     // --- Core Application Logic ---
     const handleGoToLanding = () => {
         handleSignOut(); // This is the new logic to go to the landing page
@@ -1450,7 +1464,8 @@ export default function App() {
         const provider = new GoogleAuthProvider();
         try {
             await signInWithPopup(auth, provider);
-            // The onAuthStateChanged listener in AuthContext will handle the rest!
+            // On successful sign-in, close the modal. The useEffect will handle the view switch.
+            setIsSignInModalOpen(false);
         } catch (error) {
             console.error("Error during sign in:", error);
         }
@@ -1564,14 +1579,27 @@ export default function App() {
 
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
-            {/* Your modals and background can stay here */}
+            
+            {/* --- 1. RENDER THE NEW SIGN-IN MODAL --- */}
+            {/* This will only appear when isSignInModalOpen is true and the user is not yet logged in. */}
+            {isSignInModalOpen && !currentUser && (
+                <SignInModal 
+                    onSignIn={handleSignIn} 
+                    onClose={() => setIsSignInModalOpen(false)} 
+                />
+            )}
+
+            {/* Your other existing modals and background */}
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
 
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {currentUser ? (
-                    // If a user is signed in, show the main App
+                
+                {/* --- 2. USE THE 'view' STATE FOR AUTOMATIC REDIRECTION --- */}
+                {/* This logic now respects the automatic redirection from the useEffect hook. */}
+                {view === 'app' && currentUser ? (
+                    // If view is 'app' AND a user is logged in, show the main application.
                     <>
                         <AppHeader 
                             onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
@@ -1579,12 +1607,12 @@ export default function App() {
                             setIsPulseOpen={setIsPulseOpen}
                             onGoToLanding={handleGoToLanding}
                             onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                            onSignOut={handleSignOut}  // Pass the sign out function
+                            onSignOut={handleSignOut}
                         />
                         {renderMainApp()}
                     </>
                 ) : (
-                    // If no user is signed in, show the Landing Page
+                    // Otherwise (if view is 'landing' or user is null), show the landing page.
                     <>
                         <LandingHeader 
                             onDemoOpen={() => setIsDemoOpen(true)} 
@@ -1593,7 +1621,9 @@ export default function App() {
                             onBetaModalOpen={() => setIsBetaModalOpen(true)}
                         />
                         <LandingPage 
-                            onSignIn={handleSignIn} // Pass the sign in function
+                            // --- 3. UPDATE THE onSignIn PROP ---
+                            // The "Launch Analysis Tool" button now opens our modal instead of the Google popup directly.
+                            onSignIn={() => setIsSignInModalOpen(true)}
                             handleLaunchAndNavigate={handleLaunchAndNavigate}
                             onDemoOpen={() => setIsDemoOpen(true)}
                             onFaqOpen={() => setShowFaq(true)}
@@ -1605,7 +1635,7 @@ export default function App() {
                 )}
             </div>
 
-            {/* These components are universal and stay outside the conditional logic */}
+            {/* These universal components remain unchanged */}
             <TickerTape />
             <Footer 
                 onPrivacyClick={() => setShowPrivacy(true)}
