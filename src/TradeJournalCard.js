@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { API_BASE_URL } from './apiConfig.js';
 
+// --- 1. Import the new tools ---
+import { useAuth } from './AuthContext';
+import authFetch from './api/authFetch';
+
 const TradeJournalCard = ({ analysisData }) => {
+    // --- 2. Get the current user from the Auth Context ---
+    const { currentUser } = useAuth();
+
     const [step, setStep] = useState('initial'); // 'initial', 'logging', 'submitted', 'error'
     const [formData, setFormData] = useState({
         exitPrice: '',
@@ -9,41 +16,54 @@ const TradeJournalCard = ({ analysisData }) => {
         notes: ''
     });
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false); // Add submitting state
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    // --- 3. Update the handleSubmit function to use authFetch ---
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        
+        // First, check if the user is logged in
+        if (!currentUser) {
+            setError("You must be logged in to log a trade.");
+            setStep('error');
+            return;
+        }
 
-        const payload = {
-            ticker: analysisData.ticker,
-            signal: analysisData.signal,
-            ai_trade_plan: analysisData.tradePlan,
-            user_exit_price: formData.exitPrice,
-            user_exit_date: formData.exitDate,
-            user_notes: formData.notes
-        };
+        setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/trades/log`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            const payload = {
+                ticker: analysisData.ticker,
+                signal: analysisData.signal,
+                ai_trade_plan: analysisData.tradePlan,
+                user_exit_price: formData.exitPrice,
+                user_exit_date: formData.exitDate,
+                user_notes: formData.notes
+            };
 
-            if (!response.ok) {
-                throw new Error('Failed to save trade log. Please try again.');
-            }
+            // Use the new, secure authFetch function
+            await authFetch(
+                `${API_BASE_URL}/api/trades/log`, // The protected URL
+                currentUser,                     // The current user object
+                {                                // The fetch options
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                }
+            );
             
             setStep('submitted');
 
         } catch (err) {
             setError(err.message);
             setStep('error');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -105,8 +125,8 @@ const TradeJournalCard = ({ analysisData }) => {
                             placeholder="e.g., Exited early due to market volatility."
                         />
                     </div>
-                    <button type="submit" className="w-full bg-green-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                        Save Trade
+                    <button type="submit" disabled={isSubmitting} className="w-full bg-green-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:bg-slate-600">
+                        {isSubmitting ? 'Saving...' : 'Save Trade'}
                     </button>
                 </form>
             )}

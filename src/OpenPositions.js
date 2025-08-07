@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from './apiConfig.js';
 
+// --- 1. Import the new tools ---
+import { useAuth } from './AuthContext';
+import authFetch from './api/authFetch';
+
 const OpenPositions = ({ onAnalyze }) => {
+    // --- 2. Get the current user from the Auth Context ---
+    const { currentUser } = useAuth();
+
     const [openTrades, setOpenTrades] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // --- 3. Update the useEffect to use authFetch ---
     useEffect(() => {
+        // Don't try to fetch if the user isn't logged in
+        if (!currentUser) {
+            setIsLoading(false);
+            setOpenTrades([]); // Ensure list is empty if not logged in
+            return;
+        }
+
         const fetchOpenTrades = async () => {
             setIsLoading(true);
             setError(null);
             try {
-                const res = await fetch(`${API_BASE_URL}/api/open-trades`);
-                if (!res.ok) {
-                    throw new Error("Failed to fetch open positions from the server.");
-                }
-                const data = await res.json();
+                // Use the new, secure authFetch function
+                const data = await authFetch(
+                    `${API_BASE_URL}/api/open-trades`, // The protected URL
+                    currentUser                       // The current user object
+                );
                 setOpenTrades(data);
             } catch (err) {
                 setError(err.message);
@@ -23,8 +38,9 @@ const OpenPositions = ({ onAnalyze }) => {
                 setIsLoading(false);
             }
         };
+
         fetchOpenTrades();
-    }, []);
+    }, [currentUser]); // Add currentUser as a dependency
 
     if (isLoading) {
         return <div className="text-center p-8 animate-pulse">Loading Open Positions...</div>;
@@ -34,6 +50,16 @@ const OpenPositions = ({ onAnalyze }) => {
         return <div className="text-red-400 text-center p-8">Error: {error}</div>;
     }
 
+    // If not logged in, show a message
+    if (!currentUser) {
+        return (
+            <div className="text-center text-gray-500 py-16">
+                <h3 className="text-2xl font-bold text-white">Login Required</h3>
+                <p className="mt-2">Please log in to view open positions.</p>
+            </div>
+        );
+    }
+    
     if (openTrades.length === 0) {
         return (
             <div className="text-center text-gray-500 py-16">

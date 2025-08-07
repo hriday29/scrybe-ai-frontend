@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from './apiConfig';
 
+// --- 1. Import the new tools ---
+import { useAuth } from './AuthContext';
+import authFetch from './api/authFetch';
+
 // A helper component for the accordion items
 const FaqItem = ({ question, answer }) => (
     <details className="border-b border-gray-200 py-4 group">
@@ -14,8 +18,12 @@ const FaqItem = ({ question, answer }) => (
 );
 
 const FaqPage = ({ onBack }) => {
+    // --- 2. Get the current user from the Auth Context ---
+    const { currentUser } = useAuth();
+
     const [questionText, setQuestionText] = useState('');
     const [status, setStatus] = useState('initial'); // 'initial', 'submitting', 'submitted', 'error'
+    const [errorMessage, setErrorMessage] = useState(''); // State for error messages
 
     const presetFaqs = [
         { q: "What is Scrybe AI?", a: "Scrybe AI is a research tool that uses advanced AI to analyze stock market data. It provides data-driven insights based on a VST (Very Short-Term) swing trading strategy to help users in their own research process." },
@@ -24,19 +32,34 @@ const FaqPage = ({ onBack }) => {
         { q: "How often is the analysis updated?", a: "The analysis for our core list of stocks is run once every trading day after the market closes, using the latest available data." },
     ];
 
+    // --- 3. Update the handleSubmit function to use authFetch ---
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!currentUser) {
+            setErrorMessage("You must be logged in to submit a question.");
+            setStatus('error');
+            return;
+        }
+
         setStatus('submitting');
+        setErrorMessage('');
+        
         try {
-            const response = await fetch(`${API_BASE_URL}/api/faq/submit`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question_text: questionText }),
-            });
-            if (!response.ok) throw new Error('Submission failed.');
+            // Use the new, secure authFetch function
+            await authFetch(
+                `${API_BASE_URL}/api/faq/submit`, // The protected URL
+                currentUser,                     // The current user object
+                {                                // The fetch options
+                    method: 'POST',
+                    body: JSON.stringify({ question_text: questionText }),
+                }
+            );
+
             setStatus('submitted');
             setQuestionText('');
         } catch (error) {
+            setErrorMessage(error.message || 'Sorry, something went wrong. Please try again.');
             setStatus('error');
         }
     };
@@ -44,19 +67,16 @@ const FaqPage = ({ onBack }) => {
     return (
         <div className="bg-white min-h-screen text-gray-800 font-sans">
             <div className="max-w-4xl mx-auto px-4 py-8">
-                {/* Back button */}
                 <button onClick={onBack} className="text-blue-600 font-semibold mb-8">← Back to Main Site</button>
 
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                     <h1 className="text-5xl font-bold text-center mb-4">Frequently Asked Questions</h1>
                     <p className="text-center text-gray-500 mb-12">Find answers to common questions about Scrybe AI.</p>
 
-                    {/* Preset FAQs */}
                     <div className="mb-16">
                         {presetFaqs.map((faq, i) => <FaqItem key={i} question={faq.q} answer={faq.a} />)}
                     </div>
 
-                    {/* User Submission Form */}
                     <div className="bg-gray-50 p-8 rounded-2xl border border-gray-200 text-center">
                         <h2 className="text-3xl font-bold mb-2">Can't find your answer?</h2>
                         <p className="text-gray-500 mb-6">Ask our team! We'll review your question and add it to our list.</p>
@@ -75,7 +95,7 @@ const FaqPage = ({ onBack }) => {
                                 <button type="submit" disabled={status === 'submitting'} className="mt-4 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-400">
                                     {status === 'submitting' ? 'Submitting...' : 'Submit Question'}
                                 </button>
-                                {status === 'error' && <p className="text-red-500 mt-2">Sorry, something went wrong. Please try again.</p>}
+                                {status === 'error' && <p className="text-red-500 mt-2">{errorMessage}</p>}
                             </form>
                         ) : (
                             <p className="text-green-600 font-semibold">✅ Thank you! Your question has been submitted for review.</p>

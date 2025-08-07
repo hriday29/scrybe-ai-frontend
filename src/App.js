@@ -21,6 +21,9 @@ import TermsPage from './TermsPage.js';
 import AppGuide from './AppGuide.js';
 import LandingWalkthrough from './LandingWalkthrough.js';
 import BetaInfoModal from './BetaInfoModal.js';
+import { useAuth } from './AuthContext';
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from './firebase';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -401,7 +404,7 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
     );
 };
 
-const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBetaModalOpen }) => {
+const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
             <div className="flex-1 flex justify-start">
@@ -446,6 +449,10 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onGoToLanding, onBeta
                         <ArrowLeftIcon /> New Analysis
                     </button>
                 )}
+                {/* vvv ADDED BUTTON vvv */}
+                <button onClick={onSignOut} className="text-gray-400 hover:text-white text-sm font-semibold">
+                    Sign Out
+                </button>
             </div>
         </header>
     );
@@ -622,7 +629,7 @@ const HowItWorks = () => {
     );
 };
 
-const LandingPage = ({ onLaunch, handleLaunchAndNavigate, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen, onDemoOpen }) => {
+const LandingPage = ({ onSignIn, handleLaunchAndNavigate, onUserGuideOpen, onFaqOpen, onPrivacyOpen, onTermsOpen, onDemoOpen }) => {
     return (
         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-12 pb-20 md:pt-16 md:pb-24 animate-fadeIn">
             
@@ -636,7 +643,7 @@ const LandingPage = ({ onLaunch, handleLaunchAndNavigate, onUserGuideOpen, onFaq
                         Scrybe AI combines frontier intelligence with a disciplined, data-driven process to identify high-probability trading setups.
                     </p>
                 <motion.button
-                    onClick={onLaunch}
+                    onClick={onSignIn}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="mt-8 bg-blue-600 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
@@ -1384,6 +1391,7 @@ const AITrackRecord = () => {
 
 export default function App() {
 
+    const { currentUser } = useAuth(); // <-- This now tells us if a user is logged in
     const [view, setView] = useState('landing');
     const [showFaq, setShowFaq] = useState(false);
     const [showUserGuide, setShowUserGuide] = useState(false);
@@ -1401,8 +1409,8 @@ export default function App() {
 
     // --- Core Application Logic ---
     const handleGoToLanding = () => {
-        setView('landing');
-        setAnalysisState('selector'); // This resets the analysis page for the next visit
+        handleSignOut(); // This is the new logic to go to the landing page
+        setAnalysisState('selector');
     };
 
     const handleLaunch = () => {
@@ -1436,6 +1444,20 @@ export default function App() {
     const handleLaunchAndNavigate = (index) => {
         setView('app');      // First, switch to the main app view
         setTabIndex(index);  // Then, immediately set the active tab
+    };
+
+    const handleSignIn = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            await signInWithPopup(auth, provider);
+            // The onAuthStateChanged listener in AuthContext will handle the rest!
+        } catch (error) {
+            console.error("Error during sign in:", error);
+        }
+    };
+
+    const handleSignOut = () => {
+        signOut(auth).catch(error => console.error("Error during sign out:", error));
     };
 
     const handleResetAnalysis = () => setAnalysisState('selector');
@@ -1542,43 +1564,48 @@ export default function App() {
 
     return (
         <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
+            {/* Your modals and background can stay here */}
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
 
             <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                {view === 'landing' ? (
-                    <LandingHeader 
-                        onDemoOpen={() => setIsDemoOpen(true)} 
-                        onFaqOpen={() => setShowFaq(true)}
-                        onUserGuideOpen={() => setShowUserGuide(true)}
-                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                    />
+                {currentUser ? (
+                    // If a user is signed in, show the main App
+                    <>
+                        <AppHeader 
+                            onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
+                            isPulseOpen={isPulseOpen} 
+                            setIsPulseOpen={setIsPulseOpen}
+                            onGoToLanding={handleGoToLanding}
+                            onBetaModalOpen={() => setIsBetaModalOpen(true)}
+                            onSignOut={handleSignOut}  // Pass the sign out function
+                        />
+                        {renderMainApp()}
+                    </>
                 ) : (
-                    <AppHeader 
-                        onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
-                        isPulseOpen={isPulseOpen} 
-                        setIsPulseOpen={setIsPulseOpen}
-                        onGoToLanding={handleGoToLanding}
-                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                    />
-                )}
-                
-                {view === 'landing' ? (
-                    <LandingPage 
-                        onLaunch={handleLaunch}
-                        handleLaunchAndNavigate={handleLaunchAndNavigate}
-                        onDemoOpen={() => setIsDemoOpen(true)}
-                        onFaqOpen={() => setShowFaq(true)}
-                        onUserGuideOpen={() => setShowUserGuide(true)}
-                        onPrivacyOpen={() => setShowPrivacy(true)}
-                        onTermsOpen={() => setShowTerms(true)}
-                    />
-                ) : (
-                    renderMainApp()
+                    // If no user is signed in, show the Landing Page
+                    <>
+                        <LandingHeader 
+                            onDemoOpen={() => setIsDemoOpen(true)} 
+                            onFaqOpen={() => setShowFaq(true)}
+                            onUserGuideOpen={() => setShowUserGuide(true)}
+                            onBetaModalOpen={() => setIsBetaModalOpen(true)}
+                        />
+                        <LandingPage 
+                            onSignIn={handleSignIn} // Pass the sign in function
+                            handleLaunchAndNavigate={handleLaunchAndNavigate}
+                            onDemoOpen={() => setIsDemoOpen(true)}
+                            onFaqOpen={() => setShowFaq(true)}
+                            onUserGuideOpen={() => setShowUserGuide(true)}
+                            onPrivacyOpen={() => setShowPrivacy(true)}
+                            onTermsOpen={() => setShowTerms(true)}
+                        />
+                    </>
                 )}
             </div>
 
+            {/* These components are universal and stay outside the conditional logic */}
             <TickerTape />
             <Footer 
                 onPrivacyClick={() => setShowPrivacy(true)}

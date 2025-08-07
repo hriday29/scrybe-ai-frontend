@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from './apiConfig';
 
-// A new component to display the granular AI analysis for a single article
+// --- 1. Import the new tools ---
+import { useAuth } from './AuthContext';
+import authFetch from './api/authFetch';
+
+// A component to display the granular AI analysis for a single article
 const SingleArticleAnalysis = ({ analysis }) => {
     if (!analysis) return null;
 
@@ -26,7 +30,9 @@ const SingleArticleAnalysis = ({ analysis }) => {
 };
 
 const NewsSection = ({ ticker }) => {
-    // --- FIX 1: The state now holds the entire object from the API ---
+    // --- 2. Get the current user from the Auth Context ---
+    const { currentUser } = useAuth();
+
     const [newsData, setNewsData] = useState({ type: '', articles: [] });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,10 +46,10 @@ const NewsSection = ({ ticker }) => {
             setError(null);
             setAnalyses({});
             try {
+                // This is a public API call, so standard fetch is fine here.
                 const res = await fetch(`${API_BASE_URL}/api/news/${ticker}`);
                 if (!res.ok) throw new Error("Failed to fetch news.");
                 const data = await res.json();
-                // --- FIX 2: We set the entire data object in the state ---
                 setNewsData(data);
             } catch (err) {
                 setError(err.message);
@@ -55,21 +61,35 @@ const NewsSection = ({ ticker }) => {
         fetchNews();
     }, [ticker]);
 
+    // --- 3. Update the handleAnalyzeClick function to use authFetch ---
     const handleAnalyzeClick = async (article, index) => {
         const key = index;
+
+        // First, check if the user is logged in
+        if (!currentUser) {
+            setAnalyses(prev => ({ ...prev, [key]: { loading: false, error: "You must be logged in to analyze articles.", data: null } }));
+            return;
+        }
+        
         setAnalyses(prev => ({ ...prev, [key]: { loading: true, error: null, data: null } }));
         try {
-            const response = await fetch(`${API_BASE_URL}/api/news/analyze-one`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(article)
-            });
-            if (response.status === 429) throw new Error("You have reached your analysis limit for the day.");
-            if (!response.ok) throw new Error("The AI failed to analyze this article.");
-            const analysisData = await response.json();
+            // Use the new, secure authFetch function
+            const analysisData = await authFetch(
+                `${API_BASE_URL}/api/news/analyze-one`, // The protected URL
+                currentUser,                           // The current user object
+                {                                      // The fetch options
+                    method: 'POST',
+                    body: JSON.stringify(article)
+                }
+            );
+
+            if (analysisData.error) throw new Error(analysisData.error);
+            
             setAnalyses(prev => ({ ...prev, [key]: { loading: false, error: null, data: analysisData } }));
         } catch (err) {
-            setAnalyses(prev => ({ ...prev, [key]: { loading: false, error: err.message, data: null } }));
+            // Special handling for rate limit errors from the backend
+            const errorMessage = err.message.includes("rate limit exceeded") ? "You have reached your analysis limit for the day." : err.message;
+            setAnalyses(prev => ({ ...prev, [key]: { loading: false, error: errorMessage, data: null } }));
         }
     };
 
@@ -77,14 +97,12 @@ const NewsSection = ({ ticker }) => {
         if (isLoading) return <div className="p-4 text-center text-gray-400 animate-pulse">Loading news...</div>;
         if (error) return <div className="p-4 text-center text-red-400">{error}</div>;
         
-        // --- FIX 3: We check the length of newsData.articles ---
         if (newsData.articles.length === 0) {
             return <div className="p-4 text-center text-gray-500">No recent news found for this stock.</div>;
         }
 
         return (
             <div className="space-y-4 pt-4">
-                {/* --- FIX 4: We map over newsData.articles --- */}
                 {newsData.articles.map((article, index) => {
                     const key = index;
                     const analysisState = analyses[key];
@@ -115,7 +133,6 @@ const NewsSection = ({ ticker }) => {
     return (
         <details className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6 group mb-8" open>
             <summary className="font-bold text-xl text-white list-none flex justify-between items-center cursor-pointer">
-                {/* --- FIX 5: The title is now dynamic based on the type of news --- */}
                 {newsData.type || 'Recent News'}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-open:rotate-180 transition-transform"><path d="m6 9 6 6 6-6"/></svg>
             </summary>

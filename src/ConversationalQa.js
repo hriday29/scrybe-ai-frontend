@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import { API_BASE_URL } from './apiConfig.js';
 
+// --- 1. Import the new tools ---
+import { useAuth } from './AuthContext';
+import authFetch from './api/authFetch';
+
 const ConversationalQa = ({ analysisContext }) => {
+    // --- 2. Get the current user from the Auth Context ---
+    const { currentUser } = useAuth();
+
     const [question, setQuestion] = useState('');
     const [conversation, setConversation] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // --- 3. Update the handleSubmit function to use authFetch ---
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!question.trim() || isLoading) return;
+
+        // First, check if the user is logged in
+        if (!currentUser) {
+            setError("You must be logged in to ask a question.");
+            return;
+        }
 
         const currentQuestion = question;
         setConversation(prev => [...prev, { type: 'user', text: currentQuestion }]);
@@ -18,22 +32,23 @@ const ConversationalQa = ({ analysisContext }) => {
         setError(null);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/analysis/ask`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question: currentQuestion, context: analysisContext })
-            });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error || "The AI failed to generate an answer.");
-            }
-
-            const data = await response.json();
+            // Use the new, secure authFetch function
+            const data = await authFetch(
+                `${API_BASE_URL}/api/analysis/ask`, // The protected URL
+                currentUser,                       // The current user object
+                {                                  // The fetch options
+                    method: 'POST',
+                    body: JSON.stringify({ question: currentQuestion, context: analysisContext })
+                }
+            );
+            
             setConversation(prev => [...prev, { type: 'ai', text: data.answer }]);
 
         } catch (err) {
             setError(err.message);
+            // Optionally add the failed user message back to the input
+            setConversation(prev => prev.slice(0, -1));
+            setQuestion(currentQuestion);
         } finally {
             setIsLoading(false);
         }
@@ -43,7 +58,6 @@ const ConversationalQa = ({ analysisContext }) => {
         <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
             <h3 className="font-bold text-xl text-white mb-4">Ask a Question About This Analysis</h3>
             
-            {/* Conversation Display */}
             <div className="space-y-4 mb-4 max-h-64 overflow-y-auto pr-2">
                 {conversation.map((entry, index) => (
                     <div key={index} className={`flex flex-col ${entry.type === 'user' ? 'items-end' : 'items-start'}`}>
@@ -53,10 +67,8 @@ const ConversationalQa = ({ analysisContext }) => {
                     </div>
                 ))}
                 {isLoading && <p className="text-center text-sm text-gray-400 animate-pulse">AI is thinking...</p>}
-                {error && <p className="text-center text-sm text-red-400">{error}</p>}
             </div>
 
-            {/* Input Form */}
             <form onSubmit={handleSubmit}>
                 <div className="flex gap-2">
                     <input
@@ -75,6 +87,7 @@ const ConversationalQa = ({ analysisContext }) => {
                         Ask
                     </button>
                 </div>
+                 {error && <p className="text-center text-sm text-red-400 mt-2">{error}</p>}
             </form>
         </div>
     );
