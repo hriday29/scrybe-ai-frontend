@@ -22,7 +22,7 @@ import AppGuide from './AppGuide.js';
 import LandingWalkthrough from './LandingWalkthrough.js';
 import BetaInfoModal from './BetaInfoModal.js';
 import { useAuth } from './AuthContext';
-import { GoogleAuthProvider, GithubAuthProvider, OAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from './firebase';
 import SignInModal from './SignInModal';
 import { API_BASE_URL } from './apiConfig.js';
@@ -1471,24 +1471,13 @@ export default function App() {
         }
     };
 
-    const handleGitHubSignIn = async () => {
-        const provider = new GithubAuthProvider(); // Use the GitHub provider
+    const handleMicrosoftSignIn = async () => {
+        const provider = new OAuthProvider('microsoft.com'); // Use the generic OAuth provider for Microsoft
         try {
             await signInWithPopup(auth, provider);
             setIsSignInModalOpen(false);
         } catch (error) {
-            console.error("Error during GitHub sign in:", error);
-        }
-    };
-
-    // --- 3. CREATE THE NEW HANDLER FOR APPLE SIGN-IN ---
-    const handleAppleSignIn = async () => {
-        const provider = new OAuthProvider('apple.com'); // Use the generic OAuth provider for Apple
-        try {
-            await signInWithPopup(auth, provider);
-            setIsSignInModalOpen(false);
-        } catch (error) {
-            console.error("Error during Apple sign in:", error);
+            console.error("Error during Microsoft sign in:", error);
         }
     };
 
@@ -1606,8 +1595,7 @@ export default function App() {
             {isSignInModalOpen && !currentUser && (
                 <SignInModal 
                     onSignIn={handleSignIn}
-                    onGitHubSignIn={handleGitHubSignIn}
-                    onAppleSignIn={handleAppleSignIn}
+                    onMicrosoftSignIn={handleMicrosoftSignIn}
                     onClose={() => setIsSignInModalOpen(false)} 
                 />
             )}
