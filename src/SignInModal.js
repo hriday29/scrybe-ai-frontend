@@ -1,10 +1,9 @@
 // src/SignInModal.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Turnstile from 'react-turnstile';
 
 // --- (Icon components for the buttons) ---
-const GoogleIcon = () => (
+const GoogleIcon = () => ( 
   <svg className="w-6 h-6" viewBox="0 0 48 48" aria-hidden="true">
     <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path>
     <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path>
@@ -15,17 +14,15 @@ const GoogleIcon = () => (
 
 const MicrosoftIcon = () => (
   <svg className="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="#f35325" d="M1 1h10v10H1z" />
-    <path fill="#81bc06" d="M13 1h10v10H13z" />
-    <path fill="#05a6f0" d="M1 13h10v10H1z" />
-    <path fill="#ffba08" d="M13 13h10v10H13z" />
+    <path fill="#f35325" d="M1 1h10v10H1z"/>
+    <path fill="#81bc06" d="M13 1h10v10H13z"/>
+    <path fill="#05a6f0" d="M1 13h10v10H1z"/>
+    <path fill="#ffba08" d="M13 13h10v10H13z"/>
   </svg>
 );
 
 export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
-  const [isVerified, setIsVerified] = useState(false);
-
-  // ESC key handler
+  // Keyboard event handler for ESC key
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === 'Escape') {
@@ -37,6 +34,7 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
     return () => document.removeEventListener('keydown', handleEscKey);
   }, [onClose]);
 
+  // Error handling wrapper for click handlers
   const handleSignIn = (handler, provider) => {
     try {
       handler?.();
@@ -66,46 +64,25 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
           Access Your Dashboard
         </h2>
         <p className="text-gray-400 mb-8">Choose a sign-in method to continue.</p>
-
-        {/* Turnstile CAPTCHA */}
-        <div className="mb-6">
-          <Turnstile
-            sitekey="your-turnstile-site-key"
-            onSuccess={() => setIsVerified(true)}
-            onError={() => setIsVerified(false)}
-            onExpire={() => setIsVerified(false)}
-            options={{ theme: "dark" }}
-          />
-        </div>
-
+        
         <div className="space-y-3">
-          <button
-            onClick={() => handleSignIn(onSignIn, 'Google')}
-            disabled={!isVerified}
-            className={`w-full flex items-center justify-center gap-3 font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900
-              ${!isVerified
-                ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
-                : 'bg-white text-gray-800 hover:bg-gray-200'
-              }`}
-            aria-label="Sign in with Google"
-          >
-            <GoogleIcon />
-            Sign in with Google
-          </button>
+            <button
+              onClick={() => handleSignIn(onSignIn, 'Google')}
+              className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              aria-label="Sign in with Google"
+            >
+              <GoogleIcon />
+              Sign in with Google
+            </button>
 
-          <button
-            onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
-            disabled={!isVerified}
-            className={`w-full flex items-center justify-center gap-3 font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900
-              ${!isVerified
-                ? 'bg-blue-300 text-white cursor-not-allowed'
-                : 'bg-[#0078d4] text-white hover:bg-[#106ebe]'
-              }`}
-            aria-label="Sign in with Microsoft"
-          >
-            <MicrosoftIcon />
-            Sign in with Microsoft
-          </button>
+            <button
+              onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
+              className="w-full flex items-center justify-center gap-3 bg-[#0078d4] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#106ebe] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              aria-label="Sign in with Microsoft"
+            >
+              <MicrosoftIcon />
+              Sign in with Microsoft
+            </button>
         </div>
 
         <p className="text-xs text-gray-500 mt-6">
