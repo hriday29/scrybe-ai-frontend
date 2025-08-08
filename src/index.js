@@ -1,27 +1,31 @@
 // src/index.js
 
-// --- 1. ALL IMPORTS ARE NOW GROUPED AT THE TOP ---
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+// We no longer import from "@sentry/tracing"
 
 import './index.css';
 import App from './App';
 import { AuthProvider } from './AuthContext';
 
 
-// --- 2. SENTRY IS INITIALIZED *AFTER* ALL IMPORTS ---
+// --- THIS SENTRY CODE IS NOW UPDATED ---
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [new BrowserTracing()],
-  // We recommend adjusting this value in production,
-  // or using tracesSampler for finer control
-  tracesSampleRate: 1.0, 
+  integrations: [
+    // This is the new, correct way to enable performance monitoring
+    Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, // Capture 100% of transactions
+  // Session Replay
+  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, sample the session when an error occurs.
 });
 
 
-// --- 3. THE REST OF THE APP CODE FOLLOWS ---
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
