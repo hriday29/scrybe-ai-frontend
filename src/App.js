@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import { Tab, Menu, Transition } from '@headlessui/react';
 import './App.css';
-import { motion } from 'framer-motion';
-import { useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Bot, BrainCircuit, RefreshCw, Zap, Timer, Home } from "lucide-react";
 import OpenPositions from './OpenPositions';
 import NewsSection from './NewsSection';
@@ -536,7 +535,7 @@ const PerformanceShowcase = () => {
 };
 
 const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 3.33 }) => {
-    // 1. We use useMemo to calculate the score only when the props change.
+    // Calculate success score only when props change
     const successScore = useMemo(() => {
         return (winRate * profitFactor) / (maxDrawdown * 10);
     }, [winRate, profitFactor, maxDrawdown]);
@@ -546,28 +545,44 @@ const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 
 
     // Circle setup
     const radius = 54;
-    const strokeWidth = 10;
+    const strokeWidth = 12;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference * (1 - normalizedScore);
 
+    // Animated number
     const count = useMotionValue(0);
     const rounded = useTransform(count, (latest) => latest.toFixed(2));
 
     useEffect(() => {
         const controls = animate(count, successScore, {
             duration: 2,
-            ease: "easeOut",
+            ease: [0.4, 0, 0.2, 1], // smooth in-out
         });
         return controls.stop;
-    // 2. The dependency array now correctly uses the source value.
-    }, [successScore, count]); // The warning will now be gone.
+    }, [successScore, count]);
 
     return (
-        <div className="relative w-44 h-44 sm:w-48 sm:h-48">
+        <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative w-44 h-44 sm:w-48 sm:h-48"
+        >
             <svg className="w-full h-full" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r={radius} strokeWidth={strokeWidth} fill="none" stroke="#1e293b" />
+                {/* Base Circle */}
+                <circle
+                    cx="60"
+                    cy="60"
+                    r={radius}
+                    strokeWidth={strokeWidth}
+                    fill="none"
+                    stroke="rgba(30,41,59,0.3)" // softer base
+                />
+                {/* Animated Progress Circle */}
                 <motion.circle
-                    cx="60" cy="60" r={radius}
+                    cx="60"
+                    cy="60"
+                    r={radius}
                     strokeWidth={strokeWidth}
                     fill="none"
                     stroke="url(#gradient)"
@@ -576,8 +591,10 @@ const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 
                     transform="rotate(-90 60 60)"
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ strokeDashoffset: offset }}
-                    transition={{ duration: 2, ease: "easeOut" }}
+                    transition={{ duration: 2, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ filter: "drop-shadow(0 0 6px rgba(34,197,94,0.4))" }}
                 />
+                {/* Gradient Definition */}
                 <defs>
                     <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120">
                         <stop offset="0%" stopColor="#16a34a" />
@@ -585,18 +602,25 @@ const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 
                     </linearGradient>
                 </defs>
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <motion.span className="text-4xl font-semibold text-white">
+
+            {/* Center Text */}
+            <motion.div
+                className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+            >
+                <motion.span className="text-4xl sm:text-5xl font-bold text-white">
                     {rounded}
                 </motion.span>
-                <span className="text-xs text-gray-400 tracking-wide uppercase mt-1">
+                <span className="text-sm text-gray-400 tracking-wide uppercase mt-1">
                     Success Score
                 </span>
-                <span className="text-[10px] text-gray-500 mt-1 leading-tight w-32 sm:w-36 font-light">
+                <span className="text-[11px] text-gray-500 mt-2 leading-tight max-w-[8rem] font-light">
                     (Win Rate × Profit Factor) ÷ (Max Drawdown × 10)
                 </span>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
