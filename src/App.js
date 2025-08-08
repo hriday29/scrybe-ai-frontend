@@ -534,12 +534,8 @@ const PerformanceShowcase = () => {
   );
 };
 
-const SuccessRateDonut = ({
-    winRate = 63.16,
-    profitFactor = 1.65,
-    maxDrawdown = 3.33
-}) => {
-    // Calculate score only when inputs change
+const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 3.33 }) => {
+    // 1. We use useMemo to calculate the score only when the props change.
     const successScore = useMemo(() => {
         return (winRate * profitFactor) / (maxDrawdown * 10);
     }, [winRate, profitFactor, maxDrawdown]);
@@ -549,39 +545,28 @@ const SuccessRateDonut = ({
 
     // Circle setup
     const radius = 54;
-    const strokeWidth = 12; // slightly thicker for modern feel
+    const strokeWidth = 10;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference * (1 - normalizedScore);
 
-    // Animated number
     const count = useMotionValue(0);
     const rounded = useTransform(count, (latest) => latest.toFixed(2));
 
     useEffect(() => {
         const controls = animate(count, successScore, {
-            duration: 1.8,
-            ease: [0.4, 0, 0.2, 1], // smoother
+            duration: 2,
+            ease: "easeOut",
         });
         return controls.stop;
-    }, [successScore, count]);
+    // 2. The dependency array now correctly uses the source value.
+    }, [successScore, count]); // The warning will now be gone.
 
     return (
         <div className="relative w-44 h-44 sm:w-48 sm:h-48">
             <svg className="w-full h-full" viewBox="0 0 120 120">
-                {/* Base track with softer tone */}
-                <circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                    stroke="rgba(30,41,59,0.3)"
-                />
-                {/* Animated progress stroke */}
+                <circle cx="60" cy="60" r={radius} strokeWidth={strokeWidth} fill="none" stroke="#1e293b" />
                 <motion.circle
-                    cx="60"
-                    cy="60"
-                    r={radius}
+                    cx="60" cy="60" r={radius}
                     strokeWidth={strokeWidth}
                     fill="none"
                     stroke="url(#gradient)"
@@ -590,10 +575,8 @@ const SuccessRateDonut = ({
                     transform="rotate(-90 60 60)"
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ strokeDashoffset: offset }}
-                    transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
-                    style={{ filter: "drop-shadow(0 0 6px rgba(34,197,94,0.3))" }} // subtle glow
+                    transition={{ duration: 2, ease: "easeOut" }}
                 />
-                {/* Gradient definition */}
                 <defs>
                     <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120">
                         <stop offset="0%" stopColor="#16a34a" />
@@ -601,23 +584,20 @@ const SuccessRateDonut = ({
                     </linearGradient>
                 </defs>
             </svg>
-
-            {/* Centered labels */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <motion.span className="text-4xl sm:text-5xl font-bold text-white">
+                <motion.span className="text-4xl font-semibold text-white">
                     {rounded}
                 </motion.span>
-                <span className="text-sm text-gray-400 tracking-wide uppercase mt-1">
+                <span className="text-xs text-gray-400 tracking-wide uppercase mt-1">
                     Success Score
                 </span>
-                <span className="text-[11px] text-gray-500 mt-2 leading-tight max-w-[8rem] font-light">
+                <span className="text-[10px] text-gray-500 mt-1 leading-tight w-32 sm:w-36 font-light">
                     (Win Rate × Profit Factor) ÷ (Max Drawdown × 10)
                 </span>
             </div>
         </div>
     );
 };
-
 
 const HowItWorks = () => {
     const steps = [
