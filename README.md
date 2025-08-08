@@ -267,6 +267,13 @@ This is a closed-source project. External contributions are not currently accept
 ### **Proprietary License**
 This is a proprietary, closed-source project. The code contained within this repository is the sole intellectual property of Scrybe AI. You may not fork, copy, modify, distribute, or use this code in any way without express written permission from the copyright holder.
 
+### **Business Source License (BUSL-1.1)**
+This software is licensed under a Business Source License with the following restrictions:
+- **Commercial Use**: Prohibited without written permission from Scrybe AI
+- **Distribution**: Not permitted without explicit authorization
+- **Modification**: Creating derivative works is strictly forbidden
+- **Reverse Engineering**: Decompilation or reverse engineering is prohibited
+
 ### **Intellectual Property**
 The Service and its original content, features, and functionality are and will remain the exclusive property of Scrybe AI and its licensors. This includes but is not limited to:
 
@@ -275,7 +282,29 @@ The Service and its original content, features, and functionality are and will r
 - Trade analysis methodologies
 - Brand elements and trademarks
 
-**Unauthorized use, reproduction, or distribution of this software is strictly prohibited and may result in severe civil and criminal penalties.**
+### **Legal Notice**
+```javascript
+/*
+ * ================================================================
+ * SCRYBE AI - PROPRIETARY AND CONFIDENTIAL
+ * ================================================================
+ * Copyright (c) 2025 Scrybe AI
+ * Proprietary and confidential. Not for public use.
+ * Unauthorized reproduction or usage is strictly prohibited.
+ * ================================================================
+ */
+```
+
+### **Enforcement**
+**VIOLATIONS**: Unauthorized use, reproduction, or distribution of this software constitutes a violation of copyright law and may result in severe civil and criminal penalties, including:
+- Immediate cease and desist orders
+- Monetary damages and lost profits
+- Injunctive relief and court orders
+- Attorney fees and litigation costs
+- Criminal prosecution under applicable laws
+
+### **Licensing Inquiries**
+For legitimate business licensing opportunities, contact our legal department at **legal@scrybe-ai.com**
 
 ---
 
