@@ -453,12 +453,11 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
 
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>);
 
-// In App.js
 const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
-            {/* --- Logo and Branding (Remains the same) --- */}
-            <div className="flex items-center">
+            {/* --- Logo and Branding (Always Visible) --- */}
+            <div className="flex-1 flex justify-start">
                 <button 
                     onClick={onGoToLanding} 
                     title="Back to Landing Page" 
@@ -469,7 +468,10 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                     <div className="flex items-center gap-2">
                         <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
                         <button 
-                            onClick={(e) => { e.stopPropagation(); onBetaModalOpen(); }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onBetaModalOpen();
+                            }}
                             className="px-2.5 py-1 text-xs font-bold text-slate-200 bg-gradient-to-b from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-inset ring-slate-400/50 shadow-md"
                             style={{textShadow: '0 1px 1px #000'}}
                         >
@@ -478,14 +480,21 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                     </div>
                 </button>
             </div>
-
-            {/* --- Desktop Menu (The popover is now removed from here) --- */}
+            
+            {/* --- Desktop Menu (Visible on Medium screens and up) --- */}
             <div className="hidden md:flex items-center gap-4">
-                <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                    <PulseIcon /> Market Pulse
-                </button>
+                <div className="relative">
+                    <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
+                        <PulseIcon /> Market Pulse
+                    </button>
+                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
+                </div>
                 {onReset && (
-                    <button onClick={onReset} className="bg-slate-50/10 ...">
+                    <button
+                        onClick={onReset}
+                        // This className is now simplified for a text-only style
+                        className="text-gray-400 hover:text-white text-sm font-semibold flex items-center gap-2"
+                    >
                         <ArrowLeftIcon /> New Analysis
                     </button>
                 )}
@@ -494,7 +503,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                 </button>
             </div>
 
-            {/* --- Mobile "Hamburger" Menu (onClick is updated) --- */}
+            {/* --- Mobile "Hamburger" Menu (Visible ONLY on small screens) --- */}
             <div className="md:hidden">
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
@@ -502,15 +511,20 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                             <MenuIcon />
                         </Menu.Button>
                     </div>
-                    <Transition as={Fragment} /* ... */>
-                        <Menu.Items className="absolute right-0 mt-2 w-56 ...">
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="px-1 py-1">
                                 <Menu.Item>
                                     {({ active }) => (
-                                        <button 
-                                            onClick={() => setIsPulseOpen(true)} // This now only opens the popover
-                                            className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                        >
+                                        <button onClick={() => setIsPulseOpen(true)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
                                             Market Pulse
                                         </button>
                                     )}
@@ -518,7 +532,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                                 {onReset && (
                                 <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={onReset} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} ...`}>
+                                        <button onClick={onReset} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
                                             New Analysis
                                         </button>
                                     )}
@@ -528,7 +542,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                             <div className="px-1 py-1">
                                <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={onSignOut} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} ...`}>
+                                        <button onClick={onSignOut} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
                                             Sign Out
                                         </button>
                                     )}
@@ -1686,9 +1700,13 @@ export default function App() {
                 if (index === 4) setActiveTab('index_analysis');
                 if (index === 5) setActiveTab('track_record');
                 if (index === 6) setActiveTab('rulebook');
+
+                // Reset analysis state if not on the stock analysis tab (index 1)
+                if (index !== 1) {
+                    handleResetAnalysis();
+                }
             }}>
                 <Tab.List>
-                    {/* Desktop tab list remains unchanged */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
@@ -1710,29 +1728,30 @@ export default function App() {
                             <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
-                                        {/* --- THIS SECTION HAS BEEN UPDATED --- */}
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(0); setActiveTab('app_guide'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(0); setActiveTab('app_guide'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
                                         <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(1); setActiveTab('stock_analysis'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(2); setActiveTab('on_the_radar'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(3); setActiveTab('open_positions'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(4); setActiveTab('index_analysis'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(5); setActiveTab('track_record'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(6); setActiveTab('rulebook'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(2); setActiveTab('on_the_radar'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(3); setActiveTab('open_positions'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(4); setActiveTab('index_analysis'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(5); setActiveTab('track_record'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(6); setActiveTab('rulebook'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
                                     </div>
                                 </Menu.Items>
                             </Transition>
                         </Menu>
                     </div>
                 </Tab.List>
-                <Tab.Panels>
-                    <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
-                    <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
-                    <Tab.Panel><OnTheRadar /></Tab.Panel>
-                    <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
-                    <Tab.Panel><IndexAnalysisView /></Tab.Panel>
-                    <Tab.Panel><AITrackRecord /></Tab.Panel>
-                    <Tab.Panel><Rulebook /></Tab.Panel>
-                </Tab.Panels>
+                <div className="w-full py-8">
+                    <Tab.Panels>
+                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
+                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                        <Tab.Panel><OnTheRadar /></Tab.Panel>
+                        <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
+                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
+                        <Tab.Panel><AITrackRecord /></Tab.Panel>
+                        <Tab.Panel><Rulebook /></Tab.Panel>
+                    </Tab.Panels>
+                </div>
             </Tab.Group>
         </div>
     );
