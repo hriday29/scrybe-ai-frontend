@@ -1103,7 +1103,24 @@ const StockSelector = ({ onAnalyze }) => {
     );
 };
 
-const SkeletonLoader = () => (<div className="w-full max-w-5xl mx-auto p-8 animate-fadeIn"><h2 className="text-2xl font-bold text-center text-gray-400 mb-2">Retrieving Instant Analysis...</h2><p className="text-center text-gray-500 mb-8 h-6"></p><div className="w-full h-28 bg-slate-800/80 rounded-lg animate-pulse mb-6"></div><div className="w-full h-24 bg-slate-800/80 rounded-lg animate-pulse mb-6"></div><div className="grid md:grid-cols-2 gap-6 mb-6"><div className="w-full h-48 bg-slate-800/80 rounded-lg animate-pulse"></div><div className="w-full h-48 bg-slate-800/80 rounded-lg animate-pulse"></div></div><div className="w-full h-96 bg-slate-800/80 rounded-lg animate-pulse"></div></div>);
+const SkeletonLoader = ({ isLongLoad }) => (
+    <div className="w-full max-w-5xl mx-auto p-8 animate-fadeIn">
+        <h2 className="text-2xl font-bold text-center text-gray-400 mb-2">Retrieving Instant Analysis...</h2>
+        {/* This message will appear only if the load is taking a long time */}
+        {isLongLoad && (
+            <p className="text-center text-amber-400 text-sm mb-8 animate-pulse">
+                Waking up the AI engine... this can take up to 45 seconds on the first load.
+            </p>
+        )}
+        <div className="w-full h-28 bg-slate-800/80 rounded-lg animate-pulse mb-6"></div>
+        <div className="w-full h-24 bg-slate-800/80 rounded-lg animate-pulse mb-6"></div>
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="w-full h-48 bg-slate-800/80 rounded-lg animate-pulse"></div>
+            <div className="w-full h-48 bg-slate-800/80 rounded-lg animate-pulse"></div>
+        </div>
+        <div className="w-full h-96 bg-slate-800/80 rounded-lg animate-pulse"></div>
+    </div>
+);
 const ErrorDisplay = ({ error, onReset }) => ( <div className="text-center p-8 animate-fadeIn"><h2 className="text-2xl font-bold text-red-400">Analysis Failed</h2><p className="text-red-300 mt-2 max-w-2xl mx-auto">{error}</p><button onClick={onReset} className="mt-6 bg-red-500/80 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/100 transition-colors">Try Another Analysis</button></div>);
 const TickerTape = () => {
     const nifty50=[ {name:"RELIANCE", price:"2985.50", change:"+12.25", dir:"+"}, {name:"TCS", price:"3850.10", change:"-5.80", dir:"-"}, {name:"HDFCBANK", price:"1690.75", change:"+8.15", dir:"+"}, {name:"INFY", price:"1525.30", change:"-1.90", dir:"-"}, {name:"ICICIBANK", price:"1160.05", change:"+2.55", dir:"+"}, {name:"HINDUNILVR", price:"2455.60", change:"-20.40", dir:"-"}, {name:"BHARTIARTL", price:"1415.90", change:"+15.00", dir:"+"}, {name:"ITC", price:"430.25", change:"-0.65", dir:"-"}, {name:"KOTAKBANK", price:"1725.20", change:"-3.45", dir:"-"}, {name:"LT", price:"3700.80", change:"+25.75", dir:"+"}, {name:"SBIN", price:"870.60", change:"+6.10", dir:"+"}, {name:"AXISBANK", price:"1112.90", change:"-2.20", dir:"-"}, {name:"BAJFINANCE", price:"7520.00", change:"+30.00", dir:"+"}, {name:"ASIANPAINT", price:"3185.40", change:"-15.70", dir:"-"}, {name:"MARUTI", price:"12380.25", change:"+90.15", dir:"+"}, {name:"SUNPHARMA", price:"1225.60", change:"-5.50", dir:"-"}, {name:"NESTLEIND", price:"25250.90", change:"+110.00", dir:"+"}, {name:"ULTRACEMCO", price:"10050.00", change:"-45.20", dir:"-"}, {name:"ADANIENT", price:"3125.70", change:"+20.35", dir:"+"}, {name:"WIPRO", price:"460.20", change:"-2.10", dir:"-"} ];
@@ -1530,6 +1547,8 @@ export default function App() {
     const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
     const [postLoginRedirect, setPostLoginRedirect] = useState(null);
+    const [isLongLoad, setIsLongLoad] = useState(false);
+    let longLoadTimer = null;
 
     useEffect(() => {
       if (currentUser) {
@@ -1627,9 +1646,18 @@ export default function App() {
         setAnalysisState('analyzing');
         setError(null);
         setAnalysisData(null);
+
+        // Start a timer. If it finishes, we know it's a cold start.
+        longLoadTimer = setTimeout(() => {
+            setIsLongLoad(true);
+        }, 3000); // 3 seconds
+
         try {
-            // Use the variable instead of the hardcoded URL
             const response = await fetch(`${API_BASE_URL}/api/analyze/${ticker}`);
+            
+            // When the response arrives, clear the timer
+            clearTimeout(longLoadTimer);
+            setIsLongLoad(false);
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ error: "Analysis not found or server error." }));
@@ -1639,6 +1667,8 @@ export default function App() {
             setAnalysisData(data);
             setAnalysisState('results');
         } catch (err) {
+            clearTimeout(longLoadTimer);
+            setIsLongLoad(false);
             console.error("API Error:", err);
             setError(err.message);
             setAnalysisState('error');
@@ -1709,7 +1739,8 @@ export default function App() {
 
     const renderStockAnalysisContent = () => {
         switch (analysisState) {
-            case 'analyzing': return <SkeletonLoader />;
+            // --- 4. Pass the new state to the SkeletonLoader ---
+            case 'analyzing': return <SkeletonLoader isLongLoad={isLongLoad} />;
             case 'results': return <AnalysisDashboard data={analysisData} />;
             case 'error': return <ErrorDisplay error={error} onReset={handleResetAnalysis} />;
             case 'selector':
