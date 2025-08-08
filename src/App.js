@@ -1408,18 +1408,23 @@ export default function App() {
     const [tabIndex, setTabIndex] = useState(0);
     const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+    const [postLoginRedirect, setPostLoginRedirect] = useState(null);
+
     useEffect(() => {
-      // This effect runs whenever 'currentUser' changes.
       if (currentUser) {
-        // If a user is detected (from a previous session or after a new login),
-        // automatically switch to the main app view.
+        // A user is now logged in.
         setView('app');
+        
+        // Check if we need to redirect them to a specific tab.
+        if (postLoginRedirect !== null) {
+          setTabIndex(postLoginRedirect); // Go to the remembered tab
+          setPostLoginRedirect(null);     // Clear the memory
+        }
       } else {
-        // If there's no user (they logged out or are a new visitor),
-        // ensure we are on the landing page.
+        // No user, show the landing page.
         setView('landing');
       }
-    }, [currentUser]);
+    }, [currentUser, postLoginRedirect]);
     
     // --- Core Application Logic ---
     const handleGoToLanding = () => {
@@ -1455,9 +1460,18 @@ export default function App() {
     const navigateToTab = (index) => {
         setTabIndex(index);
     };
-    const handleLaunchAndNavigate = (index) => {
-        setView('app');      // First, switch to the main app view
-        setTabIndex(index);  // Then, immediately set the active tab
+
+    const handleAuthAndNavigate = (targetTabIndex) => {
+        if (currentUser) {
+            // If user is already logged in, navigate them directly.
+            setView('app');
+            setTabIndex(targetTabIndex);
+        } else {
+            // If user is logged out, remember where they want to go...
+            setPostLoginRedirect(targetTabIndex);
+            // ...and then open the sign-in modal.
+            setIsSignInModalOpen(true);
+        }
     };
 
     const handleSignIn = async () => {
@@ -1635,7 +1649,7 @@ export default function App() {
                             // --- 3. UPDATE THE onSignIn PROP ---
                             // The "Launch Analysis Tool" button now opens our modal instead of the Google popup directly.
                             onSignIn={() => setIsSignInModalOpen(true)}
-                            handleLaunchAndNavigate={handleLaunchAndNavigate}
+                            handleLaunchAndNavigate={handleAuthAndNavigate}
                             onDemoOpen={() => setIsDemoOpen(true)}
                             onFaqOpen={() => setShowFaq(true)}
                             onUserGuideOpen={() => setShowUserGuide(true)}
