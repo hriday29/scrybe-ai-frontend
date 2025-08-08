@@ -404,26 +404,24 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
     );
 };
 
+const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>);
+
 const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
-            <div className="flex-1 flex justify-start">
+            {/* --- Logo and Branding (Always Visible) --- */}
+            <div className="flex items-center">
                 <button 
                     onClick={onGoToLanding} 
                     title="Back to Landing Page" 
                     className="group flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-slate-800"
                 >
-                    {/* --- ADDITION: Home Icon --- */}
                     <Home className="w-5 h-5 text-slate-400 transition-colors group-hover:text-white" />
-
                     <ScrybeLogo />
                     <div className="flex items-center gap-2">
                         <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
                         <button 
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onBetaModalOpen();
-                            }}
+                            onClick={(e) => { e.stopPropagation(); onBetaModalOpen(); }}
                             className="px-2.5 py-1 text-xs font-bold text-slate-200 bg-gradient-to-b from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-inset ring-slate-400/50 shadow-md"
                             style={{textShadow: '0 1px 1px #000'}}
                         >
@@ -432,15 +430,15 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                     </div>
                 </button>
             </div>
-            <div className="flex-1 flex justify-center">
+
+            {/* --- Desktop Menu (Visible on Medium screens and up) --- */}
+            <div className="hidden md:flex items-center gap-4">
                 <div className="relative">
                     <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
                         <PulseIcon /> Market Pulse
                     </button>
                     {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
                 </div>
-            </div>
-            <div className="flex-1 flex justify-end items-center gap-4">
                 {onReset && (
                     <button
                         onClick={onReset}
@@ -449,10 +447,59 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                         <ArrowLeftIcon /> New Analysis
                     </button>
                 )}
-                {/* vvv ADDED BUTTON vvv */}
                 <button onClick={onSignOut} className="text-gray-400 hover:text-white text-sm font-semibold">
                     Sign Out
                 </button>
+            </div>
+
+            {/* --- Mobile "Hamburger" Menu (Visible ONLY on small screens) --- */}
+            <div className="md:hidden">
+                <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                        <Menu.Button className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-slate-700/50">
+                            <MenuIcon />
+                        </Menu.Button>
+                    </div>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="px-1 py-1">
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={() => setIsPulseOpen(true)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            Market Pulse
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                                {onReset && (
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={onReset} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            New Analysis
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                                )}
+                            </div>
+                            <div className="px-1 py-1">
+                               <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={onSignOut} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            Sign Out
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>
             </div>
         </header>
     );
@@ -1348,42 +1395,80 @@ const AITrackRecord = () => {
     if (!trackRecordData) return <div className="text-center p-8 animate-pulse">Loading AI Track Record...</div>
     return (
         <div className="w-full max-w-7xl mx-auto p-4 md:p-8 animate-fadeIn">
-            <h2 className="text-4xl font-bold text-white mb-2 text-center">AI Performance Record</h2><p className="text-lg text-gray-400 text-center mb-12">Reviewing the event log of every AI-driven trade prediction.</p>
+            <h2 className="text-4xl font-bold text-white mb-2 text-center">AI Performance Record</h2>
+            <p className="text-lg text-gray-400 text-center mb-12">Reviewing the event log of every AI-driven trade prediction.</p>
+            
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl shadow-lg overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-slate-800/50"><tr><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Prediction Date</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Days Held</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Event</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Total Return</th></tr></thead>
-                    <tbody>
-                        {trackRecordData.length > 0 ? trackRecordData.map(trade => {
-                            // FIX: Use 'closing_reason' instead of 'event'
-                            const eventDisplay = getEventDisplay(trade.closing_reason);
-                            // FIX: Use 'return_pct' instead of 'return_vs_prediction_pct'
-                            const returnColor = trade.return_pct >= 0 ? 'text-green-400' : 'text-red-400';
-                            return (
-                                <tr key={trade.prediction_id} className="border-b border-slate-800 last:border-b-0 hover:bg-slate-800/40 transition-colors">
-                                    <td className="p-4 text-gray-200 font-semibold">{trade.ticker}</td>
-                                    {/* FIX: Use 'open_date' to be consistent with the backend */}
-                                    <td className="p-4 text-gray-400">{new Date(trade.open_date).toLocaleDateString()}</td>
-                                    <td className="p-4 text-gray-400">{trade.evaluation_days}</td>
-                                    <td className="p-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${eventDisplay.color}`}>
-                                            {eventDisplay.text}
+                
+                {/* --- 1. CARD LAYOUT (Visible ONLY on mobile) --- */}
+                <div className="md:hidden">
+                    {trackRecordData.length > 0 ? trackRecordData.map(trade => {
+                        const eventDisplay = getEventDisplay(trade.closing_reason);
+                        const returnColor = trade.return_pct >= 0 ? 'text-green-400' : 'text-red-400';
+                        return (
+                            <div key={trade.prediction_id} className="p-4 border-b border-slate-800 last:border-b-0">
+                                <div className="flex justify-between items-center mb-3">
+                                    <span className="font-semibold text-white">{trade.ticker}</span>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${eventDisplay.color}`}>
+                                        {eventDisplay.text}
+                                    </span>
+                                </div>
+                                <div className="text-sm space-y-2">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Return</span>
+                                        <span className={`font-mono font-semibold ${returnColor}`}>
+                                            {trade.return_pct >= 0 ? '+' : ''}{trade.return_pct.toFixed(2)}%
                                         </span>
-                                    </td>
-                                    {/* FIX: Use 'return_pct' for the value */}
-                                    <td className={`p-4 font-mono font-semibold text-right ${returnColor}`}>
-                                        {trade.return_pct >= 0 ? '+' : ''}{trade.return_pct.toFixed(2)}%
-                                    </td>
-                                </tr>
-                            )
-                        }) : (
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Days Held</span>
+                                        <span className="text-gray-300">{trade.evaluation_days}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Date</span>
+                                        <span className="text-gray-300">{new Date(trade.open_date).toLocaleDateString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }) : (
+                        <div className="text-center text-gray-500 py-16">
+                            No performance data has been recorded yet.
+                        </div>
+                    )}
+                </div>
+
+                {/* --- 2. TABLE LAYOUT (Hidden on mobile, visible on desktop) --- */}
+                <div className="hidden md:block">
+                    <table className="w-full text-left">
+                        <thead className="bg-slate-800/50">
                             <tr>
-                                <td colSpan="5" className="text-center text-gray-500 py-16">
-                                    No performance data has been recorded yet.
-                                </td>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Prediction Date</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Days Held</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Event</th>
+                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Total Return</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {trackRecordData.length > 0 ? trackRecordData.map(trade => {
+                                const eventDisplay = getEventDisplay(trade.closing_reason);
+                                const returnColor = trade.return_pct >= 0 ? 'text-green-400' : 'text-red-400';
+                                return (
+                                    <tr key={trade.prediction_id} className="border-b border-slate-800 last:border-b-0 hover:bg-slate-800/40 transition-colors">
+                                        <td className="p-4 text-gray-200 font-semibold">{trade.ticker}</td>
+                                        <td className="p-4 text-gray-400">{new Date(trade.open_date).toLocaleDateString()}</td>
+                                        <td className="p-4 text-gray-400">{trade.evaluation_days}</td>
+                                        <td className="p-4"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${eventDisplay.color}`}>{eventDisplay.text}</span></td>
+                                        <td className={`p-4 font-mono font-semibold text-right ${returnColor}`}>{trade.return_pct >= 0 ? '+' : ''}{trade.return_pct.toFixed(2)}%</td>
+                                    </tr>
+                                )
+                            }) : (
+                                <tr><td colSpan="5" className="text-center text-gray-500 py-16">No performance data has been recorded yet.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
@@ -1527,6 +1612,7 @@ export default function App() {
         <div className="w-full">
             <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
                 setTabIndex(index);
+                // This part for setting the mobile dropdown's title text is still correct
                 if (index === 0) setActiveTab('app_guide');
                 if (index === 1) setActiveTab('stock_analysis');
                 if (index === 2) setActiveTab('on_the_radar');
@@ -1536,6 +1622,7 @@ export default function App() {
                 if (index === 6) setActiveTab('rulebook');
             }}>
                 <Tab.List>
+                    {/* The desktop tab list remains unchanged */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
@@ -1557,13 +1644,15 @@ export default function App() {
                             <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</Tab>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<Tab as="button" className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</Tab>)}</Menu.Item>
+                                        {/* vvv THESE ARE THE CHANGES vvv */}
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(0)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(1)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(2)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(3)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(4)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(5)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(6)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
+                                        {/* ^^^ THESE ARE THE CHANGES ^^^ */}
                                     </div>
                                 </Menu.Items>
                             </Transition>

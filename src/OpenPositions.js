@@ -91,7 +91,53 @@ const OpenPositions = ({ onAnalyze }) => {
             <p className="text-lg text-gray-400 text-center mb-12">Tracking all live, AI-driven trade signals.</p>
 
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
+                
+                {/* --- 1. CARD LAYOUT (Visible ONLY on mobile) --- */}
+                <div className="md:hidden">
+                    {openTrades.map(trade => {
+                        const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
+                        return (
+                            <div key={trade.ticker} className="p-4 border-b border-slate-800 last:border-b-0">
+                                <div className="flex justify-between items-center mb-3">
+                                    <h3 className="font-semibold text-white text-lg">{trade.companyName}</h3>
+                                    <button onClick={() => onAnalyze(trade.ticker)} className="text-blue-400 hover:text-blue-300 font-semibold text-sm">
+                                        View Analysis
+                                    </button>
+                                </div>
+                                <div className="mb-3">
+                                    <PnlProgressBar trade={trade} />
+                                </div>
+                                <div className="text-sm space-y-2">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">P&L</span>
+                                        <span className={`font-mono font-semibold ${pnlColor}`}>
+                                            {trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Days Held</span>
+                                        <span className="text-gray-300">{trade.days_held}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Entry / Target / Stop</span>
+                                        <span className="font-mono text-gray-300">
+                                            {trade.entry_price.toFixed(2)} / 
+                                            <span className="text-green-400">{trade.target.toFixed(2)}</span> / 
+                                            <span className="text-red-400">{trade.stop_loss.toFixed(2)}</span>
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">R/R Ratio</span>
+                                        <span className="font-mono text-sky-400">{trade.risk_reward_ratio}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* --- 2. TABLE LAYOUT (Hidden on mobile, visible on desktop) --- */}
+                <div className="overflow-x-auto hidden md:block">
                     <table className="w-full text-left min-w-[900px]">
                         <thead className="bg-slate-800/50">
                             <tr>
