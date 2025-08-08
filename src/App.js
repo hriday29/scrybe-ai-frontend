@@ -1733,7 +1733,7 @@ export default function App() {
     if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
     return (
-        <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col">
+        <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col overflow-hidden">
             
             {/* --- 1. RENDER THE NEW SIGN-IN MODAL --- */}
             {/* This will only appear when isSignInModalOpen is true and the user is not yet logged in. */}
