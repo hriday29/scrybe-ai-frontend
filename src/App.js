@@ -1756,12 +1756,6 @@ export default function App() {
                             onBetaModalOpen={() => setIsBetaModalOpen(true)}
                             onSignOut={handleSignOut}
                         />
-                        <button 
-                            onClick={() => { throw new Error("Sentry Frontend Test Error - " + new Date().toLocaleString()); }}
-                            className="bg-red-500 text-white p-2 m-4 rounded"
-                        >
-                            Test Sentry Crash
-                        </button>
                         {renderMainApp()}
                     </>
                 ) : (
