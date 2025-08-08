@@ -453,10 +453,11 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
 
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>);
 
+// In App.js
 const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLanding, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
-            {/* --- Logo and Branding (Always Visible) --- */}
+            {/* --- Logo and Branding (Remains the same) --- */}
             <div className="flex items-center">
                 <button 
                     onClick={onGoToLanding} 
@@ -478,19 +479,13 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                 </button>
             </div>
 
-            {/* --- Desktop Menu (Visible on Medium screens and up) --- */}
+            {/* --- Desktop Menu (The popover is now removed from here) --- */}
             <div className="hidden md:flex items-center gap-4">
-                <div className="relative">
-                    <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
-                        <PulseIcon /> Market Pulse
-                    </button>
-                    {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
-                </div>
+                <button onClick={() => setIsPulseOpen(p => !p)} className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2">
+                    <PulseIcon /> Market Pulse
+                </button>
                 {onReset && (
-                    <button
-                        onClick={onReset}
-                        className="bg-slate-50/10 backdrop-blur-sm border border-slate-50/20 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50/20 transition-all duration-300 flex items-center gap-2"
-                    >
+                    <button onClick={onReset} className="bg-slate-50/10 ...">
                         <ArrowLeftIcon /> New Analysis
                     </button>
                 )}
@@ -499,7 +494,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                 </button>
             </div>
 
-            {/* --- Mobile "Hamburger" Menu (Visible ONLY on small screens) --- */}
+            {/* --- Mobile "Hamburger" Menu (onClick is updated) --- */}
             <div className="md:hidden">
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
@@ -507,20 +502,15 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                             <MenuIcon />
                         </Menu.Button>
                     </div>
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                    >
-                        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Transition as={Fragment} /* ... */>
+                        <Menu.Items className="absolute right-0 mt-2 w-56 ...">
                             <div className="px-1 py-1">
                                 <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={() => setIsPulseOpen(true)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                        <button 
+                                            onClick={() => setIsPulseOpen(true)} // This now only opens the popover
+                                            className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        >
                                             Market Pulse
                                         </button>
                                     )}
@@ -528,7 +518,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                                 {onReset && (
                                 <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={onReset} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                        <button onClick={onReset} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} ...`}>
                                             New Analysis
                                         </button>
                                     )}
@@ -538,7 +528,7 @@ const AppHeader = ({ onReset, isPulseOpen, setIsPulseOpen, onSignOut, onGoToLand
                             <div className="px-1 py-1">
                                <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={onSignOut} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                        <button onClick={onSignOut} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} ...`}>
                                             Sign Out
                                         </button>
                                     )}
@@ -1747,6 +1737,7 @@ export default function App() {
 
             {/* Your other existing modals and background */}
             {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
+            {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
             <InteractiveGridBackground />
 
