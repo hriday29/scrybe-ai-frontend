@@ -535,7 +535,7 @@ const PerformanceShowcase = () => {
 };
 
 const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 3.33 }) => {
-    // Calculate success score only when props change
+    // Score calculation
     const successScore = useMemo(() => {
         return (winRate * profitFactor) / (maxDrawdown * 10);
     }, [winRate, profitFactor, maxDrawdown]);
@@ -543,84 +543,64 @@ const SuccessRateDonut = ({ winRate = 63.16, profitFactor = 1.65, maxDrawdown = 
     const maxScore = 5;
     const normalizedScore = Math.min(successScore, maxScore) / maxScore;
 
-    // Circle setup
+    // Circle measurements
     const radius = 54;
-    const strokeWidth = 12;
+    const strokeWidth = 10;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference * (1 - normalizedScore);
 
-    // Animated number
+    // Animated value
     const count = useMotionValue(0);
     const rounded = useTransform(count, (latest) => latest.toFixed(2));
 
     useEffect(() => {
         const controls = animate(count, successScore, {
-            duration: 2,
-            ease: [0.4, 0, 0.2, 1], // smooth in-out
+            duration: 1.5,
+            ease: "easeOut",
         });
         return controls.stop;
     }, [successScore, count]);
 
     return (
-        <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative w-44 h-44 sm:w-48 sm:h-48"
-        >
+        <div className="relative w-44 h-44">
             <svg className="w-full h-full" viewBox="0 0 120 120">
-                {/* Base Circle */}
+                {/* Base track */}
                 <circle
                     cx="60"
                     cy="60"
                     r={radius}
                     strokeWidth={strokeWidth}
                     fill="none"
-                    stroke="rgba(30,41,59,0.3)" // softer base
+                    stroke="#1e293b"
+                    opacity="0.3"
                 />
-                {/* Animated Progress Circle */}
+                {/* Progress */}
                 <motion.circle
                     cx="60"
                     cy="60"
                     r={radius}
                     strokeWidth={strokeWidth}
                     fill="none"
-                    stroke="url(#gradient)"
+                    stroke="#22c55e"
                     strokeDasharray={circumference}
                     strokeLinecap="round"
                     transform="rotate(-90 60 60)"
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ strokeDashoffset: offset }}
-                    transition={{ duration: 2, ease: [0.4, 0, 0.2, 1] }}
-                    style={{ filter: "drop-shadow(0 0 6px rgba(34,197,94,0.4))" }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
                 />
-                {/* Gradient Definition */}
-                <defs>
-                    <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120">
-                        <stop offset="0%" stopColor="#16a34a" />
-                        <stop offset="100%" stopColor="#22c55e" />
-                    </linearGradient>
-                </defs>
             </svg>
 
-            {/* Center Text */}
-            <motion.div
-                className="absolute inset-0 flex flex-col items-center justify-center text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-            >
-                <motion.span className="text-4xl sm:text-5xl font-bold text-white">
+            {/* Center text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <motion.span className="text-3xl font-semibold text-white">
                     {rounded}
                 </motion.span>
-                <span className="text-sm text-gray-400 tracking-wide uppercase mt-1">
+                <span className="text-xs text-gray-400 mt-1 uppercase tracking-wide">
                     Success Score
                 </span>
-                <span className="text-[11px] text-gray-500 mt-2 leading-tight max-w-[8rem] font-light">
-                    (Win Rate × Profit Factor) ÷ (Max Drawdown × 10)
-                </span>
-            </motion.div>
-        </motion.div>
+            </div>
+        </div>
     );
 };
 
