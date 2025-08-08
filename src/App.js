@@ -363,7 +363,8 @@ const DemoModal = ({ onClose }) => {
 
 const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen }) => {
     return (
-        <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
+        // vvv THIS IS THE ONLY LINE THAT HAS CHANGED vvv
+        <header className="relative z-30 flex justify-between items-center py-5">
             {/* Logo and Branding (Always Visible) */}
             <div className="flex items-center gap-3">
                 <ScrybeLogo />
@@ -379,7 +380,7 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
                 </div>
             </div>
             
-            {/* --- Desktop Links (Visible on Medium screens and up) --- */}
+            {/* Desktop Links (Visible on Medium screens and up) */}
             <div className="hidden md:flex items-center gap-4">
                 <button 
                     onClick={onUserGuideOpen} 
@@ -401,7 +402,7 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
                 </button>
             </div>
 
-            {/* --- Mobile "Hamburger" Menu (Visible ONLY on small screens) --- */}
+            {/* Mobile "Hamburger" Menu (Visible ONLY on small screens) */}
             <div className="md:hidden">
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
