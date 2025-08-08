@@ -364,12 +364,11 @@ const DemoModal = ({ onClose }) => {
 const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen }) => {
     return (
         <header className="relative z-30 flex justify-between items-center py-5 px-4 md:px-0">
+            {/* Logo and Branding (Always Visible) */}
             <div className="flex items-center gap-3">
                 <ScrybeLogo />
                 <div className="flex items-center gap-2">
                     <h1 className="text-xl font-semibold uppercase tracking-[.2em] text-white/90">SCRYBE AI</h1>
-                    
-                    {/* --- NEW, CLICKABLE BETA BADGE --- */}
                     <button 
                         onClick={onBetaModalOpen}
                         className="px-2 py-0.5 text-xs font-bold text-slate-200 bg-gradient-to-br from-slate-500 to-slate-700 rounded-md transition-all hover:opacity-80 ring-1 ring-slate-400/50"
@@ -380,7 +379,8 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
                 </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            {/* --- Desktop Links (Visible on Medium screens and up) --- */}
+            <div className="hidden md:flex items-center gap-4">
                 <button 
                     onClick={onUserGuideOpen} 
                     className="text-white/80 text-sm font-semibold hover:text-white transition-colors"
@@ -399,6 +399,52 @@ const LandingHeader = ({ onDemoOpen, onFaqOpen, onUserGuideOpen, onBetaModalOpen
                 >
                     View a Demo
                 </button>
+            </div>
+
+            {/* --- Mobile "Hamburger" Menu (Visible ONLY on small screens) --- */}
+            <div className="md:hidden">
+                <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                        <Menu.Button className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-slate-700/50">
+                            <MenuIcon />
+                        </Menu.Button>
+                    </div>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="px-1 py-1">
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={onUserGuideOpen} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            User Guide
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={onFaqOpen} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            Q&A
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button onClick={onDemoOpen} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                            View a Demo
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>
             </div>
         </header>
     );
@@ -1612,7 +1658,6 @@ export default function App() {
         <div className="w-full">
             <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
                 setTabIndex(index);
-                // This part for setting the mobile dropdown's title text is still correct
                 if (index === 0) setActiveTab('app_guide');
                 if (index === 1) setActiveTab('stock_analysis');
                 if (index === 2) setActiveTab('on_the_radar');
@@ -1622,7 +1667,7 @@ export default function App() {
                 if (index === 6) setActiveTab('rulebook');
             }}>
                 <Tab.List>
-                    {/* The desktop tab list remains unchanged */}
+                    {/* Desktop tab list remains unchanged */}
                     <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
                         <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
@@ -1644,32 +1689,29 @@ export default function App() {
                             <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-1 py-1">
-                                        {/* vvv THESE ARE THE CHANGES vvv */}
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(0)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(1)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(2)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(3)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(4)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(5)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => setTabIndex(6)} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
-                                        {/* ^^^ THESE ARE THE CHANGES ^^^ */}
+                                        {/* --- THIS SECTION HAS BEEN UPDATED --- */}
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(0); setActiveTab('app_guide'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(1); setActiveTab('stock_analysis'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(2); setActiveTab('on_the_radar'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(3); setActiveTab('open_positions'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(4); setActiveTab('index_analysis'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(5); setActiveTab('track_record'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
+                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(6); setActiveTab('rulebook'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
                                     </div>
                                 </Menu.Items>
                             </Transition>
                         </Menu>
                     </div>
                 </Tab.List>
-                <div className="w-full py-8">
-                    <Tab.Panels>
-                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
-                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
-                        <Tab.Panel><OnTheRadar /></Tab.Panel>
-                        <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
-                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
-                        <Tab.Panel><AITrackRecord /></Tab.Panel>
-                        <Tab.Panel><Rulebook /></Tab.Panel>
-                    </Tab.Panels>
-                </div>
+                <Tab.Panels>
+                    <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
+                    <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                    <Tab.Panel><OnTheRadar /></Tab.Panel>
+                    <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
+                    <Tab.Panel><IndexAnalysisView /></Tab.Panel>
+                    <Tab.Panel><AITrackRecord /></Tab.Panel>
+                    <Tab.Panel><Rulebook /></Tab.Panel>
+                </Tab.Panels>
             </Tab.Group>
         </div>
     );

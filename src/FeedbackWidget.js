@@ -75,7 +75,9 @@ const FeedbackWidget = () => {
         return (
             <button
                 onClick={handleOpen}
-                className="fixed top-5 right-5 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-all z-40"
+                // vvv THIS IS THE ONLY CHANGE vvv
+                className="fixed top-20 md:top-5 right-5 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-all z-40"
+                // ^^^ THIS IS THE ONLY CHANGE ^^^
             >
                 Feedback
             </button>
@@ -83,6 +85,7 @@ const FeedbackWidget = () => {
     }
 
     return (
+        // The expanded widget remains the same
         <div className="fixed top-5 right-5 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-40 animate-fadeIn">
             <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
