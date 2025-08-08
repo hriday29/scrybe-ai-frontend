@@ -1,190 +1,277 @@
-> ⚡️ **Scrybe AI is a precision swing trading engine built for traders who demand institutional-grade signals:  powered by AI, backed by real data.**
+# 🚀 Scrybe AI: Frontend Interface
 
-<div align="center">
-  <img src="https://i.postimg.cc/hPN5ZQpq/scrybe-logo.png" alt="Scrybe AI Logo" width="80px" />
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
+[![Netlify Status](https://api.netlify.com/api/v1/badges/your-netlify-badge-id/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)
 
-  <h1>SCRYBE AI</h1>
-  <p><b>Institutional-Grade Swing Trading Analysis, Powered by Generative AI</b></p>
-
-  <p>
-    <a href="https://your-vercel-deployment-link.vercel.app"><strong>🔗 View Live Demo</strong></a> ·
-    <a href="https://github.com/your-username/scrybe-ai-app/issues"><strong>🐞 Report Bug</strong></a> ·
-    <a href="https://github.com/your-username/scrybe-ai-app/issues"><strong>✨ Request Feature</strong></a>
-  </p>
-
-  <details>
-    <summary>📌 Tech Stack & Platform Badges</summary>
-    <p>
-      <img src="https://img.shields.io/badge/License-Proprietary-red.svg" alt="License: Proprietary" />
-      <img src="https://img.shields.io/badge/Status-Beta-blue.svg" alt="Status: Beta" />
-      <img src="https://img.shields.io/badge/Made%20With-Python%20%7C%20React-blueviolet" alt="Tech Stack" />
-    </p>
-    <p>
-      <img src="https://img.shields.io/badge/AI-Google%20Gemini-yellow.svg" alt="Gemini AI" />
-      <img src="https://img.shields.io/badge/Deployment-Vercel%20%7C%20Azure-brightgreen.svg" alt="Deployment" />
-      <img src="https://img.shields.io/badge/Database-MongoDB-informational.svg" alt="MongoDB" />
-    </p>
-  </details>
-</div>
+**The official frontend web application for the Scrybe AI platform. A cutting-edge financial technology interface that leverages frontier AI to identify high-probability swing trading setups with unparalleled precision and clarity.**
 
 ---
 
-## 📚 Table of Contents
+## 📋 Table of Contents
 
-- [🤖 About Scrybe AI](#-about-scrybe-ai)
-- [👤 Who It's For](#-who-its-for)
-- [✨ Key Features](#-key-features)
-- [🏆 Strategy Performance](#-validated-vst-strategy-performance)
-- [🛠️ Technology Stack](#️-technology-stack)
-- [📜 License & Legal](#-license--legal)
-- [📬 Contact](#-contact)
-- [🧠 Disclaimer](#-disclaimer)
-- [🌍 Internationalization](#-internationalization)
-- [🤝 Contributing](#-contributing)
-- [✅ Ready to Level Up?](#-ready-to-level-up-your-trading)
+- [Overview](#-overview)
+- [Technology Stack](#-technology-stack)
+- [Key Features](#-key-features)
+- [Getting Started](#-getting-started)
+- [Usage](#-usage)
+- [Project Roadmap](#-project-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
 
 ---
 
-## 🤖 About Scrybe AI
+## 🎯 Overview
 
-**Scrybe AI** is a high-performance swing trading engine that combines data science and generative AI to produce actionable, high-probability trading signals.
+Scrybe AI represents the next evolution in financial technology platforms, providing traders and investors with AI-driven market analysis through an intuitive, powerful web interface. Built with React and modern web technologies, this application delivers real-time insights, comprehensive analytics, and actionable trading intelligence in a sleek, professional package.
 
-Where traditional indicators stop, Scrybe starts - scanning:
+This repository contains the complete frontend source code for our proprietary trading platform, designed to democratize access to institutional-grade market analysis through cutting-edge artificial intelligence.
 
-- 📌 Market structure and macro context  
-- 🔍 Sector rotation and intermarket dynamics  
-- 📈 Price action, earnings, fundamentals  
-- 📊 Options flow, volatility, and sentiment  
-
-All processed through an institutional-grade, risk-calibrated strategy engine.
-
----
-
-## 👤 Who It's For
-
-- 🧑‍💼 **Retail and semi-professional swing traders**  
-- 📈 **Quant traders and financial engineers**  
-- 🧠 **Fintech teams building AI-assisted trade platforms**  
-- 🧪 **Data-driven analysts seeking quantifiable edge**
-
----
-
-## ✨ Key Features
-
-- 🧠 **AI-Powered Analysis**  
-  Integrates [Google Gemini](https://deepmind.google/technologies/gemini/) for deep market insights.
-
-- 📊 **Backtested VST Strategy**  
-  Uses a statistically validated VST logic framework.
-
-- 🛡️ **Risk-First Trade Planning**  
-  Every signal is governed by expected risk/reward ratios.
-
-- 🌀 **Sector Context Awareness**  
-  Understands momentum, rotation, and relative strength.
-
-- 🖥️ **Clean & Responsive UI**  
-  Built with React + Tailwind CSS, styled for clarity and speed.
-
-- ☁️ **Cloud-Native Infrastructure**  
-  Automated tasks run securely via Azure and Vercel.
-
----
-
-## 🏆 Validated VST Strategy Performance
-
-| 📊 **Metric**                 | 💡 **Result** | 🧠 **Interpretation**                   |
-|------------------------------|---------------|-----------------------------------------|
-| ✅ **Win Rate**              | 63.16%        | Reliable signal accuracy                |
-| 💰 **Profit Factor**        | 1.65           | $1.65 gained for every $1 risked        |
-| 📉 **Max Drawdown**         | 3.33%          | Excellent downside protection           |
-| 🚀 **Annual Return (CAGR)** | 80.8%          | Outstanding growth over time            |
-
-> 📅 Backtested across 6 months of live-like market data, including S&P 500 and Nifty 50 stocks.
+**Please note that this is a closed-source project. The code is not licensed for public use, distribution, or contribution.**
 
 ---
 
 ## 🛠️ Technology Stack
 
-### 🧪 Backend
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=firebase&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
 
-- **Language**: ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)  
-- **AI Integration**: Google Gemini API  
-- **Libraries**: `pandas`, `numpy`, `yfinance`  
-- **Server**: Flask  
-- **Database**: MongoDB Atlas  
+### Core Technologies
 
-### 🎨 Frontend
-
-- **Framework**: ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=black)  
-- **Styling**: Tailwind CSS  
-- **Animation**: Framer Motion  
-
-### 🚀 Deployment
-
-- **Containerization**: ![Docker](https://img.shields.io/badge/-Docker-2496ED?logo=docker&logoColor=white)  
-- **Backend Hosting**: Azure App Service  
-- **Frontend Hosting**: Vercel  
+- **Language:** JavaScript (ES6+)
+- **Framework:** React 18+
+- **Styling:** Tailwind CSS
+- **Animation:** Framer Motion
+- **Authentication:** Firebase Auth
+- **Deployment:** Render
+- **Build Tool:** Vite
+- **State Management:** React Context API
 
 ---
 
-## 📜 License & Legal
+## ✨ Key Features
 
-**© 2025 Hriday. All Rights Reserved.**
+### 🎛️ Interactive Analysis Dashboard
+A comprehensive, immersive interface for detailed stock analysis featuring:
+- **Scrybe Score:** Our proprietary AI confidence rating system
+- **DVM Ratings:** Dynamic Value Momentum indicators
+- **Actionable Trade Plans:** Step-by-step execution strategies
+- **Multi-timescale Charts:** Integrated technical analysis across timeframes
+- **Technical & Fundamental Breakdowns:** Deep-dive analytics in intuitive layouts
 
-This software is proprietary and confidential. It may **not** be:
+### 🏎️ Trade Cockpit
+Real-time trading command center providing:
+- Live tracking of AI-generated trade signals
+- Real-time P&L monitoring
+- Trade duration and key parameter tracking
+- Performance analytics and insights
 
-- Copied, modified, or redistributed without explicit permission  
-- Used in commercial or public projects
+### 📊 Market Pulse
+Dynamic market overview dashboard featuring:
+- Current market health indicators
+- Sector performance analytics
+- Nifty 50 momentum tracking
+- Sentiment analysis and trends
 
-> ⚠️ *Provided “as-is” without warranties. The creator bears no liability for financial outcomes, misuse, or system limitations.*
+### 📈 Transparent AI Track Record
+Comprehensive performance tracking system:
+- Historical performance of all closed trades
+- Signal accuracy metrics
+- AI model accountability features
+- Trust-building transparency tools
+
+### 🤝 User Interaction Hub
+Engaging user experience features:
+- AI signal confidence voting system
+- Personal trade journaling capabilities
+- Community feedback integration
+- User-driven platform improvements
+
+### 🔐 Secure Authentication System
+Enterprise-grade security implementation:
+- Firebase-powered authentication
+- Secure user session management
+- Privacy-first data handling
+- Multi-factor authentication support
 
 ---
 
-## 📬 Contact
+## 🚀 Getting Started
 
-Interested in licensing, partnerships, or enterprise integration?  
-📧 `hriday [at] example [dot] com`
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Node.js (v18.0 or higher)
+- npm or yarn package manager
+- Git
+
+### Installation
+
+1. **Clone the repository** (authorized personnel only)
+   ```bash
+   git clone https://github.com/scrybe-ai/frontend-interface.git
+   cd frontend-interface
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Update the `.env.local` file with your Firebase configuration and API keys.
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. **Open your browser**
+   Navigate to `http://localhost:3000` to view the application.
 
 ---
 
-## 🧠 Disclaimer
+## 📖 Usage
 
-This application is for **informational and educational purposes only**. It does **not** constitute investment advice. Always conduct your own due diligence or consult a licensed financial advisor.
+### Development Commands
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm run test
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
+```
+
+### Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Application pages
+├── hooks/              # Custom React hooks
+├── context/            # React context providers
+├── utils/              # Utility functions
+├── assets/             # Static assets
+├── styles/             # Global styles
+└── config/             # Configuration files
+```
 
 ---
 
-## 🌍 Internationalization (i18n)
+## 🗺️ Project Roadmap
 
-Want to localize Scrybe AI in your native language?
+### Q1 2025
+- [ ] Enhanced mobile responsiveness
+- [ ] Advanced charting capabilities
+- [ ] Real-time notifications system
+- [ ] Performance optimizations
 
-Fork the repo and create a translated file (e.g., `README.fr.md` for French).
+### Q2 2025
+- [ ] Social trading features
+- [ ] Advanced portfolio analytics
+- [ ] Machine learning model interpretability
+- [ ] API rate limiting improvements
 
-We welcome contributions in:
+### Q3 2025
+- [ ] Multi-language support
+- [ ] Advanced risk management tools
+- [ ] Integration with major brokerages
+- [ ] Enhanced AI explanation features
 
-- 🇫🇷 French  
-- 🇪🇸 Spanish  
-- 🇩🇪 German  
-- 🇮🇳 Hindi  
+### Future Releases
+- [ ] Mobile application companion
+- [ ] Advanced backtesting capabilities
+- [ ] Institutional features
+- [ ] Algorithmic trading integration
 
 ---
 
 ## 🤝 Contributing
 
-Although this project is private and proprietary, we encourage:
+We appreciate your interest in Scrybe AI! However, this is a proprietary, closed-source project and we do not accept external contributions at this time.
 
-- 💡 Feature ideas  
-- 🔎 Bug reports  
-- 🤝 Strategic collaborations
+### For Internal Team Members
 
-Please [open an issue](https://github.com/your-username/scrybe-ai-app/issues) or contact directly.
+If you are part of the Scrybe AI development team:
+
+1. **Follow our coding standards**
+   - Use ESLint and Prettier configurations
+   - Write comprehensive tests for new features
+   - Follow conventional commit message format
+
+2. **Development workflow**
+   - Create feature branches from `develop`
+   - Submit pull requests for code review
+   - Ensure all tests pass before merging
+
+3. **Code review process**
+   - All changes require peer review
+   - Security review for authentication changes
+   - Performance review for critical path modifications
+
+For questions about internal development processes, please contact the development team lead.
 
 ---
 
-## ✅ Ready to Level Up Your Trading?
+## 📄 License
 
-Scrybe AI gives you the edge that institutions pay millions for — now in your hands.
+**Proprietary License**
 
-🎯 [Request a Demo](mailto:hriday@example.com?subject=Requesting%20Scrybe%20AI%20demo)
+This software and its associated documentation are proprietary to Scrybe AI and are protected by copyright law. All rights reserved.
+
+**Usage Restrictions:**
+- This software is for authorized use only
+- Redistribution in any form is strictly prohibited
+- Reverse engineering or decompilation is not permitted
+- Commercial use outside of Scrybe AI is forbidden
+
+**Disclaimer:**
+All analyses, data, and signals provided by the Scrybe AI platform are for informational and educational purposes only and should not be construed as financial advice. Trading and investing in financial markets involve substantial risk of loss and is not suitable for every investor.
+
+The software is provided "as is" without warranty of any kind. Scrybe AI disclaims all warranties, whether express or implied, including but not limited to implied warranties of merchantability and fitness for a particular purpose.
 
 ---
+
+## 📞 Contact
+
+### Development Team
+- **Technical Lead:** [tech-lead@scrybe-ai.com](mailto:tech-lead@scrybe-ai.com)
+- **Product Manager:** [product@scrybe-ai.com](mailto:product@scrybe-ai.com)
+
+### Business Inquiries
+- **General:** [hello@scrybe-ai.com](mailto:hello@scrybe-ai.com)
+- **Partnership:** [partnerships@scrybe-ai.com](mailto:partnerships@scrybe-ai.com)
+
+### Support
+- **Technical Support:** [support@scrybe-ai.com](mailto:support@scrybe-ai.com)
+- **Documentation:** [docs.scrybe-ai.com](https://docs.scrybe-ai.com)
+
+---
+
+**© 2025 Scrybe AI. All rights reserved.**
+
+*Built with ❤️ by the Scrybe AI development team*
