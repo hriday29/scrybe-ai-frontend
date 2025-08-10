@@ -17,46 +17,31 @@ const ScrybeVerse = ({ onAnalyze }) => {
                 }
                 const data = await response.json();
 
+                // Fallback if data is not an array
+                if (!Array.isArray(data)) {
+                    throw new Error("Invalid API data format.");
+                }
+
+                const createNode = (signal, color, valueFn) => ({
+                    name: signal,
+                    color,
+                    children: data
+                        .filter(s => s && s.signal === signal)
+                        .map(s => ({
+                            name: s?.ticker || "Unknown",
+                            value: valueFn(Math.abs(s?.scrybeScore) || 0) || 1,
+                            originalScore: s?.scrybeScore ?? "N/A",
+                            companyName: s?.companyName || "Unknown Company"
+                        }))
+                });
+
                 const transformedData = {
                     name: "Scrybe-Verse",
                     color: "#0A0F1E",
                     children: [
-                        {
-                            name: "BUY",
-                            color: "hsl(140, 70%, 50%)",
-                            children: data
-                                .filter(s => s.signal === 'BUY')
-                                .map(s => ({
-                                    name: s.ticker,
-                                    value: Math.abs(s.scrybeScore),
-                                    originalScore: s.scrybeScore,
-                                    companyName: s.companyName
-                                }))
-                        },
-                        {
-                            name: "SELL",
-                            color: "hsl(340, 80%, 60%)",
-                            children: data
-                                .filter(s => s.signal === 'SELL')
-                                .map(s => ({
-                                    name: s.ticker,
-                                    value: Math.abs(s.scrybeScore),
-                                    originalScore: s.scrybeScore,
-                                    companyName: s.companyName
-                                }))
-                        },
-                        {
-                            name: "HOLD",
-                            color: "hsl(220, 10%, 50%)",
-                            children: data
-                                .filter(s => s.signal === 'HOLD')
-                                .map(s => ({
-                                    name: s.ticker,
-                                    value: Math.abs(s.scrybeScore) / 2, 
-                                    originalScore: s.scrybeScore,
-                                    companyName: s.companyName
-                                }))
-                        },
+                        createNode("BUY", "hsl(140, 70%, 50%)", v => v),
+                        createNode("SELL", "hsl(340, 80%, 60%)", v => v),
+                        createNode("HOLD", "hsl(220, 10%, 50%)", v => v / 2)
                     ]
                 };
 
@@ -71,8 +56,13 @@ const ScrybeVerse = ({ onAnalyze }) => {
         fetchData();
     }, []);
 
-    if (isLoading) return <div className="text-center p-8 animate-pulse">Building the Scrybe-Verse...</div>;
-    if (error) return <div className="text-red-400 text-center p-8">Error: {error}</div>;
+    if (isLoading) {
+        return <div className="text-center p-8 animate-pulse">Building the Scrybe-Verse...</div>;
+    }
+
+    if (error) {
+        return <div className="text-red-400 text-center p-8">Error: {error}</div>;
+    }
 
     return (
         <div className="w-full h-[60vh] md:h-[70vh]">
@@ -91,12 +81,11 @@ const ScrybeVerse = ({ onAnalyze }) => {
                 borderWidth={2}
                 borderColor={{ from: 'color', modifiers: [['darker', 0.5]] }}
                 
-                // --- THIS IS THE CORRECTED TOOLTIP FUNCTION ---
+                // --- Safe Tooltip ---
                 tooltip={({ node }) => {
-                    // Only show the tooltip if the node has a companyName (i.e., it's a stock, not a category)
-                    if (!node.data.companyName) {
-                        return null; // Return nothing for parent circles
-                    }
+                    if (!node || typeof node.data !== 'object') return null;
+                    if (!node.data.companyName) return null; // Skip parent nodes
+
                     return (
                         <div className="bg-slate-800 text-white p-2 rounded-md shadow-lg text-sm">
                             <strong>{node.data.companyName} ({node.id})</strong>
@@ -105,12 +94,14 @@ const ScrybeVerse = ({ onAnalyze }) => {
                         </div>
                     );
                 }}
+
+                // --- Safe Click ---
                 onClick={(node) => {
-                    // Only run the analysis if the clicked node is a stock
-                    if (node.data.companyName) {
+                    if (node && typeof node.data === 'object' && node.data.companyName) {
                         onAnalyze(node.id);
                     }
                 }}
+
                 theme={{
                     labels: {
                         text: {
