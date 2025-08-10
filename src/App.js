@@ -24,6 +24,7 @@ import { useAuth } from './AuthContext';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from './firebase';
 import SignInModal from './SignInModal';
+import ScrybeVerse from './ScrybeVerse.js';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -994,128 +995,128 @@ const MarketPulsePopover = ({ onClose }) => {
   );
 };
 
-const StockSelector = ({ onAnalyze }) => {
-    const [stocks, setStocks] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
-    const [activeFilter, setActiveFilter] = useState('All'); // New state for filters
+// const StockSelector = ({ onAnalyze }) => {
+//     const [stocks, setStocks] = useState([]);
+//     const [searchTerm, setSearchTerm] = useState("");
+//     const [isLoading, setIsLoading] = useState(true);
+//     const [activeFilter, setActiveFilter] = useState('All'); // New state for filters
 
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/api/all-analysis`)
-            .then(res => {
-                if (!res.ok) throw new Error("Failed to load stock analysis list.");
-                return res.json();
-            })
-            .then(data => {
-                data.sort((a, b) => Math.abs(b.scrybeScore || 0) - Math.abs(a.scrybeScore || 0));
-                setStocks(data);
-                setIsLoading(false);
-            })
-            .catch(error => {
-                console.error("Error fetching stock list:", error);
-                setIsLoading(false);
-            });
-    }, []);
+//     useEffect(() => {
+//         fetch(`${API_BASE_URL}/api/all-analysis`)
+//             .then(res => {
+//                 if (!res.ok) throw new Error("Failed to load stock analysis list.");
+//                 return res.json();
+//             })
+//             .then(data => {
+//                 data.sort((a, b) => Math.abs(b.scrybeScore || 0) - Math.abs(a.scrybeScore || 0));
+//                 setStocks(data);
+//                 setIsLoading(false);
+//             })
+//             .catch(error => {
+//                 console.error("Error fetching stock list:", error);
+//                 setIsLoading(false);
+//             });
+//     }, []);
 
-    const filteredStocks = useMemo(() => {
-        let filtered = stocks;
+//     const filteredStocks = useMemo(() => {
+//         let filtered = stocks;
 
-        // Apply the active filter first
-        if (activeFilter === 'BUY') {
-            filtered = stocks.filter(stock => stock.signal === 'BUY');
-        } else if (activeFilter === 'SELL') {
-            filtered = stocks.filter(stock => stock.signal === 'SELL');
-        } else if (activeFilter === 'On The Radar') {
-            filtered = stocks.filter(stock => stock.isOnRadar === true);
-        }
+//         // Apply the active filter first
+//         if (activeFilter === 'BUY') {
+//             filtered = stocks.filter(stock => stock.signal === 'BUY');
+//         } else if (activeFilter === 'SELL') {
+//             filtered = stocks.filter(stock => stock.signal === 'SELL');
+//         } else if (activeFilter === 'On The Radar') {
+//             filtered = stocks.filter(stock => stock.isOnRadar === true);
+//         }
 
-        // Then apply the search term
-        if (!searchTerm) return filtered;
-        return filtered.filter(stock =>
-            stock.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [stocks, searchTerm, activeFilter]);
+//         // Then apply the search term
+//         if (!searchTerm) return filtered;
+//         return filtered.filter(stock =>
+//             stock.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//             stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
+//         );
+//     }, [stocks, searchTerm, activeFilter]);
 
-    const ScoreBadge = ({ score }) => {
-        // This safety check prevents the crash.
-        if (typeof score !== 'number' || isNaN(score)) {
-            return (
-                <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">
-                    N/A
-                </span>
-            );
-        }
+//     const ScoreBadge = ({ score }) => {
+//         // This safety check prevents the crash.
+//         if (typeof score !== 'number' || isNaN(score)) {
+//             return (
+//                 <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">
+//                     N/A
+//                 </span>
+//             );
+//         }
 
-        const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
-                    : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
-                    : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
-        const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
+//         const scoreColor = score > 49 ? 'text-green-300 bg-green-500/10 ring-green-500/30' 
+//                     : score < -49 ? 'text-red-300 bg-red-500/10 ring-red-500/30'
+//                     : 'text-slate-400 bg-slate-700/20 ring-slate-600/30';
+//         const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
         
-        return (
-            <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
-                {scoreText}
-            </span>
-        );
-    };
+//         return (
+//             <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>
+//                 {scoreText}
+//             </span>
+//         );
+//     };
         
-    const FilterButton = ({ filterType }) => {
-        const isActive = activeFilter === filterType;
-        return (
-            <button 
-                onClick={() => setActiveFilter(filterType)}
-                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-700/50 text-gray-300 hover:bg-slate-600/50'}`}
-            >
-                {filterType}
-            </button>
-        );
-    };
+//     const FilterButton = ({ filterType }) => {
+//         const isActive = activeFilter === filterType;
+//         return (
+//             <button 
+//                 onClick={() => setActiveFilter(filterType)}
+//                 className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-700/50 text-gray-300 hover:bg-slate-600/50'}`}
+//             >
+//                 {filterType}
+//             </button>
+//         );
+//     };
 
-    return (
-        <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-20 md:pt-20 md:pb-24">
-            <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Today's Top Setups</h2>
-            <p className="mt-4 max-w-2xl text-lg text-gray-400">A daily ranked list of Nifty 50 companies, sorted by the AI's Scrybe Score.</p>
-            <div className="mt-12 w-full max-w-2xl">
-                {/* --- NEW FILTER BUTTONS --- */}
-                <div className="flex justify-center gap-2 mb-4">
-                    <FilterButton filterType="All" />
-                    <FilterButton filterType="BUY" />
-                    <FilterButton filterType="SELL" />
-                    <FilterButton filterType="On The Radar" />
-                </div>
+//     return (
+//         <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-20 md:pt-20 md:pb-24">
+//             <h2 className="mt-0 text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Today's Top Setups</h2>
+//             <p className="mt-4 max-w-2xl text-lg text-gray-400">A daily ranked list of Nifty 50 companies, sorted by the AI's Scrybe Score.</p>
+//             <div className="mt-12 w-full max-w-2xl">
+//                 {/* --- NEW FILTER BUTTONS --- */}
+//                 <div className="flex justify-center gap-2 mb-4">
+//                     <FilterButton filterType="All" />
+//                     <FilterButton filterType="BUY" />
+//                     <FilterButton filterType="SELL" />
+//                     <FilterButton filterType="On The Radar" />
+//                 </div>
 
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><SearchIcon /></div>
-                    <input
-                        type="text"
-                        placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-slate-900/40 backdrop-blur-md border border-slate-700 text-white placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
-                        disabled={isLoading}
-                    />
-                </div>
-                <div className="mt-4 max-h-96 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
-                    {isLoading && <p className="text-gray-400 text-center p-4">Loading...</p>}
-                    {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No setups found for the current filter.</p>}
-                    {!isLoading && filteredStocks.map((stock, index) => (
-                        <button
-                            key={stock.ticker}
-                            onClick={() => onAnalyze(stock.ticker)}
-                            className="w-full text-left p-3 rounded-lg hover:bg-blue-600/50 transition-colors flex justify-between items-center"
-                        >
-                            <div className="flex items-center">
-                                <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
-                                <span className="font-semibold text-white">{stock.companyName}</span>
-                            </div>
-                            <ScoreBadge score={stock.scrybeScore} />
-                        </button>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
+//                 <div className="relative">
+//                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><SearchIcon /></div>
+//                     <input
+//                         type="text"
+//                         placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
+//                         value={searchTerm}
+//                         onChange={(e) => setSearchTerm(e.target.value)}
+//                         className="w-full bg-slate-900/40 backdrop-blur-md border border-slate-700 text-white placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
+//                         disabled={isLoading}
+//                     />
+//                 </div>
+//                 <div className="mt-4 max-h-96 overflow-y-auto bg-slate-900/40 border border-slate-700 rounded-xl p-2 space-y-1">
+//                     {isLoading && <p className="text-gray-400 text-center p-4">Loading...</p>}
+//                     {!isLoading && filteredStocks.length === 0 && <p className="text-gray-400 text-center p-4">No setups found for the current filter.</p>}
+//                     {!isLoading && filteredStocks.map((stock, index) => (
+//                         <button
+//                             key={stock.ticker}
+//                             onClick={() => onAnalyze(stock.ticker)}
+//                             className="w-full text-left p-3 rounded-lg hover:bg-blue-600/50 transition-colors flex justify-between items-center"
+//                         >
+//                             <div className="flex items-center">
+//                                 <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
+//                                 <span className="font-semibold text-white">{stock.companyName}</span>
+//                             </div>
+//                             <ScoreBadge score={stock.scrybeScore} />
+//                         </button>
+//                     ))}
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
 
 const SkeletonLoader = ({ isLongLoad }) => (
     <div className="w-full max-w-5xl mx-auto p-8 animate-fadeIn">
@@ -1763,7 +1764,7 @@ export default function App() {
             case 'results': return <AnalysisDashboard data={analysisData} />;
             case 'error': return <ErrorDisplay error={error} onReset={handleResetAnalysis} />;
             case 'selector':
-            default: return <StockSelector onAnalyze={handleAnalysis} />;
+            default: return <ScrybeVerse onAnalyze={handleAnalysis} />;
         }
     };
     
