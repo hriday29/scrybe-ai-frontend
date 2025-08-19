@@ -1,27 +1,36 @@
 // src/api/api.js
 
 import authFetch from './authFetch';
-import { API_BASE_URL } from './apiConfig'; // Assuming you have this file
+import { API_BASE_URL } from '../apiConfig.js'; // CORRECTED PATH
 
 /**
  * Fetches the official, curated A-List from the backend config.
- * @param {object} currentUser - The user object from the useAuth() hook.
- * @returns {Promise<Array>} - A promise that resolves to the array of A-List tickers.
  */
-export const getAList = async (currentUser) => {
+export const getAList = (currentUser) => {
     const url = `${API_BASE_URL}/api/config/a-list`;
     return authFetch(url, currentUser);
 };
 
 /**
  * Fetches the full Apex analysis for a given ticker.
- * @param {string} ticker - The stock ticker (e.g., "LT.NS").
- * @param {object} currentUser - The user object from the useAuth() hook.
- * @returns {Promise<object>} - A promise that resolves to the analysis JSON object.
  */
-export const getAnalysisForTicker = async (ticker, currentUser) => {
+export const getAnalysisForTicker = (ticker, currentUser) => {
     const url = `${API_BASE_URL}/api/analyze/${ticker}`;
     return authFetch(url, currentUser);
 };
 
-// You can add all other future API calls here (e.g., getOpenTrades, getTrackRecord, etc.)
+/**
+ * Fetches all currently open positions for the user.
+ */
+export const getOpenTrades = (currentUser) => {
+    const url = `${API_BASE_URL}/api/open-trades`;
+    return authFetch(url, currentUser);
+};
+
+/**
+ * Fetches the historical track record of all closed trades.
+ */
+export const getTrackRecord = (currentUser) => {
+    const url = `${API_BASE_URL}/api/track-record`;
+    return authFetch(url, currentUser);
+};
