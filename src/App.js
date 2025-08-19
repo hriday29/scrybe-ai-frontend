@@ -24,6 +24,8 @@ import { useAuth } from './AuthContext';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from './firebase';
 import SignInModal from './SignInModal';
+import { getAList } from './api/api';
+import StockDetailPage from './StockDetailPage';
 import { API_BASE_URL } from './apiConfig.js';
 
 // === ALL HELPER & ICON COMPONENTS (CORRECTLY ORDERED) ===
@@ -1562,6 +1564,9 @@ export default function App() {
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
     const [postLoginRedirect, setPostLoginRedirect] = useState(null);
     const [isLongLoad, setIsLongLoad] = useState(false);
+    const [aListData, setAListData] = useState([]);
+    const [isLoadingAList, setIsLoadingAList] = useState(true);
+    const [selectedTicker, setSelectedTicker] = useState(null);
     let longLoadTimer = null;
 
     useEffect(() => {
@@ -1579,6 +1584,33 @@ export default function App() {
         setView('landing');
       }
     }, [currentUser, postLoginRedirect]);
+
+    useEffect(() => {
+        const fetchAList = async () => {
+            if (currentUser) {
+                try {
+                    setIsLoadingAList(true);
+                    const data = await getAList(currentUser);
+                    setAListData(data.a_list || []); // Assuming the backend sends { "a_list": [...] }
+                } catch (error) {
+                    console.error("Failed to fetch A-List:", error);
+                    setAListData([]); // Set to empty on error
+                } finally {
+                    setIsLoadingAList(false);
+                }
+            }
+        };
+
+        fetchAList();
+    }, [currentUser]);
+    
+    const handleStockSelect = (ticker) => {
+        setSelectedTicker(ticker);
+    };
+
+    const handleBackToList = () => {
+        setSelectedTicker(null);
+    };
     
     // --- Core Application Logic ---
     const handleGoToLanding = () => {
@@ -1690,71 +1722,308 @@ export default function App() {
     };
 
     const renderMainApp = () => (
-        <div className="w-full">
-            <Tab.Group selectedIndex={tabIndex} onChange={(index) => {
-                setTabIndex(index);
-                if (index === 0) setActiveTab('app_guide');
-                if (index === 1) setActiveTab('stock_analysis');
-                if (index === 2) setActiveTab('on_the_radar');
-                if (index === 3) setActiveTab('open_positions');
-                if (index === 4) setActiveTab('index_analysis');
-                if (index === 5) setActiveTab('track_record');
-                if (index === 6) setActiveTab('rulebook');
+    <div className="w-full">
+        {selectedTicker ? (
+        // --- Show Stock Detail Page ---
+        <StockDetailPage ticker={selectedTicker} onBackClick={handleBackToList} />
+        ) : (
+        // --- Show Tab Layout ---
+        <Tab.Group
+            selectedIndex={tabIndex}
+            onChange={(index) => {
+            setTabIndex(index);
+            if (index === 0) setActiveTab('app_guide');
+            if (index === 1) setActiveTab('stock_analysis');
+            if (index === 2) setActiveTab('on_the_radar');
+            if (index === 3) setActiveTab('open_positions');
+            if (index === 4) setActiveTab('index_analysis');
+            if (index === 5) setActiveTab('track_record');
+            if (index === 6) setActiveTab('rulebook');
 
-                // Reset analysis state if not on the stock analysis tab (index 1)
-                if (index !== 1) {
-                    handleResetAnalysis();
-                }
-            }}>
-                <Tab.List>
-                    <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>App Guide</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Stock Analysis</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>On The Radar</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Open Positions</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Index Analysis</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>AI Track Record</button>)}</Tab>
-                        <Tab as={Fragment}>{({ selected }) => (<button className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${selected ? 'bg-slate-700/50 text-white shadow' : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'}`}>Rulebook</button>)}</Tab>
-                    </div>
+            // Reset analysis state if not on the stock analysis tab
+            if (index !== 1) {
+                handleResetAnalysis();
+            }
+            }}
+        >
+            {/* --- Tab List --- */}
+            <Tab.List>
+            <div className="hidden md:flex justify-center p-1 space-x-1 bg-slate-900/40 rounded-xl sticky top-4 z-10 backdrop-blur-md w-fit mx-auto">
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    App Guide
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    Stock Analysis
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    On The Radar
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    Open Positions
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    Index Analysis
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    AI Track Record
+                    </button>
+                )}
+                </Tab>
+                <Tab as={Fragment}>
+                {({ selected }) => (
+                    <button
+                    className={`w-full rounded-lg py-2.5 px-6 text-md font-medium leading-5 transition-all ${
+                        selected
+                        ? 'bg-slate-700/50 text-white shadow'
+                        : 'text-gray-400 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                    >
+                    Rulebook
+                    </button>
+                )}
+                </Tab>
+            </div>
 
-                    <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
-                        <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
-                            <div>
-                                <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
-                                    {activeTab.replace(/_/g, ' ')}
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 -mr-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
-                                </Menu.Button>
-                            </div>
-                            <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-                                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div className="px-1 py-1">
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(0); setActiveTab('app_guide'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>App Guide</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(1); setActiveTab('stock_analysis'); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Stock Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(2); setActiveTab('on_the_radar'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>On The Radar</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(3); setActiveTab('open_positions'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Open Positions</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(4); setActiveTab('index_analysis'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Index Analysis</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(5); setActiveTab('track_record'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>AI Track Record</button>)}</Menu.Item>
-                                        <Menu.Item>{({ active }) => (<button onClick={() => { setTabIndex(6); setActiveTab('rulebook'); handleResetAnalysis(); }} className={`${active ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>Rulebook</button>)}</Menu.Item>
-                                    </div>
-                                </Menu.Items>
-                            </Transition>
-                        </Menu>
-                    </div>
-                </Tab.List>
-                <div className="w-full py-8">
-                    <Tab.Panels>
-                        <Tab.Panel><AppGuide navigateToTab={navigateToTab} /></Tab.Panel>
-                        <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
-                        <Tab.Panel><OnTheRadar /></Tab.Panel>
-                        <Tab.Panel><OpenPositions onAnalyze={handleAnalysis} /></Tab.Panel>
-                        <Tab.Panel><IndexAnalysisView /></Tab.Panel>
-                        <Tab.Panel><AITrackRecord /></Tab.Panel>
-                        <Tab.Panel><Rulebook /></Tab.Panel>
-                    </Tab.Panels>
+            {/* --- Mobile Dropdown Menu --- */}
+            <div className="md:hidden sticky top-4 z-10 w-full flex justify-center">
+                <Menu as="div" className="relative inline-block text-left w-full max-w-xs">
+                <div>
+                    <Menu.Button className="inline-flex justify-center w-full rounded-lg bg-slate-700/50 px-4 py-2.5 text-md font-medium text-white shadow hover:bg-slate-700/80">
+                    {activeTab.replace(/_/g, ' ')}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="ml-2 -mr-1 h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                        />
+                    </svg>
+                    </Menu.Button>
                 </div>
-            </Tab.Group>
-        </div>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-slate-700 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="px-1 py-1">
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(0);
+                                setActiveTab('app_guide');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            App Guide
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(1);
+                                setActiveTab('stock_analysis');
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            Stock Analysis
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(2);
+                                setActiveTab('on_the_radar');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            On The Radar
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(3);
+                                setActiveTab('open_positions');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            Open Positions
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(4);
+                                setActiveTab('index_analysis');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            Index Analysis
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(5);
+                                setActiveTab('track_record');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            AI Track Record
+                            </button>
+                        )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                            onClick={() => {
+                                setTabIndex(6);
+                                setActiveTab('rulebook');
+                                handleResetAnalysis();
+                            }}
+                            className={`${
+                                active ? 'bg-blue-600 text-white' : 'text-gray-300'
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            >
+                            Rulebook
+                            </button>
+                        )}
+                        </Menu.Item>
+                    </div>
+                    </Menu.Items>
+                </Transition>
+                </Menu>
+            </div>
+            </Tab.List>
+
+            {/* --- Tab Panels --- */}
+            <div className="w-full py-8">
+            <Tab.Panels>
+                <Tab.Panel>
+                <AppGuide navigateToTab={navigateToTab} />
+                </Tab.Panel>
+                <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+                <Tab.Panel>
+                <OnTheRadar
+                    aListData={aListData}
+                    isLoading={isLoadingAList}
+                    onStockSelect={handleStockSelect} // ✅ pass handler
+                />
+                </Tab.Panel>
+                <Tab.Panel>
+                <OpenPositions onAnalyze={handleAnalysis} />
+                </Tab.Panel>
+                <Tab.Panel>
+                <IndexAnalysisView />
+                </Tab.Panel>
+                <Tab.Panel>
+                <AITrackRecord />
+                </Tab.Panel>
+                <Tab.Panel>
+                <Rulebook />
+                </Tab.Panel>
+            </Tab.Panels>
+            </div>
+        </Tab.Group>
+        )}
+    </div>
     );
+
 
     const renderStockAnalysisContent = () => {
         switch (analysisState) {
