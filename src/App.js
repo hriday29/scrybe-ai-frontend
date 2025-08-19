@@ -2042,77 +2042,87 @@ export default function App() {
     if (showTerms) { return <TermsPage onBack={() => setShowTerms(false)} />; }
 
     return (
-        <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col overflow-hidden">
-            
-            {/* --- 1. RENDER THE NEW SIGN-IN MODAL --- */}
-            {/* This will only appear when isSignInModalOpen is true and the user is not yet logged in. */}
-            {isSignInModalOpen && !currentUser && (
-                <SignInModal 
-                    onSignIn={handleSignIn}
-                    onMicrosoftSignIn={handleMicrosoftSignIn}
-                    onClose={() => setIsSignInModalOpen(false)} 
-                />
-            )}
+    <main className="bg-[#0A0F1E] min-h-screen text-white font-sans relative flex flex-col overflow-hidden">
+        
+        {/* --- 1. RENDER THE NEW SIGN-IN MODAL --- */}
+        {isSignInModalOpen && !currentUser && (
+        <SignInModal 
+            onSignIn={handleSignIn}
+            onMicrosoftSignIn={handleMicrosoftSignIn}
+            onClose={() => setIsSignInModalOpen(false)} 
+        />
+        )}
 
-            {/* Your other existing modals and background */}
-            {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
-            {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
-            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }`}</style>
-            <InteractiveGridBackground />
+        {/* Other modals and background */}
+        {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
+        {isPulseOpen && <MarketPulsePopover onClose={() => setIsPulseOpen(false)} />}
+        {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
+        {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
 
-            <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
-                
-                {/* --- 2. USE THE 'view' STATE FOR AUTOMATIC REDIRECTION --- */}
-                {/* This logic now respects the automatic redirection from the useEffect hook. */}
-                {view === 'app' && currentUser ? (
-                    // If view is 'app' AND a user is logged in, show the main application.
-                    <>
-                        <AppHeader 
-                            onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
-                            isPulseOpen={isPulseOpen} 
-                            setIsPulseOpen={setIsPulseOpen}
-                            onGoToLanding={handleGoToLanding}
-                            onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                            onSignOut={handleSignOut}
-                        />
-                        {renderMainApp()}
-                    </>
-                ) : (
-                    // Otherwise (if view is 'landing' or user is null), show the landing page.
-                    <>
-                        <LandingHeader 
-                            onDemoOpen={() => setIsDemoOpen(true)} 
-                            onFaqOpen={() => setShowFaq(true)}
-                            onUserGuideOpen={() => setShowUserGuide(true)}
-                            onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                        />
-                        <LandingPage 
-                            // --- 3. UPDATE THE onSignIn PROP ---
-                            // The "Launch Analysis Tool" button now opens our modal instead of the Google popup directly.
-                            onSignIn={() => setIsSignInModalOpen(true)}
-                            handleLaunchAndNavigate={handleAuthAndNavigate}
-                            onDemoOpen={() => setIsDemoOpen(true)}
-                            onFaqOpen={() => setShowFaq(true)}
-                            onUserGuideOpen={() => setShowUserGuide(true)}
-                            onPrivacyOpen={() => setShowPrivacy(true)}
-                            onTermsOpen={() => setShowTerms(true)}
-                        />
-                    </>
-                )}
-            </div>
+        <style>{`
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
+        `}</style>
+        <InteractiveGridBackground />
 
-            {/* These universal components remain unchanged */}
-            <TickerTape />
-            <Footer 
-                onPrivacyClick={() => setShowPrivacy(true)}
-                onTermsClick={() => setShowTerms(true)}
-                onUserGuideClick={() => setShowUserGuide(true)}
-                onFaqClick={() => setShowFaq(true)}
+        <div className="max-w-7xl w-full mx-auto px-4 relative z-20">
+        {view === 'app' && currentUser ? (
+            <>
+            <AppHeader 
+                onReset={analysisState !== 'selector' ? handleResetAnalysis : null} 
+                isPulseOpen={isPulseOpen} 
+                setIsPulseOpen={setIsPulseOpen}
+                onGoToLanding={handleGoToLanding}
+                onBetaModalOpen={() => setIsBetaModalOpen(true)}
+                onSignOut={handleSignOut}
             />
-            {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
-            {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
-            <FeedbackWidget />
-        </main>
+
+            {/* --- NEW CONDITIONAL VIEW LOGIC --- */}
+            {selectedTicker ? (
+                <StockDetailPage 
+                ticker={selectedTicker} 
+                onBackClick={handleBackToList} 
+                />
+            ) : (
+                renderMainApp()
+            )}
+            {/* --- END CONDITIONAL VIEW LOGIC --- */}
+            </>
+        ) : (
+            <>
+            <LandingHeader 
+                onDemoOpen={() => setIsDemoOpen(true)} 
+                onFaqOpen={() => setShowFaq(true)}
+                onUserGuideOpen={() => setShowUserGuide(true)}
+                onBetaModalOpen={() => setIsBetaModalOpen(true)}
+            />
+            <LandingPage 
+                onSignIn={() => setIsSignInModalOpen(true)}
+                handleLaunchAndNavigate={handleAuthAndNavigate}
+                onDemoOpen={() => setIsDemoOpen(true)}
+                onFaqOpen={() => setShowFaq(true)}
+                onUserGuideOpen={() => setShowUserGuide(true)}
+                onPrivacyOpen={() => setShowPrivacy(true)}
+                onTermsOpen={() => setShowTerms(true)}
+            />
+            </>
+        )}
+        </div>
+
+        {/* Universal components */}
+        <TickerTape />
+        <Footer 
+        onPrivacyClick={() => setShowPrivacy(true)}
+        onTermsClick={() => setShowTerms(true)}
+        onUserGuideClick={() => setShowUserGuide(true)}
+        onFaqClick={() => setShowFaq(true)}
+        />
+        <FeedbackWidget />
+    </main>
     );
+
     
 }
