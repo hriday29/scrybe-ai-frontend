@@ -1,0 +1,21 @@
+.rotating-logo:hover {
+  animation: clean-rotate 10s linear infinite;
+}
+
+@keyframes clean-rotate {
+  from {
+    transform: rotate3d(1, 1, 0, 0deg);
+  }
+  to {
+    transform: rotate3d(1, 1, 0, 360deg);
+  }
+}
+
+@keyframes pan-background {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
