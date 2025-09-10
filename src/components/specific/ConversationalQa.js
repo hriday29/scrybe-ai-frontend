@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 // --- Corrected Imports ---
-import { API_BASE_URL } from '../../apiConfig.js';
 import { useAuth } from '../../context/AuthContext';
-import authFetch from '../../api/authFetch';
+import { askQuestion } from '../../api/api.js'; // Use the standardized API function
 // --- End Corrected Imports ---
 
 const ConversationalQa = ({ analysisContext }) => {
@@ -21,9 +20,11 @@ const ConversationalQa = ({ analysisContext }) => {
         setConversation(prev => [...prev, { type: 'user', text: currentQuestion }]);
         setQuestion(''); setIsLoading(true); setError(null);
         try {
-            const data = await authFetch(`${API_BASE_URL}/api/analysis/ask`, currentUser, { method: 'POST', body: JSON.stringify({ question: currentQuestion, analysis_context: analysisContext }) });
+            // Use the correct function and send the ticker, not the whole context
+            const data = await askQuestion(analysisContext.ticker, currentQuestion);
             setConversation(prev => [...prev, { type: 'ai', text: data.answer }]);
-        } catch (err) {
+        }
+        catch (err) {
             setError(err.message);
             setConversation(prev => prev.slice(0, -1));
             setQuestion(currentQuestion);
