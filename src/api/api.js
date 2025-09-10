@@ -27,8 +27,7 @@ export const getUniverse = async () => {
 
 export const getAnalysis = async (ticker) => {
   try {
-    // FIX: Changed '/analysis/' to '/get-analysis/'
-    const response = await api.get(`/get-analysis/${ticker}`);
+    const response = await api.get(`/analysis/${ticker}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching analysis for ${ticker}:`, error);
@@ -38,8 +37,7 @@ export const getAnalysis = async (ticker) => {
 
 export const getOpenTrades = async () => {
   try {
-    // FIX: Changed '/open-trades' to '/get-open-trades'
-    const response = await api.get('/get-open-trades');
+    const response = await api.get('/open-trades');
     return response.data;
   } catch (error) {
     console.error('Error fetching open trades:', error);
@@ -49,8 +47,7 @@ export const getOpenTrades = async () => {
 
 export const getTrackRecord = async () => {
   try {
-    // FIX: Changed '/track-record' to '/get-track-record'
-    const response = await api.get('/get-track-record');
+    const response = await api.get('/track-record');
     return response.data;
   } catch (error) {
     console.error('Error fetching track record:', error);
@@ -73,11 +70,11 @@ export const askQuestion = async (ticker, question) => {
 
 export const submitVote = async (analysisId, voteType) => {
   try {
-    // FIX: Changed '/feedback/vote' to '/vote-analysis'
     const payload = { analysis_id: analysisId, vote_type: voteType };
-    const response = await api.post('/vote-analysis', payload);
+    const response = await api.post('/vote', payload);
     return response.data;
-  } catch (error)
+  }
+  catch (error)
   {
     console.error('Error submitting vote:', error);
     throw error;
@@ -86,9 +83,8 @@ export const submitVote = async (analysisId, voteType) => {
 
 export const submitFeedback = async (category, feedbackText) => {
   try {
-    // FIX: Changed '/feedback/submit' to '/submit-feedback'
     const payload = { category, feedback_text: feedbackText };
-    const response = await api.post('/submit-feedback', payload);
+    const response = await api.post('/feedback/submit', payload);
     return response.data;
   } catch (error) {
     console.error('Error submitting feedback:', error);
@@ -98,8 +94,7 @@ export const submitFeedback = async (category, feedbackText) => {
 
 export const logTrade = async (tradeData) => {
   try {
-    // FIX: Changed '/trades/log' to '/log-user-trade'
-    const response = await api.post('/log-user-trade', tradeData);
+    const response = await api.post('/trades/log', tradeData);
     return response.data;
   } catch (error) {
     console.error('Error logging trade:', error);
