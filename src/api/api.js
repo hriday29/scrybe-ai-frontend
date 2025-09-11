@@ -55,6 +55,17 @@ export const getTrackRecord = async () => {
   }
 };
 
+export const getNews = async (ticker) => {
+  try {
+    // This route exists in your final api/index.py
+    const response = await api.get(`/news/${ticker}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching news for ${ticker}:`, error);
+    throw error;
+  }
+};
+
 // --- INTERACTIVE ENDPOINTS ---
 
 export const askQuestion = async (ticker, question) => {

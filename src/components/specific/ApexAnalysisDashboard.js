@@ -24,6 +24,22 @@ const DataCard = ({ title, data }) => (
     </div>
 );
 
+const TradePlanCard = ({ plan }) => (
+    <div className="bg-green-900/50 border-2 border-green-500 rounded-xl p-6">
+        <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+            <Target size={20} className="mr-2 text-green-300" />
+            Actionable Trade Plan
+        </h3>
+        <ul className="space-y-3 text-md">
+            <li className="flex justify-between"><span className="text-gray-400">Entry Price:</span><span className="text-white font-mono font-semibold">₹{plan.entry_price}</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Stop-Loss:</span><span className="text-white font-mono font-semibold">₹{plan.stop_loss}</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Target Price:</span><span className="text-white font-mono font-semibold">₹{plan.target_price}</span></li>
+            <li className="flex justify-between pt-3 border-t border-green-500/30"><span className="text-gray-400">Risk/Reward Ratio:</span><span className="text-white font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Holding Period:</span><span className="text-white font-mono font-semibold">~{plan.holding_period_days} days</span></li>
+        </ul>
+    </div>
+);
+
 const ApexAnalysisDashboard = ({ analysisData }) => {
     if (!analysisData) { return <div className="text-center p-8 text-gray-500">No analysis data available.</div>; }
 
@@ -128,6 +144,9 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             {/* --- END FIX --- */}
 
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                {strategy_signal && strategy_signal.trade_plan && (
+                    <TradePlanCard plan={strategy_signal.trade_plan} />
+                )}
                 <div className="flex items-center gap-4">
                     <div className="text-green-400"><TrendingUp size={28} /></div>
                     <div>

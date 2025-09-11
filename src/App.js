@@ -5,6 +5,7 @@ import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAnalysis } from './api/api.js';
 
 // Styles
 import './assets/styles/App.css';
@@ -577,23 +578,17 @@ export default function App() {
     longLoadTimerRef.current = setTimeout(() => setIsLongLoad(true), 3000);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/analyze/${ticker}`);
-      if (longLoadTimerRef.current) {
-        clearTimeout(longLoadTimerRef.current);
-        longLoadTimerRef.current = null;
-      }
-      setIsLongLoad(false);
+        // Use the standardized and corrected API function from api.js
+        const data = await getAnalysis(ticker);
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({
-          error: "Analysis not found or server error.",
-        }));
-        throw new Error(errorData.error);
-      }
+        if (longLoadTimerRef.current) {
+            clearTimeout(longLoadTimerRef.current);
+            longLoadTimerRef.current = null;
+        }
+        setIsLongLoad(false);
 
-      const data = await response.json();
-      setAnalysisData(data);
-      setAnalysisState("results");
+        setAnalysisData(data);
+        setAnalysisState("results");
     } catch (err) {
       if (longLoadTimerRef.current) {
         clearTimeout(longLoadTimerRef.current);
