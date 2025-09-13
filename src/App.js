@@ -5,7 +5,7 @@ import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { getAnalysis } from './api/api.js';
+import { getAnalysis, getTrackRecord } from './api/api.js';
 
 // Styles
 import './assets/styles/App.css';
@@ -355,10 +355,10 @@ const AITrackRecord = () => {
     let isMounted = true;
     const fetchTrackRecord = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/track-record`);
-        if (!res.ok) throw new Error('Server failed to return track record.');
-        const data = await res.json();
+        // 1. Call our standardized function. It returns the final data directly.
+        const data = await getTrackRecord();
 
+        // 2. Process the data as before.
         const processedData = data.map((trade) => {
           const openDate = new Date(trade.open_date);
           const closeDate = new Date(trade.close_date);

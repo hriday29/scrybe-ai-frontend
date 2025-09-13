@@ -57,12 +57,12 @@ const LandingWalkthrough = ({
     {
       icon: <TargetIcon className="w-7 h-7 text-blue-400" />,
       badge: "bg-gradient-to-br from-blue-500/30 to-blue-700/30",
-      title: "Actionable Features",
+      title: "Your Tactical Edge",
       description:
-        "Go beyond a simple list. Our 'On The Radar' feature shows which stocks are on the verge of a signal and what condition the AI is waiting for. The 'Index Analysis' gives you the big picture before you move.",
+        "Track all of the AI's live signals in the 'Trade Cockpit,' your hub for monitoring open positions. Before you act, get the big picture with our comprehensive 'Index Analysis' to understand the overall market trend.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
-        { text: "Explore 'On The Radar'", action: () => handleLaunchAndNavigate(2) },
+        { text: "Open the Trade Cockpit", action: () => handleLaunchAndNavigate(2) }, // Now correctly links to Open Positions tab
       ],
     },
     {

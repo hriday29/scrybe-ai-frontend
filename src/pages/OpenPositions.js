@@ -1,12 +1,11 @@
 // src/pages/OpenPositions.js
 
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../apiConfig.js'; // Corrected path
-import { useAuth } from '../context/AuthContext'; // Corrected path
-import authFetch from '../api/authFetch'; // Corrected path
+import { useAuth } from '../context/AuthContext';
+import { getOpenTrades } from '../api/api';
 
 const OpenPositions = ({ onAnalyze }) => {
-    const { currentUser } = useAuth();
+    const { currentUser, authFetch } = useAuth();
     const [openTrades, setOpenTrades] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,7 +20,7 @@ const OpenPositions = ({ onAnalyze }) => {
             setIsLoading(true);
             setError(null);
             try {
-                const data = await authFetch(`${API_BASE_URL}/api/open-trades`, currentUser);
+                const data = await getOpenTrades(authFetch, currentUser);
                 setOpenTrades(data);
             } catch (err) {
                 setError(err.message);
