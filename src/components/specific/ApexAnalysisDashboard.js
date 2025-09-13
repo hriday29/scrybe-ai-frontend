@@ -1,4 +1,4 @@
-// src/components/specific/ApexAnalysisDashboard.js (AURORA REVAMP)
+// src/components/specific/ApexAnalysisDashboard.js (AURORA REVAMP - FIXED ALIGNMENT)
 
 import React from 'react';
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
@@ -42,7 +42,7 @@ const Gauge = ({ value, label }) => {
 const Indicator = ({ label, value, state }) => {
     const stateColor = state === 'Bullish' ? 'text-green-400' : state === 'Bearish' ? 'text-red-400' : 'text-yellow-400';
     return (
-        <div className="text-center">
+        <div className="text-left">
             <p className="text-sm text-slate-400">{label}</p>
             <p className={`text-lg font-bold ${stateColor}`}>{value}</p>
         </div>
@@ -71,7 +71,6 @@ const TradePlanCard = ({ plan }) => (
         </ul>
     </div>
 );
-
 
 // =========================================================================
 // Main Dashboard Component
@@ -160,39 +159,52 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
-            {/* --- REVAMPED EVIDENCE CARDS --- */}
+            {/* --- FIXED EVIDENCE CARDS --- */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 h-full">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center"><Zap size={18} className="mr-2 text-blue-400" />Technical Snapshot</h3>
-                    <div className="flex justify-around items-center h-full">
+                {/* Technical Snapshot */}
+                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                        <Zap size={18} className="mr-2 text-blue-400" />Technical Snapshot
+                    </h3>
+                    <div className="flex items-center justify-between flex-1">
                         <Gauge value={rsiValue} label="RSI" />
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 items-start">
                             <Indicator label="Trend (ADX)" value={adxState} state={adxState === 'Strong Trend' ? 'Bullish' : 'Bearish'} />
                             <Indicator label="Momentum (MACD)" value="Crossover" state={macdState} />
                         </div>
                     </div>
                 </div>
-                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 h-full">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center"><BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment</h3>
-                    <div className="flex flex-col justify-center h-full space-y-2 text-sm">
-                         <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-white font-mono">{safe_options.put_call_ratio_oi || 'N/A'}</span></div>
-                         <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-white font-mono">{safe_options.max_oi_call_strike || 'N/A'}</span></div>
-                         <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-white font-mono">{safe_options.max_oi_put_strike || 'N/A'}</span></div>
+
+                {/* Options Sentiment */}
+                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                        <BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment
+                    </h3>
+                    <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
+                        <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-white font-mono">{safe_options.put_call_ratio_oi || 'N/A'}</span></div>
+                        <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-white font-mono">{safe_options.max_oi_call_strike || 'N/A'}</span></div>
+                        <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-white font-mono">{safe_options.max_oi_put_strike || 'N/A'}</span></div>
                     </div>
                 </div>
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 h-full">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center"><Rss size={18} className="mr-2 text-orange-400" />Price-Based Fundamentals</h3>
-                     <div className="flex justify-around items-center h-full">
+
+                {/* Price-Based Fundamentals */}
+                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                        <Rss size={18} className="mr-2 text-orange-400" />Price-Based Fundamentals
+                    </h3>
+                    <div className="flex items-center justify-between flex-1">
                         <Gauge value={safe_fundamentals.quality_score} label="Quality Score" />
                         <div className="text-center">
-                           <p className="text-sm text-slate-400">Valuation</p>
-                           <p className="text-lg font-bold text-white">{(safe_fundamentals.valuation_proxy || '').split(' ')[0]}</p>
+                            <p className="text-sm text-slate-400">Valuation</p>
+                            <p className="text-lg font-bold text-white">
+                                {(safe_fundamentals.valuation_proxy || '').split(' ')[0]}
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            {/* --- NEW: Risk/Reward Snapshot for ALL stocks --- */}
+            {/* --- Risk/Reward Snapshot --- */}
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
                 <h3 className="font-bold text-xl text-white mb-4">Risk/Reward Snapshot</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
@@ -211,7 +223,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
-            {/* --- The PREDICTED GAIN card, now separate --- */}
+            {/* --- Predicted Gain --- */}
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
                 <div className="flex items-center gap-4">
                     <div className="text-green-400"><TrendingUp size={28} /></div>
@@ -222,13 +234,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
-            {/* This renders the GREEN card only when a trade plan exists */}
+            {/* Trade Plan Card */}
             {strategy_signal && strategy_signal.trade_plan && (
                 <TradePlanCard plan={strategy_signal.trade_plan} />
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-white mb-4 flex items-center">
                         <ShieldAlert size={20} className="mr-2 text-yellow-400" /> Key Risks & Invalidation
                     </h3>

@@ -1,45 +1,21 @@
-// src/components/specific/NewsSection.js (FUNCTIONAL VERSION)
+// src/components/specific/NewsSection.js (SAGE REVAMP)
 
-import React, { useState, useEffect } from 'react';
-import { getNews } from '../../api/api'; // Import our new function
+import React from 'react';
 import { ExternalLink } from 'lucide-react';
 
-const NewsSection = ({ ticker }) => {
-    const [newsData, setNewsData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        if (!ticker) return;
-
-        const fetchNews = async () => {
-            try {
-                setIsLoading(true);
-                const data = await getNews(ticker);
-                setNewsData(data);
-            } catch (error) {
-                console.error("Failed to fetch news", error);
-                setNewsData({ articles: [] }); // Set empty to avoid errors
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchNews();
-    }, [ticker]);
+const NewsSection = ({ newsData }) => { // It now receives newsData directly
 
     const renderContent = () => {
-        if (isLoading) {
-            return <div className="text-center text-gray-400 p-4">Loading news...</div>;
-        }
-
+        // Check if the articles array is empty or not provided
         if (!newsData || !newsData.articles || newsData.articles.length === 0) {
             return (
                 <div className="p-4 text-center text-gray-400">
-                    The news analysis feature is currently unavailable.
+                    No relevant news found for this stock.
                 </div>
             );
         }
 
+        // If we have articles, display them
         return (
             <div className="pt-4 space-y-4">
                 {newsData.articles.map((article, index) => (

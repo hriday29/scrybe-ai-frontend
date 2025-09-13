@@ -610,7 +610,7 @@ export default function App() {
           <>
             <ApexAnalysisDashboard analysisData={analysisData} />
             <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
-              <NewsSection ticker={analysisData?.ticker} />
+              <NewsSection newsData={analysisData?.news_and_events_analysis} />
               <ConversationalQa analysisContext={analysisData} />
               <ConfidencePoll analysisId={analysisData?._id} />
               <TradeJournalCard analysisData={analysisData} />

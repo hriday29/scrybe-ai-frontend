@@ -1,8 +1,9 @@
-// src/context/AuthContext.js
+// src/context/AuthContext.js (FINAL, CORRECTED VERSION)
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../services/firebase'; // <-- Corrected path
+import { auth } from '../services/firebase';
+import authFetch from '../api/authFetch'; // 1. Import authFetch
 
 const AuthContext = createContext();
 
@@ -23,7 +24,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = {
-    currentUser
+    currentUser,
+    authFetch // 2. Add authFetch to the context value
   };
 
   return (
