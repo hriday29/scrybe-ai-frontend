@@ -84,6 +84,20 @@ export const getNews = async (ticker) => {
  * to be passed in from the component that calls them.
  */
 
+export const submitFeedback = async (authFetch, currentUser, category, feedbackText) => {
+  try {
+    const payload = { category, feedback_text: feedbackText };
+    const response = await authFetch(`${API_BASE_URL}/api/feedback/submit`, currentUser, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    return response;
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    throw error;
+  }
+};
+
 export const getOpenTrades = async (authFetch, currentUser) => {
   try {
     const response = await authFetch(`${API_BASE_URL}/api/open-trades`, currentUser);

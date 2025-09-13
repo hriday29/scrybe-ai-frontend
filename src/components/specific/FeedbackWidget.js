@@ -1,51 +1,22 @@
+// src/components/specific/FeedbackWidget.js (FINAL, CORRECTED VERSION)
+
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  MessageSquare,
-  X,
-  Lightbulb,
-  Bug,
-  HelpCircle,
-  ThumbsUp,
-  Send,
-  CheckCircle,
-} from "lucide-react";
-
-import { API_BASE_URL } from "../../apiConfig.js";
+import { MessageSquare, X, Lightbulb, Bug, HelpCircle, ThumbsUp, Send, CheckCircle } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import authFetch from "../../api/authFetch";
+import { submitFeedback } from "../../api/api.js"; // Use the standardized API function
 
-// --- Configuration for Feedback Categories (for easier maintenance) ---
+// --- Configuration for Feedback Categories ---
 const feedbackCategories = [
-  {
-    id: "testimonial",
-    label: "Share a Testimonial",
-    icon: ThumbsUp,
-    placeholder: "Share your positive experience with our platform...",
-  },
-  {
-    id: "improvement",
-    label: "Suggest an Improvement",
-    icon: Lightbulb,
-    placeholder: "What could we do better? Please be specific!",
-  },
-  {
-    id: "bug",
-    label: "Report a Bug",
-    icon: Bug,
-    placeholder: "Please describe the bug, where you found it, and how to reproduce it.",
-  },
-  {
-    id: "question",
-    label: "Ask a Question",
-    icon: HelpCircle,
-    placeholder: "What can we help you with?",
-  },
+  { id: "testimonial", label: "Share a Testimonial", icon: ThumbsUp, placeholder: "Share your positive experience with our platform..." },
+  { id: "improvement", label: "Suggest an Improvement", icon: Lightbulb, placeholder: "What could we do better? Please be specific!" },
+  { id: "bug", label: "Report a Bug", icon: Bug, placeholder: "Please describe the bug, where you found it, and how to reproduce it." },
+  { id: "question", label: "Ask a Question", icon: HelpCircle, placeholder: "What can we help you with?" },
 ];
 
 // --- Main Component ---
 const FeedbackWidget = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, authFetch } = useAuth(); // Get authFetch from the context
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState("initial"); // 'initial', 'form', 'submitted'
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -54,7 +25,6 @@ const FeedbackWidget = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // --- Accessibility: Close widget with Escape key ---
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -69,12 +39,10 @@ const FeedbackWidget = () => {
     };
   }, [isOpen]);
 
-
   const handleOpen = () => setIsOpen(true);
   
   const handleClose = () => {
     setIsOpen(false);
-    // Reset state after the closing animation completes
     setTimeout(() => {
       setStep("initial");
       setSelectedCategory(null);
@@ -98,15 +66,13 @@ const FeedbackWidget = () => {
     setIsSubmitting(true);
     setError("");
     try {
-      const payload = {
-        category: selectedCategory?.label,
-        feedback_text: feedbackText,
-        email: userEmail || currentUser.email, // Prefer explicit email, fallback to user's
-      };
-      await authFetch(`${API_BASE_URL}/api/feedback/submit`, currentUser, {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      // Use the new, standardized API function
+      await submitFeedback(
+        authFetch,
+        currentUser,
+        selectedCategory?.label,
+        feedbackText
+      );
       setStep("submitted");
     } catch (err) {
       console.error("Feedback submission error:", err);
@@ -214,7 +180,7 @@ const FeedbackWidget = () => {
 
                   {step === "submitted" && (
                     <div className="text-center py-6 flex flex-col items-center gap-3">
-                       <CheckCircle size={40} className="text-green-400"/>
+                        <CheckCircle size={40} className="text-green-400"/>
                       <p className="font-semibold text-xl text-white">
                         Thank You!
                       </p>
@@ -234,4 +200,3 @@ const FeedbackWidget = () => {
 };
 
 export default FeedbackWidget;
-
