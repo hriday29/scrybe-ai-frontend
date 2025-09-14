@@ -30,9 +30,9 @@ const steps = [
 
 export default function StrategyStepper() {
   return (
-    <div className="py-20 px-6 max-w-6xl mx-auto relative overflow-hidden">
-      {/* Decorative background glow */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+    <div className="py-20 px-6 max-w-6xl mx-auto relative">
+      {/* Section separator */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       {/* Section header */}
       <motion.div
@@ -42,10 +42,12 @@ export default function StrategyStepper() {
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <h2 className="text-3xl md:text-5xl font-extrabold mb-6 
+        <h2
+          className="text-3xl md:text-5xl font-extrabold mb-6 
                       bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 
                       bg-clip-text text-transparent drop-shadow-lg 
-                      leading-[1.2] inline-block pt-2 pb-2">
+                      leading-[1.2] inline-block pt-2 pb-2"
+        >
           An AI Strategy You Can Understand
         </h2>
         <p className="text-gray-300 max-w-2xl mx-auto">

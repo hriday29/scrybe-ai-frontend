@@ -189,18 +189,24 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                 {/* Price-Based Fundamentals */}
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
-                        <Rss size={18} className="mr-2 text-orange-400" />Price-Based Fundamentals
-                    </h3>
-                    <div className="flex items-center justify-between flex-1">
-                        <Gauge value={safe_fundamentals.quality_score} label="Quality Score" />
-                        <div className="text-center">
-                            <p className="text-sm text-slate-400">Valuation</p>
-                            <p className="text-lg font-bold text-white">
-                                {(safe_fundamentals.valuation_proxy || '').split(' ')[0]}
-                            </p>
-                        </div>
+                <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                    <Rss size={18} className="mr-2 text-orange-400" />
+                    Price-Based Fundamentals
+                </h3>
+
+                <div className="flex items-center justify-between flex-1">
+                    <Gauge value={safe_fundamentals.quality_score} label="Quality Score" />
+
+                    <div className="text-center">
+                    <p className="text-sm text-slate-400">Valuation %</p>
+                    <p className="text-lg font-bold text-white">
+                        {(safe_fundamentals.valuation_proxy || '').split(' ')[0]}
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">
+                        Position in 52W range
+                    </p>
                     </div>
+                </div>
                 </div>
             </div>
             
