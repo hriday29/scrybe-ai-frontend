@@ -3,6 +3,7 @@
 import React from 'react';
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import NewsSection from './NewsSection';
 
 // =========================================================================
 // Helper & Display Components
@@ -77,6 +78,7 @@ const TradePlanCard = ({ plan }) => (
 // =========================================================================
 
 const ApexAnalysisDashboard = ({ analysisData }) => {
+    console.log("INSPECTING ANALYSIS DATA:", JSON.stringify(analysisData, null, 2));
     if (!analysisData) { return <div className="text-center p-8 text-gray-500">No analysis data available.</div>; }
 
     const {
@@ -89,7 +91,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
         strategy_signal = null,
         technical_analysis,
         options_sentiment_analysis,
-        fundamental_proxy_analysis
+        fundamental_proxy_analysis,
+        news_context
     } = analysisData;
     
     const safe_options = options_sentiment_analysis || {};
@@ -244,6 +247,10 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             {strategy_signal && strategy_signal.trade_plan && (
                 <TradePlanCard plan={strategy_signal.trade_plan} />
             )}
+
+            <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                <NewsSection newsData={news_context} />
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
