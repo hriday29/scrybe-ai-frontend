@@ -248,10 +248,6 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <TradePlanCard plan={strategy_signal.trade_plan} />
             )}
 
-            <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                <NewsSection newsData={news_context} />
-            </div>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-white mb-4 flex items-center">
