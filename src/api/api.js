@@ -138,13 +138,23 @@ export const submitVote = async (authFetch, currentUser, analysisId, voteType) =
 
 export const logTrade = async (authFetch, currentUser, tradeData) => {
     try {
-        const response = await authFetch(`${API_BASE_URL}/api/log-trade`, currentUser, {
+        const response = await authFetch(`${API_BASE_URL}/api/trades/log`, currentUser, {
             method: 'POST',
             body: JSON.stringify(tradeData)
         });
         return response;
     } catch (error) {
         console.error('Error logging trade:', error);
+        throw error;
+    }
+};
+
+export const getMyTrades = async (authFetch, currentUser) => {
+    try {
+        const response = await authFetch(`${API_BASE_URL}/api/my-trades`, currentUser);
+        return response;
+    } catch (error) {
+        console.error('Error fetching my trades:', error);
         throw error;
     }
 };
