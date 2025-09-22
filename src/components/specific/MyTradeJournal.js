@@ -75,7 +75,7 @@ const MyTradeJournal = () => {
                                         {new Date(trade.user_entry_date).toLocaleDateString()}
                                     </td>
                                     <td className="p-4 font-mono text-gray-300 text-right">
-                                        ${trade.user_entry_price.toFixed(2)}
+                                        ₹{trade.user_entry_price.toFixed(2)}
                                     </td>
                                     <td className="p-4 text-gray-400 italic">
                                         {trade.user_notes || '-'}
