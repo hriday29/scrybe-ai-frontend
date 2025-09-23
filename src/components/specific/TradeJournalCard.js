@@ -40,7 +40,7 @@ const TradeJournalCard = ({ analysisData }) => {
                 prediction_id: analysisData._id, 
                 signal_type: analysisData.signal,
                 ai_trade_plan: analysisData.strategy_signal?.trade_plan, // The original AI plan
-                user_entry_price: formData.entryPrice, // The user's actual entry price
+                user_entry_price: parseFloat(formData.entryPrice), // The user's actual entry price
                 user_entry_date: formData.entryDate,
                 user_notes: formData.notes 
             };
