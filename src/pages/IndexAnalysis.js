@@ -67,7 +67,7 @@ const IndexAnalysis = () => {
             try {
                 const data = await getIndexList();
                 setIndices(data);
-                // Automatically select the first index (Nifty 50) on initial load
+                // Automatically select the first index on initial load
                 if (data && data.length > 0) {
                     setSelectedTicker(data[0].ticker);
                     setSelectedIndexName(data[0].name);
@@ -108,7 +108,9 @@ const IndexAnalysis = () => {
             <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold text-white mb-4">Market & Index Analysis</h2>
                 <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-                    A high-level strategic overview of the market. The AI analyzes key indices to determine the overall market 'weather'.
+                    A high-level strategic overview of the Indian market. The AI analyzes key indices including 
+                    Nifty 50, Nifty Smallcap 250, and sectoral indices to determine overall market 'weather' and 
+                    smallcap momentum.
                 </p>
             </div>
 

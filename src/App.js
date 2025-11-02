@@ -39,6 +39,7 @@ import StockDetailPage from './pages/StockDetailPage.js';
 import TermsPage from './pages/TermsPage.js';
 import UserGuidePage from './pages/UserGuidePage.js';
 import IndexAnalysis from './pages/IndexAnalysis.js';
+import PortfolioDashboard from './pages/PortfolioDashboard.js';
 
 // Context, Services, and Config
 import { useAuth } from './context/AuthContext.js';
@@ -286,7 +287,7 @@ const StockSelector = ({ onAnalyze }) => {
       <GlassCard className="px-6 py-10 w-full max-w-4xl text-center shadow-2xl">
         <SectionTitle
           title="Ranked Analysis Universe"
-          subtitle="Daily ranked analysis for all stocks in the Scrybe AI universe, powered by Scrybe Score."
+          subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
         />
       </GlassCard>
 
@@ -632,7 +633,7 @@ export default function App() {
       ) : (
         <Tab.Group selectedIndex={tabIndex} onChange={setTabIndex}>
           <div className="flex flex-wrap justify-center p-1 bg-white/5 border border-white/10 rounded-2xl sticky top-4 z-10 backdrop-blur-xl w-fit mx-auto shadow-xl">
-            {["App Guide", "Stock Analysis", "Open Positions", "Index Analysis", "AI Track Record", "Rulebook"].map(
+            {["App Guide", "Stock Analysis", "Portfolio", "Open Positions", "Index Analysis", "AI Track Record", "Rulebook"].map(
               (label) => (
                 <Tab
                   key={label}
@@ -656,6 +657,9 @@ export default function App() {
                 <AppGuide navigateToTab={navigateToTab} />
               </Tab.Panel>
               <Tab.Panel>{renderStockAnalysisContent()}</Tab.Panel>
+              <Tab.Panel>
+                <PortfolioDashboard onStockSelect={handleStockSelect} />
+              </Tab.Panel>
               <Tab.Panel>
                 <OpenPositions onAnalyze={handleAnalysis} />
               </Tab.Panel>

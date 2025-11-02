@@ -1,0 +1,447 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  TrendingUp, TrendingDown, AlertTriangle, CheckCircle, 
+  XCircle, Filter, Search, ArrowUpCircle, ArrowDownCircle,
+  PieChart, BarChart3, Activity, Eye, Target, Shield
+} from 'lucide-react';
+import { API_BASE_URL } from '../apiConfig';
+import { useNavigate } from 'react-router-dom';
+
+const GlassCard = ({ className = '', children, onClick }) => (
+  <motion.div
+    whileHover={onClick ? { scale: 1.02 } : {}}
+    className={`bg-slate-900/40 border border-white/10 backdrop-blur-xl shadow-2xl shadow-slate-950/30 rounded-2xl ${className} ${onClick ? 'cursor-pointer' : ''}`}
+    onClick={onClick}
+  >
+    {children}
+  </motion.div>
+);
+
+const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue' }) => {
+  const colorClasses = {
+    blue: 'from-blue-500/20 to-blue-600/20 border-blue-500/30',
+    green: 'from-green-500/20 to-green-600/20 border-green-500/30',
+    yellow: 'from-yellow-500/20 to-yellow-600/20 border-yellow-500/30',
+    red: 'from-red-500/20 to-red-600/20 border-red-500/30',
+    purple: 'from-purple-500/20 to-purple-600/20 border-purple-500/30'
+  };
+
+  return (
+    <GlassCard className={`p-6 bg-gradient-to-br ${colorClasses[color]}`}>
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-slate-400 text-sm font-medium mb-2">{label}</p>
+          <p className="text-3xl font-bold text-white mb-1">{value}</p>
+          {subtitle && <p className="text-slate-400 text-xs">{subtitle}</p>}
+        </div>
+        <Icon className="w-8 h-8 text-white/80" />
+      </div>
+    </GlassCard>
+  );
+};
+
+const SignalBadge = ({ signal }) => {
+  if (signal === 'BUY') {
+    return (
+      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs font-bold">
+        <ArrowUpCircle className="w-3 h-3" />
+        BUY
+      </span>
+    );
+  }
+  if (signal === 'SHORT') {
+    return (
+      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold">
+        <ArrowDownCircle className="w-3 h-3" />
+        SHORT
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-500/20 border border-slate-500/30 text-slate-400 text-xs font-bold">
+      HOLD
+    </span>
+  );
+};
+
+const ExecutedTradeCard = ({ trade, rank }) => {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate(`/stock/${trade.ticker}`);
+  };
+
+  return (
+    <GlassCard className="p-4 hover:border-blue-500/50 transition-all" onClick={handleClick}>
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+            #{rank || '?'}
+          </div>
+          <div>
+            <h4 className="text-white font-bold text-lg">{trade.ticker}</h4>
+            <p className="text-slate-400 text-sm">{trade.sector || 'Unknown Sector'}</p>
+          </div>
+        </div>
+        <SignalBadge signal={trade.signal} />
+      </div>
+      
+      <div className="grid grid-cols-3 gap-3 mb-3 text-sm">
+        <div>
+          <p className="text-slate-400 text-xs mb-1">Entry</p>
+          <p className="text-white font-semibold">₹{trade.entry_price?.toFixed(2) || 'N/A'}</p>
+        </div>
+        <div>
+          <p className="text-slate-400 text-xs mb-1">Target</p>
+          <p className="text-green-400 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
+        </div>
+        <div>
+          <p className="text-slate-400 text-xs mb-1">Stop Loss</p>
+          <p className="text-red-400 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
+        </div>
+      </div>
+      
+      {trade.selection_reason && (
+        <div className="pt-3 border-t border-white/10">
+          <p className="text-slate-300 text-xs flex items-start gap-2">
+            <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+            {trade.selection_reason}
+          </p>
+        </div>
+      )}
+    </GlassCard>
+  );
+};
+
+const AnalysisRow = ({ analysis }) => {
+  const navigate = useNavigate();
+  
+  const getStatusIcon = () => {
+    if (analysis.is_executed) {
+      return <CheckCircle className="w-5 h-5 text-green-400" />;
+    }
+    if (analysis.portfolio_selected) {
+      return <Target className="w-5 h-5 text-blue-400" />;
+    }
+    return <XCircle className="w-5 h-5 text-slate-500" />;
+  };
+
+  const getReasonColor = () => {
+    const reason = analysis.selection_reason?.toLowerCase() || '';
+    if (reason.includes('selected')) return 'text-green-400';
+    if (reason.includes('sector')) return 'text-yellow-400';
+    if (reason.includes('portfolio full')) return 'text-orange-400';
+    return 'text-slate-400';
+  };
+
+  return (
+    <motion.tr
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors"
+      onClick={() => navigate(`/stock/${analysis.ticker}`)}
+    >
+      <td className="px-4 py-4">
+        <div className="flex items-center gap-3">
+          {getStatusIcon()}
+          <div>
+            <p className="text-white font-semibold">{analysis.ticker}</p>
+            <p className="text-slate-400 text-xs">{analysis.sector || 'Unknown'}</p>
+          </div>
+        </div>
+      </td>
+      <td className="px-4 py-4">
+        <SignalBadge signal={analysis.signal} />
+      </td>
+      <td className="px-4 py-4">
+        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+          {analysis.scrybeScore >= 0 ? '+' : ''}{analysis.scrybeScore || 0}
+        </span>
+      </td>
+      <td className="px-4 py-4">
+        <span className="text-white font-semibold">
+          #{analysis.portfolio_rank || 'N/A'}
+        </span>
+      </td>
+      <td className="px-4 py-4 max-w-md">
+        <p className={`text-sm ${getReasonColor()}`}>
+          {analysis.selection_reason || 'No reason provided'}
+        </p>
+      </td>
+    </motion.tr>
+  );
+};
+
+const PortfolioDashboard = () => {
+  const [portfolioData, setPortfolioData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('executed'); // executed, not-selected, all
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterSignal, setFilterSignal] = useState('all'); // all, BUY, SHORT, HOLD
+
+  useEffect(() => {
+    const fetchPortfolioData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/portfolio-summary`);
+        if (!response.ok) throw new Error('Failed to fetch portfolio data');
+        const data = await response.json();
+        setPortfolioData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPortfolioData();
+  }, []);
+
+  const filteredAnalyses = useMemo(() => {
+    if (!portfolioData?.all_analyses) return [];
+
+    let filtered = portfolioData.all_analyses;
+
+    // Tab filtering
+    if (activeTab === 'executed') {
+      filtered = filtered.filter(a => a.is_executed);
+    } else if (activeTab === 'not-selected') {
+      filtered = filtered.filter(a => !a.portfolio_selected && a.signal !== 'HOLD');
+    }
+
+    // Search filtering
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(a => 
+        a.ticker?.toLowerCase().includes(term) ||
+        a.sector?.toLowerCase().includes(term) ||
+        a.selection_reason?.toLowerCase().includes(term)
+      );
+    }
+
+    // Signal filtering
+    if (filterSignal !== 'all') {
+      filtered = filtered.filter(a => a.signal === filterSignal);
+    }
+
+    return filtered;
+  }, [portfolioData, activeTab, searchTerm, filterSignal]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <Activity className="w-16 h-16 text-blue-400 animate-pulse mx-auto mb-4" />
+          <p className="text-white text-xl font-semibold">Loading Portfolio...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <GlassCard className="p-8 max-w-md">
+          <AlertTriangle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white text-center mb-2">Failed to Load</h2>
+          <p className="text-slate-400 text-center">{error}</p>
+        </GlassCard>
+      </div>
+    );
+  }
+
+  const { portfolio_summary, sector_breakdown, executed_trades, total_analyzed, display_timestamp } = portfolioData;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-4">
+            Portfolio Management Dashboard
+          </h1>
+          <p className="text-slate-400 text-lg">
+            AI analyzes <span className="text-white font-bold">{total_analyzed} stocks</span> • 
+            Portfolio executes <span className="text-green-400 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
+          </p>
+          <p className="text-slate-500 text-sm mt-2">Last Updated: {display_timestamp}</p>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <StatCard
+            icon={Target}
+            label="Executing Positions"
+            value={`${portfolio_summary.selected_for_execution}/${portfolio_summary.max_positions}`}
+            subtitle="Top conviction trades"
+            color="green"
+          />
+          <StatCard
+            icon={Eye}
+            label="Total Analyzed"
+            value={total_analyzed}
+            subtitle="All AI analyses available"
+            color="blue"
+          />
+          <StatCard
+            icon={AlertTriangle}
+            label="High Conviction Pending"
+            value={portfolio_summary.high_conviction_not_selected}
+            subtitle="Not selected (portfolio full)"
+            color="yellow"
+          />
+          <StatCard
+            icon={Shield}
+            label="Risk Protected"
+            value={`${portfolio_summary.sector_limits_reached}`}
+            subtitle="Blocked by sector limits"
+            color="purple"
+          />
+        </div>
+
+        {/* Sector Breakdown */}
+        {executed_trades.length > 0 && (
+          <GlassCard className="p-6 mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <PieChart className="w-6 h-6 text-blue-400" />
+              <h2 className="text-2xl font-bold text-white">Sector Diversification</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Object.entries(sector_breakdown).map(([sector, count]) => (
+                <div key={sector} className="text-center p-4 bg-white/5 rounded-lg">
+                  <p className="text-slate-400 text-sm mb-2">{sector}</p>
+                  <p className="text-3xl font-bold text-white">{count}</p>
+                  <p className="text-slate-500 text-xs mt-1">
+                    {((count / portfolio_summary.selected_for_execution) * 100).toFixed(0)}% of portfolio
+                  </p>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        )}
+
+        {/* Executed Trades Section */}
+        {executed_trades.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <CheckCircle className="w-7 h-7 text-green-400" />
+              <h2 className="text-3xl font-bold text-white">Executed Trades ({executed_trades.length})</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {executed_trades.map((trade) => (
+                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Analyses Browser */}
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="w-7 h-7 text-blue-400" />
+              <h2 className="text-3xl font-bold text-white">Browse All Analyses</h2>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-2 mb-6 flex-wrap">
+            {[
+              { id: 'executed', label: 'Executed', count: executed_trades.length },
+              { id: 'not-selected', label: 'Not Selected', count: portfolio_summary.high_conviction_not_selected + portfolio_summary.sector_limits_reached },
+              { id: 'all', label: 'All Analyses', count: total_analyzed }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                }`}
+              >
+                {tab.label} ({tab.count})
+              </button>
+            ))}
+          </div>
+
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search by ticker, sector, or reason..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="relative">
+              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <select
+                value={filterSignal}
+                onChange={(e) => setFilterSignal(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500 appearance-none"
+              >
+                <option value="all">All Signals</option>
+                <option value="BUY">BUY Only</option>
+                <option value="SHORT">SHORT Only</option>
+                <option value="HOLD">HOLD Only</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-white/10 text-left">
+                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Stock</th>
+                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Signal</th>
+                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Score</th>
+                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Rank</th>
+                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Selection Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <AnimatePresence>
+                  {filteredAnalyses.map((analysis) => (
+                    <AnalysisRow key={analysis._id} analysis={analysis} />
+                  ))}
+                </AnimatePresence>
+              </tbody>
+            </table>
+            
+            {filteredAnalyses.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-slate-400 text-lg">No analyses match your filters</p>
+              </div>
+            )}
+          </div>
+        </GlassCard>
+
+        {/* Footer Stats */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center gap-8 text-slate-400 text-sm">
+            <div>
+              <span className="font-semibold text-white">{portfolio_summary.selected_for_execution}</span> Executing
+            </div>
+            <div>
+              <span className="font-semibold text-yellow-400">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
+            </div>
+            <div>
+              <span className="font-semibold text-orange-400">{portfolio_summary.sector_limits_reached}</span> Sector Limited
+            </div>
+            <div>
+              <span className="font-semibold text-slate-500">{portfolio_summary.no_signal_generated}</span> HOLD Signals
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PortfolioDashboard;

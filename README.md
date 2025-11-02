@@ -43,37 +43,46 @@
 
 ## 🚀 About Scrybe AI
 
-In today's complex financial markets, traders are inundated with data, noise, and conflicting opinions. **Scrybe AI** is engineered to bring clarity and discipline to this chaos. Our platform leverages **generative AI** to perform deep, institutional-grade analysis on stocks, distilling vast amounts of information into a single, objective **"Scrybe Score"**.
+In today's complex financial markets, traders face overwhelming data and noise when analyzing emerging growth opportunities. **Scrybe AI** brings institutional-grade discipline to the **Nifty Smallcap 250 universe** through systematic AI analysis and professional portfolio management.
 
-This provides users with a data-driven edge to identify and research high-probability swing trading setups. Our React-powered frontend delivers a fast, responsive, and intuitive interface that makes sophisticated financial analysis accessible to modern traders.
+Every trading day, our platform analyzes **all 250 smallcap stocks** using advanced AI, ranking them with our proprietary **"Scrybe Score"** from -100 to +100. An institutional Portfolio Manager then selects only the **top 10 highest-conviction trades** that pass strict risk controls:
+
+- ✅ Maximum 10 concurrent positions
+- ✅ 40% sector concentration limit  
+- ✅ 2% max risk per individual stock
+
+This provides users complete transparency into both the analysis process and portfolio selection reasoning.
 
 ### 🎯 **Our Mission**
-Transform the way traders approach swing trading by providing AI-driven insights that cut through market noise and deliver actionable intelligence.
+Transform smallcap trading by combining comprehensive AI analysis with institutional fund manager discipline. Analyze everything, execute only the best.
 
 ---
 
 ## ✨ Key Features
 
-### 🤖 **AI-Powered Stock Analysis**
-Get instant, comprehensive reports with objective **"Scrybe Scores"** ranging from -100 to +100, providing clear directional bias for any stock.
+### 🤖 **Complete Universe Analysis**
+Every trading day, analyze all **250 stocks in the Nifty Smallcap 250** universe with comprehensive AI-driven reports featuring objective **"Scrybe Scores"** from -100 to +100.
+
+### 🎯 **Top 10 Portfolio Selection**
+Out of 250 analyses, only the **top 10 highest-conviction trades** that pass institutional risk controls are selected for execution. Maximum 10 positions, 40% sector limit, 2% per-stock risk.
+
+### 📊 **Portfolio Dashboard**
+Browse all 250 daily analyses with complete transparency. See exactly why each stock was selected or rejected: "Top conviction", "Sector limit reached", "Portfolio full", etc.
 
 ### 📈 **Actionable Trade Plans**
-Every analysis includes detailed trade plans with precise entry points, profit targets, and stop-loss levels - no guesswork required.
-
-### 🎯 **"On The Radar" Watchlist**
-Curated list of stocks our AI has identified as being on the verge of generating trading signals, giving you a competitive edge.
+Every selected trade includes detailed plans with precise entry points, profit targets, and stop-loss levels - institutional-grade precision.
 
 ### 🌍 **Market & Index Analysis**
-High-level strategic overview of entire markets and major indices to help you understand the broader market context.
+Track Nifty 50, Nifty Smallcap 250, and sectoral indices to understand broad market context and smallcap-specific momentum.
 
 ### 📊 **Transparent Track Record**
-Complete performance log of every trade signal the AI has generated, with full transparency on wins, losses, and overall performance.
+Complete performance log of every closed trade with full transparency on wins, losses, and overall strategy effectiveness.
 
 ### 🔐 **Secure Authentication**
 Enterprise-grade security with Google and Microsoft sign-in options, powered by Firebase Authentication.
 
 ### 📱 **Fully Responsive Design**
-Seamless experience across all devices - desktop, tablet, and mobile - built with modern responsive design principles.
+Seamless experience across all devices - desktop, tablet, and mobile - optimized for the Indian market.
 
 ---
 

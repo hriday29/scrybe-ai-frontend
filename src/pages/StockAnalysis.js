@@ -119,7 +119,7 @@ const StockSelector = ({ onAnalyze }) => {
       <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-20 md:pt-20 md:pb-24">
         <SectionTitle
           title="Ranked Analysis Universe"
-          subtitle="The daily analysis for all stocks in the Scrybe AI universe, ranked by Scrybe Score."
+          subtitle="Daily analysis of all 250 stocks in the Nifty Smallcap 250 universe, ranked by Scrybe Score. Only the top 10 highest-conviction trades are selected for execution."
         />
         <div className="mt-10 w-full max-w-2xl">
           <div className="relative">

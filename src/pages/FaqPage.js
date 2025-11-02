@@ -62,35 +62,51 @@ const FaqPage = ({ onBack }) => {
   const generalFaqs = [
     {
       q: "What is Scrybe AI?",
-      a: "Scrybe AI is a research tool that uses advanced AI to analyze stock market data. It provides data-driven insights based on a VST (Very Short-Term) swing trading strategy to help users in their own research process.",
+      a: "Scrybe AI is an institutional-grade research tool that analyzes all 250 stocks in the Nifty Smallcap 250 universe daily. Using advanced AI and professional fund manager principles, it selects the top 10 highest-conviction trades based on strict risk controls. It provides complete transparency into the analysis and selection process.",
+    },
+    {
+      q: "Why focus on Nifty Smallcap 250?",
+      a: "The Nifty Smallcap 250 represents India's emerging growth segment with higher volatility and opportunity. These companies often deliver outsized returns during bull markets but require disciplined analysis and risk management. Our AI analyzes this complex universe daily to identify the best opportunities while managing smallcap-specific risks.",
+    },
+    {
+      q: "How many stocks do you analyze?",
+      a: "We analyze all 250 stocks in the Nifty Smallcap 250 index every trading day. Out of these 250 analyses, our Portfolio Manager selects only the top 10 highest-conviction trades that pass institutional risk controls. You can see all 250 analyses in the Portfolio Dashboard with complete transparency on selection reasons.",
+    },
+    {
+      q: "What are the portfolio risk controls?",
+      a: "We apply institutional-grade risk management: (1) Maximum 10 concurrent positions at any time, (2) No more than 40% of portfolio in any single sector, (3) Maximum 2% risk per individual stock. These rules ensure diversification and capital protection, just like professional fund managers use.",
     },
     {
       q: "Is this financial advice?",
-      a: "No. Absolutely not. Scrybe AI provides informational research outcomes based on historical data. It is not financial advice, and all users are 100% responsible for their own trading decisions and risks.",
+      a: "No. Absolutely not. Scrybe AI provides informational research and analysis for educational purposes only. It is not financial advice, and all users are 100% responsible for their own trading decisions and risks. Always consult with a qualified financial advisor before making investment decisions.",
     },
     {
       q: "Who is this tool for?",
-      a: "Our tool is specifically designed for swing traders with a 1-5 day trading horizon who are looking to automate the tedious process of screening for high-probability trade setups.",
+      a: "Scrybe AI is designed for active traders and investors interested in the Nifty Smallcap 250 universe who want institutional-grade analysis and portfolio management discipline. It's ideal for those who understand smallcap volatility and want a systematic, data-driven approach to identifying opportunities.",
     },
     {
       q: "How often is the analysis updated?",
-      a: "The analysis for our core list of stocks is run once every trading day after the market closes, using the latest available data.",
+      a: "The complete 250-stock analysis runs once daily after market close (typically around 4 PM IST). The Portfolio Manager then selects the top 10 trades immediately after. You always see the latest daily snapshot with all analyses and selection reasons visible in the Portfolio Dashboard.",
     },
     {
       q: "What markets/exchanges do you cover?",
-      a: "Currently, we focus on US equity markets including NYSE and NASDAQ. We may expand to other markets based on user feedback and demand.",
+      a: "Currently, we focus exclusively on the Indian equity market, specifically the Nifty Smallcap 250 index traded on the NSE (National Stock Exchange). We may expand to other indices or markets based on user feedback and demand.",
     },
     {
       q: "Do you offer mobile access?",
-      a: "The platform is web-based and accessible on mobile devices through your browser. A dedicated mobile app may be considered for future releases.",
+      a: "Yes! The platform is web-based and fully accessible on mobile devices through your browser. The Portfolio Dashboard, analysis pages, and all features are optimized for mobile viewing. A dedicated native app may be considered for future releases.",
     },
     {
       q: "How accurate are the predictions?",
-      a: "Our AI model is trained on historical data and provides probability-based insights. Past performance does not guarantee future results. Always conduct your own research and risk management.",
+      a: "Our AI model uses historical data and probability-based analysis. Past performance does not guarantee future results. Smallcap stocks are inherently volatile. View the AI Track Record for complete transparency on historical performance. Always conduct your own research and risk management.",
     },
     {
-      q: "Can I integrate this with my broker?",
-      a: "Currently, we provide analysis and insights only. Direct broker integration is not available but may be considered for future versions based on user demand.",
+      q: "Why was a high-score stock not selected?",
+      a: "Even high Scrybe Score stocks may not be selected if they violate portfolio risk controls. Common reasons: (1) Sector concentration would exceed 40%, (2) Portfolio already has 10 positions, (3) Trade would exceed 2% single-stock risk limit. Check the 'selection_reason' field in Portfolio Dashboard for specifics.",
+    },
+    {
+      q: "Can I see stocks that weren't selected?",
+      a: "Yes! The Portfolio Dashboard shows all 250 analyses with complete transparency. Use the 'Not Selected' tab to see high-conviction signals that didn't make the top 10, along with clear reasons why (e.g., 'High conviction, sector limit reached'). This transparency helps you understand the risk management process.",
     },
   ];
 

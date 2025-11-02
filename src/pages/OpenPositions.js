@@ -52,7 +52,10 @@ const OpenPositions = ({ onAnalyze }) => {
             return (
                 <div className="text-center text-gray-500 py-16">
                     <h3 className="text-2xl font-bold text-white">No Open Positions</h3>
-                    <p className="mt-2">The AI is not currently tracking any active trades.</p>
+                    <p className="mt-2">
+                        The AI is not currently tracking any active trades. Check the Portfolio Dashboard 
+                        to see all 250 analyzed stocks and understand why no positions meet the execution criteria today.
+                    </p>
                 </div>
             );
         }
@@ -114,7 +117,10 @@ const OpenPositions = ({ onAnalyze }) => {
         <>
             <div className="w-full max-w-7xl mx-auto p-4 md:p-8 animate-fadeIn">
                 <h2 className="text-4xl font-bold text-white mb-2 text-center">Trade Cockpit</h2>
-                <p className="text-lg text-gray-400 text-center mb-12">Tracking all live, AI-driven trade signals.</p>
+                <p className="text-lg text-gray-400 text-center mb-12">
+                    Tracking the top 10 highest-conviction trades selected from the Nifty Smallcap 250 universe. 
+                    These positions passed all institutional risk controls for execution.
+                </p>
                 {renderTradeCockpit()}
             </div>
 

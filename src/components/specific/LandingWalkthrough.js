@@ -46,31 +46,31 @@ const LandingWalkthrough = ({
     {
       icon: <BrainCircuitIcon className="w-7 h-7 text-purple-400" />,
       badge: "bg-gradient-to-br from-purple-500/30 to-purple-700/30",
-      title: "The Core Engine",
+      title: "Institutional-Grade Analysis",
       description:
-        "At the heart of Scrybe AI is our proprietary 'Scrybe Score' system. The AI performs a deep, multi-layered analysis of every stock and assigns a single, objective score from -100 (a perfect short setup) to +100 (a perfect long setup).",
+        "Every trading day, Scrybe AI analyzes all 250 stocks in the Nifty Smallcap 250 universe. Using our proprietary 'Scrybe Score' system (-100 to +100), the AI evaluates each stock's technical setup, fundamentals, and market context to identify the best opportunities in India's emerging growth segment.",
       links: [
-        { text: "Launch the Ranked List", action: () => handleLaunchAndNavigate(1) },
+        { text: "Launch the Portfolio Dashboard", action: () => handleLaunchAndNavigate(2) },
         { text: "Read the Full Strategy", action: onUserGuideOpen },
       ],
     },
     {
       icon: <TargetIcon className="w-7 h-7 text-blue-400" />,
       badge: "bg-gradient-to-br from-blue-500/30 to-blue-700/30",
-      title: "Your Tactical Edge",
+      title: "Top 10 Selection Process",
       description:
-        "Track all of the AI's live signals in the 'Trade Cockpit,' your hub for monitoring open positions. Before you act, get the big picture with our comprehensive 'Index Analysis' to understand the overall market trend.",
+        "Out of 250 daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 40% sector concentration limit, and 2% max risk per stock—just like professional fund managers.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
-        { text: "Open the Trade Cockpit", action: () => handleLaunchAndNavigate(2) }, // Now correctly links to Open Positions tab
+        { text: "View Open Positions", action: () => handleLaunchAndNavigate(3) },
       ],
     },
     {
       icon: <ShieldCheckIcon className="w-7 h-7 text-green-400" />,
       badge: "bg-gradient-to-br from-green-500/30 to-green-700/30",
-      title: "Trust & Transparency",
+      title: "Complete Transparency",
       description:
-        "We believe in transparency. Review the AI's full historical 'Track Record' and read our detailed 'Rulebook' to understand the disciplined logic behind every score.",
+        "Unlike black-box systems, we show you everything. Browse all 250 analyses in the Portfolio Dashboard with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",
       links: [
         { text: "View AI Track Record", action: () => handleLaunchAndNavigate(5) },
         { text: "Read the Rulebook", action: () => handleLaunchAndNavigate(6) },
@@ -79,9 +79,9 @@ const LandingWalkthrough = ({
     {
       icon: <BookOpenIcon className="w-7 h-7 text-slate-300" />,
       badge: "bg-gradient-to-br from-slate-500/30 to-slate-700/30",
-      title: "Support & Legal",
+      title: "Support & Resources",
       description:
-        "Your trust and privacy are paramount. Access our documentation, legal pages, and FAQ for clarity on how Scrybe AI works and how we protect your data.",
+        "Understand exactly how the AI works, why risk controls exist, and how to use the platform effectively. Access comprehensive documentation, FAQs, and legal information. Your trust and privacy are paramount.",
       links: [
         { text: "Frequently Asked Questions", action: onFaqOpen },
         { text: "Privacy Policy", action: onPrivacyOpen },
@@ -95,11 +95,12 @@ const LandingWalkthrough = ({
       {/* Heading */}
       <div className="text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Your Complete Analytical Toolkit
+          Institutional-Grade Analysis for Nifty Smallcap 250
         </h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed">
-          Scrybe AI is more than a signal generator. It's a full suite of tools designed
-          to give you a professional edge.
+          Scrybe AI analyzes all 250 smallcap stocks daily and selects the top 10 highest-conviction 
+          trades using professional fund manager principles. Complete transparency, strict risk controls, 
+          and systematic discipline.
         </p>
       </div>
       <GenuineMetrics />

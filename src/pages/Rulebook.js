@@ -16,7 +16,7 @@ const Rulebook = () => {
       {/* HEADER */}
       <h2 className="text-4xl font-bold text-white mb-2 text-center">The Scrybe AI Rulebook</h2>
       <p className="text-lg text-gray-400 text-center mb-12">
-        Understanding our data-driven analysis engine.
+        Understanding our institutional-grade portfolio management system for the Nifty Smallcap 250 universe.
       </p>
 
       {/* CORE CONCEPT */}
@@ -44,16 +44,19 @@ const Rulebook = () => {
       {/* ANALYSIS PROTOCOL */}
       <Section title="The Analysis Protocol: Data Funnel">
         <p>
-          The Scrybe Score is the end-product of a disciplined, multi-step daily pipeline that distills thousands of stocks into a few high-quality trade ideas:
+          Every trading day, Scrybe AI analyzes the complete <strong>Nifty Smallcap 250 universe</strong> through a 
+          disciplined, institutional-grade pipeline. Out of 250 stocks analyzed daily, only the <strong>top 10 
+          highest-conviction setups</strong> are selected for execution based on strict risk management rules:
         </p>
 
         <div className="space-y-4 mt-4">
           <div className="flex items-start gap-4">
             <ZapIcon className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
             <div>
-              <h4 className="font-semibold text-white">Market Open Check</h4>
+              <h4 className="font-semibold text-white">Universe Analysis (250 Stocks)</h4>
               <p className="text-sm text-gray-400">
-                Each trading day begins with verifying whether the NSE is open before starting the pipeline.
+                Each trading day begins with comprehensive analysis of all 250 stocks in the Nifty Smallcap 250 index, 
+                ensuring no opportunity is missed in this high-growth segment.
               </p>
             </div>
           </div>
@@ -63,7 +66,8 @@ const Rulebook = () => {
             <div>
               <h4 className="font-semibold text-white">Market Regime Analysis</h4>
               <p className="text-sm text-gray-400">
-                NIFTY 50 index trends are analyzed to define the overall regime (Bullish, Bearish, or Neutral). This acts as the foundation for all trades.
+                Both Nifty 50 and Nifty Smallcap 250 index trends are analyzed to define the overall market regime 
+                (Bullish, Bearish, or Neutral) and smallcap-specific momentum. This acts as the foundation for all trades.
               </p>
             </div>
           </div>
@@ -71,9 +75,10 @@ const Rulebook = () => {
           <div className="flex items-start gap-4">
             <TargetIcon className="w-6 h-6 text-purple-400 flex-shrink-0 mt-1" />
             <div>
-              <h4 className="font-semibold text-white">Sector Analysis</h4>
+              <h4 className="font-semibold text-white">Sector Analysis & Rotation Detection</h4>
               <p className="text-sm text-gray-400">
-                Top-performing sectors relative to NIFTY 50 are identified. Only stocks in strong sectors are considered.
+                Top-performing sectors within the smallcap universe are identified. Sector rotation patterns are tracked 
+                to identify emerging themes and avoid concentrated exposure.
               </p>
             </div>
           </div>
@@ -83,7 +88,8 @@ const Rulebook = () => {
             <div>
               <h4 className="font-semibold text-white">Quantitative Screening</h4>
               <p className="text-sm text-gray-400">
-                A regime-adaptive screener filters stocks into Momentum, Pullback, or Mean Reversion setups, with an additional fundamental health check.
+                A regime-adaptive screener filters 250 stocks into Momentum, Pullback, or Mean Reversion setups, 
+                with fundamental health checks to ensure quality.
               </p>
             </div>
           </div>
@@ -93,17 +99,32 @@ const Rulebook = () => {
             <div>
               <h4 className="font-semibold text-white">AI Deep-Dive Analysis</h4>
               <p className="text-sm text-gray-400">
-                Shortlisted stocks undergo "Apex Analysis" by Scrybe (powered by Gemini AI). The output is a trade plan, structured insights, and a proprietary Scrybe Score.
+                All 250 stocks undergo "Apex Analysis" by Scrybe (powered by advanced AI). Each receives a comprehensive 
+                trade plan, structured insights, and a proprietary Scrybe Score from -100 to +100.
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <DatabaseIcon className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
+            <ShieldCheckIcon className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
             <div>
-              <h4 className="font-semibold text-white">Database Storage</h4>
+              <h4 className="font-semibold text-white">Portfolio Selection (Top 10)</h4>
               <p className="text-sm text-gray-400">
-                Final results are stored in MongoDB. The frontend API directly reads from this database, ensuring users always see the latest daily snapshot.
+                An institutional-grade Portfolio Manager ranks all signals by conviction and applies strict risk controls: 
+                <strong> max 10 concurrent positions</strong>, <strong>40% sector concentration limit</strong>, and 
+                <strong>2% max risk per stock</strong>. Only the highest-conviction trades that pass all constraints are executed.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4">
+            <DatabaseIcon className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" />
+            <div>
+              <h4 className="font-semibold text-white">Complete Transparency</h4>
+              <p className="text-sm text-gray-400">
+                All 250 analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each 
+                stock was selected or rejected, with clear reasons like "High conviction, sector limit reached" or 
+                "Below conviction threshold". No black boxes.
               </p>
             </div>
           </div>
@@ -113,28 +134,39 @@ const Rulebook = () => {
       {/* HIGH SCORE */}
       <Section title="Anatomy of a High Scrybe Score">
         <p>
-          A top-grade score (e.g., +85) isn't just about price going up. It represents a powerful confluence of factors:
+          A top-grade score (e.g., +85) in the <strong>Nifty Smallcap 250 universe</strong> isn't just about price 
+          movement. It represents a powerful confluence of factors specific to emerging growth opportunities:
         </p>
         <ul className="list-none mt-4 space-y-2">
           <li className="flex items-center gap-3">
             <span className="text-green-400">✅</span>{" "}
-            <strong>Favorable Market:</strong> The overall market regime is bullish.
+            <strong>Favorable Market:</strong> Both broad market and smallcap indices show bullish momentum.
           </li>
           <li className="flex items-center gap-3">
             <span className="text-green-400">✅</span>{" "}
-            <strong>Strong Sector:</strong> The stock's sector is outperforming.
+            <strong>Strong Sector:</strong> The stock's sector is outperforming within the smallcap universe.
           </li>
           <li className="flex items-center gap-3">
             <span className="text-green-400">✅</span>{" "}
-            <strong>Confirmed Technicals:</strong> The chart pattern is clear and confirmed by indicators.
+            <strong>Confirmed Technicals:</strong> Chart patterns show clear momentum with volume confirmation.
           </li>
           <li className="flex items-center gap-3">
             <span className="text-green-400">✅</span>{" "}
-            <strong>No Major Contradictions:</strong> No fundamental red flags or negative catalysts.
+            <strong>Quality Fundamentals:</strong> Company shows solid business fundamentals despite smallcap classification.
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="text-green-400">✅</span>{" "}
+            <strong>Portfolio Fit:</strong> Trade passes institutional risk controls (sector limits, position sizing).
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="text-green-400">✅</span>{" "}
+            <strong>No Major Contradictions:</strong> No red flags or negative catalysts detected.
           </li>
         </ul>
         <p className="mt-4">
-          When all these conditions are met, the AI generates a high Scrybe Score and a high-conviction signal.
+          When all these conditions align, the AI generates a high Scrybe Score. The Portfolio Manager then ranks 
+          all signals and selects only the <strong>top 10 highest-conviction trades</strong> that fit within our 
+          institutional risk framework for execution.
         </p>
       </Section>
     </div>

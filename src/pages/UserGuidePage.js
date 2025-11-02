@@ -91,26 +91,31 @@ const UserGuidePage = ({ onBack }) => {
         <div className="space-y-20">
           <Section title="1. Welcome to Scrybe AI" id="welcome">
             <p>
-              <strong>Scrybe AI</strong> is your personal AI analyst, designed to
-              cut through market noise and highlight the highest-probability swing
-              trading opportunities. We process institutional-grade analysis on
-              top stocks every single day—so you save time and focus only on what
-              matters.
+              <strong>Scrybe AI</strong> is your institutional-grade AI analyst for the 
+              <strong> Nifty Smallcap 250</strong> universe. Every trading day, our AI analyzes 
+              all 250 smallcap stocks and applies professional fund manager principles to identify 
+              the <strong>top 10 highest-conviction trades</strong>. We cut through market noise 
+              with disciplined portfolio management, strict risk controls, and complete transparency.
             </p>
           </Section>
 
           <Section title="2. Quickstart: Your First Analysis" id="quickstart">
             <ol className="list-decimal list-inside space-y-2">
               <li>
-                <strong>Open the Stock Analysis Tab:</strong> Your main dashboard
-                with ranked stocks.
+                <strong>Open the Portfolio Dashboard:</strong> See all 250 analyzed stocks 
+                with the top 10 selected for execution.
               </li>
               <li>
-                <strong>Select a Stock:</strong> Scroll the list or search directly.
+                <strong>Browse the Universe:</strong> Use tabs to view Executed trades, 
+                High-conviction stocks not selected, or All 250 analyses.
               </li>
               <li>
-                <strong>View the Apex Analysis:</strong> Instantly access the AI’s
-                full breakdown—Scrybe Score, signal, insights, and risks.
+                <strong>Click Any Stock:</strong> View complete Apex Analysis with Scrybe Score, 
+                signal confidence, and selection reasoning.
+              </li>
+              <li>
+                <strong>Understand Selection Reasons:</strong> See exactly why stocks were 
+                selected ("Top conviction") or rejected ("Sector limit reached", "Portfolio full").
               </li>
             </ol>
           </Section>
@@ -118,32 +123,39 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="3. Understanding the Analysis Dashboard" id="dashboard">
             <ul className="list-disc pl-6 space-y-2">
               <li>
-                <strong>Scrybe Score:</strong> A number from -100 to +100
-                summarizing trade strength.
+                <strong>Scrybe Score:</strong> A conviction metric from -100 (strong short) 
+                to +100 (strong long) for each of the 250 analyzed stocks.
               </li>
               <li>
-                <strong>Signal & Confidence:</strong> Clear BUY/SELL/HOLD calls
-                with AI-backed confidence.
+                <strong>Portfolio Selection:</strong> Only top 10 highest-conviction trades 
+                that pass institutional risk controls are executed.
               </li>
               <li>
-                <strong>Analyst Verdict:</strong> A concise, human-style summary.
+                <strong>Selection Reasons:</strong> Complete transparency on why stocks were 
+                selected or rejected (sector limits, portfolio capacity, conviction threshold).
               </li>
               <li>
-                <strong>Risks & Observations:</strong> Highlights of what could
-                strengthen or weaken the setup.
+                <strong>Risk Controls:</strong> Max 10 concurrent positions, 40% sector 
+                concentration limit, 2% max risk per stock.
+              </li>
+              <li>
+                <strong>Analyst Verdict:</strong> AI-generated human-readable summary of 
+                the trade setup and key considerations.
               </li>
             </ul>
           </Section>
 
           <Section title="4. Feature Guide: Market & Index Analysis" id="market">
             <p>
-              Beyond individual stocks, Scrybe AI tracks key market indices and
-              sector performance. This allows you to:
+              Beyond individual stocks, Scrybe AI tracks key market indices including 
+              <strong> Nifty 50, Nifty Smallcap 250</strong>, and sectoral indices. This allows you to:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Spot trending sectors and rotations.</li>
-              <li>Understand market-wide momentum shifts.</li>
-              <li>Align trades with broader conditions for higher accuracy.</li>
+              <li>Understand overall market regime (Bullish, Bearish, Neutral).</li>
+              <li>Track smallcap-specific momentum versus broader market.</li>
+              <li>Spot trending sectors within the smallcap universe and sector rotations.</li>
+              <li>Align trades with broader market conditions for higher probability setups.</li>
+              <li>Identify when smallcaps are outperforming or underperforming large caps.</li>
             </ul>
           </Section>
 
@@ -161,44 +173,84 @@ const UserGuidePage = ({ onBack }) => {
 
           <Section title="6. Our AI's Philosophy" id="philosophy">
             <p>
-              Scrybe AI doesn’t chase noise—it focuses on patterns that matter.
-              Our philosophy is:
+              Scrybe AI follows institutional fund manager principles applied to the 
+              Nifty Smallcap 250 universe. Our philosophy is:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Data-driven decisions, no emotions.</li>
-              <li>Transparency over black-box predictions.</li>
-              <li>Consistency over one-off wins.</li>
+              <li><strong>Analyze Everything:</strong> Daily analysis of all 250 smallcap stocks, 
+              no cherry-picking or survivorship bias.</li>
+              <li><strong>Select the Best:</strong> Only top 10 highest-conviction trades that 
+              pass strict risk controls are executed.</li>
+              <li><strong>Risk Management First:</strong> Portfolio-level constraints (sector limits, 
+              position sizing) protect capital like a professional fund.</li>
+              <li><strong>Complete Transparency:</strong> Every decision is visible—you see why 
+              stocks are selected or rejected.</li>
+              <li><strong>Data-Driven Decisions:</strong> No emotions, no biases, only systematic 
+              analysis and quantifiable rules.</li>
+              <li><strong>Consistency Over Luck:</strong> Focus on repeatable process, not one-off wins.</li>
             </ul>
           </Section>
 
           <Section title="7. Best Practices" id="best-practices">
             <ul className="list-disc pl-6 space-y-2">
-              <li>Use Scrybe AI as a guide, not a replacement for judgment.</li>
-              <li>Check both the confidence score and rationale before acting.</li>
-              <li>Combine with proper risk management and position sizing.</li>
+              <li>Use Scrybe AI as your research analyst, not as automated trading advice.</li>
+              <li>Focus on the top 10 executing trades—these passed all institutional risk controls.</li>
+              <li>Understand rejection reasons—if "Sector limit reached", that sector is already at 40% exposure.</li>
+              <li>Check both Scrybe Score AND the detailed analysis before making decisions.</li>
+              <li>Respect the Portfolio Dashboard's risk limits—they exist to protect capital.</li>
+              <li>Monitor the "High conviction not selected" tab to understand portfolio constraints in action.</li>
+              <li>Always apply your own risk management and position sizing appropriate to your capital.</li>
+              <li>Remember: Smallcaps are volatile—the AI uses tight stops for a reason.</li>
             </ul>
           </Section>
 
           <Section title="8. Data & Updates" id="data">
             <p>
-              Data is refreshed daily. Our backend integrates live feeds, market
-              indices, and technical data streams—so your analysis is always up to
-              date.
+              Analysis is refreshed <strong>once daily after market close</strong> for all 250 stocks 
+              in the Nifty Smallcap 250 universe. Our backend integrates:
+            </p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li><strong>Live Market Data:</strong> Real-time price feeds and technical indicators.</li>
+              <li><strong>Index Tracking:</strong> Nifty 50, Nifty Smallcap 250, and sectoral indices.</li>
+              <li><strong>Fundamental Data:</strong> Company fundamentals for quality assessment.</li>
+              <li><strong>News & Events:</strong> Market-moving news and corporate announcements.</li>
+              <li><strong>Historical Performance:</strong> Complete track record of past signals.</li>
+            </ul>
+            <p className="mt-4">
+              The Portfolio Manager runs immediately after analysis completes, applying risk controls 
+              and selecting the top 10 trades. All data is stored in MongoDB for full transparency.
             </p>
           </Section>
 
           <Section title="9. Glossary of Key Terms" id="glossary">
             <ul className="list-disc pl-6 space-y-2">
               <li>
-                <strong>Scrybe Score:</strong> AI’s conviction level (-100 to +100).
+                <strong>Scrybe Score:</strong> AI's conviction level from -100 (strong short) 
+                to +100 (strong long) for each stock.
               </li>
               <li>
-                <strong>Apex Analysis:</strong> Full-stack breakdown of a stock
-                setup.
+                <strong>Nifty Smallcap 250:</strong> The complete universe of 250 stocks we analyze 
+                daily, representing India's emerging growth segment.
               </li>
               <li>
-                <strong>Confidence %:</strong> The probability of success based on
-                past patterns.
+                <strong>Portfolio Dashboard:</strong> Complete view of all 250 analyses with 
+                top 10 selections and rejection reasons.
+              </li>
+              <li>
+                <strong>Top 10 Selection:</strong> Highest-conviction trades that pass all 
+                institutional risk controls (sector limits, position sizing).
+              </li>
+              <li>
+                <strong>Selection Reason:</strong> Transparent explanation for why each stock 
+                was selected or rejected by the Portfolio Manager.
+              </li>
+              <li>
+                <strong>Sector Concentration:</strong> Maximum 40% of portfolio can be in any 
+                single sector to ensure diversification.
+              </li>
+              <li>
+                <strong>Apex Analysis:</strong> Full-stack AI-driven breakdown of a stock's 
+                technical, fundamental, and sentiment factors.
               </li>
             </ul>
           </Section>
