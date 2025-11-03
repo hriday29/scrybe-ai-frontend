@@ -264,8 +264,81 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         <p className="text-xl font-mono font-semibold text-white">
                             {safe_technicals.ATR_14 ? `₹${safe_technicals.ATR_14.toFixed(2)}` : '—'}
                         </p>
+                        {safe_technicals.ATR_14_percent && (
+                            <p className="text-xs text-slate-400 mt-1">
+                                ({safe_technicals.ATR_14_percent} of price)
+                            </p>
+                        )}
                     </div>
                 </div>
+                
+                {/* ATR Calculation Breakdown */}
+                {safe_technicals.ATR_14 && safe_technicals.potential_stop_loss && safe_technicals.daily_close && (
+                    <div className="mt-6 pt-4 border-t border-slate-700">
+                        <details className="group">
+                            <summary className="cursor-pointer text-sm font-semibold text-blue-400 hover:text-blue-300 list-none flex items-center justify-center gap-2">
+                                <span>📊 How Are These Calculated?</span>
+                                <span className="text-xs text-slate-400">(Click to expand)</span>
+                            </summary>
+                            <div className="mt-4 space-y-4 text-sm text-slate-300 bg-slate-800/50 rounded-lg p-4">
+                                <div>
+                                    <p className="font-semibold text-blue-300 mb-2">🎯 What is ATR (Average True Range)?</p>
+                                    <p className="leading-relaxed">
+                                        ATR measures the average price movement (volatility) of a stock over 14 trading days. 
+                                        Higher ATR means the stock moves more, lower ATR means it's more stable.
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-slate-900/50 rounded p-3 border border-slate-600/30">
+                                    <p className="font-semibold text-white mb-2">📐 Calculation Breakdown:</p>
+                                    <div className="space-y-2 font-mono text-xs">
+                                        <div className="flex justify-between border-b border-slate-700 pb-1">
+                                            <span className="text-slate-400">Current Price:</span>
+                                            <span className="text-white">₹{safe_technicals.daily_close?.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-slate-700 pb-1">
+                                            <span className="text-slate-400">ATR (14-day):</span>
+                                            <span className="text-white">₹{safe_technicals.ATR_14.toFixed(2)} {safe_technicals.ATR_14_percent && `(${safe_technicals.ATR_14_percent})`}</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-red-900/30 pb-1 mt-2">
+                                            <span className="text-red-300">Stop-Loss Formula:</span>
+                                            <span className="text-red-400">Price - (2 × ATR)</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-red-300">= ₹{safe_technicals.daily_close?.toFixed(2)} - (2 × ₹{safe_technicals.ATR_14.toFixed(2)})</span>
+                                            <span className="text-red-400 font-bold">= ₹{safe_technicals.potential_stop_loss}</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-green-900/30 pb-1 mt-2">
+                                            <span className="text-green-300">Target Formula:</span>
+                                            <span className="text-green-400">Price + (6 × ATR)</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-green-300">= ₹{safe_technicals.daily_close?.toFixed(2)} + (6 × ₹{safe_technicals.ATR_14.toFixed(2)})</span>
+                                            <span className="text-green-400 font-bold">= ₹{safe_technicals.potential_target}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p className="font-semibold text-purple-300 mb-2">🎓 Why This Framework?</p>
+                                    <ul className="space-y-2 text-xs leading-relaxed list-disc list-inside">
+                                        <li><strong>2× ATR Stop-Loss:</strong> Gives the stock room to breathe (normal volatility) while protecting against larger losses. Too tight = frequent stop-outs.</li>
+                                        <li><strong>6× ATR Target:</strong> Creates a 3:1 reward-to-risk ratio. Risk 2× ATR to potentially gain 6× ATR = professional risk management.</li>
+                                        <li><strong>Volatility-Adjusted:</strong> High volatility stocks get wider stops/targets. Stable stocks get tighter levels. One size doesn't fit all!</li>
+                                    </ul>
+                                </div>
+                                
+                                <div className="bg-yellow-900/20 border border-yellow-700/30 rounded p-3">
+                                    <p className="text-yellow-200 text-xs">
+                                        <strong>⚠️ Important:</strong> These are mechanical reference levels. The actual Trade Plan below combines these with AI's directional analysis, 
+                                        market conditions, and may adjust based on support/resistance levels. Always follow the Trade Plan, not just raw ATR calculations.
+                                    </p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                )}
+                
                 <div className="mt-4 pt-4 border-t border-slate-700">
                     <p className="text-xs text-slate-300 text-center">
                         💡 <span className="font-semibold">Risk/Reward Framework:</span> These are reference levels based on ATR volatility. 
