@@ -300,7 +300,7 @@ const PortfolioDashboard = () => {
                 <h4 className="text-lg font-bold text-white mb-3">📊 Step 1: Daily Analysis</h4>
                 <ul className="space-y-2 text-sm text-slate-300">
                   <li>• <span className="text-white font-semibold">250 stocks screened</span> daily using quantitative filters</li>
-                  <li>• <span className="text-white font-semibold">~47 candidates</span> pass initial momentum/trend screens</li>
+                  <li>• <span className="text-white font-semibold">~{total_analyzed} candidates</span> pass initial momentum/trend screens</li>
                   <li>• Each candidate analyzed by AI "Committee of Experts":</li>
                   <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
                   <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
