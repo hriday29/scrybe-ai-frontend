@@ -241,13 +241,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <h3 className="font-bold text-xl text-white mb-4">Risk/Reward Snapshot</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                     <div>
-                        <p className="text-sm text-slate-400">Potential Stop-Loss</p>
+                        <p className="text-sm text-slate-400">Potential Stop-Loss (2× ATR)</p>
                         <p className="text-xl font-mono font-semibold text-red-400">
                             {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
                         </p>
                     </div>
                     <div>
-                        <p className="text-sm text-slate-400">Potential Target (2R)</p>
+                        <p className="text-sm text-slate-400">Potential Target (6× ATR)</p>
                         <p className="text-xl font-mono font-semibold text-green-400">
                             {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
                         </p>
@@ -258,6 +258,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             {safe_technicals.ATR_14 ? `₹${safe_technicals.ATR_14.toFixed(2)}` : '—'}
                         </p>
                     </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-slate-700">
+                    <p className="text-xs text-slate-300 text-center">
+                        💡 <span className="font-semibold">Risk/Reward Framework:</span> These are reference levels based on ATR volatility. 
+                        Stop-Loss = 2× ATR (manages risk), Target = 6× ATR (3:1 reward-to-risk ratio). 
+                        Actual entry/exit prices in the Trade Plan below may vary based on AI's directional analysis.
+                    </p>
                 </div>
                 {(!safe_technicals.ATR_14 || !safe_technicals.potential_stop_loss) && (
                     <div className="mt-4 pt-4 border-t border-slate-700">
