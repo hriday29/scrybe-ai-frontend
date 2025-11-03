@@ -268,6 +268,142 @@ const PortfolioDashboard = () => {
           <p className="text-slate-500 text-sm mt-2">Last Updated: {display_timestamp}</p>
         </div>
 
+        {/* Portfolio Management Education Section */}
+        <GlassCard className="p-8 mb-12 border-2 border-blue-500/30">
+          <div className="flex items-center gap-3 mb-6">
+            <Shield className="w-8 h-8 text-blue-400" />
+            <h2 className="text-2xl font-bold text-white">Institutional Portfolio Management Process</h2>
+          </div>
+          
+          <div className="space-y-6 text-slate-300">
+            {/* Introduction */}
+            <div className="bg-slate-800/30 rounded-lg p-6 border border-slate-700/50">
+              <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-blue-400" />
+                How Scrybe AI Works as Your Portfolio Manager
+              </h3>
+              <p className="text-slate-300 leading-relaxed mb-3">
+                Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
+                Every day, our AI analyzes <span className="text-white font-semibold">all 250 Nifty Smallcap stocks</span>, 
+                but only executes the <span className="text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
+                pass strict risk controls.
+              </p>
+              <p className="text-slate-300 leading-relaxed">
+                This isn't swing trading—it's <span className="text-blue-400 font-semibold">institutional positioning</span> with 
+                multi-layer AI analysis, quantitative screening, and professional risk management built into every decision.
+              </p>
+            </div>
+
+            {/* Daily Process */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-slate-800/30 rounded-lg p-5 border border-slate-700/50">
+                <h4 className="text-lg font-bold text-white mb-3">📊 Step 1: Daily Analysis</h4>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• <span className="text-white font-semibold">250 stocks screened</span> daily using quantitative filters</li>
+                  <li>• <span className="text-white font-semibold">~47 candidates</span> pass initial momentum/trend screens</li>
+                  <li>• Each candidate analyzed by AI "Committee of Experts":</li>
+                  <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
+                  <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
+                  <li className="ml-4">→ Risk Analyst (volatility, futures basis, options)</li>
+                  <li className="ml-4">→ Head of Strategy (final synthesis, conviction score)</li>
+                </ul>
+              </div>
+
+              <div className="bg-slate-800/30 rounded-lg p-5 border border-slate-700/50">
+                <h4 className="text-lg font-bold text-white mb-3">🎯 Step 2: Portfolio Selection</h4>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• Only <span className="text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
+                  <li>• Ranked by conviction (highest score = highest priority)</li>
+                  <li>• Portfolio Manager applies <span className="text-white font-semibold">3 risk gates:</span></li>
+                  <li className="ml-4">→ <span className="text-yellow-400">Max 10 concurrent positions</span></li>
+                  <li className="ml-4">→ <span className="text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
+                  <li className="ml-4">→ <span className="text-yellow-400">Max 2% risk per position</span></li>
+                  <li>• Top 10 that pass all gates = <span className="text-green-400 font-semibold">EXECUTED</span></li>
+                  <li>• Others = <span className="text-slate-400">Available for review</span></li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Position Sizing */}
+            <div className="bg-slate-800/30 rounded-lg p-6 border border-slate-700/50">
+              <h4 className="text-lg font-bold text-white mb-3">💰 Position Sizing & Risk Management</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-slate-900/50 rounded p-4">
+                  <p className="text-xs text-slate-400 mb-1">Risk Per Trade</p>
+                  <p className="text-2xl font-bold text-yellow-400">1.5%</p>
+                  <p className="text-xs text-slate-400 mt-1">Of total capital at risk per position</p>
+                </div>
+                <div className="bg-slate-900/50 rounded p-4">
+                  <p className="text-xs text-slate-400 mb-1">Stop-Loss Method</p>
+                  <p className="text-2xl font-bold text-red-400">2× ATR</p>
+                  <p className="text-xs text-slate-400 mt-1">Dynamic stop based on volatility</p>
+                </div>
+                <div className="bg-slate-900/50 rounded p-4">
+                  <p className="text-xs text-slate-400 mb-1">Risk/Reward Target</p>
+                  <p className="text-2xl font-bold text-green-400">3:1</p>
+                  <p className="text-xs text-slate-400 mt-1">Target = 6× ATR above entry</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                <span className="text-white font-semibold">Position Size Calculation:</span> If you have ₹1,00,000 capital 
+                and risk 1.5% per trade (₹1,500), with a stop-loss 5% below entry, you'd invest 
+                <span className="text-green-400 font-semibold"> ₹30,000</span> (₹1,500 ÷ 5% = ₹30,000). 
+                This ensures controlled risk regardless of stock price or volatility.
+              </p>
+            </div>
+
+            {/* Trade Execution */}
+            <div className="bg-slate-800/30 rounded-lg p-6 border border-slate-700/50">
+              <h4 className="text-lg font-bold text-white mb-3">⚡ Trade Execution & Monitoring</h4>
+              <div className="space-y-3 text-sm text-slate-300">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-white">Entry Price:</p>
+                    <p>System uses <span className="text-green-400">live market price (LTP)</span> from Angel One for precise entry calculation</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Target className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-white">Stop-Loss & Target:</p>
+                    <p>Automatically calculated using ATR (Average True Range) for volatility-adjusted exits</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Activity className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-white">Holding Period:</p>
+                    <p>Typically 7 days, adjusted based on market conditions and momentum</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-white">Exit Triggers:</p>
+                    <p>Position closes on: Target hit, Stop-loss hit, Holding period expiry, or AI reversal signal</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Transparency */}
+            <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-lg p-6 border border-blue-500/30">
+              <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                <Eye className="w-5 h-5 text-blue-400" />
+                Complete Transparency
+              </h4>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-white font-semibold">every analysis, 
+                every decision, and every rejection reason</span>. Browse all 250 analyses in the 
+                <span className="text-blue-400 font-semibold"> Complete Analysis</span> page, understand why stocks were 
+                selected or rejected, and see the exact trade plan for every position. You're not following blind 
+                signals—you're learning institutional portfolio management.
+              </p>
+            </div>
+          </div>
+        </GlassCard>
+
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <StatCard
