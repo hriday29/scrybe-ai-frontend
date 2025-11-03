@@ -251,7 +251,7 @@ const PortfolioDashboard = () => {
     );
   }
 
-  const { portfolio_summary, sector_breakdown, executed_trades, total_analyzed, display_timestamp } = portfolioData;
+  const { portfolio_summary, sector_breakdown, executed_trades, total_analyzed, display_timestamp, prediction_for_date, prediction_for_date_short } = portfolioData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-12 px-4">
@@ -262,10 +262,15 @@ const PortfolioDashboard = () => {
             Portfolio Management Dashboard
           </h1>
           <p className="text-slate-400 text-lg">
-            AI analyzes <span className="text-white font-bold">{total_analyzed} stocks</span> • 
+            AI analyzes <span className="text-white font-bold">~{total_analyzed} candidates</span> • 
             Portfolio executes <span className="text-green-400 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
           </p>
           <p className="text-slate-500 text-sm mt-2">Last Updated: {display_timestamp}</p>
+          {prediction_for_date && (
+            <div className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30">
+              <span className="text-blue-400 text-sm font-semibold">📅 Analysis for: {prediction_for_date_short || prediction_for_date}</span>
+            </div>
+          )}
         </div>
 
         {/* Portfolio Management Education Section */}
