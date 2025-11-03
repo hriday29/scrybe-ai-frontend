@@ -61,14 +61,20 @@ const TradePlanCard = ({ plan }) => (
     <div className="bg-green-900/50 border-2 border-green-500 rounded-xl p-6">
         <h3 className="font-bold text-xl text-white mb-4 flex items-center">
             <Target size={20} className="mr-2 text-green-300" />
-            Actionable Trade Plan
+            Scrybe Trade Plan
         </h3>
+        <div className="mb-4 text-xs text-green-200 bg-green-900/30 rounded-lg p-3 border border-green-500/20">
+            <p className="leading-relaxed">
+                📚 <strong>Educational Note:</strong> This trade plan combines AI's directional analysis with institutional risk management rules. 
+                Entry is at current market price, Stop-Loss is 2× ATR (Average True Range), and Target is 6× ATR for a 3:1 risk-reward ratio.
+            </p>
+        </div>
         <ul className="space-y-3 text-md">
             <li className="flex justify-between"><span className="text-gray-400">Entry Price:</span><span className="text-white font-mono font-semibold">₹{plan.entry_price}</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Stop-Loss:</span><span className="text-white font-mono font-semibold">₹{plan.stop_loss}</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Target Price:</span><span className="text-white font-mono font-semibold">₹{plan.target_price}</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Stop-Loss (2× ATR):</span><span className="text-white font-mono font-semibold">₹{plan.stop_loss}</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Target Price (6× ATR):</span><span className="text-white font-mono font-semibold">₹{plan.target_price}</span></li>
             <li className="flex justify-between pt-3 border-t border-green-500/30"><span className="text-gray-400">Risk/Reward Ratio:</span><span className="text-white font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Holding Period:</span><span className="text-white font-mono font-semibold">~{plan.holding_period_days} days</span></li>
+            <li className="flex justify-between"><span className="text-gray-400">Expected Holding Period:</span><span className="text-white font-mono font-semibold">~{plan.holding_period_days} days</span></li>
         </ul>
     </div>
 );
@@ -84,7 +90,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
     const {
         ticker, companyName, last_updated,
         scrybeScore = 0, signal = 'HOLD', confidence = 'N/A',
-        predicted_gain_pct = 0, gain_prediction_rationale = 'N/A',
+        predicted_gain_pct = 0, gain_prediction_rationale = 'N/A', holding_period_days = 0,
         keyInsight = 'N/A', analystVerdict = 'N/A',
         keyRisks_and_Mitigants = {}, thesisInvalidationPoint = 'N/A',
         keyObservations = { confluencePoints: [], contradictionPoints: [] },
@@ -183,11 +189,22 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <h3 className="font-bold text-xl text-white mb-4 flex items-center">
                         <BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment
                     </h3>
-                    <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
-                        <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-white font-mono">{safe_options.put_call_ratio_oi || 'N/A'}</span></div>
-                        <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-white font-mono">{safe_options.max_oi_call_strike || 'N/A'}</span></div>
-                        <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-white font-mono">{safe_options.max_oi_put_strike || 'N/A'}</span></div>
-                    </div>
+                    {safe_options.put_call_ratio_oi && safe_options.put_call_ratio_oi !== 'N/A' ? (
+                        <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
+                            <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-white font-mono">{safe_options.put_call_ratio_oi}</span></div>
+                            <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-white font-mono">{safe_options.max_oi_call_strike}</span></div>
+                            <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-white font-mono">{safe_options.max_oi_put_strike}</span></div>
+                        </div>
+                    ) : (
+                        <div className="flex-1 flex flex-col justify-center items-center text-center space-y-2 py-4">
+                            <div className="text-purple-400 opacity-50 mb-2">
+                                <BarChart size={32} />
+                            </div>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Options data unavailable for this smallcap stock. Most smallcap stocks don't have active options trading due to lower liquidity.
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Price-Based Fundamentals */}
@@ -219,26 +236,46 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                     <div>
                         <p className="text-sm text-slate-400">Potential Stop-Loss</p>
-                        <p className="text-xl font-mono font-semibold text-red-400">₹{safe_technicals.potential_stop_loss || 'N/A'}</p>
+                        <p className="text-xl font-mono font-semibold text-red-400">
+                            {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
+                        </p>
                     </div>
                     <div>
                         <p className="text-sm text-slate-400">Potential Target (2R)</p>
-                        <p className="text-xl font-mono font-semibold text-green-400">₹{safe_technicals.potential_target || 'N/A'}</p>
+                        <p className="text-xl font-mono font-semibold text-green-400">
+                            {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
+                        </p>
                     </div>
                     <div>
                         <p className="text-sm text-slate-400">Daily Volatility (ATR)</p>
-                        <p className="text-xl font-mono font-semibold text-white">{safe_technicals.ATR_14 ? safe_technicals.ATR_14.toFixed(2) : 'N/A'}</p>
+                        <p className="text-xl font-mono font-semibold text-white">
+                            {safe_technicals.ATR_14 ? `₹${safe_technicals.ATR_14.toFixed(2)}` : '—'}
+                        </p>
                     </div>
                 </div>
+                {(!safe_technicals.ATR_14 || !safe_technicals.potential_stop_loss) && (
+                    <div className="mt-4 pt-4 border-t border-slate-700">
+                        <p className="text-xs text-slate-400 text-center">
+                            📚 <span className="italic">Risk metrics require 14+ days of trading data. New listings or stocks with limited history may show incomplete data.</span>
+                        </p>
+                    </div>
+                )}
             </div>
 
             {/* --- Predicted Gain --- */}
             <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
                 <div className="flex items-center gap-4">
-                    <div className="text-green-400"><TrendingUp size={28} /></div>
-                    <div>
-                        <h3 className="font-bold text-xl text-white">AI Predicted Gain: {predicted_gain_pct}%</h3>
-                        <p className="text-sm text-gray-400">{gain_prediction_rationale}</p>
+                    <div className={predicted_gain_pct > 0 ? "text-green-400" : predicted_gain_pct < 0 ? "text-red-400" : "text-slate-400"}>
+                        <TrendingUp size={28} />
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="font-bold text-xl text-white">
+                            AI Predicted Gain: {predicted_gain_pct > 0 ? '+' : ''}{predicted_gain_pct}%
+                            {holding_period_days > 0 && <span className="text-sm font-normal text-slate-400 ml-2">(~{holding_period_days} days)</span>}
+                        </h3>
+                        <p className="text-sm text-gray-400 mt-1">
+                            {gain_prediction_rationale || 'Analysis in progress...'}
+                        </p>
                     </div>
                 </div>
             </div>
