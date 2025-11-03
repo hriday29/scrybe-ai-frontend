@@ -139,10 +139,17 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             <div>
                 <h1 className="text-4xl font-bold text-white">{ticker?.replace('.NS', '')}</h1>
                 <p className="text-lg text-gray-400">{companyName || 'N/A'}</p>
-                <p className="text-sm text-gray-500 mt-1">Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) || 'N/A'}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                    Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+                </p>
                 {prediction_for_date && (
                     <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30">
-                        <span className="text-blue-400 text-xs font-semibold">📅 Analysis for: {prediction_for_date_short || prediction_for_date}</span>
+                        <span className="text-blue-400 text-xs font-semibold">
+                            📅 Prediction for: {prediction_for_date_short || prediction_for_date}
+                        </span>
+                        <span className="text-xs text-blue-300/70 italic ml-1">
+                            (Next trading day)
+                        </span>
                     </div>
                 )}
             </div>
