@@ -158,7 +158,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                         buying when others are fearful, but only when data supports a rebound.
                                     </p>
                                     <p className="text-yellow-200 text-xs mt-3 italic">
-                                        📊 The Scrybe Score of +{Math.abs(scrybe_score)} reflects confidence in this bounce, NOT the bearish pattern itself.
+                                        📊 The Scrybe Score of +{Math.abs(scrybeScore)} reflects confidence in this bounce, NOT the bearish pattern itself.
                                     </p>
                                 </div>
                             </div>
