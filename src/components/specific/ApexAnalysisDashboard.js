@@ -274,140 +274,153 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
             
-            {/* --- Risk/Reward Snapshot --- */}
-            <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                <h3 className="font-bold text-xl text-white mb-4">Risk/Reward Snapshot</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            {/* ===== UNIFIED TRADE OPPORTUNITY OVERVIEW ===== */}
+            <div className="bg-gradient-to-br from-indigo-900/40 to-slate-900/40 border-2 border-indigo-500/60 rounded-xl p-6 space-y-6">
+                <div className="flex items-center gap-3 border-b border-indigo-500/30 pb-4">
+                    <TrendingUp size={28} className="text-indigo-400" />
                     <div>
-                        <p className="text-sm text-slate-400">Potential Stop-Loss (2× ATR)</p>
-                        <p className="text-xl font-mono font-semibold text-red-400">
-                            {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-slate-400">Potential Target (6× ATR)</p>
-                        <p className="text-xl font-mono font-semibold text-green-400">
-                            {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-slate-400">Daily Volatility (ATR)</p>
-                        <p className="text-xl font-mono font-semibold text-white">
-                            {safe_technicals.ATR_14 ? `₹${safe_technicals.ATR_14.toFixed(2)}` : '—'}
-                        </p>
-                        {safe_technicals.ATR_14_percent && (
-                            <p className="text-xs text-slate-400 mt-1">
-                                ({safe_technicals.ATR_14_percent} of price)
-                            </p>
-                        )}
+                        <h2 className="font-bold text-2xl text-white">Trade Opportunity Overview</h2>
+                        <p className="text-sm text-indigo-300">Complete setup: Risk metrics → AI prediction → Execution plan</p>
                     </div>
                 </div>
-                
-                {/* ATR Calculation Breakdown */}
-                {safe_technicals.ATR_14 && safe_technicals.potential_stop_loss && safe_technicals.daily_close && (
-                    <div className="mt-6 pt-4 border-t border-slate-700">
-                        <details className="group">
-                            <summary className="cursor-pointer text-sm font-semibold text-blue-400 hover:text-blue-300 list-none flex items-center justify-center gap-2">
-                                <span>📊 How Are These Calculated?</span>
-                                <span className="text-xs text-slate-400">(Click to expand)</span>
+
+                {/* Step 1: Understanding the Risk Framework */}
+                <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">1</span>
+                        <h3 className="font-bold text-lg text-white">Risk/Reward Framework (Volatility-Based)</h3>
+                    </div>
+                    <p className="text-sm text-slate-300 mb-4">
+                        These levels are calculated using <strong>ATR (Average True Range)</strong> - a measure of how much the stock 
+                        typically moves each day. This ensures your stop-loss and target are realistic for this stock's volatility.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-red-500/20">
+                            <p className="text-xs text-slate-400 mb-1">Stop-Loss (2× ATR)</p>
+                            <p className="text-2xl font-mono font-bold text-red-400">
+                                {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-2">Protection against losses</p>
+                        </div>
+                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-white/20">
+                            <p className="text-xs text-slate-400 mb-1">Current Price</p>
+                            <p className="text-2xl font-mono font-bold text-white">
+                                {safe_technicals.daily_close ? `₹${safe_technicals.daily_close.toFixed(2)}` : '—'}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-2">Today's closing price</p>
+                        </div>
+                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-green-500/20">
+                            <p className="text-xs text-slate-400 mb-1">Target (6× ATR)</p>
+                            <p className="text-2xl font-mono font-bold text-green-400">
+                                {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-2">Potential upside target</p>
+                        </div>
+                    </div>
+
+                    {safe_technicals.ATR_14 && (
+                        <div className="mt-4 pt-4 border-t border-slate-700/50">
+                            <div className="text-center text-sm text-slate-400">
+                                <p className="mb-1">
+                                    <strong className="text-white">Daily Volatility (ATR):</strong> ₹{safe_technicals.ATR_14.toFixed(2)} 
+                                    {safe_technicals.ATR_14_percent && ` (${safe_technicals.ATR_14_percent} of price)`}
+                                </p>
+                                <p className="text-xs text-slate-500">
+                                    → This creates a <strong className="text-green-400">3:1 reward-to-risk ratio</strong> 
+                                    (risk 2× ATR to potentially gain 6× ATR)
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Educational Expandable */}
+                    {safe_technicals.ATR_14 && safe_technicals.potential_stop_loss && (
+                        <details className="mt-4 group">
+                            <summary className="cursor-pointer text-sm font-semibold text-blue-400 hover:text-blue-300 list-none flex items-center justify-center gap-2 py-2">
+                                <span>📖 Learn: How are these calculated?</span>
                             </summary>
-                            <div className="mt-4 space-y-4 text-sm text-slate-300 bg-slate-800/50 rounded-lg p-4">
+                            <div className="mt-3 space-y-3 text-xs text-slate-300 bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
                                 <div>
-                                    <p className="font-semibold text-blue-300 mb-2">🎯 What is ATR (Average True Range)?</p>
-                                    <p className="leading-relaxed">
-                                        ATR measures the average price movement (volatility) of a stock over 14 trading days. 
-                                        Higher ATR means the stock moves more, lower ATR means it's more stable.
-                                    </p>
+                                    <p className="font-semibold text-blue-300 mb-1">🎯 What is ATR?</p>
+                                    <p className="leading-relaxed">ATR measures average daily price movement. High ATR = volatile stock needs wider stops. Low ATR = stable stock uses tighter stops.</p>
                                 </div>
-                                
-                                <div className="bg-slate-900/50 rounded p-3 border border-slate-600/30">
-                                    <p className="font-semibold text-white mb-2">📐 Calculation Breakdown:</p>
-                                    <div className="space-y-2 font-mono text-xs">
-                                        <div className="flex justify-between border-b border-slate-700 pb-1">
-                                            <span className="text-slate-400">Current Price:</span>
-                                            <span className="text-white">₹{safe_technicals.daily_close?.toFixed(2)}</span>
-                                        </div>
-                                        <div className="flex justify-between border-b border-slate-700 pb-1">
-                                            <span className="text-slate-400">ATR (14-day):</span>
-                                            <span className="text-white">₹{safe_technicals.ATR_14.toFixed(2)} {safe_technicals.ATR_14_percent && `(${safe_technicals.ATR_14_percent})`}</span>
-                                        </div>
-                                        <div className="flex justify-between border-b border-red-900/30 pb-1 mt-2">
-                                            <span className="text-red-300">Stop-Loss Formula:</span>
-                                            <span className="text-red-400">Price - (2 × ATR)</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-red-300">= ₹{safe_technicals.daily_close?.toFixed(2)} - (2 × ₹{safe_technicals.ATR_14.toFixed(2)})</span>
-                                            <span className="text-red-400 font-bold">= ₹{safe_technicals.potential_stop_loss}</span>
-                                        </div>
-                                        <div className="flex justify-between border-b border-green-900/30 pb-1 mt-2">
-                                            <span className="text-green-300">Target Formula:</span>
-                                            <span className="text-green-400">Price + (6 × ATR)</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-green-300">= ₹{safe_technicals.daily_close?.toFixed(2)} + (6 × ₹{safe_technicals.ATR_14.toFixed(2)})</span>
-                                            <span className="text-green-400 font-bold">= ₹{safe_technicals.potential_target}</span>
-                                        </div>
+                                <div className="space-y-1 font-mono text-xs bg-slate-800/50 rounded p-2">
+                                    <div className="flex justify-between text-red-300">
+                                        <span>Stop-Loss = Current Price - (2 × ATR)</span>
+                                        <span>= ₹{safe_technicals.potential_stop_loss}</span>
                                     </div>
-                                </div>
-                                
-                                <div>
-                                    <p className="font-semibold text-purple-300 mb-2">🎓 Why This Framework?</p>
-                                    <ul className="space-y-2 text-xs leading-relaxed list-disc list-inside">
-                                        <li><strong>2× ATR Stop-Loss:</strong> Gives the stock room to breathe (normal volatility) while protecting against larger losses. Too tight = frequent stop-outs.</li>
-                                        <li><strong>6× ATR Target:</strong> Creates a 3:1 reward-to-risk ratio. Risk 2× ATR to potentially gain 6× ATR = professional risk management.</li>
-                                        <li><strong>Volatility-Adjusted:</strong> High volatility stocks get wider stops/targets. Stable stocks get tighter levels. One size doesn't fit all!</li>
-                                    </ul>
-                                </div>
-                                
-                                <div className="bg-yellow-900/20 border border-yellow-700/30 rounded p-3">
-                                    <p className="text-yellow-200 text-xs">
-                                        <strong>⚠️ Important:</strong> These are mechanical reference levels. The actual Trade Plan below combines these with AI's directional analysis, 
-                                        market conditions, and may adjust based on support/resistance levels. Always follow the Trade Plan, not just raw ATR calculations.
-                                    </p>
+                                    <div className="flex justify-between text-green-300">
+                                        <span>Target = Current Price + (6 × ATR)</span>
+                                        <span>= ₹{safe_technicals.potential_target}</span>
+                                    </div>
                                 </div>
                             </div>
                         </details>
+                    )}
+                </div>
+
+                {/* Step 2: AI's Market Prediction */}
+                <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">2</span>
+                        <h3 className="font-bold text-lg text-white">AI's Prediction & Rationale</h3>
+                    </div>
+                    <p className="text-sm text-slate-300 mb-4">
+                        Based on technical patterns, fundamentals, and market conditions, our AI predicts:
+                    </p>
+                    
+                    <div className="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-lg p-5 border border-purple-500/30">
+                        <div className="flex items-center gap-3 mb-3">
+                            <TrendingUp size={32} className={predicted_gain_pct > 0 ? "text-green-400" : "text-red-400"} />
+                            <div>
+                                <p className="text-sm text-slate-400">Expected Move</p>
+                                <p className="text-3xl font-bold text-white">
+                                    {predicted_gain_pct > 0 ? '+' : ''}{predicted_gain_pct}%
+                                    {holding_period_days > 0 && (
+                                        <span className="text-base font-normal text-slate-400 ml-2">
+                                            in ~{holding_period_days} days
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="bg-slate-900/50 rounded p-3 border border-slate-700/30">
+                            <p className="text-xs text-slate-400 mb-1 font-semibold">💡 Why this prediction?</p>
+                            <p className="text-sm text-slate-200 leading-relaxed">
+                                {gain_prediction_rationale || 'Analysis in progress...'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Step 3: Execution Plan (Trade Plan) */}
+                {strategy_signal && strategy_signal.trade_plan && (
+                    <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">3</span>
+                            <h3 className="font-bold text-lg text-white">Your Execution Plan (Scrybe Trade Plan)</h3>
+                        </div>
+                        <p className="text-sm text-slate-300 mb-4">
+                            This combines the volatility framework with AI's directional view and may adjust based on 
+                            key support/resistance levels. <strong className="text-yellow-300">Always follow this plan</strong>, 
+                            not just the raw ATR calculations above.
+                        </p>
+                        <TradePlanCard plan={strategy_signal.trade_plan} />
                     </div>
                 )}
-                
-                <div className="mt-4 pt-4 border-t border-slate-700">
-                    <p className="text-xs text-slate-300 text-center">
-                        💡 <span className="font-semibold">Risk/Reward Framework:</span> These are reference levels based on ATR volatility. 
-                        Stop-Loss = 2× ATR (manages risk), Target = 6× ATR (3:1 reward-to-risk ratio). 
-                        Actual entry/exit prices in the Trade Plan below may vary based on AI's directional analysis.
+
+                {/* Summary Flow Explanation */}
+                <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                    <p className="text-sm text-blue-200 leading-relaxed">
+                        <strong>🔄 How it all connects:</strong> We start with volatility-based risk levels (Step 1) to understand 
+                        realistic stop-loss and targets for THIS stock. Then our AI analyzes if the setup is tradeable (Step 2), 
+                        predicting potential returns. Finally, the Trade Plan (Step 3) combines everything into specific 
+                        entry/exit prices you can act on. This 3-step flow ensures you understand WHAT to trade, WHY to trade it, 
+                        and HOW to execute it safely.
                     </p>
                 </div>
-                {(!safe_technicals.ATR_14 || !safe_technicals.potential_stop_loss) && (
-                    <div className="mt-4 pt-4 border-t border-slate-700">
-                        <p className="text-xs text-slate-400 text-center">
-                            📚 <span className="italic">Risk metrics require 14+ days of trading data. New listings or stocks with limited history may show incomplete data.</span>
-                        </p>
-                    </div>
-                )}
             </div>
-
-            {/* --- Predicted Gain --- */}
-            <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                <div className="flex items-center gap-4">
-                    <div className={predicted_gain_pct > 0 ? "text-green-400" : predicted_gain_pct < 0 ? "text-red-400" : "text-slate-400"}>
-                        <TrendingUp size={28} />
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="font-bold text-xl text-white">
-                            AI Predicted Gain: {predicted_gain_pct > 0 ? '+' : ''}{predicted_gain_pct}%
-                            {holding_period_days > 0 && <span className="text-sm font-normal text-slate-400 ml-2">(~{holding_period_days} days)</span>}
-                        </h3>
-                        <p className="text-sm text-gray-400 mt-1">
-                            {gain_prediction_rationale || 'Analysis in progress...'}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Trade Plan Card */}
-            {strategy_signal && strategy_signal.trade_plan && (
-                <TradePlanCard plan={strategy_signal.trade_plan} />
-            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
