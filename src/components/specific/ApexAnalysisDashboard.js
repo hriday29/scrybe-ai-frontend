@@ -305,7 +305,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-red-500/20">
-                            <p className="text-xs text-slate-400 mb-1">Stop-Loss (2× ATR)</p>
+                            <p className="text-xs text-slate-400 mb-1">Stop-Loss (1.75× ATR)</p>
                             <p className="text-2xl font-mono font-bold text-red-400">
                                 {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
                             </p>
@@ -319,7 +319,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <p className="text-xs text-slate-500 mt-2">Today's closing price</p>
                         </div>
                         <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-green-500/20">
-                            <p className="text-xs text-slate-400 mb-1">Target (6× ATR)</p>
+                            <p className="text-xs text-slate-400 mb-1">Target (4.4× ATR)</p>
                             <p className="text-2xl font-mono font-bold text-green-400">
                                 {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
                             </p>
@@ -335,8 +335,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                     {safe_technicals.ATR_14_percent && ` (${safe_technicals.ATR_14_percent} of price)`}
                                 </p>
                                 <p className="text-xs text-slate-500">
-                                    → This creates a <strong className="text-green-400">3:1 reward-to-risk ratio</strong> 
-                                    (risk 2× ATR to potentially gain 6× ATR)
+                                    → This creates a <strong className="text-green-400">2.5:1 reward-to-risk ratio</strong> 
+                                    (risk 1.75× ATR to potentially gain 4.4× ATR)
                                 </p>
                             </div>
                         </div>
@@ -355,12 +355,16 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                 </div>
                                 <div className="space-y-1 font-mono text-xs bg-slate-800/50 rounded p-2">
                                     <div className="flex justify-between text-red-300">
-                                        <span>Stop-Loss = Current Price - (2 × ATR)</span>
+                                        <span>Stop-Loss = Current Price - (1.75 × ATR)</span>
                                         <span>= ₹{safe_technicals.potential_stop_loss}</span>
                                     </div>
                                     <div className="flex justify-between text-green-300">
-                                        <span>Target = Current Price + (6 × ATR)</span>
+                                        <span>Target = Current Price + (4.4 × ATR)</span>
                                         <span>= ₹{safe_technicals.potential_target}</span>
+                                    </div>
+                                    <div className="flex justify-between text-blue-300 pt-1 border-t border-slate-700">
+                                        <span>Risk/Reward Ratio:</span>
+                                        <span>2.5:1</span>
                                     </div>
                                 </div>
                             </div>
@@ -418,7 +422,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <p className="text-xs text-yellow-200">
                                 ⚡ <strong>Important:</strong> These prices may differ slightly from Step 1's reference levels because 
                                 they're based on the live market price (not closing price). However, the risk framework remains the same: 
-                                2× ATR stop-loss, 6× ATR target, 3:1 risk/reward ratio.
+                                1.75× ATR stop-loss, 4.4× ATR target, 2.5:1 risk/reward ratio.
                             </p>
                         </div>
                         <TradePlanCard plan={strategy_signal.trade_plan} />
