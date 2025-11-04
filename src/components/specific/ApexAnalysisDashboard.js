@@ -288,12 +288,20 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                     <div className="flex items-center gap-2 mb-4">
                         <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">1</span>
-                        <h3 className="font-bold text-lg text-white">Risk/Reward Framework (Volatility-Based)</h3>
+                        <h3 className="font-bold text-lg text-white">Risk/Reward Framework (Reference Levels)</h3>
                     </div>
-                    <p className="text-sm text-slate-300 mb-4">
-                        These levels are calculated using <strong>ATR (Average True Range)</strong> - a measure of how much the stock 
-                        typically moves each day. This ensures your stop-loss and target are realistic for this stock's volatility.
+                    <p className="text-sm text-slate-300 mb-3">
+                        These are <strong className="text-yellow-300">reference levels</strong> calculated from <strong>today's closing price</strong> using 
+                        <strong> ATR (Average True Range)</strong> - a measure of daily volatility. They show you what realistic 
+                        stop-loss and targets look like for this stock's normal price movement.
                     </p>
+                    <div className="bg-blue-900/20 border border-blue-500/30 rounded p-2 mb-4">
+                        <p className="text-xs text-blue-200">
+                            💡 <strong>Note:</strong> These are based on the closing price. Your actual trade prices in Step 3 below 
+                            will use the <strong>live market price at execution time</strong>, which may differ slightly but will follow 
+                            the same ATR-based risk framework.
+                        </p>
+                    </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-red-500/20">
@@ -399,13 +407,20 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                         <div className="flex items-center gap-2 mb-4">
                             <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">3</span>
-                            <h3 className="font-bold text-lg text-white">Your Execution Plan (Scrybe Trade Plan)</h3>
+                            <h3 className="font-bold text-lg text-white">Your Execution Plan (Actual Trade Prices)</h3>
                         </div>
-                        <p className="text-sm text-slate-300 mb-4">
-                            This combines the volatility framework with AI's directional view and may adjust based on 
-                            key support/resistance levels. <strong className="text-yellow-300">Always follow this plan</strong>, 
-                            not just the raw ATR calculations above.
+                        <p className="text-sm text-slate-300 mb-3">
+                            These are your <strong className="text-green-300">actual execution prices</strong> calculated from the 
+                            <strong> live market price at analysis time</strong>. The stop-loss and target use the same ATR framework 
+                            as Step 1, but applied to the real entry price you'll use to place your trade.
                         </p>
+                        <div className="bg-yellow-900/20 border border-yellow-500/30 rounded p-2 mb-4">
+                            <p className="text-xs text-yellow-200">
+                                ⚡ <strong>Important:</strong> These prices may differ slightly from Step 1's reference levels because 
+                                they're based on the live market price (not closing price). However, the risk framework remains the same: 
+                                2× ATR stop-loss, 6× ATR target, 3:1 risk/reward ratio.
+                            </p>
+                        </div>
                         <TradePlanCard plan={strategy_signal.trade_plan} />
                     </div>
                 )}
@@ -413,11 +428,11 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {/* Summary Flow Explanation */}
                 <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
                     <p className="text-sm text-blue-200 leading-relaxed">
-                        <strong>🔄 How it all connects:</strong> We start with volatility-based risk levels (Step 1) to understand 
-                        realistic stop-loss and targets for THIS stock. Then our AI analyzes if the setup is tradeable (Step 2), 
-                        predicting potential returns. Finally, the Trade Plan (Step 3) combines everything into specific 
-                        entry/exit prices you can act on. This 3-step flow ensures you understand WHAT to trade, WHY to trade it, 
-                        and HOW to execute it safely.
+                        <strong>🔄 How it all connects:</strong> Step 1 shows reference levels (based on today's close) to help you 
+                        understand the stock's normal volatility range. Step 2 is the AI's market prediction and reasoning. 
+                        Step 3 gives you exact execution prices (based on live market price) using the same risk framework. 
+                        <strong className="text-white"> Always follow Step 3 for your actual trades</strong> - it combines the volatility 
+                        framework with AI's analysis and real-time pricing.
                     </p>
                 </div>
             </div>
