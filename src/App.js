@@ -25,6 +25,7 @@ import ApexAnalysisDashboard from './components/specific/ApexAnalysisDashboard.j
 import ConfidencePoll from './components/specific/ConfidencePoll.js';
 import ConversationalQa from './components/specific/ConversationalQa.js';
 import FeedbackWidget from './components/specific/FeedbackWidget.js';
+import HolidayBanner from './components/specific/HolidayBanner.js';
 import LandingWalkthrough from './components/specific/LandingWalkthrough.js';
 import NewsSection from './components/specific/NewsSection.js';
 import TradeJournalCard from './components/specific/TradeJournalCard.js';
@@ -493,6 +494,7 @@ export default function App() {
   const [postLoginRedirect, setPostLoginRedirect] = useState(null);
   const [isLongLoad, setIsLongLoad] = useState(false);
   const [selectedTicker, setSelectedTicker] = useState(null);
+  const [marketStatus, setMarketStatus] = useState(null);
   const longLoadTimerRef = useRef(null);
 
   // Reflect auth state
@@ -513,6 +515,24 @@ export default function App() {
     return () => {
       if (longLoadTimerRef.current) clearTimeout(longLoadTimerRef.current);
     };
+  }, []);
+
+  // Fetch market holiday status on mount
+  useEffect(() => {
+    const fetchMarketStatus = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/market-status`);
+        if (response.ok) {
+          const status = await response.json();
+          setMarketStatus(status);
+          console.log('Market Status:', status);
+        }
+      } catch (err) {
+        console.error('Failed to fetch market status:', err);
+        // Silently fail - don't block app if endpoint is down
+      }
+    };
+    fetchMarketStatus();
   }, []);
 
   const handleStockSelect = useCallback((ticker) => setSelectedTicker(ticker), []);
@@ -628,6 +648,17 @@ export default function App() {
 
   const renderMainApp = () => (
     <div className="w-full">
+      {/* Market Holiday Banner - Shows at top when market is closed */}
+      {marketStatus && (
+        <div className="w-full max-w-5xl mx-auto px-4 pt-4">
+          <HolidayBanner
+            isHoliday={marketStatus.is_holiday}
+            holidayReason={marketStatus.holiday_reason}
+            nextTradingDay={marketStatus.next_trading_day_display}
+          />
+        </div>
+      )}
+
       {selectedTicker ? (
         <StockDetailPage ticker={selectedTicker} onBackClick={handleBackToList} />
       ) : (
