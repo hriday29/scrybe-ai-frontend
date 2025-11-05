@@ -13,6 +13,7 @@ import SectorHeatmapCard from '../components/specific/SectorHeatmapCard.js';
 import PriceActionCard from '../components/specific/PriceActionCard.js';
 import AIDecisionCard from '../components/specific/AIDecisionCard.js';
 import MarketBreadthCard from '../components/specific/MarketBreadthCard.js';
+import PositionSizeCard from '../components/specific/PositionSizeCard.js';
 
 // Import config and utils
 import { API_BASE_URL } from '../apiConfig.js';
@@ -237,6 +238,7 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                 <MarketBreadthCard breadthData={analysisData?.market_context?.breadth_indicators} />
                 <PriceActionCard priceActionContext={analysisData?.price_action_context} />
                 <AIDecisionCard analysisData={analysisData} />
+                <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
                 <NewsSection newsData={analysisData?.news_context} />
                 <ConversationalQa analysisContext={analysisData} />
                 <ConfidencePoll analysisId={analysisData?._id} />
