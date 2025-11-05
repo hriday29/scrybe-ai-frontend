@@ -8,6 +8,7 @@ import {
 import { API_BASE_URL } from '../apiConfig';
 import { useNavigate } from 'react-router-dom';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
+import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
 
 const GlassCard = ({ className = '', children, onClick }) => (
   <motion.div
@@ -278,6 +279,13 @@ const PortfolioDashboard = () => {
         {portfolioData?.all_analyses && portfolioData.all_analyses.length > 0 && portfolioData.all_analyses[0]?.market_context && (
           <div className="mb-12">
             <MarketRegimeCard marketContext={portfolioData.all_analyses[0].market_context} />
+          </div>
+        )}
+
+        {/* Sector Performance Heatmap - Feature 2/15 */}
+        {portfolioData?.all_analyses && portfolioData.all_analyses.length > 0 && portfolioData.all_analyses[0]?.market_context?.sector_performance && (
+          <div className="mb-12">
+            <SectorHeatmapCard sectorPerformance={portfolioData.all_analyses[0].market_context.sector_performance} />
           </div>
         )}
 
