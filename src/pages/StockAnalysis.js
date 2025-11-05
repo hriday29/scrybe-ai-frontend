@@ -17,6 +17,7 @@ import PositionSizeCard from '../components/specific/PositionSizeCard.js';
 import VolatilityCard from '../components/specific/VolatilityCard.js';  // Feature 7/15
 import MomentumCard from '../components/specific/MomentumCard.js';  // Feature 8/15
 import TradeChecklistCard from '../components/specific/TradeChecklistCard.js';  // Feature 9/15
+import FuturesBasisCard from '../components/specific/FuturesBasisCard.js';  // Feature 10/15
 
 // Import config and utils
 import { API_BASE_URL } from '../apiConfig.js';
@@ -245,6 +246,7 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                 <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
                 <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} />
                 <TradeChecklistCard checklistData={analysisData?.trade_checklist} />
+                <FuturesBasisCard basisData={analysisData?.futures_basis_analysis} />
                 <NewsSection newsData={analysisData?.news_context} />
                 <ConversationalQa analysisContext={analysisData} />
                 <ConfidencePoll analysisId={analysisData?._id} />
