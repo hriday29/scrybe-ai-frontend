@@ -26,8 +26,13 @@ const PriceActionCard = ({ priceActionContext }) => {
         price_position
     } = priceActionContext;
 
+    // Safe number helper
+    const safeNumber = (val, defaultVal = 0) => {
+        return (val !== null && val !== undefined && !isNaN(val)) ? val : defaultVal;
+    };
+
     // Calculate position in range for visual bar
-    const rangeWidth = price_percentile_52w;
+    const rangeWidth = safeNumber(price_percentile_52w, 50);
 
     // Color coding for price position
     const getPositionColor = () => {
@@ -74,19 +79,29 @@ const PriceActionCard = ({ priceActionContext }) => {
                     <div className="flex items-center justify-between mb-3">
                         <div>
                             <span className="text-xs text-slate-400">52W Low</span>
-                            <p className="text-lg font-bold text-white">₹{low52w}</p>
-                            <p className="text-xs text-red-400">{distance_from_52w_low_pct >= 0 ? '+' : ''}{distance_from_52w_low_pct.toFixed(1)}%</p>
+                            <p className="text-lg font-bold text-white">₹{low52w || 'N/A'}</p>
+                            <p className="text-xs text-red-400">
+                                {distance_from_52w_low_pct !== null && distance_from_52w_low_pct !== undefined ? (
+                                    `${distance_from_52w_low_pct >= 0 ? '+' : ''}${safeNumber(distance_from_52w_low_pct).toFixed(1)}%`
+                                ) : 'N/A'}
+                            </p>
                         </div>
                         <div className="text-center">
                             <span className={`text-sm font-bold ${getPositionColor()}`}>
-                                {price_position} Range
+                                {price_position || 'Mid'} Range
                             </span>
-                            <p className="text-xs text-slate-400 mt-1">{price_percentile_52w.toFixed(0)}th Percentile</p>
+                            <p className="text-xs text-slate-400 mt-1">
+                                {price_percentile_52w !== null && price_percentile_52w !== undefined ? `${safeNumber(price_percentile_52w).toFixed(0)}th Percentile` : 'N/A'}
+                            </p>
                         </div>
                         <div className="text-right">
                             <span className="text-xs text-slate-400">52W High</span>
-                            <p className="text-lg font-bold text-white">₹{high52w}</p>
-                            <p className="text-xs text-red-400">{distance_from_52w_high_pct >= 0 ? '+' : ''}{distance_from_52w_high_pct.toFixed(1)}%</p>
+                            <p className="text-lg font-bold text-white">₹{high52w || 'N/A'}</p>
+                            <p className="text-xs text-red-400">
+                                {distance_from_52w_high_pct !== null && distance_from_52w_high_pct !== undefined ? (
+                                    `${distance_from_52w_high_pct >= 0 ? '+' : ''}${safeNumber(distance_from_52w_high_pct).toFixed(1)}%`
+                                ) : 'N/A'}
+                            </p>
                         </div>
                     </div>
 
@@ -125,9 +140,9 @@ const PriceActionCard = ({ priceActionContext }) => {
                                         <span className="text-sm text-slate-300">S{idx + 1}:</span>
                                         <div className="text-right">
                                             <span className="text-sm font-bold text-red-300">₹{level}</span>
-                                            {level === nearest_support && (
+                                            {level === nearest_support && distance_to_nearest_support_pct !== null && distance_to_nearest_support_pct !== undefined && (
                                                 <span className="ml-2 text-xs text-red-400">
-                                                    ({distance_to_nearest_support_pct.toFixed(1)}%)
+                                                    ({safeNumber(distance_to_nearest_support_pct).toFixed(1)}%)
                                                 </span>
                                             )}
                                         </div>
@@ -158,9 +173,9 @@ const PriceActionCard = ({ priceActionContext }) => {
                                         <span className="text-sm text-slate-300">R{idx + 1}:</span>
                                         <div className="text-right">
                                             <span className="text-sm font-bold text-green-300">₹{level}</span>
-                                            {level === nearest_resistance && (
+                                            {level === nearest_resistance && distance_to_nearest_resistance_pct !== null && distance_to_nearest_resistance_pct !== undefined && (
                                                 <span className="ml-2 text-xs text-green-400">
-                                                    ({distance_to_nearest_resistance_pct.toFixed(1)}%)
+                                                    ({safeNumber(distance_to_nearest_resistance_pct).toFixed(1)}%)
                                                 </span>
                                             )}
                                         </div>

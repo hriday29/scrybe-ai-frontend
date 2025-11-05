@@ -1,9 +1,7 @@
-// src/components/specific/ApexAnalysisDashboard.js (AURORA REVAMP - PHASE 1 & 2 FEATURES INTEGRATED)
+// src/components/specific/ApexAnalysisDashboard.js
 
-import React from 'react';
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
-import NewsSection from './NewsSection';
 import MarketRegimeCard from './MarketRegimeCard';
 import SectorHeatmapCard from './SectorHeatmapCard';
 import MarketBreadthCard from './MarketBreadthCard';
@@ -240,8 +238,18 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         "52w_high": safe_technicals["52w_high"],
                         "52w_low": safe_technicals["52w_low"],
                         distance_from_52w_high_pct: safe_technicals.distance_from_52w_high_pct,
-                        distance_from_52w_low_pct: safe_technicals.distance_from_52w_low_pct,
-                        price_percentile_52w: safe_technicals.price_percentile_52w,
+                        // Calculate distance from 52w low if not provided
+                        distance_from_52w_low_pct: safe_technicals.distance_from_52w_low_pct !== undefined 
+                            ? safe_technicals.distance_from_52w_low_pct
+                            : (safe_technicals["52w_low"] && safe_technicals.daily_close 
+                                ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / safe_technicals["52w_low"] * 100)
+                                : null),
+                        // Calculate percentile position in 52w range
+                        price_percentile_52w: safe_technicals.price_percentile_52w !== undefined
+                            ? safe_technicals.price_percentile_52w
+                            : (safe_technicals["52w_high"] && safe_technicals["52w_low"] && safe_technicals.daily_close
+                                ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / (safe_technicals["52w_high"] - safe_technicals["52w_low"]) * 100)
+                                : null),
                         support_levels: safe_technicals.support_levels,
                         resistance_levels: safe_technicals.resistance_levels,
                         nearest_support: safe_technicals.nearest_support,
