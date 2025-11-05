@@ -245,7 +245,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                 <BarChart size={32} />
                             </div>
                             <p className="text-slate-400 text-sm leading-relaxed">
-                                Options data unavailable for this smallcap stock. Most smallcap stocks don't have active options trading due to lower liquidity.
+                                {safe_options.status || "Options data not available. This stock may not have active F&O trading or liquidity is too low for reliable options data."}
                             </p>
                         </div>
                     )}
