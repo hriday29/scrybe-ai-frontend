@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Calculator, TrendingUp, AlertTriangle, DollarSign, Percent } from 'lucide-react';
 
 const PositionSizeCard = ({ tradePlan, analysisData }) => {
+  // Interactive calculator state - MUST be called before any early returns
+  const [accountEquity, setAccountEquity] = useState(1000000);
+  const [riskPct, setRiskPct] = useState(1.0);
+
+  // Early return AFTER hooks
   if (!tradePlan || !tradePlan.position_sizing) {
     return null;
   }
@@ -10,10 +15,6 @@ const PositionSizeCard = ({ tradePlan, analysisData }) => {
   const entryPrice = tradePlan.entryPrice || tradePlan.entry_price;
   const stopLoss = tradePlan.stopLoss || tradePlan.stop_loss;
   const target = tradePlan.target || tradePlan.target_price;
-  
-  // Interactive calculator state
-  const [accountEquity, setAccountEquity] = useState(sizing.calculations?.account_equity || 1000000);
-  const [riskPct, setRiskPct] = useState(sizing.calculations?.risk_per_trade_pct || 1.0);
   
   // Recalculate position size based on user inputs
   const riskPerShare = Math.abs(entryPrice - stopLoss);
