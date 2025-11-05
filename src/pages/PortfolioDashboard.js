@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { API_BASE_URL } from '../apiConfig';
 import { useNavigate } from 'react-router-dom';
+import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 
 const GlassCard = ({ className = '', children, onClick }) => (
   <motion.div
@@ -272,6 +273,13 @@ const PortfolioDashboard = () => {
             </div>
           )}
         </div>
+
+        {/* Market Regime Card - Feature 1/15 */}
+        {portfolioData?.all_analyses && portfolioData.all_analyses.length > 0 && portfolioData.all_analyses[0]?.market_context && (
+          <div className="mb-12">
+            <MarketRegimeCard marketContext={portfolioData.all_analyses[0].market_context} />
+          </div>
+        )}
 
         {/* Portfolio Management Education Section */}
         <GlassCard className="p-8 mb-12 border-2 border-blue-500/30">
