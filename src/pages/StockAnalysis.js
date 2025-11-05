@@ -8,11 +8,12 @@ import NewsSection from '../components/specific/NewsSection.js';
 import ConversationalQa from '../components/specific/ConversationalQa.js';
 import ConfidencePoll from '../components/specific/ConfidencePoll.js';
 import TradeJournalCard from '../components/specific/TradeJournalCard.js';
-import MarketRegimeCard from '../components/specific/MarketRegimeCard.js';
-import SectorHeatmapCard from '../components/specific/SectorHeatmapCard.js';
+// Market-wide indicators moved to main dashboard
+// import MarketRegimeCard from '../components/specific/MarketRegimeCard.js';
+// import SectorHeatmapCard from '../components/specific/SectorHeatmapCard.js';
+// import MarketBreadthCard from '../components/specific/MarketBreadthCard.js';
 import PriceActionCard from '../components/specific/PriceActionCard.js';
 import AIDecisionCard from '../components/specific/AIDecisionCard.js';
-import MarketBreadthCard from '../components/specific/MarketBreadthCard.js';
 import PositionSizeCard from '../components/specific/PositionSizeCard.js';
 import VolatilityCard from '../components/specific/VolatilityCard.js';  // Feature 7/15
 import MomentumCard from '../components/specific/MomentumCard.js';  // Feature 8/15
@@ -231,15 +232,13 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
         case "results":
           return (
             <>
-              <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 mb-6 font-semibold transition-colors">
+              <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 text-white rounded-lg transition-colors">
                 <ArrowLeft size={16} />
                 Back to List
               </button>
               <ApexAnalysisDashboard analysisData={analysisData} />
               <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
-                <MarketRegimeCard marketContext={analysisData?.market_context} />
-                <SectorHeatmapCard sectorPerformance={analysisData?.market_context?.sector_performance} />
-                <MarketBreadthCard breadthData={analysisData?.market_context?.breadth_indicators} />
+                {/* Market-wide indicators (Regime, Sector, Breadth) removed - now shown on main dashboard */}
                 <PriceActionCard priceActionContext={analysisData?.price_action_context} />
                 <AIDecisionCard analysisData={analysisData} />
                 <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
