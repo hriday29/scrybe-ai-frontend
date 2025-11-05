@@ -12,6 +12,7 @@ import MarketRegimeCard from '../components/specific/MarketRegimeCard.js';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard.js';
 import PriceActionCard from '../components/specific/PriceActionCard.js';
 import AIDecisionCard from '../components/specific/AIDecisionCard.js';
+import MarketBreadthCard from '../components/specific/MarketBreadthCard.js';
 
 // Import config and utils
 import { API_BASE_URL } from '../apiConfig.js';
@@ -233,6 +234,7 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
               <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
                 <MarketRegimeCard marketContext={analysisData?.market_context} />
                 <SectorHeatmapCard sectorPerformance={analysisData?.market_context?.sector_performance} />
+                <MarketBreadthCard breadthData={analysisData?.market_context?.breadth_indicators} />
                 <PriceActionCard priceActionContext={analysisData?.price_action_context} />
                 <AIDecisionCard analysisData={analysisData} />
                 <NewsSection newsData={analysisData?.news_context} />
