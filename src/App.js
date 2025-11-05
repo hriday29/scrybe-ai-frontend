@@ -29,6 +29,9 @@ import HolidayBanner from './components/specific/HolidayBanner.js';
 import LandingWalkthrough from './components/specific/LandingWalkthrough.js';
 import NewsSection from './components/specific/NewsSection.js';
 import TradeJournalCard from './components/specific/TradeJournalCard.js';
+import MarketRegimeCard from './components/specific/MarketRegimeCard.js';
+import SectorHeatmapCard from './components/specific/SectorHeatmapCard.js';
+import MarketBreadthCard from './components/specific/MarketBreadthCard.js';
 
 // Page Components
 import AppGuide from './pages/AppGuide.js';
@@ -191,6 +194,7 @@ const StockSelector = ({ onAnalyze }) => {
   const [stocks, setStocks] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [marketContext, setMarketContext] = useState(null);
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -205,6 +209,11 @@ const StockSelector = ({ onAnalyze }) => {
         analysisData.sort((a, b) => (b.scrybeScore || 0) - (a.scrybeScore || 0));
         
         setStocks(analysisData);
+
+        // Extract market_context from the first stock (it's the same for all stocks)
+        if (analysisData.length > 0 && analysisData[0].market_context) {
+          setMarketContext(analysisData[0].market_context);
+        }
       } catch (err) {
         // If the fetch fails, we can use a more generic error message.
         setError(new Error("Failed to load analysis data."));
@@ -291,6 +300,24 @@ const StockSelector = ({ onAnalyze }) => {
           subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
         />
       </GlassCard>
+
+      {/* ========== MARKET-WIDE CONTEXT (UNIVERSAL INDICATORS) ========== */}
+      {marketContext && (
+        <div className="mt-8 w-full max-w-6xl space-y-6">
+          {/* Market Regime Card - Shows overall market direction */}
+          <MarketRegimeCard marketContext={marketContext} />
+
+          {/* Sector Performance & Market Breadth - Side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {marketContext.sector_performance && (
+              <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
+            )}
+            {marketContext.breadth_indicators && (
+              <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Search + results container */}
       <div className="mt-10 w-full max-w-2xl space-y-4">

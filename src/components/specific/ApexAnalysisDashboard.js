@@ -2,9 +2,10 @@
 
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
-import MarketRegimeCard from './MarketRegimeCard';
-import SectorHeatmapCard from './SectorHeatmapCard';
-import MarketBreadthCard from './MarketBreadthCard';
+// Market-wide indicators moved to main dashboard (App.js)
+// import MarketRegimeCard from './MarketRegimeCard';
+// import SectorHeatmapCard from './SectorHeatmapCard';
+// import MarketBreadthCard from './MarketBreadthCard';
 import PositionSizeCard from './PositionSizeCard';
 import MomentumCard from './MomentumCard';
 import PriceActionCard from './PriceActionCard';
@@ -133,12 +134,9 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
-            {/* ========== PHASE 1: CRITICAL CONTEXT (THE "WHY" LAYER) ========== */}
-            
-            {/* Market Regime Display - Prominent badge explaining why only BUY signals */}
-            {market_context && (
-                <MarketRegimeCard marketContext={market_context} />
-            )}
+            {/* ========== MARKET-WIDE CONTEXT REMOVED ========== */}
+            {/* Market Regime, Sector Performance, and Market Breadth moved to main dashboard */}
+            {/* These are universal indicators that update daily and apply to ALL stocks */}
 
             {strategy_signal && (
                 <>
@@ -217,20 +215,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
-            {/* ========== PHASE 1: SECTOR PERFORMANCE & MARKET BREADTH ========== */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Sector Performance Heatmap */}
-                {market_context?.sector_performance && (
-                    <SectorHeatmapCard sectorPerformance={market_context.sector_performance} />
-                )}
-                
-                {/* Market Breadth - Shows overall market health */}
-                {market_context?.breadth_indicators && (
-                    <MarketBreadthCard breadthData={market_context.breadth_indicators} />
-                )}
-            </div>
-
             {/* ========== PHASE 1: PRICE ACTION CONTEXT (52W HIGH/LOW, SUPPORT/RESISTANCE) ========== */}
+            {/* Note: Sector Performance & Market Breadth moved to main dashboard (universal indicators) */}
             {safe_technicals && safe_technicals.daily_close && (
                 <PriceActionCard 
                     priceActionContext={{
