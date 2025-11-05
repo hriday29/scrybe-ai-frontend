@@ -204,19 +204,29 @@ const PriceActionCard = ({ priceActionContext }) => {
                         <div>
                             <p className="text-slate-400 mb-1">Position in Range</p>
                             <p className={`font-bold ${getPositionColor()}`}>
-                                {price_position} ({price_percentile_52w.toFixed(0)}th percentile)
+                                {price_position || 'Mid'} (
+                                {price_percentile_52w !== null && price_percentile_52w !== undefined 
+                                    ? `${safeNumber(price_percentile_52w).toFixed(0)}th percentile`
+                                    : 'N/A'
+                                })
                             </p>
                         </div>
                         <div>
                             <p className="text-slate-400 mb-1">Upside to Resistance</p>
                             <p className="font-bold text-green-400">
-                                +{distance_to_nearest_resistance_pct.toFixed(1)}%
+                                {distance_to_nearest_resistance_pct !== null && distance_to_nearest_resistance_pct !== undefined
+                                    ? `+${safeNumber(distance_to_nearest_resistance_pct).toFixed(1)}%`
+                                    : 'N/A'
+                                }
                             </p>
                         </div>
                         <div>
                             <p className="text-slate-400 mb-1">Downside to Support</p>
                             <p className="font-bold text-red-400">
-                                {distance_to_nearest_support_pct.toFixed(1)}%
+                                {distance_to_nearest_support_pct !== null && distance_to_nearest_support_pct !== undefined
+                                    ? `${safeNumber(distance_to_nearest_support_pct).toFixed(1)}%`
+                                    : 'N/A'
+                                }
                             </p>
                         </div>
                     </div>
