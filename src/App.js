@@ -534,6 +534,8 @@ export default function App() {
   const [isLongLoad, setIsLongLoad] = useState(false);
   const [selectedTicker, setSelectedTicker] = useState(null);
   const [marketStatus, setMarketStatus] = useState(null);
+  const [isMarketDrawerOpen, setIsMarketDrawerOpen] = useState(false);
+  const [globalMarketContext, setGlobalMarketContext] = useState(null);
   const longLoadTimerRef = useRef(null);
 
   // Reflect auth state
@@ -573,6 +575,27 @@ export default function App() {
     };
     fetchMarketStatus();
   }, []);
+
+  // Fetch global market context
+  useEffect(() => {
+    const fetchGlobalMarketContext = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/all-analysis`);
+        if (response.ok) {
+          const analysisData = await response.json();
+          if (analysisData.length > 0 && analysisData[0].market_context) {
+            setGlobalMarketContext(analysisData[0].market_context);
+            console.log('✅ Global market context loaded');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch global market context:', err);
+      }
+    };
+    if (currentUser && view === 'app') {
+      fetchGlobalMarketContext();
+    }
+  }, [currentUser, view]);
 
   const handleStockSelect = useCallback((ticker) => setSelectedTicker(ticker), []);
   const handleBackToList = useCallback(() => setSelectedTicker(null), []);
@@ -779,6 +802,73 @@ export default function App() {
       <AnimatePresence>
         {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
       </AnimatePresence>
+
+      {/* Market Context Drawer */}
+      <AnimatePresence>
+        {isMarketDrawerOpen && globalMarketContext && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMarketDrawerOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            />
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 bg-slate-900 shadow-2xl z-50 overflow-y-auto"
+            >
+              <div className="p-6 space-y-6">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-700 pb-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                      📊 Market Context
+                    </h2>
+                    <p className="text-slate-400 text-sm mt-1">Universal daily indicators for all stocks</p>
+                  </div>
+                  <button
+                    onClick={() => setIsMarketDrawerOpen(false)}
+                    className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Market Indicators */}
+                <MarketRegimeCard marketContext={globalMarketContext} />
+                <div className="grid grid-cols-1 gap-6">
+                  {globalMarketContext.sector_performance && (
+                    <SectorHeatmapCard sectorPerformance={globalMarketContext.sector_performance} />
+                  )}
+                  {globalMarketContext.breadth_indicators && (
+                    <MarketBreadthCard breadthData={globalMarketContext.breadth_indicators} />
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Market Context Button - Only show when logged in */}
+      {view === 'app' && globalMarketContext && (
+        <button
+          onClick={() => setIsMarketDrawerOpen(true)}
+          className="fixed bottom-6 right-6 bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white p-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
+          title="View Market Context"
+        >
+          <span className="text-2xl">📊</span>
+          <span className="hidden group-hover:inline-block font-semibold text-sm whitespace-nowrap">Market Context</span>
+        </button>
+      )}
 
       {/* Standalone pages */}
       {showFaq && <FaqPage onBack={() => setShowFaq(false)} />}
