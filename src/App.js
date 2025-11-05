@@ -664,10 +664,18 @@ export default function App() {
       ) : (
         <Tab.Group selectedIndex={tabIndex} onChange={setTabIndex}>
           <div className="flex flex-wrap justify-center p-1 bg-white/5 border border-white/10 rounded-2xl sticky top-4 z-10 backdrop-blur-xl w-fit mx-auto shadow-xl">
-            {["App Guide", "Stock Analysis", "Portfolio", "Open Positions", "Index Analysis", "AI Track Record", "Rulebook"].map(
-              (label) => (
+            {[
+              { label: "App Guide", tooltip: "Learn how to use Scrybe AI effectively" },
+              { label: "Stock Analysis", tooltip: "Get AI-powered analysis for any stock" },
+              { label: "My Trades", tooltip: "View all your trades (open + closed) with performance stats" },
+              { label: "Active Trades", tooltip: "Monitor your currently open positions" },
+              { label: "Index Analysis", tooltip: "Analyze market indices (NIFTY, SENSEX)" },
+              { label: "AI Track Record", tooltip: "See Scrybe AI's historical performance" },
+              { label: "Rulebook", tooltip: "Understand the AI's trading strategy and rules" }
+            ].map(({ label, tooltip }) => (
                 <Tab
                   key={label}
+                  title={tooltip}
                   className={({ selected }) =>
                     `px-6 py-2.5 text-md font-medium rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 ${
                       selected
