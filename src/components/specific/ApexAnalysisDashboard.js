@@ -1,9 +1,18 @@
-// src/components/specific/ApexAnalysisDashboard.js (AURORA REVAMP - FIXED ALIGNMENT)
+// src/components/specific/ApexAnalysisDashboard.js (AURORA REVAMP - PHASE 1 & 2 FEATURES INTEGRATED)
 
 import React from 'react';
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import NewsSection from './NewsSection';
+import MarketRegimeCard from './MarketRegimeCard';
+import SectorHeatmapCard from './SectorHeatmapCard';
+import MarketBreadthCard from './MarketBreadthCard';
+import PositionSizeCard from './PositionSizeCard';
+import MomentumCard from './MomentumCard';
+import PriceActionCard from './PriceActionCard';
+import VolatilityCard from './VolatilityCard';
+import FuturesBasisCard from './FuturesBasisCard';
+import TradeChecklistCard from './TradeChecklistCard';
 
 // =========================================================================
 // Helper & Display Components
@@ -100,7 +109,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
         options_sentiment_analysis,
         fundamental_proxy_analysis,
         volatility_futures_data,
-        news_context
+        news_context,
+        market_context  // ✨ NEW: Market context data
     } = analysisData;
     
     const safe_options = options_sentiment_analysis || {};
@@ -125,6 +135,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
+            {/* ========== PHASE 1: CRITICAL CONTEXT (THE "WHY" LAYER) ========== */}
+            
+            {/* Market Regime Display - Prominent badge explaining why only BUY signals */}
+            {market_context && (
+                <MarketRegimeCard marketContext={market_context} />
+            )}
+
             {strategy_signal && (
                 <>
                     <div className="bg-blue-900/50 border-2 border-blue-500 rounded-xl p-5 flex items-center gap-4">
@@ -202,6 +219,40 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
+            {/* ========== PHASE 1: SECTOR PERFORMANCE & MARKET BREADTH ========== */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Sector Performance Heatmap */}
+                {market_context?.sector_performance && (
+                    <SectorHeatmapCard sectorPerformance={market_context.sector_performance} />
+                )}
+                
+                {/* Market Breadth - Shows overall market health */}
+                {market_context?.breadth_indicators && (
+                    <MarketBreadthCard breadthData={market_context.breadth_indicators} />
+                )}
+            </div>
+
+            {/* ========== PHASE 1: PRICE ACTION CONTEXT (52W HIGH/LOW, SUPPORT/RESISTANCE) ========== */}
+            {safe_technicals && safe_technicals.daily_close && (
+                <PriceActionCard 
+                    priceActionContext={{
+                        current_price: safe_technicals.daily_close,
+                        "52w_high": safe_technicals["52w_high"],
+                        "52w_low": safe_technicals["52w_low"],
+                        distance_from_52w_high_pct: safe_technicals.distance_from_52w_high_pct,
+                        distance_from_52w_low_pct: safe_technicals.distance_from_52w_low_pct,
+                        price_percentile_52w: safe_technicals.price_percentile_52w,
+                        support_levels: safe_technicals.support_levels,
+                        resistance_levels: safe_technicals.resistance_levels,
+                        nearest_support: safe_technicals.nearest_support,
+                        nearest_resistance: safe_technicals.nearest_resistance,
+                        distance_to_nearest_support_pct: safe_technicals.distance_to_nearest_support_pct,
+                        distance_to_nearest_resistance_pct: safe_technicals.distance_to_nearest_resistance_pct,
+                        price_position: safe_technicals.price_position
+                    }}
+                />
+            )}
+
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-2 bg-indigo-900/30 border border-indigo-500/60 rounded-xl p-6 flex flex-col items-center text-center">
                     <div className="bg-indigo-500/20 p-3 rounded-full mb-3"><Info className="text-indigo-300 h-6 w-6" /></div>
@@ -213,6 +264,27 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <p className="text-gray-300 whitespace-pre-wrap">{analystVerdict}</p>
                 </div>
             </div>
+
+            {/* ========== PHASE 2: MOMENTUM INDICATORS DASHBOARD (ENTRY TIMING) ========== */}
+            {safe_technicals && (
+                <MomentumCard 
+                    momentumData={safe_technicals}
+                    analysisData={analysisData}
+                />
+            )}
+
+            {/* ========== PHASE 2: ENHANCED VOLATILITY ANALYSIS ========== */}
+            {safe_futures && (
+                <VolatilityCard 
+                    volatilityData={safe_futures}
+                    analysisData={analysisData}
+                />
+            )}
+
+            {/* ========== PHASE 2: FUTURES BASIS ANALYSIS (INSTITUTIONAL BIAS) ========== */}
+            {safe_futures && safe_futures.futures_spot_basis_percent && safe_futures.futures_spot_basis_percent !== 'N/A' && (
+                <FuturesBasisCard basisData={safe_futures} />
+            )}
 
             {/* --- FIXED EVIDENCE CARDS --- */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -323,6 +395,20 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
             
+            {/* ========== PHASE 2: POSITION SIZING CALCULATOR ========== */}
+            {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
+                <PositionSizeCard 
+                    tradePlan={{
+                        ...strategy_signal.trade_plan,
+                        entryPrice: strategy_signal.trade_plan.entry_price,
+                        stopLoss: strategy_signal.trade_plan.stop_loss,
+                        target: strategy_signal.trade_plan.target_price,
+                        position_sizing: strategy_signal.trade_plan.position_sizing
+                    }}
+                    analysisData={analysisData}
+                />
+            )}
+
             {/* ===== UNIFIED TRADE OPPORTUNITY OVERVIEW ===== */}
             <div className="bg-gradient-to-br from-indigo-900/40 to-slate-900/40 border-2 border-indigo-500/60 rounded-xl p-6 space-y-6">
                 <div className="flex items-center gap-3 border-b border-indigo-500/30 pb-4">
@@ -489,6 +575,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     </p>
                 </div>
             </div>
+
+            {/* ========== PHASE 2: TRADE MANAGEMENT CHECKLIST ========== */}
+            {strategy_signal && strategy_signal.trade_checklist && (
+                <TradeChecklistCard 
+                    checklistData={strategy_signal.trade_checklist}
+                />
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
