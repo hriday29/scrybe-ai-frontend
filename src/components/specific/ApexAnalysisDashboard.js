@@ -99,10 +99,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
         technical_analysis,
         options_sentiment_analysis,
         fundamental_proxy_analysis,
+        volatility_futures_data,
         news_context
     } = analysisData;
     
     const safe_options = options_sentiment_analysis || {};
+    const safe_futures = volatility_futures_data || {};
     const safe_technicals = technical_analysis || {};
     const safe_fundamentals = fundamental_proxy_analysis || {};
 
@@ -246,6 +248,53 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             </div>
                             <p className="text-slate-400 text-sm leading-relaxed">
                                 {safe_options.status || "Options data not available. This stock may not have active F&O trading or liquidity is too low for reliable options data."}
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Futures & Volatility Data */}
+                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                        <TrendingUp size={18} className="mr-2 text-cyan-400" />Futures & Volatility
+                    </h3>
+                    {safe_futures.futures_spot_basis_percent && safe_futures.futures_spot_basis_percent !== 'N/A' ? (
+                        <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
+                            <div className="flex justify-between">
+                                <span className="text-slate-400">Futures Basis:</span>
+                                <span className={`font-mono font-semibold ${
+                                    safe_futures.basis_interpretation?.includes('Premium') ? 'text-green-400' : 
+                                    safe_futures.basis_interpretation?.includes('Discount') ? 'text-red-400' : 
+                                    'text-slate-300'
+                                }`}>
+                                    {safe_futures.futures_spot_basis_percent}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-slate-400">Interpretation:</span>
+                                <span className="text-white text-xs">{safe_futures.basis_interpretation}</span>
+                            </div>
+                            <div className="border-t border-slate-700 my-2"></div>
+                            <div className="flex justify-between">
+                                <span className="text-slate-400">ATR (14):</span>
+                                <span className="text-white font-mono">{safe_futures.volatility_atr_percent || 'N/A'}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-slate-400">BB Width:</span>
+                                <span className="text-white font-mono">{safe_futures.volatility_bbw_percent || 'N/A'}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-slate-400">Volatility:</span>
+                                <span className="text-cyan-300 text-xs">{safe_futures.volatility_interpretation || 'N/A'}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex-1 flex flex-col justify-center items-center text-center space-y-2 py-4">
+                            <div className="text-cyan-400 opacity-50 mb-2">
+                                <TrendingUp size={32} />
+                            </div>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Futures data not available. This stock may not have active futures trading.
                             </p>
                         </div>
                     )}
