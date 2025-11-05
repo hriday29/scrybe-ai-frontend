@@ -212,7 +212,10 @@ const StockSelector = ({ onAnalyze }) => {
 
         // Extract market_context from the first stock (it's the same for all stocks)
         if (analysisData.length > 0 && analysisData[0].market_context) {
+          console.log('✅ Market context loaded:', analysisData[0].market_context);
           setMarketContext(analysisData[0].market_context);
+        } else {
+          console.warn('⚠️ No market_context found in analysis data');
         }
       } catch (err) {
         // If the fetch fails, we can use a more generic error message.
@@ -302,8 +305,8 @@ const StockSelector = ({ onAnalyze }) => {
       </GlassCard>
 
       {/* ========== MARKET-WIDE CONTEXT (UNIVERSAL INDICATORS) ========== */}
-      {marketContext && (
-        <div className="mt-8 w-full max-w-6xl space-y-6">
+      {!isLoading && marketContext && (
+        <div className="mt-8 w-full max-w-6xl space-y-6 px-4">
           {/* Market Regime Card - Shows overall market direction */}
           <MarketRegimeCard marketContext={marketContext} />
 
@@ -315,6 +318,15 @@ const StockSelector = ({ onAnalyze }) => {
             {marketContext.breadth_indicators && (
               <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Debug - Remove after testing */}
+      {!isLoading && !marketContext && (
+        <div className="mt-8 w-full max-w-6xl px-4">
+          <div className="bg-yellow-900/20 border border-yellow-600/40 rounded-xl p-4 text-yellow-200">
+            ⚠️ Market context data not available. Backend may not be returning market_context field.
           </div>
         </div>
       )}
