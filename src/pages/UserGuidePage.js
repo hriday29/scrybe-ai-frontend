@@ -11,7 +11,7 @@ const Section = ({ title, children, id }) => (
     className="mb-16 scroll-mt-24"
   >
     <div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-lg shadow-lg hover:shadow-blue-500/10 transition">
-      <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b border-white/10 pb-2">
         {title}
       </h2>
       <div className="prose prose-lg prose-invert max-w-none leading-relaxed">
@@ -36,7 +36,7 @@ const UserGuidePage = ({ onBack }) => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden">
       {/* Background gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-black" />
       <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-blue-500/30 blur-3xl animate-pulse" />
@@ -49,7 +49,7 @@ const UserGuidePage = ({ onBack }) => {
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white hover:bg-white/20 backdrop-blur-md shadow-md transition"
+          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-gray-900 hover:bg-white/20 backdrop-blur-md shadow-md transition"
         >
           ← Back to Main Site
         </button>
@@ -64,7 +64,7 @@ const UserGuidePage = ({ onBack }) => {
           <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
             User Guide
           </h1>
-          <p className="text-white text-lg max-w-2xl mx-auto">
+          <p className="text-gray-900 text-lg max-w-2xl mx-auto">
             Everything you need to know to get the most out of{" "}
             <span className="font-semibold">Scrybe AI</span>.
           </p>
@@ -72,7 +72,7 @@ const UserGuidePage = ({ onBack }) => {
 
         {/* Table of Contents */}
         <div className="mb-20 rounded-2xl border border-white/10 bg-white/5 p-8 shadow-lg backdrop-blur-md">
-          <h2 className="text-2xl font-bold text-white mb-6">Table of Contents</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Table of Contents</h2>
           <ul className="list-none grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
             {sections.map((section, i) => (
               <li key={section.id}>

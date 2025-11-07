@@ -7,7 +7,7 @@ import { TrendingUp, TrendingDown, ArrowRight, Shield, ShieldOff } from 'lucide-
 
 // Sub-component for a single card in the dashboard
 const InfoCard = ({ title, children, icon: Icon }) => (
-    <div className="bg-slate-900/40 border border-white/10 backdrop-blur-xl shadow-lg rounded-2xl p-6 h-full">
+    <div className="bg-white border border-gray-200 backdrop-blur-none shadow-lg rounded-2xl p-6 h-full">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center">
             <Icon className="w-6 h-6 mr-3 text-blue-400" />
             {title}
@@ -122,7 +122,7 @@ const IndexAnalysis = () => {
                         className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors backdrop-blur-md border ${
                             selectedTicker === index.ticker
                                 ? 'bg-blue-600 text-white border-blue-400/40'
-                                : 'bg-white/5 text-slate-300 hover:bg-white/10 border-white/10'
+                                : 'bg-white/5 text-slate-300 hover:bg-white/10 border-gray-200'
                         }`}
                     >
                         {index.name}

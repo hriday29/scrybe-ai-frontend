@@ -27,7 +27,7 @@ import { apexDemoData } from '../utils/demoData.js';
 // Visual helpers that were in App.js
 const GlassCard = ({ className = '', children }) => (
   <div
-    className={`bg-slate-900/40 border border-white/10 backdrop-blur-xl shadow-2xl shadow-slate-950/30 ${className} rounded-2xl`}
+    className={`bg-white border border-gray-200 backdrop-blur-none shadow-2xl shadow-gray-200 ${className} rounded-2xl`}
   >
     {children}
   </div>
@@ -71,7 +71,7 @@ const ErrorDisplay = ({ error, onReset }) => (
       <p className="text-red-300 mt-2 max-w-2xl mx-auto">{error}</p>
       <button
         onClick={onReset}
-        className="mt-6 bg-red-500/80 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-500 transition-colors"
+        className="mt-6 bg-red-500/80 text-gray-900 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-500 transition-colors"
       >
         Try Another Analysis
       </button>
@@ -118,8 +118,8 @@ const StockSelector = ({ onAnalyze }) => {
     }, [stocks, searchTerm]);
   
     const ScoreBadge = ({ score }) => {
-        if (typeof score !== "number" || isNaN(score)) return <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">N/A</span>
-        const scoreColor = score > 49 ? "text-green-300 bg-green-500/10 ring-green-500/30" : score < -49 ? "text-red-300 bg-red-500/10 ring-red-500/30" : "text-slate-400 bg-slate-700/20 ring-slate-600/30";
+        if (typeof score !== "number" || isNaN(score)) return <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-gray-500 bg-gray-200 ring-1 ring-inset ring-gray-300">N/A</span>
+        const scoreColor = score > 49 ? "text-green-300 bg-green-500/10 ring-green-500/30" : score < -49 ? "text-red-300 bg-red-500/10 ring-red-500/30" : "text-gray-600 bg-gray-200 ring-gray-300";
         const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
         return <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>{scoreText}</span>
     };
@@ -143,7 +143,7 @@ const StockSelector = ({ onAnalyze }) => {
               placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-900/40 backdrop-blur-md border border-slate-700 text-white placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
+              className="w-full bg-white backdrop-blur-none border border-gray-300 text-gray-900 placeholder-gray-500 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-blue-500"
               disabled={isLoading}
             />
           </div>
@@ -155,7 +155,7 @@ const StockSelector = ({ onAnalyze }) => {
                 <button key={stock.ticker} onClick={() => onAnalyze(stock.ticker)} className="w-full text-left p-3 rounded-xl hover:bg-blue-600/40 transition-colors flex justify-between items-center">
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-gray-500 text-sm w-8">{index + 1}.</span>
-                    <span className="font-semibold text-white">{stock.companyName}</span>
+                    <span className="font-semibold text-gray-900">{stock.companyName}</span>
                     <span className="text-xs text-slate-400">{stock.ticker}</span>
                   </div>
                   <ScoreBadge score={stock.scrybeScore} />
@@ -232,7 +232,7 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
         case "results":
           return (
             <>
-              <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 text-white rounded-lg transition-colors">
+              <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg transition-colors">
                 <ArrowLeft size={16} />
                 Back to List
               </button>

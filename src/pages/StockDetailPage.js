@@ -52,7 +52,7 @@ const StockDetailPage = ({ ticker, onBackClick }) => {
                 <div className="w-full max-w-5xl mx-auto px-4 mb-6">
                     <button
                         onClick={() => setShowMarketContext(!showMarketContext)}
-                        className="w-full bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700/50 rounded-xl p-4 flex items-center justify-between transition-colors"
+                        className="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl p-4 flex items-center justify-between transition-colors"
                     >
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">📊</span>

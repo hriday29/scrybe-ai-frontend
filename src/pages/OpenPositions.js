@@ -66,20 +66,20 @@ const OpenPositions = ({ onAnalyze }) => {
             const progressPercent = Math.min((progress / totalRange) * 100, 100);
             const isProfit = trade.pnl_percent >= 0;
             return (
-                <div className="w-full bg-slate-700 rounded-full h-2 my-1">
+                <div className="w-full bg-gray-200 rounded-full h-2 my-1">
                     <div className={`h-2 rounded-full ${isProfit ? 'bg-green-500' : 'bg-red-500'}`} style={{ width: `${progressPercent}%` }}></div>
                 </div>
             );
         };
 
         return (
-            <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
                 {/* Mobile View */}
                 <div className="md:hidden">
                     {openTrades.map(trade => {
                         const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
                         return (
-                            <div key={trade.ticker} className="p-4 border-b border-slate-800 last:border-b-0">
+                            <div key={trade.ticker} className="p-4 border-b border-gray-200 last:border-b-0">
                                 {/* ... content for mobile view ... */}
                             </div>
                         );
@@ -88,16 +88,16 @@ const OpenPositions = ({ onAnalyze }) => {
                 {/* Desktop View Table */}
                 <div className="overflow-x-auto hidden md:block">
                     <table className="w-full text-left min-w-[900px]">
-                        <thead className="bg-slate-800/50"><tr><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">P&L</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Days Held</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Entry Price</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Target</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Stop-Loss</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">R/R</th><th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Details</th></tr></thead>
+                        <thead className="bg-gray-100"><tr><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Ticker</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">P&L</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Days Held</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Entry Price</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Target</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Stop-Loss</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">R/R</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Details</th></tr></thead>
                         <tbody>
                             {openTrades.map(trade => {
                                 const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
                                 return (
-                                    <tr key={trade.ticker} className="border-b border-slate-800 last:border-b-0 hover:bg-slate-800/40 transition-colors">
+                                    <tr key={trade.ticker} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
                                         <td className="p-4 text-white font-semibold">{trade.companyName}</td>
                                         <td className="p-4 font-mono font-semibold w-48"><span className={pnlColor}>{trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%</span><PnlProgressBar trade={trade} /></td>
-                                        <td className="p-4 text-gray-300">{trade.days_held}</td>
-                                        <td className="p-4 font-mono text-gray-300 text-right">{trade.entry_price.toFixed(2)}</td>
+                                        <td className="p-4 text-gray-700">{trade.days_held}</td>
+                                        <td className="p-4 font-mono text-gray-700 text-right">{trade.entry_price.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-green-400 text-right">{trade.target.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-red-400 text-right">{trade.stop_loss.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-sky-400 text-right">{trade.risk_reward_ratio}</td>

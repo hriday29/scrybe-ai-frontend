@@ -5,7 +5,7 @@ import { ShieldCheckIcon, TargetIcon, ZapIcon, LightbulbIcon, DatabaseIcon, BarC
 
 const Rulebook = () => {
   const Section = ({ title, children }) => (
-    <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl p-6 mb-8">
+    <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-8">
       <h3 className="text-2xl font-bold text-white mb-4 border-b border-slate-700 pb-3">{title}</h3>
       <div className="text-gray-300 leading-relaxed space-y-4 text-base">{children}</div>
     </div>
@@ -35,7 +35,7 @@ const Rulebook = () => {
           <div className="bg-red-500/10 p-3 rounded-lg">
             <strong className="text-red-300">-60 to -100:</strong> High-Conviction SELL (Short)
           </div>
-          <div className="md:col-span-2 bg-slate-700/50 p-3 rounded-lg">
+          <div className="md:col-span-2 bg-gray-100 p-3 rounded-lg">
             <strong className="text-amber-400">-59 to +59:</strong> HOLD (Neutral / Low-Conviction / Contradictory Data)
           </div>
         </div>
