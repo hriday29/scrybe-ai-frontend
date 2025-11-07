@@ -6,7 +6,7 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
   return (
     <footer className="bg-gray-50 text-gray-700 border-t border-gray-200">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div>
@@ -140,7 +140,7 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
 
       {/* Newsletter Section */}
       <div className="border-t border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h3 className="text-gray-900 font-bold text-xl mb-2">Stay Updated</h3>
             <p className="text-gray-600 mb-6">
@@ -166,7 +166,7 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-200 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-gray-500 text-sm">
             © 2025 Scrybe AI. All rights reserved. | Built for traders, by traders.
           </p>
