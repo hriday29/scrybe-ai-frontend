@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 // --- Corrected Imports ---
-import { useAuth } from '../context/AuthContext';
 import { getAnalysis } from '../api/api'; 
 import ApexAnalysisDashboard from '../components/specific/ApexAnalysisDashboard';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
@@ -13,7 +12,6 @@ import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
 
 
 const StockDetailPage = ({ ticker, onBackClick }) => {
-    const { currentUser } = useAuth();
     const [analysis, setAnalysis] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);

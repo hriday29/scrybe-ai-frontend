@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  TrendingUp, TrendingDown, AlertTriangle, CheckCircle, 
+  AlertTriangle, CheckCircle, 
   XCircle, Filter, Search, ArrowUpCircle, ArrowDownCircle,
   PieChart, BarChart3, Activity, Eye, Target, Shield
 } from 'lucide-react';

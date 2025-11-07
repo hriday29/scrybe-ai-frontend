@@ -2,7 +2,7 @@
 // Market Regime Display - Shows current market regime, volatility, and active strategy
 
 import React from 'react';
-import { TrendingUp, TrendingDown, Activity, Shield, AlertTriangle, Info } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Shield, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const MarketRegimeCard = ({ marketContext }) => {

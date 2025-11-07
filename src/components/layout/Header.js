@@ -1,30 +1,31 @@
 // src/components/layout/Header.js
 
 import { useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 import { motion } from "framer-motion";
 import { Menu, LogOut } from "lucide-react";
-// We no longer need Link for the landing page header
-import { Link } from "react-router-dom";
 
 // --- Subcomponents for Buttons ---
 const baseClasses =
-  "px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-lg transition-all duration-200 shadow-lg flex items-center gap-2";
+  "px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm flex items-center gap-2 border";
 
-// --- MODIFIED: Made all button variants uniform and colorless for a consistent glass look ---
-const uniformStyle = "bg-white/10 hover:bg-white/20 text-slate-100 hover:text-white border border-white/20";
+// Light, accessible variants for white/light-gray surfaces
 const variants = {
-  primary: uniformStyle,
-  secondary: uniformStyle,
-  accent: uniformStyle,
-  danger: uniformStyle,
+  primary:
+    "bg-primary-500 hover:bg-primary-600 text-white border-primary-500",
+  secondary:
+    "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 border-gray-300",
+  accent:
+    "bg-secondary-500 hover:bg-secondary-600 text-white border-secondary-500",
+  danger:
+    "bg-white hover:bg-red-50 text-red-600 border-red-200",
 };
-
 
 // Button (for actions)
 const NavButton = ({ label, onClick, variant = "secondary", icon: Icon }) => (
   <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
+    whileHover={{ scale: 1.03 }}
+    whileTap={{ scale: 0.97 }}
     onClick={onClick}
     aria-label={label}
     className={`${baseClasses} ${variants[variant]}`}
@@ -36,48 +37,42 @@ const NavButton = ({ label, onClick, variant = "secondary", icon: Icon }) => (
 
 // --- Main Header Component ---
 export default function Header({
-  mode = "landing", // "landing" or "app"
+  mode = "app", // "landing" or "app"; defaults to app for light theme
   onReset,
   onSignOut,
   onBetaModalOpen,
-  // --- CHANGE 1: Add new props for handling clicks ---
   onFaqClick,
   onGuideClick,
   onLaunchAppClick,
-  onDemoClick, // Assuming you might have a demo modal/view
+  onDemoClick,
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-  // --- CHANGE 2: Create a consistent set of landing page buttons ---
+  // Landing header (rarely used now since NewLandingPage has its own)
   const landingNavButtons = (
     <>
-      <NavButton label="Demo" onClick={onDemoClick} variant="primary" />
+      <NavButton label="Demo" onClick={onDemoClick} variant="secondary" />
       <NavButton label="FAQ" onClick={onFaqClick} />
       <NavButton label="User Guide" onClick={onGuideClick} />
-      <NavButton
-        label="Beta Info"
-        onClick={onBetaModalOpen}
-        variant="accent"
-      />
+      <NavButton label="Beta Info" onClick={onBetaModalOpen} variant="secondary" />
       <NavButton label="Launch App" onClick={onLaunchAppClick} variant="primary" />
+      <NavButton label={theme === 'dark' ? 'Light Mode' : 'Dark Mode'} onClick={toggleTheme} variant="secondary" />
     </>
   );
 
   const appNavButtons = (
     <>
       {onReset && (
-        <NavButton label="Reset" onClick={onReset} variant="primary" />
+        <NavButton label="Reset" onClick={onReset} variant="secondary" />
       )}
-      <NavButton
-        label="Beta Info"
-        onClick={onBetaModalOpen}
-        variant="accent"
-      />
+      <NavButton label="Beta Info" onClick={onBetaModalOpen} variant="secondary" />
+      <NavButton label={theme === 'dark' ? 'Light Mode' : 'Dark Mode'} onClick={toggleTheme} variant="secondary" />
     </>
   );
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -86,22 +81,13 @@ export default function Header({
         >
           {mode === "landing" ? (
             <>
-              <img
-                src="/logo192.png"
-                alt="Scrybe AI Logo"
-                className="w-9 h-9"
-              />
-              <span className="text-2xl font-bold text-white tracking-tight">
-                Scrybe <span className="text-blue-400">AI</span>
+              <img src="/logo192.png" alt="Scrybe AI Logo" className="w-9 h-9" />
+              <span className="text-2xl font-bold tracking-tight text-gray-900">
+                Scrybe <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">AI</span>
               </span>
             </>
           ) : (
-            <NavButton
-              label="Sign Out"
-              onClick={onSignOut}
-              variant="danger"
-              icon={LogOut}
-            />
+            <NavButton label="Sign Out" onClick={onSignOut} variant="danger" icon={LogOut} />
           )}
         </motion.div>
 
@@ -112,7 +98,7 @@ export default function Header({
 
         {/* Mobile Menu Toggle */}
         <button
-          className="md:hidden text-white hover:text-blue-300"
+          className="md:hidden text-gray-700 hover:text-gray-900"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
@@ -125,20 +111,17 @@ export default function Header({
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="flex flex-col gap-3 px-6 py-4 bg-white backdrop-blur-none border-t border-gray-200 md:hidden"
-          onClick={() => setMobileMenuOpen(false)} // Close menu on link click
+          className="flex flex-col gap-3 px-6 py-4 bg-white border-t border-gray-200 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
         >
-          {mode === "landing" ? landingNavButtons :
+          {mode === "landing" ? (
+            landingNavButtons
+          ) : (
             <>
               {appNavButtons}
-              <NavButton
-                label="Sign Out"
-                onClick={onSignOut}
-                variant="danger"
-                icon={LogOut}
-              />
+              <NavButton label="Sign Out" onClick={onSignOut} variant="danger" icon={LogOut} />
             </>
-          }
+          )}
         </motion.nav>
       )}
     </header>

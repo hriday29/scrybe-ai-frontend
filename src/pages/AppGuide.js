@@ -69,11 +69,11 @@ const AppGuide = ({ navigateToTab }) => {
     <div className="w-full max-w-7xl mx-auto p-6 md:p-12 animate-fadeIn">
       {/* Header */}
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white mb-4">
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">
           Welcome to Scrybe AI
         </h2>
-        <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-          Your institutional-grade AI analyst for the Nifty Smallcap 250 universe. 
+        <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+          Your institutional-grade AI analyst for the Nifty Smallcap 250 universe.
           Master the app with this interactive guide.
         </p>
       </div>
@@ -91,25 +91,25 @@ const AppGuide = ({ navigateToTab }) => {
             <div className="mb-4">{item.icon}</div>
 
             {/* Title */}
-            <h3 className="font-bold text-xl text-white group-hover:text-blue-400 transition">
+            <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary-600 transition">
               {item.title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-400 mt-2 flex-grow">
+            <p className="text-sm text-gray-600 mt-2 flex-grow">
               {item.description}
             </p>
 
             {/* Benefit */}
             <div className="mt-6 pt-4 border-t border-slate-700">
-              <p className="text-xs font-semibold text-green-400 mb-1">
+              <p className="text-xs font-semibold text-success-700 mb-1">
                 Why This Is Useful:
               </p>
-              <p className="text-sm text-green-200/80">{item.benefit}</p>
+              <p className="text-sm text-success-600">{item.benefit}</p>
             </div>
 
             {/* CTA */}
-            <p className="text-sm font-semibold text-blue-400 mt-6 pt-4 border-t border-slate-800">
+            <p className="text-sm font-semibold text-primary-600 mt-6 pt-4 border-t border-slate-200">
               Go to Section →
             </p>
           </div>

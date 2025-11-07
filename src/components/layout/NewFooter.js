@@ -44,29 +44,29 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
             <h3 className="text-gray-900 font-bold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#features" className="text-gray-600 hover:text-primary-600 transition-colors">
+                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors">
                   Features
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#testimonials" className="text-gray-600 hover:text-primary-600 transition-colors">
+                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors">
                   Testimonials
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary-600 transition-colors">
+                <button type="button" onClick={onDisclaimerOpen} className="text-gray-600 hover:text-primary-600 transition-colors">
                   Get Started
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary-600 transition-colors">
+                <button type="button" onClick={onTermsOpen} className="text-gray-600 hover:text-primary-600 transition-colors">
                   Sign In
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#contact" className="text-gray-600 hover:text-primary-600 transition-colors">
+                <button type="button" onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors">
                   Contact Us
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -93,12 +93,14 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
             <div className="mt-6">
               <p className="text-gray-900 font-semibold mb-3">Follow us:</p>
               <div className="flex gap-3">
-                <a
-                  href="#"
+                <button
+                  type="button"
+                  aria-label="Instagram (coming soon)"
                   className="w-10 h-10 bg-white border border-gray-200 hover:border-primary-500 hover:bg-primary-50 rounded-lg flex items-center justify-center transition-all duration-300"
+                  onClick={() => console.info('Social link coming soon')}
                 >
                   <Instagram className="w-5 h-5 text-gray-700" />
-                </a>
+                </button>
               </div>
             </div>
           </div>

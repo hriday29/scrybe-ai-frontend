@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { X, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
+import Modal from '../ui/Modal';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true">
@@ -40,96 +40,65 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
   };
 
   return (
-    <motion.div
-      onClick={onClose}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="signin-modal-title"
-    >
-      <motion.div
-        onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl w-full max-w-md text-center p-8 md:p-10 shadow-soft-2xl relative"
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      >
-        {/* Close Button */}
+    <Modal onClose={onClose} title="Welcome Back" maxWidth="max-w-md">
+      {/* Lock Icon */}
+      <div className="flex justify-center mb-4">
+        <div className="bg-primary-50 dark:bg-primary-900/20 rounded-full p-4">
+          <Lock className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+        </div>
+      </div>
+
+      <p className="text-gray-600 dark:text-gray-300 mb-8 text-center">
+        Sign in to access your trading dashboard
+      </p>
+
+      {/* Sign-in Buttons */}
+      <div className="space-y-3 mb-6">
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
-          aria-label="Close modal"
+          onClick={() => handleSignIn(onSignIn, 'Google')}
+          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-neutral-900 border-2 border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-200 font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
+          aria-label="Sign in with Google"
         >
-          <X className="w-5 h-5" />
+          <GoogleIcon />
+          Continue with Google
         </button>
+        <button
+          onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
+          className="w-full flex items-center justify-center gap-3 bg-[#0078d4] border-2 border-[#0078d4] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-[#106ebe] hover:border-[#106ebe] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2 shadow-soft"
+          aria-label="Sign in with Microsoft"
+        >
+          <MicrosoftIcon />
+          Continue with Microsoft
+        </button>
+      </div>
 
-        {/* Lock Icon */}
-        <div className="flex justify-center mb-4">
-          <div className="bg-primary-50 rounded-full p-4">
-            <Lock className="w-8 h-8 text-primary-500" />
-          </div>
+      {/* Divider */}
+      <div className="relative my-6">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-200 dark:border-neutral-700"></div>
         </div>
-
-        {/* Title */}
-        <h2 id="signin-modal-title" className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
-          Welcome Back
-        </h2>
-        <p className="text-gray-600 mb-8">
-          Sign in to access your trading dashboard
-        </p>
-
-        {/* Sign-in Buttons */}
-        <div className="space-y-3 mb-6">
-          <button
-            onClick={() => handleSignIn(onSignIn, 'Google')}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-50 hover:border-primary-500 hover:text-primary-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
-            aria-label="Sign in with Google"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-          <button
-            onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
-            className="w-full flex items-center justify-center gap-3 bg-[#0078d4] border-2 border-[#0078d4] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-[#106ebe] hover:border-[#106ebe] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2 shadow-soft"
-            aria-label="Sign in with Microsoft"
-          >
-            <MicrosoftIcon />
-            Continue with Microsoft
-          </button>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-4 bg-white dark:bg-neutral-900 text-gray-500 dark:text-gray-400">Secure Authentication</span>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-gray-500">Secure Authentication</span>
-          </div>
-        </div>
+      {/* Footer */}
+      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed text-center">
+        By signing in, you agree to our{' '}
+        <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline">
+          Terms of Service
+        </button>
+        {' '}and{' '}
+        <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline">
+          Privacy Policy
+        </button>
+      </p>
 
-        {/* Footer */}
-        <p className="text-xs text-gray-500 leading-relaxed">
-          By signing in, you agree to our{' '}
-          <button className="text-primary-600 hover:text-primary-700 font-medium underline">
-            Terms of Service
-          </button>
-          {' '}and{' '}
-          <button className="text-primary-600 hover:text-primary-700 font-medium underline">
-            Privacy Policy
-          </button>
-        </p>
-
-        {/* Trust Badge */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
-          <Lock className="w-3 h-3" />
-          <span>Your data is encrypted and secure</span>
-        </div>
-      </motion.div>
-    </motion.div>
+      {/* Trust Badge */}
+      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <Lock className="w-3 h-3" />
+        <span>Your data is encrypted and secure</span>
+      </div>
+    </Modal>
   );
 }

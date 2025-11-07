@@ -48,21 +48,21 @@ const MomentumCard = ({ momentumData, analysisData }) => {
 
   // Color coding for momentum score
   const getMomentumColor = (score) => {
-    if (score >= 75) return 'text-green-400';
-    if (score >= 60) return 'text-lime-400';
-    if (score >= 40) return 'text-yellow-400';
-    if (score >= 25) return 'text-orange-400';
-    return 'text-red-400';
+    if (score >= 75) return 'text-green-700';
+    if (score >= 60) return 'text-lime-700';
+    if (score >= 40) return 'text-amber-700';
+    if (score >= 25) return 'text-orange-700';
+    return 'text-red-700';
   };
 
   // Timing signal color and badge styling
   const getTimingSignalClass = (color) => {
     const colorMap = {
-      'green': 'bg-green-500/20 text-green-400 border-green-500/50',
-      'lightgreen': 'bg-lime-500/20 text-lime-400 border-lime-500/50',
-      'yellow': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50',
-      'orange': 'bg-orange-500/20 text-orange-400 border-orange-500/50',
-      'red': 'bg-red-500/20 text-red-400 border-red-500/50'
+      'green': 'bg-green-50 text-green-700 border-green-200',
+      'lightgreen': 'bg-lime-50 text-lime-700 border-lime-200',
+      'yellow': 'bg-amber-50 text-amber-700 border-amber-200',
+      'orange': 'bg-orange-50 text-orange-700 border-orange-200',
+      'red': 'bg-red-50 text-red-700 border-red-200'
     };
     return colorMap[color] || colorMap['yellow'];
   };
@@ -101,9 +101,9 @@ const MomentumCard = ({ momentumData, analysisData }) => {
       </div>
 
       {/* Momentum Score & Gauge */}
-      <div className="mb-4 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg border border-purple-700/50">
+      <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-300">Overall Momentum Score</span>
+          <span className="text-sm text-gray-600">Overall Momentum Score</span>
           <span className={`text-3xl font-bold ${getMomentumColor(momentum_score)}`}>
             {momentum_score}/100
           </span>
@@ -112,7 +112,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
           {getMomentumGaugeSegments()}
         </div>
         {timing_signal.advice && (
-          <p className="text-xs text-gray-300 italic">💡 {timing_signal.advice}</p>
+          <p className="text-xs text-gray-600 italic">💡 {timing_signal.advice}</p>
         )}
       </div>
 
@@ -123,7 +123,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="w-4 h-4 text-blue-400" />
-              <h4 className="text-sm font-semibold text-gray-200">Trend Strength (ADX)</h4>
+              <h4 className="text-sm font-semibold text-gray-900">Trend Strength (ADX)</h4>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -132,7 +132,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Strength:</span>
-                <span className="text-sm font-semibold text-blue-400">{adx_analysis.strength}</span>
+                <span className="text-sm font-semibold text-blue-700">{adx_analysis.strength}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Direction:</span>
@@ -145,10 +145,10 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Trend Status:</span>
-                <span className="text-sm text-gray-300">{adx_analysis.adx_trend}</span>
+                <span className="text-sm text-gray-600">{adx_analysis.adx_trend}</span>
               </div>
               {adx_analysis.interpretation && (
-                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-700">
+                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-200">
                   {adx_analysis.interpretation}
                 </p>
               )}
@@ -161,7 +161,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <div className="flex items-center gap-2 mb-2">
               <Activity className="w-4 h-4 text-purple-400" />
-              <h4 className="text-sm font-semibold text-gray-200">MACD Momentum</h4>
+              <h4 className="text-sm font-semibold text-gray-900">MACD Momentum</h4>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -191,7 +191,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
                 </span>
               </div>
               {macd_analysis.interpretation && (
-                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-700">
+                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-200">
                   {macd_analysis.interpretation}
                 </p>
               )}
@@ -204,7 +204,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <div className="flex items-center gap-2 mb-2">
               <BarChart3 className="w-4 h-4 text-green-400" />
-              <h4 className="text-sm font-semibold text-gray-200">RSI Analysis</h4>
+              <h4 className="text-sm font-semibold text-gray-900">RSI Analysis</h4>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -214,9 +214,9 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Zone:</span>
                 <span className={`text-xs font-semibold ${
-                  rsi_analysis.zone?.includes('Overbought') ? 'text-red-400' :
-                  rsi_analysis.zone?.includes('Oversold') ? 'text-green-400' :
-                  rsi_analysis.zone?.includes('Strong') ? 'text-lime-400' : 'text-gray-600'
+                  rsi_analysis.zone?.includes('Overbought') ? 'text-red-700' :
+                  rsi_analysis.zone?.includes('Oversold') ? 'text-green-700' :
+                  rsi_analysis.zone?.includes('Strong') ? 'text-lime-700' : 'text-gray-600'
                 }`}>
                   {rsi_analysis.zone}
                 </span>
@@ -224,8 +224,8 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Trend:</span>
                 <span className={`text-sm ${
-                  rsi_analysis.trend === 'Rising' ? 'text-green-400' :
-                  rsi_analysis.trend === 'Falling' ? 'text-red-400' : 'text-gray-600'
+                  rsi_analysis.trend === 'Rising' ? 'text-green-700' :
+                  rsi_analysis.trend === 'Falling' ? 'text-red-700' : 'text-gray-600'
                 }`}>
                   {rsi_analysis.trend}
                 </span>
@@ -233,14 +233,14 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Divergence:</span>
                 <span className={`text-xs ${
-                  rsi_analysis.divergence?.includes('Bullish') ? 'text-green-400' :
-                  rsi_analysis.divergence?.includes('Bearish') ? 'text-red-400' : 'text-gray-600'
+                  rsi_analysis.divergence?.includes('Bullish') ? 'text-green-700' :
+                  rsi_analysis.divergence?.includes('Bearish') ? 'text-red-700' : 'text-gray-600'
                 }`}>
                   {rsi_analysis.divergence}
                 </span>
               </div>
               {rsi_analysis.interpretation && (
-                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-700">
+                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-200">
                   {rsi_analysis.interpretation}
                 </p>
               )}
@@ -253,7 +253,7 @@ const MomentumCard = ({ momentumData, analysisData }) => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <div className="flex items-center gap-2 mb-2">
               <BarChart3 className="w-4 h-4 text-orange-400" />
-              <h4 className="text-sm font-semibold text-gray-200">Volume Momentum</h4>
+              <h4 className="text-sm font-semibold text-gray-900">Volume Momentum</h4>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -262,24 +262,24 @@ const MomentumCard = ({ momentumData, analysisData }) => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">20D Avg:</span>
-                <span className="text-sm text-gray-300">{volume_momentum['20d_avg_volume']}</span>
+                <span className="text-sm text-gray-600">{volume_momentum['20d_avg_volume']}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">Ratio:</span>
                 <span className={`text-sm font-semibold ${
-                  volume_momentum.volume_ratio >= 1.5 ? 'text-green-400' :
-                  volume_momentum.volume_ratio >= 1.2 ? 'text-lime-400' :
-                  volume_momentum.volume_ratio >= 0.8 ? 'text-yellow-400' : 'text-red-400'
+                  volume_momentum.volume_ratio >= 1.5 ? 'text-green-700' :
+                  volume_momentum.volume_ratio >= 1.2 ? 'text-lime-700' :
+                  volume_momentum.volume_ratio >= 0.8 ? 'text-amber-700' : 'text-red-700'
                 }`}>
                   {volume_momentum.volume_ratio}x
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-600">State:</span>
-                <span className="text-xs text-gray-300">{volume_momentum.state}</span>
+                <span className="text-xs text-gray-600">{volume_momentum.state}</span>
               </div>
               {volume_momentum.interpretation && (
-                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-700">
+                <p className="text-xs text-gray-600 mt-2 pt-2 border-t border-gray-200">
                   {volume_momentum.interpretation}
                 </p>
               )}
@@ -290,24 +290,24 @@ const MomentumCard = ({ momentumData, analysisData }) => {
 
       {/* Score Breakdown */}
       {score_breakdown && (
-        <div className="mb-4 p-3 bg-gray-900/30 rounded-lg border border-gray-700/30">
-          <h4 className="text-xs font-semibold text-gray-300 mb-2">Score Breakdown</h4>
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="text-xs font-semibold text-gray-900 mb-2">Score Breakdown</h4>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             <div className="text-center">
               <p className="text-xs text-gray-600">ADX</p>
-              <p className="text-sm font-semibold text-blue-400">{score_breakdown.adx_score || 0}</p>
+              <p className="text-sm font-semibold text-blue-700">{score_breakdown.adx_score || 0}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-600">MACD</p>
-              <p className="text-sm font-semibold text-purple-400">{score_breakdown.macd_score || 0}</p>
+              <p className="text-sm font-semibold text-purple-700">{score_breakdown.macd_score || 0}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-600">RSI</p>
-              <p className="text-sm font-semibold text-green-400">{score_breakdown.rsi_score || 0}</p>
+              <p className="text-sm font-semibold text-green-700">{score_breakdown.rsi_score || 0}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-600">Volume</p>
-              <p className="text-sm font-semibold text-orange-400">{score_breakdown.volume_score || 0}</p>
+              <p className="text-sm font-semibold text-orange-700">{score_breakdown.volume_score || 0}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-600">Total</p>
@@ -319,21 +319,21 @@ const MomentumCard = ({ momentumData, analysisData }) => {
 
       {/* Momentum Factors */}
       {momentum_factors && momentum_factors.length > 0 && (
-        <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-lg p-4 border border-blue-700/30">
-          <h4 className="text-sm font-semibold text-gray-200 mb-3 flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-blue-400" />
+        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-blue-700" />
             Key Momentum Factors
           </h4>
           <div className="space-y-1.5">
             {momentum_factors.map((factor, idx) => (
               <div key={idx} className="flex items-start gap-2">
                 {factor.startsWith('✅') ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-green-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-3.5 h-3.5 text-green-700 flex-shrink-0 mt-0.5" />
                 ) : (
-                  <XCircle className="w-3.5 h-3.5 text-orange-400 flex-shrink-0 mt-0.5" />
+                  <XCircle className="w-3.5 h-3.5 text-orange-700 flex-shrink-0 mt-0.5" />
                 )}
                 <span className={`text-xs ${
-                  factor.startsWith('✅') ? 'text-gray-200' : 'text-gray-600'
+                  factor.startsWith('✅') ? 'text-gray-700' : 'text-gray-600'
                 }`}>
                   {factor.replace('✅ ', '').replace('⚠️ ', '')}
                 </span>

@@ -2,19 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* App global styles */
-body {
-  @apply bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e293b] text-white;
+/* Global light theme baseline */
+html, body, #root {
+  height: 100%;
 }
 
-/* Optional: subtle grid effect without external file */
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* Dark mode overrides (utility-level patching for rapid toggle without rewriting all components) */
+.dark body {
+  @apply bg-neutral-900 text-neutral-100;
+}
+.dark .bg-white { background-color: #1e1e1e !important; }
+.dark .bg-gray-50 { background-color: #111827 !important; }
+.dark .text-gray-900 { color: #f3f4f6 !important; }
+.dark .text-gray-700 { color: #e5e7eb !important; }
+.dark .text-gray-600 { color: #d1d5db !important; }
+.dark .border-gray-200 { border-color: #374151 !important; }
+.dark .border-gray-300 { border-color: #4b5563 !important; }
+.dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.5) !important; }
+.dark .shadow, .dark .shadow-lg { box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important; }
+
+/* Accent adjustments for dark mode readability */
+.dark .bg-primary-500 { background-color: #7C3AED !important; }
+.dark .bg-secondary-500 { background-color: #0D9488 !important; }
+
+/* Ensure cards with gradient backgrounds remain legible */
+.dark .bg-blue-50, .dark .bg-purple-50, .dark .bg-amber-50, .dark .bg-green-50 { background-color: #1f2937 !important; }
+.dark .text-indigo-700, .dark .text-blue-700, .dark .text-purple-700, .dark .text-amber-700, .dark .text-green-700, .dark .text-red-700, .dark .text-cyan-700 { filter: brightness(1.2); }
+
+/* Optional: subtle light grid background (very faint) */
+/* Disabled by default to keep UI clean; uncomment to enable
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
 }
+*/

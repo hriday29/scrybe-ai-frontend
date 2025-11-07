@@ -76,14 +76,11 @@ const OpenPositions = ({ onAnalyze }) => {
             <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
                 {/* Mobile View */}
                 <div className="md:hidden">
-                    {openTrades.map(trade => {
-                        const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
-                        return (
-                            <div key={trade.ticker} className="p-4 border-b border-gray-200 last:border-b-0">
-                                {/* ... content for mobile view ... */}
-                            </div>
-                        );
-                    })}
+                    {openTrades.map(trade => (
+                        <div key={trade.ticker} className="p-4 border-b border-gray-200 last:border-b-0">
+                            {/* Mobile view details could be implemented here */}
+                        </div>
+                    ))}
                 </div>
                 {/* Desktop View Table */}
                 <div className="overflow-x-auto hidden md:block">
@@ -91,11 +88,10 @@ const OpenPositions = ({ onAnalyze }) => {
                         <thead className="bg-gray-100"><tr><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Ticker</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">P&L</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Days Held</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Entry Price</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Target</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">Stop-Loss</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider text-right">R/R</th><th className="p-4 text-sm font-semibold text-gray-700 tracking-wider">Details</th></tr></thead>
                         <tbody>
                             {openTrades.map(trade => {
-                                const pnlColor = trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
                                 return (
                                     <tr key={trade.ticker} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
                                         <td className="p-4 text-white font-semibold">{trade.companyName}</td>
-                                        <td className="p-4 font-mono font-semibold w-48"><span className={pnlColor}>{trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%</span><PnlProgressBar trade={trade} /></td>
+                                        <td className="p-4 font-mono font-semibold w-48"><span className={trade.pnl_percent >= 0 ? 'text-green-400' : 'text-red-400'}>{trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%</span><PnlProgressBar trade={trade} /></td>
                                         <td className="p-4 text-gray-700">{trade.days_held}</td>
                                         <td className="p-4 font-mono text-gray-700 text-right">{trade.entry_price.toFixed(2)}</td>
                                         <td className="p-4 font-mono text-green-400 text-right">{trade.target.toFixed(2)}</td>

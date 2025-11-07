@@ -11,9 +11,8 @@ import { getAnalysis, getTrackRecord } from './api/api.js';
 import './assets/styles/App.css';
 
 // Layout Components
-import AppBackground from "./components/layout/AppBackground.js";
-import Footer from './components/layout/Footer.js';
-import Header from './components/layout/Header.js'; // We will use only this Header
+// Removed dark-themed AppBackground and Footer import for light overhaul
+import Header from './components/layout/Header.js'; // Unified light Header
 
 // Common Components (Modals)
 import BetaInfoModal from './components/common/BetaInfoModal.js';
@@ -26,7 +25,6 @@ import ConfidencePoll from './components/specific/ConfidencePoll.js';
 import ConversationalQa from './components/specific/ConversationalQa.js';
 import FeedbackWidget from './components/specific/FeedbackWidget.js';
 import HolidayBanner from './components/specific/HolidayBanner.js';
-import LandingWalkthrough from './components/specific/LandingWalkthrough.js';
 import NewsSection from './components/specific/NewsSection.js';
 import TradeJournalCard from './components/specific/TradeJournalCard.js';
 import MarketRegimeCard from './components/specific/MarketRegimeCard.js';
@@ -37,10 +35,8 @@ import MarketBreadthCard from './components/specific/MarketBreadthCard.js';
 import AppGuide from './pages/AppGuide.js';
 import FaqPage from './pages/FaqPage.js';
 import OpenPositions from './pages/OpenPositions.js';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage.js';
 import Rulebook from './pages/Rulebook.js';
 import StockDetailPage from './pages/StockDetailPage.js';
-import TermsPage from './pages/TermsPage.js';
 import UserGuidePage from './pages/UserGuidePage.js';
 import IndexAnalysis from './pages/IndexAnalysis.js';
 import PortfolioDashboard from './pages/PortfolioDashboard.js';
@@ -128,33 +124,6 @@ const DemoModal = ({ onClose }) => (
   </div>
 );
 
-// =========================================================================
-// Landing Page
-// =========================================================================
-
-const LandingPage = ({
-  handleLaunchAndNavigate,
-  onUserGuideOpen,
-  onFaqOpen,
-  onPrivacyOpen,
-  onTermsOpen,
-  onDemoOpen,
-  onBetaInfoClick,
-}) => (
-  <div className="relative z-10 flex flex-col items-center justify-center text-center pt-12 pb-20 md:pt-16 md:pb-24">
-    <main>
-      <LandingWalkthrough
-        handleLaunchAndNavigate={handleLaunchAndNavigate}
-        onUserGuideOpen={onUserGuideOpen}
-        onFaqOpen={onFaqOpen}
-        onPrivacyOpen={onPrivacyOpen}
-        onTermsOpen={onTermsOpen}
-        onDemoOpen={onDemoOpen}
-        onBetaInfoClick={onBetaInfoClick}
-      />
-    </main>
-  </div>
-);
 
 // =========================================================================
 // Loaders & Error
@@ -235,23 +204,18 @@ const StockSelector = ({ onAnalyze }) => {
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All");
 
   const filteredStocks = useMemo(() => {
     if (!stocks) return [];
-    let filtered = stocks;
-    if (activeFilter === "BUY") {
-      filtered = stocks.filter((stock) => stock.signal === "BUY");
-    }
-    if (!searchTerm) return filtered;
+    const list = stocks;
+    if (!searchTerm) return list;
     const term = searchTerm.toLowerCase();
-    return filtered.filter(
+    return list.filter(
       (stock) =>
-        (stock.companyName &&
-          stock.companyName.toLowerCase().includes(term)) ||
+        (stock.companyName && stock.companyName.toLowerCase().includes(term)) ||
         (stock.ticker && stock.ticker.toLowerCase().includes(term))
     );
-  }, [stocks, searchTerm, activeFilter]);
+  }, [stocks, searchTerm]);
 
   const ScoreBadge = ({ score }) => {
     if (typeof score !== "number" || isNaN(score)) {
@@ -277,21 +241,7 @@ const StockSelector = ({ onAnalyze }) => {
     );
   };
 
-  const FilterButton = ({ filterType }) => {
-    const isActive = activeFilter === filterType;
-    return (
-      <button
-        onClick={() => setActiveFilter(filterType)}
-        className={`px-4 py-2 text-sm font-semibold rounded-xl transition-all border ${
-          isActive
-            ? "bg-primary-500 text-white border-primary-500 shadow-soft"
-            : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 hover:border-primary-400"
-        }`}
-      >
-        {filterType}
-      </button>
-    );
-  };
+  // Removed unused FilterButton (legacy)
 
   if (error) {
     return (
@@ -435,8 +385,8 @@ const AITrackRecord = () => {
     return { text: 'Closed', color: 'bg-gray-200 text-gray-700' };
   };
 
-  if (error) return <div className="text-red-400 text-center p-8">Error loading track record: {error}</div>;
-  if (!trackRecordData) return <div className="text-center p-8 animate-pulse">Loading AI Track Record...</div>;
+  if (error) return <div className="text-red-600 text-center p-8">Error loading track record: {error}</div>;
+  if (!trackRecordData) return <div className="text-center p-8 text-gray-600 animate-pulse">Loading AI Track Record...</div>;
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8">
@@ -448,11 +398,11 @@ const AITrackRecord = () => {
           {trackRecordData.length > 0 ? (
             trackRecordData.map((trade) => {
               const reasonDisplay = getReasonDisplay(trade.closing_reason);
-              const returnColor = trade.net_return_pct >= 0 ? 'text-green-400' : 'text-red-400';
+              const returnColor = trade.net_return_pct >= 0 ? 'text-green-600' : 'text-red-600';
               return (
-                <div key={trade._id} className="p-4 border-b border-white/5 last:border-b-0">
+                <div key={trade._id} className="p-4 border-b border-gray-200 last:border-b-0">
                   <div className="flex justify-between items-center mb-3">
-                    <span className="font-semibold text-white">
+                    <span className="font-semibold text-gray-900">
                       {trade.ticker} ({trade.signal})
                     </span>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${reasonDisplay.color}`}>
@@ -460,9 +410,9 @@ const AITrackRecord = () => {
                     </span>
                   </div>
                   <div className="text-sm space-y-2">
-                    <div className="flex justify-between"><span className="text-gray-400">Net Return</span><span className={`font-mono font-semibold ${returnColor}`}>{trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Days Held</span><span className="text-gray-300">{trade.days_held}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Closed On</span><span className="text-gray-300">{new Date(trade.close_date).toLocaleDateString()}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-600">Net Return</span><span className={`font-mono font-semibold ${returnColor}`}>{trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%</span></div>
+                    <div className="flex justify-between"><span className="text-gray-600">Days Held</span><span className="text-gray-700">{trade.days_held}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-600">Closed On</span><span className="text-gray-700">{new Date(trade.close_date).toLocaleDateString()}</span></div>
                   </div>
                 </div>
               );
@@ -476,10 +426,10 @@ const AITrackRecord = () => {
         <div className="hidden md:block">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-white/5">
+              <thead className="bg-gray-50">
                 <tr>
                   {['Ticker', 'Signal', 'Open Date', 'Close Date', 'Days Held', 'Closing Reason', 'Net Return'].map((h) => (
-                    <th key={h} className="p-4 text-sm font-semibold text-gray-300 tracking-wider">
+                    <th key={h} className="p-4 text-sm font-semibold text-gray-700 tracking-wider">
                       {h}
                     </th>
                   ))}
@@ -489,14 +439,14 @@ const AITrackRecord = () => {
                 {trackRecordData.length > 0 ? (
                   trackRecordData.map((trade) => {
                     const reasonDisplay = getReasonDisplay(trade.closing_reason);
-                    const returnColor = trade.net_return_pct >= 0 ? 'text-green-400' : 'text-red-400';
+                    const returnColor = trade.net_return_pct >= 0 ? 'text-green-600' : 'text-red-600';
                     return (
-                      <tr key={trade._id} className="border-b border-white/5 last:border-b-0 hover:bg-white/5 transition-colors">
-                        <td className="p-4 text-gray-200 font-semibold">{trade.ticker}</td>
-                        <td className={`p-4 font-semibold ${trade.signal === 'BUY' ? 'text-green-400' : 'text-red-400'}`}>{trade.signal}</td>
-                        <td className="p-4 text-gray-400">{new Date(trade.open_date).toLocaleDateString()}</td>
-                        <td className="p-4 text-gray-400">{new Date(trade.close_date).toLocaleDateString()}</td>
-                        <td className="p-4 text-gray-400">{trade.days_held}</td>
+                      <tr key={trade._id} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
+                        <td className="p-4 text-gray-900 font-semibold">{trade.ticker}</td>
+                        <td className={`p-4 font-semibold ${trade.signal === 'BUY' ? 'text-green-600' : 'text-red-600'}`}>{trade.signal}</td>
+                        <td className="p-4 text-gray-600">{new Date(trade.open_date).toLocaleDateString()}</td>
+                        <td className="p-4 text-gray-600">{new Date(trade.close_date).toLocaleDateString()}</td>
+                        <td className="p-4 text-gray-600">{trade.days_held}</td>
                         <td className="p-4"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${reasonDisplay.color}`}>{reasonDisplay.text}</span></td>
                         <td className={`p-4 font-mono font-semibold ${returnColor}`}>{trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%</td>
                       </tr>
@@ -734,7 +684,7 @@ export default function App() {
         <StockDetailPage ticker={selectedTicker} onBackClick={handleBackToList} />
       ) : (
         <Tab.Group selectedIndex={tabIndex} onChange={setTabIndex}>
-          <div className="flex flex-wrap justify-center p-1 bg-white/5 border border-white/10 rounded-2xl sticky top-4 z-10 backdrop-blur-xl w-fit mx-auto shadow-xl">
+          <div className="flex flex-wrap justify-center p-1 bg-white border border-gray-200 rounded-2xl sticky top-4 z-10 w-fit mx-auto shadow-sm">
             {[
               { label: "App Guide", tooltip: "Learn how to use Scrybe AI effectively" },
               { label: "Stock Analysis", tooltip: "Get AI-powered analysis for any stock" },
@@ -748,10 +698,10 @@ export default function App() {
                   key={label}
                   title={tooltip}
                   className={({ selected }) =>
-                    `px-6 py-2.5 text-md font-medium rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 ${
+                    `px-6 py-2.5 text-md font-medium rounded-xl transition-all outline-none border focus-visible:ring-2 focus-visible:ring-primary-300 ${
                       selected
-                        ? "bg-white/10 text-white shadow"
-                        : "text-slate-300 hover:bg-white/10 hover:text-white"
+                        ? "bg-primary-50 text-primary-700 border-primary-200"
+                        : "bg-white text-gray-600 hover:bg-gray-50 border-transparent"
                     }`
                   }
                 >

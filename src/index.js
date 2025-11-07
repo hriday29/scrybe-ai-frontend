@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import './assets/styles/index.css'; // <-- FIXED PATH
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // --- Sentry Code ---
 Sentry.init({
@@ -22,9 +23,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </AuthProvider>
   </React.StrictMode>
 );
