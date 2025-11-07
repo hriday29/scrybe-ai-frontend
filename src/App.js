@@ -64,7 +64,7 @@ import { apexDemoData } from './utils/demoData.js';
 
 const GlassCard = ({ className = '', children }) => (
   <div
-    className={`bg-slate-900/40 border border-white/10 backdrop-blur-xl shadow-2xl shadow-slate-950/30 ${className} rounded-2xl`}
+    className={`bg-white border border-gray-200 shadow-soft-lg ${className} rounded-2xl`}
   >
     {children}
   </div>
@@ -72,11 +72,11 @@ const GlassCard = ({ className = '', children }) => (
 
 const SectionTitle = ({ title, subtitle }) => (
   <div className="text-center">
-    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-slate-300 leading-tight pb-2">
+    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-primary-600 to-secondary-600 leading-tight pb-2">
       {title}
     </h2>
     {subtitle && (
-      <p className="mt-3 text-slate-400 max-w-2xl mx-auto leading-relaxed">
+      <p className="mt-3 text-gray-600 max-w-2xl mx-auto leading-relaxed">
         {subtitle}
       </p>
     )}
@@ -164,29 +164,29 @@ const SkeletonLoader = ({ isLongLoad }) => (
   <div className="w-full max-w-5xl mx-auto p-8">
     <SectionTitle title="Retrieving Instant Analysis..." />
     {isLongLoad && (
-      <p className="text-center text-amber-400 text-sm mb-8 animate-pulse">
+      <p className="text-center text-warning-600 text-sm mb-8 animate-pulse">
         Waking up the AI engine... first load can take longer.
       </p>
     )}
     <div className="mt-6 space-y-6">
-      <GlassCard className="h-28 animate-pulse" />
-      <GlassCard className="h-24 animate-pulse" />
+      <GlassCard className="h-28 animate-pulse bg-gray-100" />
+      <GlassCard className="h-24 animate-pulse bg-gray-100" />
       <div className="grid md:grid-cols-2 gap-6">
-        <GlassCard className="h-48 animate-pulse" />
-        <GlassCard className="h-48 animate-pulse" />
+        <GlassCard className="h-48 animate-pulse bg-gray-100" />
+        <GlassCard className="h-48 animate-pulse bg-gray-100" />
       </div>
-      <GlassCard className="h-96 animate-pulse" />
+      <GlassCard className="h-96 animate-pulse bg-gray-100" />
     </div>
   </div>
 );
 
 const ErrorDisplay = ({ error, onReset }) => (
   <div className="text-center p-8">
-    <h2 className="text-2xl font-bold text-red-400">Analysis Failed</h2>
-    <p className="text-red-300 mt-2 max-w-2xl mx-auto">{error}</p>
+    <h2 className="text-2xl font-bold text-red-600">Analysis Failed</h2>
+    <p className="text-red-500 mt-2 max-w-2xl mx-auto">{error}</p>
     <button
       onClick={onReset}
-      className="mt-6 bg-red-500/80 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-500 transition-colors"
+      className="mt-6 bg-red-500 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors shadow-soft"
     >
       Try Another Analysis
     </button>
@@ -256,17 +256,17 @@ const StockSelector = ({ onAnalyze }) => {
   const ScoreBadge = ({ score }) => {
     if (typeof score !== "number" || isNaN(score)) {
       return (
-        <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-slate-500 bg-slate-700/20 ring-1 ring-inset ring-slate-600/30">
+        <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-gray-500 bg-gray-100 ring-1 ring-inset ring-gray-300">
           N/A
         </span>
       );
     }
     const scoreColor =
       score > 49
-        ? "text-green-300 bg-green-500/10 ring-green-500/30"
+        ? "text-success-700 bg-success-50 ring-success-300"
         : score < -49
-        ? "text-red-300 bg-red-500/10 ring-red-500/30"
-        : "text-slate-400 bg-slate-700/20 ring-slate-600/30";
+        ? "text-red-700 bg-red-50 ring-red-300"
+        : "text-gray-700 bg-gray-100 ring-gray-300";
     const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
     return (
       <span
@@ -282,10 +282,10 @@ const StockSelector = ({ onAnalyze }) => {
     return (
       <button
         onClick={() => setActiveFilter(filterType)}
-        className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors backdrop-blur-md border ${
+        className={`px-4 py-2 text-sm font-semibold rounded-xl transition-all border ${
           isActive
-            ? "bg-blue-600/80 text-white border-blue-400/40"
-            : "bg-white/10 text-slate-200 hover:bg-white/20 border-white/10"
+            ? "bg-primary-500 text-white border-primary-500 shadow-soft"
+            : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 hover:border-primary-400"
         }`}
       >
         {filterType}
@@ -343,7 +343,7 @@ const StockSelector = ({ onAnalyze }) => {
         {/* Search bar */}
         <div className="relative">
           <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <span className="text-slate-400 text-lg">🔍</span>
+            <Search className="text-gray-400 h-5 w-5" />
           </div>
           <input
             type="text"
@@ -351,18 +351,18 @@ const StockSelector = ({ onAnalyze }) => {
             placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-900/50 backdrop-blur-xl border border-slate-700 text-white placeholder-slate-400 text-lg rounded-xl py-3 pl-12 pr-4 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 shadow-lg"
+            className="w-full bg-white border border-gray-300 text-gray-900 placeholder-gray-500 text-lg rounded-xl py-3 pl-12 pr-4 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 shadow-soft"
             disabled={isLoading}
           />
         </div>
 
         {/* Results list */}
-        <GlassCard className="max-h-96 overflow-y-auto divide-y divide-white/5">
+        <GlassCard className="max-h-96 overflow-y-auto divide-y divide-gray-100">
           {isLoading && (
-            <p className="text-gray-400 text-center p-4">Loading...</p>
+            <p className="text-gray-500 text-center p-4">Loading...</p>
           )}
           {!isLoading && filteredStocks.length === 0 && (
-            <p className="text-gray-400 text-center p-4">
+            <p className="text-gray-500 text-center p-4">
               No setups found for the current filter.
             </p>
           )}
@@ -371,16 +371,16 @@ const StockSelector = ({ onAnalyze }) => {
               <button
                 key={stock.ticker}
                 onClick={() => onAnalyze(stock.ticker)}
-                className="w-full flex justify-between items-center p-4 text-left hover:bg-blue-600/30 transition-colors rounded-lg group"
+                className="w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 transition-colors rounded-lg group"
               >
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-gray-500 text-sm w-8">
                     {index + 1}.
                   </span>
-                  <span className="font-semibold text-white group-hover:text-blue-300">
+                  <span className="font-semibold text-gray-900 group-hover:text-primary-600">
                     {stock.companyName}
                   </span>
-                  <span className="text-xs text-slate-400">{stock.ticker}</span>
+                  <span className="text-xs text-gray-500">{stock.ticker}</span>
                 </div>
                 <ScoreBadge score={stock.scrybeScore} />
               </button>
@@ -791,7 +791,7 @@ export default function App() {
 
   // ✅ Final return with unified Header
   return (
-    <div className="bg-[#0A0F1E] min-h-screen text-white/90 font-sans">
+    <div className="bg-gray-50 min-h-screen text-gray-900 font-sans">
       {/* Modals */}
       <AnimatePresence>
         {isSignInModalOpen && (
@@ -822,7 +822,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMarketDrawerOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             />
             {/* Drawer */}
             <motion.div
@@ -830,20 +830,20 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 bg-slate-900 shadow-2xl z-50 overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 bg-white shadow-2xl z-50 overflow-y-auto"
             >
               <div className="p-6 space-y-6">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-slate-700 pb-4">
+                <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                   <div>
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                       📊 Market Context
                     </h2>
-                    <p className="text-slate-400 text-sm mt-1">Universal daily indicators for all stocks</p>
+                    <p className="text-gray-600 text-sm mt-1">Universal daily indicators for all stocks</p>
                   </div>
                   <button
                     onClick={() => setIsMarketDrawerOpen(false)}
-                    className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -871,7 +871,7 @@ export default function App() {
       {view === 'app' && globalMarketContext && (
         <button
           onClick={() => setIsMarketDrawerOpen(true)}
-          className="fixed bottom-6 right-6 bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white p-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
+          className="fixed bottom-6 right-6 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white p-4 rounded-full shadow-soft-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
           title="View Market Context"
         >
           <span className="text-2xl">📊</span>
