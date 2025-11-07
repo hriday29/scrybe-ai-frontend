@@ -23,12 +23,12 @@ import { TrendingUp, AlertTriangle, Activity, Target } from 'lucide-react';
 const VolatilityCard = ({ volatilityData, analysisData }) => {
   if (!volatilityData || volatilityData.error) {
     return (
-      <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-6 backdrop-blur-sm">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-4">
           <Activity className="w-5 h-5 text-purple-400" />
-          <h3 className="text-lg font-semibold text-white">Enhanced Volatility Analysis</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Enhanced Volatility Analysis</h3>
         </div>
-        <p className="text-gray-400">
+        <p className="text-gray-600">
           {volatilityData?.error || "Volatility analysis not available"}
         </p>
       </div>
@@ -62,7 +62,7 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
     } else if (trend === "Falling") {
       return { icon: "↓", color: "text-green-400", label: "Contracting" };
     } else {
-      return { icon: "→", color: "text-gray-400", label: "Stable" };
+      return { icon: "→", color: "text-gray-600", label: "Stable" };
     }
   };
 
@@ -88,12 +88,12 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
   const recommendedStop = getRecommendedStopZone();
 
   return (
-    <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-6 backdrop-blur-sm">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Activity className="w-5 h-5 text-purple-400" />
-          <h3 className="text-lg font-semibold text-white">Enhanced Volatility Analysis</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Enhanced Volatility Analysis</h3>
         </div>
         {volatility_regime.classification && (
           <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRegimeColorClass(volatility_regime.color)}`}>
@@ -116,31 +116,31 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
           ATR-Based Volatility
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-gray-900/50 p-3 rounded-lg">
-            <p className="text-xs text-gray-400">Current ATR</p>
-            <p className="text-lg font-semibold text-white">{formatPct(atr_metrics.current_atr_pct)}</p>
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-600">Current ATR</p>
+            <p className="text-lg font-semibold text-gray-900">{formatPct(atr_metrics.current_atr_pct)}</p>
             <p className="text-xs text-gray-500">₹{atr_metrics.current_atr?.toFixed(2) || "N/A"}</p>
           </div>
-          <div className="bg-gray-900/50 p-3 rounded-lg">
-            <p className="text-xs text-gray-400">ATR Trend (30D)</p>
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-600">ATR Trend (30D)</p>
             <p className={`text-lg font-semibold ${atrTrend.color}`}>
               {atrTrend.icon} {atrTrend.label}
             </p>
             <p className="text-xs text-gray-500">{atr_metrics.atr_trend_pct > 0 ? '+' : ''}{atr_metrics.atr_trend_pct?.toFixed(1)}%</p>
           </div>
-          <div className="bg-gray-900/50 p-3 rounded-lg">
-            <p className="text-xs text-gray-400">ATR Percentile</p>
-            <p className="text-lg font-semibold text-white">{atr_metrics.atr_percentile_90d || "N/A"}th</p>
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-600">ATR Percentile</p>
+            <p className="text-lg font-semibold text-gray-900">{atr_metrics.atr_percentile_90d || "N/A"}th</p>
             <p className="text-xs text-gray-500">90-day range</p>
           </div>
-          <div className="bg-gray-900/50 p-3 rounded-lg">
-            <p className="text-xs text-gray-400">Regime Score</p>
-            <p className="text-lg font-semibold text-white">{volatility_regime.score || "N/A"}/100</p>
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-600">Regime Score</p>
+            <p className="text-lg font-semibold text-gray-900">{volatility_regime.score || "N/A"}/100</p>
             <p className="text-xs text-gray-500">{volatility_regime.classification}</p>
           </div>
         </div>
         {atr_metrics.interpretation && (
-          <p className="text-xs text-gray-400 mt-2 italic">💡 {atr_metrics.interpretation}</p>
+          <p className="text-xs text-gray-600 mt-2 italic">💡 {atr_metrics.interpretation}</p>
         )}
       </div>
 
@@ -150,21 +150,21 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
           <h4 className="text-sm font-semibold text-gray-300 mb-2">Historical Volatility (Annualized)</h4>
           <div className="grid grid-cols-3 gap-3">
             {historical_volatility.volatility_10d && (
-              <div className="bg-gray-900/50 p-3 rounded-lg text-center">
-                <p className="text-xs text-gray-400">10-Day</p>
-                <p className="text-lg font-semibold text-white">{historical_volatility.volatility_10d}%</p>
+              <div className="bg-gray-50 p-3 rounded-lg text-center">
+                <p className="text-xs text-gray-600">10-Day</p>
+                <p className="text-lg font-semibold text-gray-900">{historical_volatility.volatility_10d}%</p>
               </div>
             )}
             {historical_volatility.volatility_30d && (
-              <div className="bg-gray-900/50 p-3 rounded-lg text-center">
-                <p className="text-xs text-gray-400">30-Day</p>
-                <p className="text-lg font-semibold text-white">{historical_volatility.volatility_30d}%</p>
+              <div className="bg-gray-50 p-3 rounded-lg text-center">
+                <p className="text-xs text-gray-600">30-Day</p>
+                <p className="text-lg font-semibold text-gray-900">{historical_volatility.volatility_30d}%</p>
               </div>
             )}
             {historical_volatility.volatility_90d && (
-              <div className="bg-gray-900/50 p-3 rounded-lg text-center">
-                <p className="text-xs text-gray-400">90-Day</p>
-                <p className="text-lg font-semibold text-white">{historical_volatility.volatility_90d}%</p>
+              <div className="bg-gray-50 p-3 rounded-lg text-center">
+                <p className="text-xs text-gray-600">90-Day</p>
+                <p className="text-lg font-semibold text-gray-900">{historical_volatility.volatility_90d}%</p>
               </div>
             )}
           </div>
@@ -175,13 +175,13 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
       {bbw_metrics && !bbw_metrics.error && (
         <div className="mb-4">
           <h4 className="text-sm font-semibold text-gray-300 mb-2">Bollinger Band Analysis</h4>
-          <div className="bg-gray-900/50 p-3 rounded-lg">
+          <div className="bg-gray-50 p-3 rounded-lg">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-400">Band Width:</span>
-              <span className="text-sm font-semibold text-white">{bbw_metrics.band_width_pct}%</span>
+              <span className="text-sm text-gray-600">Band Width:</span>
+              <span className="text-sm font-semibold text-gray-900">{bbw_metrics.band_width_pct}%</span>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-400">State:</span>
+              <span className="text-sm text-gray-600">State:</span>
               <span className={`text-sm font-semibold ${
                 bbw_metrics.state === 'Squeeze' ? 'text-yellow-400' :
                 bbw_metrics.state === 'Expansion' ? 'text-red-400' : 'text-green-400'
@@ -190,11 +190,11 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Price Position:</span>
-              <span className="text-sm text-white">{bbw_metrics.price_position}</span>
+              <span className="text-sm text-gray-600">Price Position:</span>
+              <span className="text-sm text-gray-900">{bbw_metrics.price_position}</span>
             </div>
             {bbw_metrics.interpretation && (
-              <p className="text-xs text-gray-400 mt-2 italic">💡 {bbw_metrics.interpretation}</p>
+              <p className="text-xs text-gray-600 mt-2 italic">💡 {bbw_metrics.interpretation}</p>
             )}
           </div>
         </div>
@@ -210,15 +210,15 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
           <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-4 rounded-lg border border-blue-700/50">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-300">{recommendedStop.level}</span>
-              <span className="text-xl font-bold text-white">₹{recommendedStop.price}</span>
+              <span className="text-xl font-bold text-gray-900">₹{recommendedStop.price}</span>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs text-gray-400">Distance from Entry:</span>
+              <span className="text-xs text-gray-600">Distance from Entry:</span>
               <span className="text-sm font-semibold text-yellow-400">{recommendedStop.distance_pct}%</span>
             </div>
             <div className="border-t border-gray-700 pt-2 mt-2">
-              <p className="text-xs text-gray-400"><strong>Risk Profile:</strong> {recommendedStop.risk_profile}</p>
-              <p className="text-xs text-gray-400 mt-1">💡 {recommendedStop.implication}</p>
+              <p className="text-xs text-gray-600"><strong>Risk Profile:</strong> {recommendedStop.risk_profile}</p>
+              <p className="text-xs text-gray-600 mt-1">💡 {recommendedStop.implication}</p>
             </div>
           </div>
         </div>
@@ -240,8 +240,8 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
               >
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-gray-300">{zone.level}</span>
-                  <span className="text-sm font-semibold text-white">₹{zone.price}</span>
-                  <span className="text-xs text-gray-400">({zone.distance_pct}%)</span>
+                  <span className="text-sm font-semibold text-gray-900">₹{zone.price}</span>
+                  <span className="text-xs text-gray-600">({zone.distance_pct}%)</span>
                 </div>
               </div>
             ))}

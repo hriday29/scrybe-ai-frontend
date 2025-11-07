@@ -50,7 +50,7 @@ const ConversationalQa = ({ analysisContext }) => {
 
     return (
         <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6">
-            <h3 className="font-bold text-xl text-white mb-4">
+            <h3 className="font-bold text-xl text-gray-900 mb-4">
                 Ask a Question About This Analysis
             </h3>
 
@@ -65,7 +65,7 @@ const ConversationalQa = ({ analysisContext }) => {
                         <div
                             className={`p-3 rounded-lg max-w-lg ${
                                 entry.type === 'user'
-                                    ? 'bg-blue-600 text-white'
+                                    ? 'bg-blue-600 text-gray-900'
                                     : 'bg-slate-700 text-gray-200'
                             }`}
                         >
@@ -75,7 +75,7 @@ const ConversationalQa = ({ analysisContext }) => {
                 ))}
 
                 {isLoading && (
-                    <p className="text-center text-sm text-gray-400 animate-pulse">
+                    <p className="text-center text-sm text-gray-600 animate-pulse">
                         AI is thinking...
                     </p>
                 )}
@@ -88,13 +88,13 @@ const ConversationalQa = ({ analysisContext }) => {
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         placeholder="e.g., Why is the RSI considered bullish?"
-                        className="flex-grow bg-slate-800/50 border border-slate-600 text-white placeholder-gray-500 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none focus:border-blue-500"
+                        className="flex-grow bg-slate-800/50 border border-slate-600 text-gray-900 placeholder-gray-500 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none focus:border-blue-500"
                         disabled={isLoading}
                     />
                     <button
                         type="submit"
                         disabled={isLoading || !question.trim()}
-                        className="bg-blue-600 text-white font-semibold text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed"
+                        className="bg-blue-600 text-gray-900 font-semibold text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed"
                     >
                         Ask
                     </button>

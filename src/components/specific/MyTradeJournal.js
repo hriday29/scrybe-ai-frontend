@@ -35,12 +35,12 @@ const MyTradeJournal = () => {
     if (myTrades.length === 0) {
         return (
              <div className="w-full max-w-7xl mx-auto p-4 md:p-8 mt-12">
-                <h2 className="text-3xl font-bold text-white mb-6 flex items-center">
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
                     <BookMarked className="mr-3 text-blue-300" />
                     Personal Trade Journal
                 </h2>
-                <div className="text-center text-gray-500 py-16 bg-slate-900/40 border border-slate-700/60 rounded-2xl">
-                    <h3 className="text-2xl font-bold text-white">Your Journal is Empty</h3>
+                <div className="text-center text-gray-500 py-16 bg-white border border-gray-200 rounded-2xl">
+                    <h3 className="text-2xl font-bold text-gray-900">Your Journal is Empty</h3>
                     <p className="mt-2">Log a trade from an analysis page to get started.</p>
                 </div>
             </div>
@@ -49,14 +49,14 @@ const MyTradeJournal = () => {
 
     return (
         <div className="w-full max-w-7xl mx-auto p-4 md:p-8 mt-12">
-            <h2 className="text-3xl font-bold text-white mb-6 flex items-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
                 <BookMarked className="mr-3 text-blue-300" />
                 Personal Trade Journal
             </h2>
-            <div className="bg-slate-900/40 border border-slate-700/60 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left min-w-[600px]">
-                        <thead className="bg-slate-800/50">
+                        <thead className="bg-gray-50">
                             <tr>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th>
                                 <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Entry Date</th>
@@ -66,8 +66,8 @@ const MyTradeJournal = () => {
                         </thead>
                         <tbody>
                             {myTrades.map(trade => (
-                                <tr key={trade._id} className="border-b border-slate-800 last:border-b-0 hover:bg-slate-800/40 transition-colors">
-                                    <td className="p-4 text-white font-semibold flex items-center">
+                                <tr key={trade._id} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
+                                    <td className="p-4 text-gray-900 font-semibold flex items-center">
                                         <TrendingUp size={16} className="mr-2 text-sky-400" />
                                         {trade.ticker}
                                     </td>

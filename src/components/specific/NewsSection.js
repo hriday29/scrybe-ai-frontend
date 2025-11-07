@@ -33,11 +33,11 @@ const NewsSection = ({ newsData }) => { // It now receives newsData directly
                         key={index}
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="block p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors"
+                        className="block p-4 bg-white rounded-lg hover:bg-gray-50 transition-colors"
                     >
                         <div className="flex justify-between items-start">
                             <div>
-                                <h4 className="font-semibold text-white mb-1">{article.title}</h4>
+                                <h4 className="font-semibold text-gray-900 mb-1">{article.title}</h4>
                                 <p className="text-xs text-gray-400">{article.source_name || 'N/A'}</p>
                             </div>
                             <ExternalLink size={16} className="text-gray-500 flex-shrink-0 ml-4 mt-1" />
@@ -49,8 +49,8 @@ const NewsSection = ({ newsData }) => { // It now receives newsData directly
     };
 
     return (
-        <details className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6 group" open>
-            <summary className="font-bold text-xl text-white list-none flex justify-between items-center cursor-pointer">
+        <details className="bg-white backdrop-blur-md border border-gray-200 rounded-xl p-6 group" open>
+            <summary className="font-bold text-xl text-gray-900 list-none flex justify-between items-center cursor-pointer">
                 <span>
                     {newsData?.type || 'Recent News'}
                     {newsData?.articles?.length > 0 && (

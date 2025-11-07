@@ -40,7 +40,7 @@ const Gauge = ({ value, label }) => {
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xl font-bold text-white">{Math.round(percentage)}</span>
+                    <span className="text-xl font-bold text-gray-900">{Math.round(percentage)}</span>
                 </div>
             </div>
             <span className="text-xs text-slate-400 font-medium">{label}</span>
@@ -67,7 +67,7 @@ const PointItem = ({ text, Icon, colorClass }) => (
 
 const TradePlanCard = ({ plan }) => (
     <div className="bg-green-900/50 border-2 border-green-500 rounded-xl p-6">
-        <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+        <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
             <Target size={20} className="mr-2 text-green-300" />
             Scrybe Trade Plan
         </h3>
@@ -78,11 +78,11 @@ const TradePlanCard = ({ plan }) => (
             </p>
         </div>
         <ul className="space-y-3 text-md">
-            <li className="flex justify-between"><span className="text-gray-400">Entry Price:</span><span className="text-white font-mono font-semibold">₹{plan.entry_price}</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Stop-Loss (2× ATR):</span><span className="text-white font-mono font-semibold">₹{plan.stop_loss}</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Target Price (6× ATR):</span><span className="text-white font-mono font-semibold">₹{plan.target_price}</span></li>
-            <li className="flex justify-between pt-3 border-t border-green-500/30"><span className="text-gray-400">Risk/Reward Ratio:</span><span className="text-white font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
-            <li className="flex justify-between"><span className="text-gray-400">Expected Holding Period:</span><span className="text-white font-mono font-semibold">~{plan.holding_period_days} days</span></li>
+            <li className="flex justify-between"><span className="text-gray-600">Entry Price:</span><span className="text-gray-900 font-mono font-semibold">₹{plan.entry_price}</span></li>
+            <li className="flex justify-between"><span className="text-gray-600">Stop-Loss (2× ATR):</span><span className="text-gray-900 font-mono font-semibold">₹{plan.stop_loss}</span></li>
+            <li className="flex justify-between"><span className="text-gray-600">Target Price (6× ATR):</span><span className="text-gray-900 font-mono font-semibold">₹{plan.target_price}</span></li>
+            <li className="flex justify-between pt-3 border-t border-green-500/30"><span className="text-gray-600">Risk/Reward Ratio:</span><span className="text-gray-900 font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
+            <li className="flex justify-between"><span className="text-gray-600">Expected Holding Period:</span><span className="text-gray-900 font-mono font-semibold">~{plan.holding_period_days} days</span></li>
         </ul>
     </div>
 );
@@ -143,7 +143,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <div className="bg-blue-900/50 border-2 border-blue-500 rounded-xl p-5 flex items-center gap-4">
                         <Megaphone size={32} className="text-blue-300 flex-shrink-0" />
                         <div>
-                            <h2 className="font-bold text-xl text-white">Actionable Signal Identified</h2>
+                            <h2 className="font-bold text-xl text-gray-900">Actionable Signal Identified</h2>
                             <p className="text-blue-200">
                                 This stock passed the rigorous **{strategy_signal.type}** strategy filter.
                                 {strategy_signal.signal === 'HOLD' && ` It was vetoed due to: ${strategy_signal.veto_reason}.`}
@@ -183,8 +183,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             )}
 
             <div>
-                <h1 className="text-4xl font-bold text-white">{ticker?.replace('.NS', '')}</h1>
-                <p className="text-lg text-gray-400">{companyName || 'N/A'}</p>
+                <h1 className="text-4xl font-bold text-gray-900">{ticker?.replace('.NS', '')}</h1>
+                <p className="text-lg text-gray-600">{companyName || 'N/A'}</p>
                 <p className="text-sm text-gray-500 mt-1">
                     Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
                 </p>
@@ -250,11 +250,11 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-2 bg-indigo-900/30 border border-indigo-500/60 rounded-xl p-6 flex flex-col items-center text-center">
                     <div className="bg-indigo-500/20 p-3 rounded-full mb-3"><Info className="text-indigo-300 h-6 w-6" /></div>
-                    <h3 className="font-bold text-xl text-white mb-2">Key Insight</h3>
+                    <h3 className="font-bold text-xl text-gray-900 mb-2">Key Insight</h3>
                     <p className="text-indigo-200">{keyInsight}</p>
                 </div>
                 <div className="lg:col-span-3 bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                    <h3 className="font-bold text-xl text-white mb-2">Analyst Verdict</h3>
+                    <h3 className="font-bold text-xl text-gray-900 mb-2">Analyst Verdict</h3>
                     <p className="text-gray-300 whitespace-pre-wrap">{analystVerdict}</p>
                 </div>
             </div>
@@ -284,7 +284,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Technical Snapshot */}
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                    <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <Zap size={18} className="mr-2 text-blue-400" />Technical Snapshot
                     </h3>
                     <div className="flex items-center justify-between flex-1">
@@ -298,14 +298,14 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                 {/* Options Sentiment */}
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                    <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment
                     </h3>
                     {safe_options.put_call_ratio_oi && safe_options.put_call_ratio_oi !== 'N/A' ? (
                         <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
-                            <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-white font-mono">{safe_options.put_call_ratio_oi}</span></div>
-                            <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-white font-mono">{safe_options.max_oi_call_strike}</span></div>
-                            <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-white font-mono">{safe_options.max_oi_put_strike}</span></div>
+                            <div className="flex justify-between"><span className="text-slate-400">PCR (OI):</span><span className="text-gray-900 font-mono">{safe_options.put_call_ratio_oi}</span></div>
+                            <div className="flex justify-between"><span className="text-slate-400">Max OI Call:</span><span className="text-gray-900 font-mono">{safe_options.max_oi_call_strike}</span></div>
+                            <div className="flex justify-between"><span className="text-slate-400">Max OI Put:</span><span className="text-gray-900 font-mono">{safe_options.max_oi_put_strike}</span></div>
                         </div>
                     ) : (
                         <div className="flex-1 flex flex-col justify-center items-center text-center space-y-2 py-4">
@@ -321,7 +321,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                 {/* Futures & Volatility Data */}
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                    <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <TrendingUp size={18} className="mr-2 text-cyan-400" />Futures & Volatility
                     </h3>
                     {safe_futures.futures_spot_basis_percent && safe_futures.futures_spot_basis_percent !== 'N/A' ? (
@@ -338,16 +338,16 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-slate-400">Interpretation:</span>
-                                <span className="text-white text-xs">{safe_futures.basis_interpretation}</span>
+                                <span className="text-gray-900 text-xs">{safe_futures.basis_interpretation}</span>
                             </div>
                             <div className="border-t border-slate-700 my-2"></div>
                             <div className="flex justify-between">
                                 <span className="text-slate-400">ATR (14):</span>
-                                <span className="text-white font-mono">{safe_futures.volatility_atr_percent || 'N/A'}</span>
+                                <span className="text-gray-900 font-mono">{safe_futures.volatility_atr_percent || 'N/A'}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-slate-400">BB Width:</span>
-                                <span className="text-white font-mono">{safe_futures.volatility_bbw_percent || 'N/A'}</span>
+                                <span className="text-gray-900 font-mono">{safe_futures.volatility_bbw_percent || 'N/A'}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-slate-400">Volatility:</span>
@@ -368,7 +368,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                 {/* Price-Based Fundamentals */}
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
-                <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                     <Rss size={18} className="mr-2 text-orange-400" />
                     Price-Based Fundamentals
                 </h3>
@@ -378,7 +378,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                     <div className="text-center">
                     <p className="text-sm text-slate-400">Valuation %</p>
-                    <p className="text-lg font-bold text-white">
+                    <p className="text-lg font-bold text-gray-900">
                         {(safe_fundamentals.valuation_proxy || '').split(' ')[0]}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
@@ -408,7 +408,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <div className="flex items-center gap-3 border-b border-indigo-500/30 pb-4">
                     <TrendingUp size={28} className="text-indigo-400" />
                     <div>
-                        <h2 className="font-bold text-2xl text-white">Trade Opportunity Overview</h2>
+                        <h2 className="font-bold text-2xl text-gray-900">Trade Opportunity Overview</h2>
                         <p className="text-sm text-indigo-300">Complete setup: Risk metrics → AI prediction → Execution plan</p>
                     </div>
                 </div>
@@ -416,8 +416,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {/* Step 1: Understanding the Risk Framework */}
                 <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                     <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">1</span>
-                        <h3 className="font-bold text-lg text-white">Risk/Reward Framework (Reference Levels)</h3>
+                        <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">1</span>
+                        <h3 className="font-bold text-lg text-gray-900">Risk/Reward Framework (Reference Levels)</h3>
                     </div>
                     <p className="text-sm text-slate-300 mb-3">
                         These are <strong className="text-yellow-300">reference levels</strong> calculated from <strong>today's closing price</strong> using 
@@ -442,7 +442,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         </div>
                         <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-white/20">
                             <p className="text-xs text-slate-400 mb-1">Current Price</p>
-                            <p className="text-2xl font-mono font-bold text-white">
+                            <p className="text-2xl font-mono font-bold text-gray-900">
                                 {safe_technicals.daily_close ? `₹${safe_technicals.daily_close.toFixed(2)}` : '—'}
                             </p>
                             <p className="text-xs text-slate-500 mt-2">Today's closing price</p>
@@ -460,7 +460,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         <div className="mt-4 pt-4 border-t border-slate-700/50">
                             <div className="text-center text-sm text-slate-400">
                                 <p className="mb-1">
-                                    <strong className="text-white">Daily Volatility (ATR):</strong> ₹{safe_technicals.ATR_14.toFixed(2)} 
+                                    <strong className="text-gray-900">Daily Volatility (ATR):</strong> ₹{safe_technicals.ATR_14.toFixed(2)} 
                                     {safe_technicals.ATR_14_percent && ` (${safe_technicals.ATR_14_percent} of price)`}
                                 </p>
                                 <p className="text-xs text-slate-500">
@@ -504,8 +504,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {/* Step 2: AI's Market Prediction */}
                 <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                     <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">2</span>
-                        <h3 className="font-bold text-lg text-white">AI's Prediction & Rationale</h3>
+                        <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">2</span>
+                        <h3 className="font-bold text-lg text-gray-900">AI's Prediction & Rationale</h3>
                     </div>
                     <p className="text-sm text-slate-300 mb-4">
                         Based on technical patterns, fundamentals, and market conditions, our AI predicts:
@@ -516,7 +516,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <TrendingUp size={32} className={predicted_gain_pct > 0 ? "text-green-400" : "text-red-400"} />
                             <div>
                                 <p className="text-sm text-slate-400">Expected Move</p>
-                                <p className="text-3xl font-bold text-white">
+                                <p className="text-3xl font-bold text-gray-900">
                                     {predicted_gain_pct > 0 ? '+' : ''}{predicted_gain_pct}%
                                     {holding_period_days > 0 && (
                                         <span className="text-base font-normal text-slate-400 ml-2">
@@ -539,8 +539,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {strategy_signal && strategy_signal.trade_plan && (
                     <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                         <div className="flex items-center gap-2 mb-4">
-                            <span className="bg-indigo-500 text-white font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">3</span>
-                            <h3 className="font-bold text-lg text-white">Your Execution Plan (Actual Trade Prices)</h3>
+                            <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">3</span>
+                            <h3 className="font-bold text-lg text-gray-900">Your Execution Plan (Actual Trade Prices)</h3>
                         </div>
                         <p className="text-sm text-slate-300 mb-3">
                             These are your <strong className="text-green-300">actual execution prices</strong> calculated from the 
@@ -564,7 +564,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         <strong>🔄 How it all connects:</strong> Step 1 shows reference levels (based on today's close) to help you 
                         understand the stock's normal volatility range. Step 2 is the AI's market prediction and reasoning. 
                         Step 3 gives you exact execution prices (based on live market price) using the same risk framework. 
-                        <strong className="text-white"> Always follow Step 3 for your actual trades</strong> - it combines the volatility 
+                        <strong className="text-gray-900"> Always follow Step 3 for your actual trades</strong> - it combines the volatility 
                         framework with AI's analysis and real-time pricing.
                     </p>
                 </div>
@@ -579,7 +579,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                    <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+                    <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <ShieldAlert size={20} className="mr-2 text-yellow-400" /> Key Risks & Invalidation
                     </h3>
                     <ul className="space-y-3">
@@ -588,12 +588,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         <PointItem text={(keyRisks_and_Mitigants || {}).mitigant} Icon={CheckCircle} colorClass="text-green-400" />
                         <li className="pt-3 mt-3 border-t border-slate-700">
                             <p className="font-semibold text-gray-300">Thesis Invalidation Point:</p>
-                            <p className="text-gray-400">{thesisInvalidationPoint}</p>
+                            <p className="text-gray-600">{thesisInvalidationPoint}</p>
                         </li>
                     </ul>
                 </div>
                 <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
-                    <h3 className="font-bold text-xl text-white mb-4">Key Observations</h3>
+                    <h3 className="font-bold text-xl text-gray-900 mb-4">Key Observations</h3>
                     <div>
                         <h4 className="font-semibold text-green-400 mb-2">Confluence Points</h4>
                         <ul className="space-y-2">

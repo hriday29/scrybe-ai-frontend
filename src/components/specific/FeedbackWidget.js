@@ -109,13 +109,13 @@ const FeedbackWidget = () => {
             <div className="p-5">
               {/* Header */}
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-lg text-white">
+                <h3 className="font-bold text-lg text-gray-900">
                   {step === 'form' ? currentCategoryDetails?.label : 'Feedback & Support'}
                 </h3>
                 <button
                   onClick={handleClose}
                   aria-label="Close feedback widget"
-                  className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                  className="p-1 rounded-full text-slate-400 hover:text-gray-900 hover:bg-slate-700 transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -154,7 +154,7 @@ const FeedbackWidget = () => {
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
                         rows="5"
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                         placeholder={currentCategoryDetails?.placeholder}
                         required
                       />
@@ -163,14 +163,14 @@ const FeedbackWidget = () => {
                           type="email"
                           value={userEmail}
                           onChange={(e) => setUserEmail(e.target.value)}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                          className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                           placeholder="Your Email (Optional, for attribution)"
                         />
                       )}
                       <button
                         type="submit"
                         disabled={isSubmitting || !feedbackText}
-                        className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white font-semibold py-2.5 rounded-lg hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full flex justify-center items-center gap-2 bg-blue-600 text-gray-900 font-semibold py-2.5 rounded-lg hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isSubmitting ? "Submitting..." : <>Submit <Send size={16}/></>}
                       </button>
@@ -181,7 +181,7 @@ const FeedbackWidget = () => {
                   {step === "submitted" && (
                     <div className="text-center py-6 flex flex-col items-center gap-3">
                         <CheckCircle size={40} className="text-green-400"/>
-                      <p className="font-semibold text-xl text-white">
+                      <p className="font-semibold text-xl text-gray-900">
                         Thank You!
                       </p>
                       <p className="text-sm text-slate-300">

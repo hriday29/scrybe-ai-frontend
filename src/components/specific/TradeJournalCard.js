@@ -65,8 +65,8 @@ const TradeJournalCard = ({ analysisData }) => {
     }
 
     return (
-        <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6 mt-8">
-            <h3 className="font-bold text-xl text-white mb-4 flex items-center">
+        <div className="bg-white backdrop-blur-md border border-gray-200 rounded-xl p-6 mt-8">
+            <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                 <BookMarked size={20} className="mr-2 text-blue-300"/>
                 Personal Trade Journal
             </h3>
@@ -74,7 +74,7 @@ const TradeJournalCard = ({ analysisData }) => {
             {step === 'initial' && (
                 <div className="text-center">
                     <p className="text-gray-300 mb-4">Did you follow the AI and enter this trade?</p>
-                    <button onClick={() => setStep('logging')} className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <button onClick={() => setStep('logging')} className="bg-primary-500 text-gray-900 font-semibold px-5 py-2 rounded-lg hover:bg-primary-600 transition-colors">
                         Yes, Log My Entry
                     </button>
                 </div>
@@ -85,17 +85,17 @@ const TradeJournalCard = ({ analysisData }) => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="entryPrice" className="block text-sm font-medium text-gray-300 mb-1">Your Entry Price</label>
-                        <input type="number" step="0.01" name="entryPrice" id="entryPrice" value={formData.entryPrice} onChange={handleInputChange} className="w-full bg-slate-800/50 border border-slate-600 text-white rounded-lg p-2 focus:border-blue-500 focus:outline-none" required />
+                        <input type="number" step="0.01" name="entryPrice" id="entryPrice" value={formData.entryPrice} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2 focus:border-blue-500 focus:outline-none" required />
                     </div>
                     <div>
                         <label htmlFor="entryDate" className="block text-sm font-medium text-gray-300 mb-1">Your Entry Date</label>
-                        <input type="date" name="entryDate" id="entryDate" value={formData.entryDate} onChange={handleInputChange} className="w-full bg-slate-800/50 border border-slate-600 text-white rounded-lg p-2 focus:border-blue-500 focus:outline-none" required />
+                        <input type="date" name="entryDate" id="entryDate" value={formData.entryDate} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2 focus:border-blue-500 focus:outline-none" required />
                     </div>
                     <div>
                         <label htmlFor="notes" className="block text-sm font-medium text-gray-300 mb-1">Notes (Optional)</label>
-                        <textarea name="notes" id="notes" rows="3" value={formData.notes} onChange={handleInputChange} className="w-full bg-slate-800/50 border border-slate-600 text-white rounded-lg p-2 focus:border-blue-500 focus:outline-none" placeholder="e.g., Entered with a limit order..." />
+                        <textarea name="notes" id="notes" rows="3" value={formData.notes} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2 focus:border-blue-500 focus:outline-none" placeholder="e.g., Entered with a limit order..." />
                     </div>
-                    <button type="submit" disabled={isSubmitting} className="w-full bg-green-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:bg-slate-600">
+                    <button type="submit" disabled={isSubmitting} className="w-full bg-success-600 text-gray-900 font-semibold px-5 py-2 rounded-lg hover:bg-success-700 transition-colors disabled:bg-gray-300">
                         {isSubmitting ? 'Saving...' : 'Save My Entry'}
                     </button>
                 </form>

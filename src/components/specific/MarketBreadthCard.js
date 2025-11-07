@@ -63,7 +63,7 @@ const MarketBreadthCard = ({ breadthData }) => {
             <BarChart3 className="w-6 h-6 text-blue-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Market Breadth Indicators</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Market Breadth Indicators</h3>
             <p className="text-sm text-gray-400">
               Analyzing {total_stocks_analyzed} stocks in the Smallcap 250 universe
             </p>
@@ -154,7 +154,7 @@ const MarketBreadthCard = ({ breadthData }) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-300">Bullish Breadth</span>
-            <span className="text-xl font-bold text-white">{bullish_breadth_pct.toFixed(1)}%</span>
+            <span className="text-xl font-bold text-gray-900">{bullish_breadth_pct.toFixed(1)}%</span>
           </div>
 
           <div className="relative h-6 bg-gray-700 rounded-full overflow-hidden">

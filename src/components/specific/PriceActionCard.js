@@ -54,7 +54,7 @@ const PriceActionCard = ({ priceActionContext }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="w-full"
         >
-            <div className="bg-slate-900/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
+            <div className="bg-white border border-gray-200 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
@@ -62,15 +62,15 @@ const PriceActionCard = ({ priceActionContext }) => {
                             <Target className="w-6 h-6 text-blue-400" />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-bold text-white">Price Action</h3>
-                            <p className="text-sm text-slate-400">52-week range & key levels</p>
+                            <h3 className="text-2xl font-bold text-gray-900">Price Action</h3>
+                            <p className="text-sm text-gray-600">52-week range & key levels</p>
                         </div>
                     </div>
 
                     {/* Current Price Badge */}
                     <div className="text-right">
-                        <p className="text-sm text-slate-400">Current Price</p>
-                        <p className="text-3xl font-bold text-white">₹{current_price}</p>
+                        <p className="text-sm text-gray-600">Current Price</p>
+                        <p className="text-3xl font-bold text-gray-900">₹{current_price}</p>
                     </div>
                 </div>
 
@@ -78,8 +78,8 @@ const PriceActionCard = ({ priceActionContext }) => {
                 <div className={`border rounded-xl p-5 mb-6 ${getPositionBg()}`}>
                     <div className="flex items-center justify-between mb-3">
                         <div>
-                            <span className="text-xs text-slate-400">52W Low</span>
-                            <p className="text-lg font-bold text-white">₹{low52w || 'N/A'}</p>
+                            <span className="text-xs text-gray-600">52W Low</span>
+                            <p className="text-lg font-bold text-gray-900">₹{low52w || 'N/A'}</p>
                             <p className="text-xs text-red-400">
                                 {distance_from_52w_low_pct !== null && distance_from_52w_low_pct !== undefined ? (
                                     `${distance_from_52w_low_pct >= 0 ? '+' : ''}${safeNumber(distance_from_52w_low_pct).toFixed(1)}%`
@@ -90,13 +90,13 @@ const PriceActionCard = ({ priceActionContext }) => {
                             <span className={`text-sm font-bold ${getPositionColor()}`}>
                                 {price_position || 'Mid'} Range
                             </span>
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-xs text-gray-600 mt-1">
                                 {price_percentile_52w !== null && price_percentile_52w !== undefined ? `${safeNumber(price_percentile_52w).toFixed(0)}th Percentile` : 'N/A'}
                             </p>
                         </div>
                         <div className="text-right">
-                            <span className="text-xs text-slate-400">52W High</span>
-                            <p className="text-lg font-bold text-white">₹{high52w || 'N/A'}</p>
+                            <span className="text-xs text-gray-600">52W High</span>
+                            <p className="text-lg font-bold text-gray-900">₹{high52w || 'N/A'}</p>
                             <p className="text-xs text-red-400">
                                 {distance_from_52w_high_pct !== null && distance_from_52w_high_pct !== undefined ? (
                                     `${distance_from_52w_high_pct >= 0 ? '+' : ''}${safeNumber(distance_from_52w_high_pct).toFixed(1)}%`
@@ -106,7 +106,7 @@ const PriceActionCard = ({ priceActionContext }) => {
                     </div>
 
                     {/* Visual Range Bar */}
-                    <div className="relative h-3 bg-slate-700/50 rounded-full overflow-hidden">
+                    <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
                         {/* Filled portion showing current position */}
                         <div
                             className={`h-full rounded-full transition-all duration-500 ${
@@ -131,13 +131,13 @@ const PriceActionCard = ({ priceActionContext }) => {
                     <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-3">
                             <ArrowDown className="w-5 h-5 text-red-400" />
-                            <span className="font-semibold text-white">Support Levels</span>
+                            <span className="font-semibold text-gray-900">Support Levels</span>
                         </div>
                         <div className="space-y-2">
                             {support_levels && support_levels.length > 0 ? (
                                 support_levels.map((level, idx) => (
                                     <div key={idx} className="flex items-center justify-between">
-                                        <span className="text-sm text-slate-300">S{idx + 1}:</span>
+                                        <span className="text-sm text-gray-700">S{idx + 1}:</span>
                                         <div className="text-right">
                                             <span className="text-sm font-bold text-red-300">₹{level}</span>
                                             {level === nearest_support && distance_to_nearest_support_pct !== null && distance_to_nearest_support_pct !== undefined && (
@@ -149,12 +149,12 @@ const PriceActionCard = ({ priceActionContext }) => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-xs text-slate-500">No clear support levels</p>
+                                <p className="text-xs text-gray-500">No clear support levels</p>
                             )}
                         </div>
                         {nearest_support && (
                             <div className="mt-3 pt-3 border-t border-red-500/20">
-                                <p className="text-xs text-slate-400">Nearest Support</p>
+                                <p className="text-xs text-gray-600">Nearest Support</p>
                                 <p className="text-lg font-bold text-red-300">₹{nearest_support}</p>
                             </div>
                         )}
@@ -164,13 +164,13 @@ const PriceActionCard = ({ priceActionContext }) => {
                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-3">
                             <ArrowUp className="w-5 h-5 text-green-400" />
-                            <span className="font-semibold text-white">Resistance Levels</span>
+                            <span className="font-semibold text-gray-900">Resistance Levels</span>
                         </div>
                         <div className="space-y-2">
                             {resistance_levels && resistance_levels.length > 0 ? (
                                 resistance_levels.map((level, idx) => (
                                     <div key={idx} className="flex items-center justify-between">
-                                        <span className="text-sm text-slate-300">R{idx + 1}:</span>
+                                        <span className="text-sm text-gray-700">R{idx + 1}:</span>
                                         <div className="text-right">
                                             <span className="text-sm font-bold text-green-300">₹{level}</span>
                                             {level === nearest_resistance && distance_to_nearest_resistance_pct !== null && distance_to_nearest_resistance_pct !== undefined && (
@@ -182,12 +182,12 @@ const PriceActionCard = ({ priceActionContext }) => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-xs text-slate-500">No clear resistance levels</p>
+                                <p className="text-xs text-gray-500">No clear resistance levels</p>
                             )}
                         </div>
                         {nearest_resistance && (
                             <div className="mt-3 pt-3 border-t border-green-500/20">
-                                <p className="text-xs text-slate-400">Nearest Resistance</p>
+                                <p className="text-xs text-gray-600">Nearest Resistance</p>
                                 <p className="text-lg font-bold text-green-300">₹{nearest_resistance}</p>
                             </div>
                         )}
@@ -195,14 +195,14 @@ const PriceActionCard = ({ priceActionContext }) => {
                 </div>
 
                 {/* Key Insights */}
-                <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-3">
                         <Info className="w-5 h-5 text-blue-400" />
-                        <span className="text-sm font-semibold text-white">Price Analysis</span>
+                        <span className="text-sm font-semibold text-gray-900">Price Analysis</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                         <div>
-                            <p className="text-slate-400 mb-1">Position in Range</p>
+                            <p className="text-gray-600 mb-1">Position in Range</p>
                             <p className={`font-bold ${getPositionColor()}`}>
                                 {price_position || 'Mid'} (
                                 {price_percentile_52w !== null && price_percentile_52w !== undefined 
@@ -212,7 +212,7 @@ const PriceActionCard = ({ priceActionContext }) => {
                             </p>
                         </div>
                         <div>
-                            <p className="text-slate-400 mb-1">Upside to Resistance</p>
+                            <p className="text-gray-600 mb-1">Upside to Resistance</p>
                             <p className="font-bold text-green-400">
                                 {distance_to_nearest_resistance_pct !== null && distance_to_nearest_resistance_pct !== undefined
                                     ? `+${safeNumber(distance_to_nearest_resistance_pct).toFixed(1)}%`
@@ -221,7 +221,7 @@ const PriceActionCard = ({ priceActionContext }) => {
                             </p>
                         </div>
                         <div>
-                            <p className="text-slate-400 mb-1">Downside to Support</p>
+                            <p className="text-gray-600 mb-1">Downside to Support</p>
                             <p className="font-bold text-red-400">
                                 {distance_to_nearest_support_pct !== null && distance_to_nearest_support_pct !== undefined
                                     ? `${safeNumber(distance_to_nearest_support_pct).toFixed(1)}%`
@@ -233,9 +233,9 @@ const PriceActionCard = ({ priceActionContext }) => {
                 </div>
 
                 {/* Info Footer */}
-                <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-start gap-2">
+                <div className="mt-4 pt-4 border-t border-gray-200 flex items-start gap-2">
                     <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-gray-600 leading-relaxed">
                         Support levels act as <span className="text-red-400 font-semibold">price floors</span> where buying interest 
                         typically increases. Resistance levels act as <span className="text-green-400 font-semibold">price ceilings</span> where 
                         selling pressure emerges. Price position shows where the stock sits within its 52-week trading range.

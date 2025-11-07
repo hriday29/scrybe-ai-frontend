@@ -56,11 +56,11 @@ const AIDecisionCard = ({ analysisData }) => {
   const getSignalColor = (signal) => {
     if (signal === 'BUY') return 'text-green-400';
     if (signal === 'SHORT') return 'text-red-400';
-    return 'text-gray-400';
+    return 'text-gray-600';
   };
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700/50">
+    <div className="bg-white backdrop-blur-sm rounded-lg p-6 border border-gray-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -68,14 +68,14 @@ const AIDecisionCard = ({ analysisData }) => {
             <Brain className="w-6 h-6 text-purple-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">AI Decision Breakdown</h3>
-            <p className="text-sm text-gray-400">How we calculated the score</p>
+            <h3 className="text-lg font-semibold text-gray-900">AI Decision Breakdown</h3>
+            <p className="text-sm text-gray-600">How we calculated the score</p>
           </div>
         </div>
         
         {/* Final Score Badge */}
         <div className="text-right">
-          <div className="text-2xl font-bold text-white">{Math.round(scrybeScore)}/100</div>
+          <div className="text-2xl font-bold text-gray-900">{Math.round(scrybeScore)}/100</div>
           <div className={`text-sm font-medium ${getSignalColor(signal)}`}>{signal}</div>
         </div>
       </div>
@@ -98,7 +98,7 @@ const AIDecisionCard = ({ analysisData }) => {
               </div>
 
               {/* Progress Bar */}
-              <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className={`absolute left-0 top-0 h-full ${getBarColor(dimension.score)} transition-all duration-500 ease-out`}
                   style={{ width: `${dimension.score}%` }}
@@ -106,7 +106,7 @@ const AIDecisionCard = ({ analysisData }) => {
               </div>
 
               {/* Reasoning */}
-              <p className="text-xs text-gray-400 leading-relaxed pl-6">
+              <p className="text-xs text-gray-600 leading-relaxed pl-6">
                 {dimension.reasoning}
               </p>
             </div>
@@ -115,15 +115,15 @@ const AIDecisionCard = ({ analysisData }) => {
       </div>
 
       {/* Synthesis Explanation */}
-      <div className="mt-6 pt-6 border-t border-gray-700/50">
+      <div className="mt-6 pt-6 border-t border-gray-200">
         <div className="flex items-start gap-3">
           <div className="p-1.5 bg-blue-500/10 rounded-lg mt-0.5">
             <Brain className="w-4 h-4 text-blue-400" />
           </div>
           <div className="flex-1">
             <div className="text-sm font-medium text-gray-300 mb-1">Synthesis</div>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              The final Scrybe Score of <span className="text-white font-medium">{Math.round(scrybeScore)}</span> is 
+            <p className="text-xs text-gray-600 leading-relaxed">
+              The final Scrybe Score of <span className="text-gray-900 font-medium">{Math.round(scrybeScore)}</span> is 
               a weighted synthesis of these four dimensions. 
               {scrybeScore >= 50 ? (
                 <> Strong scores in {dimensions.filter(d => d.score >= 70).map(d => d.name.toLowerCase()).join(' and ')} 
