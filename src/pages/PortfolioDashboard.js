@@ -232,10 +232,10 @@ const PortfolioDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 flex items-center justify-center">
         <div className="text-center">
-          <Activity className="w-16 h-16 text-blue-400 animate-pulse mx-auto mb-4" />
-          <p className="text-white text-xl font-semibold">Loading Portfolio...</p>
+          <Activity className="w-16 h-16 text-primary-600 animate-pulse mx-auto mb-4" />
+          <p className="text-gray-900 text-xl font-semibold">Loading Portfolio...</p>
         </div>
       </div>
     );
@@ -243,11 +243,11 @@ const PortfolioDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 flex items-center justify-center">
         <GlassCard className="p-8 max-w-md">
-          <AlertTriangle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white text-center mb-2">Failed to Load</h2>
-          <p className="text-slate-400 text-center">{error}</p>
+          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">Failed to Load</h2>
+          <p className="text-gray-700 text-center">{error}</p>
         </GlassCard>
       </div>
     );
@@ -256,7 +256,7 @@ const PortfolioDashboard = () => {
   const { portfolio_summary, sector_breakdown, executed_trades, total_analyzed, display_timestamp, prediction_for_date, prediction_for_date_short } = portfolioData;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

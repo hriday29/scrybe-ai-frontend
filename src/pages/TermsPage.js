@@ -13,17 +13,17 @@ const TermsPage = ({ onBack }) => {
 
   const Section = ({ number, title, children, icon, accent }) => (
     <div
-      className={`p-6 rounded-2xl bg-white/5 border ${
-        accent || "border-white/10"
-      } shadow-lg space-y-3`}
+      className={`p-6 rounded-2xl bg-white border ${
+        accent || "border-gray-200"
+      } shadow-soft-lg space-y-3`}
     >
-      <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+      <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
         {icon}
         <span>
           {number}. {title}
         </span>
       </h2>
-      <div className="text-gray-300 leading-relaxed">{children}</div>
+      <div className="text-gray-700 leading-relaxed">{children}</div>
     </div>
   );
 

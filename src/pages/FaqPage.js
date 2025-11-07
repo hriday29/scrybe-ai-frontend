@@ -12,11 +12,11 @@ const FaqItem = ({ question, answer, isBeta = false }) => (
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
     viewport={{ once: true }}
-    className={`group mb-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg shadow-md hover:shadow-blue-500/10 transition ${
+    className={`group mb-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-soft-lg hover:shadow-xl transition ${
       isBeta ? "ring-1 ring-amber-400/40" : ""
     }`}
   >
-    <summary className="flex justify-between items-center cursor-pointer text-lg font-semibold text-white list-none">
+    <summary className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 list-none">
       <span className="flex items-center gap-2">
         {isBeta && (
           <span className="text-amber-400 text-sm font-normal">[BETA]</span>
@@ -27,7 +27,7 @@ const FaqItem = ({ question, answer, isBeta = false }) => (
         ▼
       </span>
     </summary>
-    <p className="mt-3 prose prose-invert max-w-none leading-relaxed">
+    <p className="mt-3 prose prose-lg max-w-none leading-relaxed text-gray-700">
       {answer}
     </p>
   </motion.details>
@@ -162,20 +162,20 @@ const FaqPage = ({ onBack }) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 text-gray-900 font-sans overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-black" />
-      <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-blue-500/30 blur-3xl animate-pulse" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-purple-600/30 blur-3xl animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40" />
+      <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-primary-200/20 blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-secondary-200/20 blur-3xl" />
 
       {/* Subtle grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px] opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(100,100,100,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,100,100,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-40 pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-6 py-12">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white hover:bg-white/20 backdrop-blur-md shadow-md transition"
+          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50 shadow-soft transition"
         >
           ← Back to Main Site
         </button>
@@ -187,12 +187,12 @@ const FaqPage = ({ onBack }) => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="inline-block text-6xl font-extrabold mb-4 pt-2 pb-2 bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent drop-shadow-lg leading-tight">
+          <h1 className="inline-block text-6xl font-extrabold mb-4 pt-2 pb-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg leading-tight">
             Frequently Asked Questions
           </h1>
-          <p className="text-lg max-w-2xl mx-auto text-gray-300">
+          <p className="text-lg max-w-2xl mx-auto text-gray-700">
             Find answers to common questions about{" "}
-            <span className="font-semibold">Scrybe AI</span>.
+            <span className="font-semibold text-primary-600">Scrybe AI</span>.
           </p>
         </motion.div>
 
@@ -227,11 +227,11 @@ const FaqPage = ({ onBack }) => {
         </div>
 
         {/* Question Submission */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-8 shadow-lg backdrop-blur-md">
-          <h2 className="text-3xl font-bold mb-4 text-center">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-soft-lg">
+          <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">
             Can't find your answer?
           </h2>
-          <p className="text-gray-300 mb-8 text-center">
+          <p className="text-gray-700 mb-8 text-center">
             Ask our team! We'll review your question and add it to our list.
           </p>
 
@@ -247,15 +247,15 @@ const FaqPage = ({ onBack }) => {
                   }
                 }}
                 rows="4"
-                className={`w-full rounded-lg p-3 text-sm focus:outline-none focus:ring-2 backdrop-blur-md bg-white/10 text-white placeholder-gray-400 ${
+                className={`w-full rounded-lg p-3 text-sm focus:outline-none focus:ring-2 bg-gray-50 text-gray-900 placeholder-gray-500 ${
                   status === "error"
                     ? "border border-red-400 focus:ring-red-500"
-                    : "border border-white/20 focus:ring-blue-500"
+                    : "border border-gray-200 focus:ring-primary-500"
                 }`}
                 placeholder="Type your question here... (e.g., 'I found a bug when...', 'Feature request...', 'How do I...')"
                 required
               />
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-600">
                 Please do not submit personal information. Your question will be
                 reviewed by our team.
               </p>
@@ -264,7 +264,7 @@ const FaqPage = ({ onBack }) => {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
+                  className="bg-primary-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                 >
                   {status === "submitting" ? "Submitting..." : "Submit Question"}
                 </button>
