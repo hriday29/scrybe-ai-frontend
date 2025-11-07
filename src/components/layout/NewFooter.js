@@ -6,14 +6,16 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
   return (
     <footer className="bg-gray-50 text-gray-700 border-t border-gray-200">
       {/* Main Footer Content */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
+      <div className="w-full px-6 sm:px-8 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
-              </div>
+              <img 
+                src="/scrybe-logo.ico" 
+                alt="Scrybe AI Logo" 
+                className="w-10 h-10"
+              />
               <span className="text-2xl font-bold text-gray-900">
                 SCRYBE <span className="text-primary-500">AI</span>
               </span>

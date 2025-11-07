@@ -10,11 +10,11 @@ const Section = ({ title, children, id }) => (
     viewport={{ once: true }}
     className="mb-16 scroll-mt-24"
   >
-    <div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-lg shadow-lg hover:shadow-blue-500/10 transition">
-      <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b border-white/10 pb-2">
+    <div className="rounded-2xl bg-white border border-gray-200 p-6 shadow-soft-lg hover:shadow-xl transition">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">
         {title}
       </h2>
-      <div className="prose prose-lg prose-invert max-w-none leading-relaxed">
+      <div className="prose prose-lg max-w-none leading-relaxed text-gray-700">
         {children}
       </div>
     </div>
@@ -38,18 +38,18 @@ const UserGuidePage = ({ onBack }) => {
   return (
     <div className="relative min-h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-black" />
-      <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-blue-500/30 blur-3xl animate-pulse" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-purple-600/30 blur-3xl animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40" />
+      <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-primary-200/20 blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-secondary-200/20 blur-3xl" />
 
       {/* Subtle grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px] opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(100,100,100,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,100,100,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-40 pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-6 py-12">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-gray-900 hover:bg-white/20 backdrop-blur-md shadow-md transition"
+          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50 shadow-soft transition"
         >
           ← Back to Main Site
         </button>
@@ -61,24 +61,24 @@ const UserGuidePage = ({ onBack }) => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
+          <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
             User Guide
           </h1>
-          <p className="text-gray-900 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-700 text-lg max-w-2xl mx-auto">
             Everything you need to know to get the most out of{" "}
-            <span className="font-semibold">Scrybe AI</span>.
+            <span className="font-semibold text-primary-600">Scrybe AI</span>.
           </p>
         </motion.div>
 
         {/* Table of Contents */}
-        <div className="mb-20 rounded-2xl border border-white/10 bg-white/5 p-8 shadow-lg backdrop-blur-md">
+        <div className="mb-20 rounded-2xl border border-gray-200 bg-white p-8 shadow-soft-lg">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Table of Contents</h2>
           <ul className="list-none grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
             {sections.map((section, i) => (
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  className="text-blue-400 hover:text-blue-300 font-medium transition"
+                  className="text-primary-600 hover:text-primary-700 font-medium transition"
                 >
                   {i + 1}. {section.title}
                 </a>

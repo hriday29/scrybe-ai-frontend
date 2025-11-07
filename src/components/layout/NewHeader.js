@@ -8,7 +8,7 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-soft">
-      <nav className="w-full px-4 sm:px-6 lg:px-8">
+      <nav className="w-full px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex items-center gap-3">

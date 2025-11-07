@@ -5,14 +5,14 @@ import { Brain, TrendingUp, Shield, Sparkles } from 'lucide-react';
 
 const HeroSection = ({ onGetStarted, onWatchDemo }) => {
   return (
-    <section className="relative bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+    <section id="hero" className="relative bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-200/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full px-6 sm:px-8 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text Content */}
           <motion.div

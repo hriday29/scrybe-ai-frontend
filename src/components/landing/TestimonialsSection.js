@@ -32,8 +32,8 @@ const benefits = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-gradient-soft">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+    <section id="testimonials" className="py-20 md:py-28 bg-gradient-soft">
+      <div className="w-full px-6 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-16">
           <motion.h2
