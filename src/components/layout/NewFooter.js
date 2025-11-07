@@ -4,7 +4,7 @@ import { Mail, Phone, Instagram, CheckCircle, Shield } from 'lucide-react';
 
 const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen }) => {
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-gray-800 text-gray-300">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -20,15 +20,15 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
             </div>
             
             <p className="text-gray-400 leading-relaxed mb-6">
-              Empowering traders with cutting-edge algorithmic trading solutions for the 
-              Indian stock market. Join thousands of successful traders.
+              AI-powered analysis of Nifty Smallcap 250 stocks with institutional-grade 
+              risk management. Built for systematic traders.
             </p>
 
             {/* Status Indicators */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                <span>NSE & BSE Connected</span>
+                <span>NSE Connected</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Shield className="w-4 h-4 text-blue-500" />
