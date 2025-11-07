@@ -1,50 +1,50 @@
 // src/components/landing/FeaturesSection.js
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Shield, BarChart3, Zap, Target, Brain } from 'lucide-react';
+import { Brain, TrendingUp, Shield, BarChart3, Target, Activity } from 'lucide-react';
 
 const features = [
   {
     icon: Brain,
-    title: 'AI-Powered Analysis',
-    description: 'Advanced machine learning algorithms analyze market patterns and predict optimal trade setups.',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    title: 'Scrybe Score AI Engine',
+    description: 'Proprietary AI scoring system (-100 to +100) evaluates technical setup, fundamentals, and market context for each of 250 smallcap stocks daily.',
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50',
   },
   {
-    icon: Target,
-    title: 'Precision Trading',
-    description: 'Smart entry and exit points calculated using technical indicators and market sentiment analysis.',
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-50',
+    icon: Activity,
+    title: 'Market Regime Detection',
+    description: 'Real-time identification of market conditions (Uptrend, Downtrend, Sideways) with volatility analysis to adapt trading strategies dynamically.',
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50',
   },
   {
     icon: Shield,
-    title: 'Risk Management',
-    description: 'Institutional-grade risk controls with automatic stop-loss and position sizing recommendations.',
+    title: 'Institutional Risk Controls',
+    description: 'Professional portfolio management: Max 10 positions, 40% sector concentration limit, 2% max risk per trade—just like institutional fund managers.',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
   },
   {
     icon: BarChart3,
-    title: 'Real-Time Analytics',
-    description: 'Live market data integration with NSE and BSE for up-to-the-second trading decisions.',
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-50',
+    title: 'Technical Analysis Suite',
+    description: 'Comprehensive analysis of momentum indicators, price action patterns, volatility metrics, and market breadth to identify high-probability setups.',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+  },
+  {
+    icon: Target,
+    title: 'Top 10 Daily Selection',
+    description: 'From 250 analyzed stocks, only the top 10 highest-conviction trades that pass all risk controls are selected for execution each day.',
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
   },
   {
     icon: TrendingUp,
-    title: 'Portfolio Optimization',
-    description: 'Diversified stock selection with sector-wise allocation and rebalancing strategies.',
+    title: 'Complete Transparency',
+    description: 'View all 250 daily analyses with clear selection reasons. Access AI Track Record for honest historical performance—no black-box promises.',
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-50',
-  },
-  {
-    icon: Zap,
-    title: 'Lightning Fast',
-    description: 'Execute trades in milliseconds with our optimized infrastructure and API integrations.',
-    color: 'text-pink-600',
-    bgColor: 'bg-pink-50',
   },
 ];
 
@@ -61,9 +61,9 @@ const FeaturesSection = () => {
             transition={{ duration: 0.5 }}
             className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4"
           >
-            Powerful Features for{' '}
+            AI-Powered Features for{' '}
             <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-              Modern Traders
+              Smallcap Trading
             </span>
           </motion.h2>
           <motion.p
@@ -73,7 +73,7 @@ const FeaturesSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Everything you need to trade smarter, safer, and more profitably in the Indian stock market.
+            Institutional-grade analysis and risk management designed specifically for India's Nifty Smallcap 250 universe.
           </motion.p>
         </div>
 

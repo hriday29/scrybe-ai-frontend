@@ -1,41 +1,38 @@
 // src/components/landing/TestimonialsSection.js
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { CheckCircle2, TrendingUp, Shield, Eye } from 'lucide-react';
 
-const testimonials = [
+const benefits = [
   {
-    quote: "Scrybe AI has transformed my trading experience. The automated strategies have significantly improved my trading performance.",
-    author: "Rajesh Kumar",
-    role: "Day Trader",
-    location: "Mumbai",
-    avatar: "R",
-    bgColor: "bg-blue-500",
-    rating: 5,
+    icon: TrendingUp,
+    title: 'Focus on India\'s Growth Story',
+    description: 'Nifty Smallcap 250 represents emerging Indian businesses with high growth potential—companies at the sweet spot before they become largecaps.',
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50',
+    borderColor: 'border-teal-200',
   },
   {
-    quote: "The risk management features are exceptional. I can confidently manage multiple portfolios with better control.",
-    author: "Priya Sharma",
-    role: "Investment Advisor",
-    location: "Delhi",
-    avatar: "P",
-    bgColor: "bg-purple-500",
-    rating: 5,
+    icon: Shield,
+    title: 'Professional Risk Management',
+    description: 'Unlike retail traders, our system enforces institutional-grade risk controls: strict position limits, sector diversification, and maximum 2% risk per trade.',
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50',
+    borderColor: 'border-violet-200',
   },
   {
-    quote: "User-friendly interface with powerful analytics. Perfect for both beginners and experienced traders.",
-    author: "Amit Patel",
-    role: "Retail Trader",
-    location: "Bangalore",
-    avatar: "A",
-    bgColor: "bg-green-500",
-    rating: 5,
+    icon: Eye,
+    title: 'Complete Transparency',
+    description: 'No black-box promises. View all 250 daily analyses, see why each stock was selected or rejected, and access honest historical performance in the AI Track Record.',
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+    borderColor: 'border-purple-200',
   },
 ];
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-gray-50">
+    <section className="py-20 md:py-28 bg-gradient-soft">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -46,9 +43,9 @@ const TestimonialsSection = () => {
             transition={{ duration: 0.5 }}
             className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4"
           >
-            Trusted by{' '}
+            Why{' '}
             <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-              Traders Across India
+              Scrybe AI?
             </span>
           </motion.h2>
           <motion.p
@@ -58,48 +55,70 @@ const TestimonialsSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            See what our community of traders has to say about their experience
+            Institutional-grade analysis meets systematic discipline for smallcap trading
           </motion.p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-2xl p-8 shadow-soft-lg hover:shadow-soft-xl transition-shadow duration-300"
-            >
-              {/* Star Rating */}
-              <div className="flex gap-1 mb-5">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-
-              {/* Quote */}
-              <blockquote className="text-gray-700 italic leading-relaxed mb-6">
-                "{testimonial.quote}"
-              </blockquote>
-
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 ${testimonial.bgColor} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
-                  {testimonial.avatar}
+        {/* Benefits Grid */}
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`bg-white rounded-2xl p-8 shadow-soft-lg hover:shadow-soft-xl transition-all duration-300 border-2 ${benefit.borderColor}`}
+              >
+                {/* Icon */}
+                <div className={`w-14 h-14 ${benefit.bgColor} rounded-xl flex items-center justify-center mb-5`}>
+                  <Icon className={`w-7 h-7 ${benefit.color}`} />
                 </div>
-                <div>
-                  <div className="font-bold text-gray-900">{testimonial.author}</div>
-                  <div className="text-sm text-gray-600">
-                    {testimonial.role} • {testimonial.location}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {benefit.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* What You Get - Quick List */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="bg-white rounded-3xl p-8 md:p-12 shadow-soft-xl border border-gray-100"
+        >
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+            What You Get with Scrybe AI
+          </h3>
+          
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              'Daily analysis of all 250 Nifty Smallcap stocks',
+              'Proprietary Scrybe Score for each stock (-100 to +100)',
+              'Top 10 highest-conviction trade selections',
+              'Real-time market regime detection (Uptrend/Downtrend/Sideways)',
+              'Technical analysis: Momentum, Volatility, Price Action',
+              'Institutional risk controls: Max 10 positions, 2% risk/trade',
+              'Portfolio management with sector diversification limits',
+              'Complete transparency: View all analyses and selection reasons',
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-primary-500 flex-shrink-0 mt-0.5" />
+                <span className="text-gray-700">{item}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

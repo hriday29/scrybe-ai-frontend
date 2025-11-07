@@ -6,31 +6,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary Brand Colors (SwingAlgo-inspired)
+        // Primary Brand Colors - Deep Purple/Indigo for AI Intelligence
         primary: {
-          50: '#EEF2FF',
-          100: '#E0E7FF',
-          200: '#C7D2FE',
-          300: '#A5B4FC',
-          400: '#818CF8',
-          500: '#4169E1', // Royal Blue - Main brand color
-          600: '#4F46E5',
-          700: '#4338CA',
-          800: '#3730A3',
-          900: '#312E81',
+          50: '#F5F3FF',
+          100: '#EDE9FE',
+          200: '#DDD6FE',
+          300: '#C4B5FD',
+          400: '#A78BFA',
+          500: '#8B5CF6', // Violet - AI Intelligence theme
+          600: '#7C3AED',
+          700: '#6D28D9',
+          800: '#5B21B6',
+          900: '#4C1D95',
         },
-        // Secondary Purple Accents
+        // Secondary Teal/Cyan for Technology & Data
         secondary: {
-          50: '#FAF5FF',
-          100: '#F3E8FF',
-          200: '#E9D5FF',
-          300: '#D8B4FE',
-          400: '#C084FC',
-          500: '#A855F7',
-          600: '#9333EA',
-          700: '#7E22CE',
-          800: '#6B21A8',
-          900: '#581C87',
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          300: '#5EEAD4',
+          400: '#2DD4BF',
+          500: '#14B8A6', // Teal - Technology & Analytics
+          600: '#0D9488',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A',
         },
         // Success Green
         success: {
@@ -94,8 +94,8 @@ module.exports = {
         '4xl': '2rem',
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #4169E1 0%, #9333EA 100%)',
-        'gradient-soft': 'linear-gradient(135deg, #EEF2FF 0%, #FAF5FF 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #8B5CF6 0%, #14B8A6 100%)',
+        'gradient-soft': 'linear-gradient(135deg, #F5F3FF 0%, #F0FDFA 100%)',
       },
     },
   },
