@@ -125,8 +125,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
     const getSignalStyle = (sig) => {
         switch (sig) {
-            case 'BUY': return 'bg-green-500/10 text-green-300 border-green-500/30';
-            default: return 'bg-slate-700/50 text-gray-700 border-slate-600/50';
+            case 'BUY': return 'bg-green-100 text-green-700 border-green-200';
+            default: return 'bg-gray-100 text-gray-700 border-gray-200';
         }
     };
 

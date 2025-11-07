@@ -102,7 +102,7 @@ const DemoModal = ({ onClose }) => (
         <button
         onClick={onClose}
         aria-label="Close demo"
-        className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/50 hover:bg-slate-700/70 text-slate-300 hover:text-white transition"
+        className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition"
         >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -427,12 +427,12 @@ const AITrackRecord = () => {
   }, []);
 
   const getReasonDisplay = (reason) => {
-    if (!reason) return { text: 'Closed', color: 'bg-slate-700 text-slate-300' };
+    if (!reason) return { text: 'Closed', color: 'bg-gray-200 text-gray-700' };
     const lower = reason.toLowerCase();
-    if (lower.includes('target hit')) return { text: 'Target Hit', color: 'bg-green-500/20 text-green-300' };
-    if (lower.includes('stop-loss hit')) return { text: 'Stop-Loss Hit', color: 'bg-red-500/20 text-red-400' };
-    if (lower.includes('time exit')) return { text: 'Time Exit', color: 'bg-amber-500/20 text-amber-400' };
-    return { text: 'Closed', color: 'bg-slate-700 text-slate-300' };
+    if (lower.includes('target hit')) return { text: 'Target Hit', color: 'bg-green-100 text-green-700' };
+    if (lower.includes('stop-loss hit')) return { text: 'Stop-Loss Hit', color: 'bg-red-100 text-red-700' };
+    if (lower.includes('time exit')) return { text: 'Time Exit', color: 'bg-amber-100 text-amber-700' };
+    return { text: 'Closed', color: 'bg-gray-200 text-gray-700' };
   };
 
   if (error) return <div className="text-red-400 text-center p-8">Error loading track record: {error}</div>;
