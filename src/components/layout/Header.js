@@ -125,7 +125,7 @@ export default function Header({
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="flex flex-col gap-3 px-6 py-4 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 md:hidden"
+          className="flex flex-col gap-3 px-6 py-4 bg-white backdrop-blur-none border-t border-gray-200 md:hidden"
           onClick={() => setMobileMenuOpen(false)} // Close menu on link click
         >
           {mode === "landing" ? landingNavButtons :

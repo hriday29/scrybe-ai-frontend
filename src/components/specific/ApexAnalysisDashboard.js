@@ -71,7 +71,7 @@ const TradePlanCard = ({ plan }) => (
             <Target size={20} className="mr-2 text-green-300" />
             Scrybe Trade Plan
         </h3>
-        <div className="mb-4 text-xs text-green-200 bg-green-900/30 rounded-lg p-3 border border-green-500/20">
+        <div className="mb-4 text-xs text-green-200 bg-green-900/30 rounded-lg p-3 border border-green-200">
             <p className="leading-relaxed">
                 📚 <strong>Educational Note:</strong> This trade plan combines AI's directional analysis with institutional risk management rules. 
                 Entry is at current market price, Stop-Loss is 2× ATR (Average True Range), and Target is 6× ATR for a 3:1 risk-reward ratio.
@@ -126,7 +126,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
     const getSignalStyle = (sig) => {
         switch (sig) {
             case 'BUY': return 'bg-green-500/10 text-green-300 border-green-500/30';
-            default: return 'bg-slate-700/50 text-slate-300 border-slate-600/50';
+            default: return 'bg-slate-700/50 text-gray-700 border-slate-600/50';
         }
     };
 
@@ -331,7 +331,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                 <span className={`font-mono font-semibold ${
                                     safe_futures.basis_interpretation?.includes('Premium') ? 'text-green-400' : 
                                     safe_futures.basis_interpretation?.includes('Discount') ? 'text-red-400' : 
-                                    'text-slate-300'
+                                    'text-gray-700'
                                 }`}>
                                     {safe_futures.futures_spot_basis_percent}
                                 </span>
@@ -414,12 +414,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
 
                 {/* Step 1: Understanding the Risk Framework */}
-                <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
                     <div className="flex items-center gap-2 mb-4">
                         <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">1</span>
                         <h3 className="font-bold text-lg text-gray-900">Risk/Reward Framework (Reference Levels)</h3>
                     </div>
-                    <p className="text-sm text-slate-300 mb-3">
+                    <p className="text-sm text-gray-700 mb-3">
                         These are <strong className="text-yellow-300">reference levels</strong> calculated from <strong>today's closing price</strong> using 
                         <strong> ATR (Average True Range)</strong> - a measure of daily volatility. They show you what realistic 
                         stop-loss and targets look like for this stock's normal price movement.
@@ -433,21 +433,21 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-red-500/20">
+                        <div className="bg-white rounded-lg p-4 text-center border border-red-200">
                             <p className="text-xs text-slate-400 mb-1">Stop-Loss (1.75× ATR)</p>
                             <p className="text-2xl font-mono font-bold text-red-400">
                                 {safe_technicals.potential_stop_loss ? `₹${safe_technicals.potential_stop_loss}` : '—'}
                             </p>
                             <p className="text-xs text-slate-500 mt-2">Protection against losses</p>
                         </div>
-                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-white/20">
+                        <div className="bg-white rounded-lg p-4 text-center border border-gray-200">
                             <p className="text-xs text-slate-400 mb-1">Current Price</p>
                             <p className="text-2xl font-mono font-bold text-gray-900">
                                 {safe_technicals.daily_close ? `₹${safe_technicals.daily_close.toFixed(2)}` : '—'}
                             </p>
                             <p className="text-xs text-slate-500 mt-2">Today's closing price</p>
                         </div>
-                        <div className="bg-slate-900/60 rounded-lg p-4 text-center border border-green-500/20">
+                        <div className="bg-white rounded-lg p-4 text-center border border-green-200">
                             <p className="text-xs text-slate-400 mb-1">Target (4.4× ATR)</p>
                             <p className="text-2xl font-mono font-bold text-green-400">
                                 {safe_technicals.potential_target ? `₹${safe_technicals.potential_target}` : '—'}
@@ -457,7 +457,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     </div>
 
                     {safe_technicals.ATR_14 && (
-                        <div className="mt-4 pt-4 border-t border-slate-700/50">
+                        <div className="mt-4 pt-4 border-t border-gray-200">
                             <div className="text-center text-sm text-slate-400">
                                 <p className="mb-1">
                                     <strong className="text-gray-900">Daily Volatility (ATR):</strong> ₹{safe_technicals.ATR_14.toFixed(2)} 
@@ -477,12 +477,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <summary className="cursor-pointer text-sm font-semibold text-blue-400 hover:text-blue-300 list-none flex items-center justify-center gap-2 py-2">
                                 <span>📖 Learn: How are these calculated?</span>
                             </summary>
-                            <div className="mt-3 space-y-3 text-xs text-slate-300 bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
+                            <div className="mt-3 space-y-3 text-xs text-gray-700 bg-gray-50 rounded-lg p-4 border border-gray-200">
                                 <div>
                                     <p className="font-semibold text-blue-300 mb-1">🎯 What is ATR?</p>
                                     <p className="leading-relaxed">ATR measures average daily price movement. High ATR = volatile stock needs wider stops. Low ATR = stable stock uses tighter stops.</p>
                                 </div>
-                                <div className="space-y-1 font-mono text-xs bg-slate-800/50 rounded p-2">
+                                <div className="space-y-1 font-mono text-xs bg-gray-50 rounded p-2">
                                     <div className="flex justify-between text-red-300">
                                         <span>Stop-Loss = Current Price - (1.75 × ATR)</span>
                                         <span>= ₹{safe_technicals.potential_stop_loss}</span>
@@ -502,12 +502,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
 
                 {/* Step 2: AI's Market Prediction */}
-                <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
                     <div className="flex items-center gap-2 mb-4">
                         <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">2</span>
                         <h3 className="font-bold text-lg text-gray-900">AI's Prediction & Rationale</h3>
                     </div>
-                    <p className="text-sm text-slate-300 mb-4">
+                    <p className="text-sm text-gray-700 mb-4">
                         Based on technical patterns, fundamentals, and market conditions, our AI predicts:
                     </p>
                     
@@ -526,7 +526,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                 </p>
                             </div>
                         </div>
-                        <div className="bg-slate-900/50 rounded p-3 border border-slate-700/30">
+                        <div className="bg-gray-50 rounded p-3 border border-gray-200">
                             <p className="text-xs text-slate-400 mb-1 font-semibold">💡 Why this prediction?</p>
                             <p className="text-sm text-slate-200 leading-relaxed">
                                 {gain_prediction_rationale || 'Analysis in progress...'}
@@ -537,12 +537,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                 {/* Step 3: Execution Plan (Trade Plan) */}
                 {strategy_signal && strategy_signal.trade_plan && (
-                    <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
+                    <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
                         <div className="flex items-center gap-2 mb-4">
                             <span className="bg-indigo-500 text-gray-900 font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm">3</span>
                             <h3 className="font-bold text-lg text-gray-900">Your Execution Plan (Actual Trade Prices)</h3>
                         </div>
-                        <p className="text-sm text-slate-300 mb-3">
+                        <p className="text-sm text-gray-700 mb-3">
                             These are your <strong className="text-green-300">actual execution prices</strong> calculated from the 
                             <strong> live market price at analysis time</strong>. The stop-loss and target use the same ATR framework 
                             as Step 1, but applied to the real entry price you'll use to place your trade.
