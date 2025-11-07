@@ -43,7 +43,7 @@ const ConfidencePoll = ({ analysisId }) => {
         }
     };
     const VoteButton = ({ type, count, children }) => (
-        <button onClick={() => handleVote(type)} disabled={!!userVote} className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold ${userVote === type ? 'bg-blue-600 text-gray-900 ring-2 ring-blue-400' : 'bg-slate-700/50 text-gray-300'} ${!userVote ? 'hover:bg-slate-600/80' : ''} disabled:cursor-not-allowed disabled:opacity-50`}>{children}<span className="text-xs">{isLoading ? '...' : count}</span></button>
+        <button onClick={() => handleVote(type)} disabled={!!userVote} className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold ${userVote === type ? 'bg-primary-500 text-white ring-2 ring-primary-300' : 'bg-gray-100 text-gray-700'} ${!userVote ? 'hover:bg-gray-200' : ''} disabled:cursor-not-allowed disabled:opacity-50`}>{children}<span className="text-xs">{isLoading ? '...' : count}</span></button>
     );
     return (
         <div className="bg-white backdrop-blur-none border border-gray-200 rounded-xl p-6 mt-8">

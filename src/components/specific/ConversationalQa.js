@@ -65,8 +65,8 @@ const ConversationalQa = ({ analysisContext }) => {
                         <div
                             className={`p-3 rounded-lg max-w-lg ${
                                 entry.type === 'user'
-                                    ? 'bg-blue-600 text-gray-900'
-                                    : 'bg-slate-700 text-gray-200'
+                                    ? 'bg-primary-500 text-white'
+                                    : 'bg-gray-100 text-gray-900'
                             }`}
                         >
                             <p className="text-sm">{entry.text}</p>
