@@ -33,11 +33,11 @@ const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue' }) => {
     <GlassCard className={`p-6 bg-gradient-to-br ${colorClasses[color]}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-slate-400 text-sm font-medium mb-2">{label}</p>
-          <p className="text-3xl font-bold text-white mb-1">{value}</p>
-          {subtitle && <p className="text-slate-400 text-xs">{subtitle}</p>}
+          <p className="text-gray-600 text-sm font-medium mb-2">{label}</p>
+          <p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
+          {subtitle && <p className="text-gray-600 text-xs">{subtitle}</p>}
         </div>
-        <Icon className="w-8 h-8 text-white/80" />
+        <Icon className="w-8 h-8 text-gray-700" />
       </div>
     </GlassCard>
   );
@@ -61,7 +61,7 @@ const SignalBadge = ({ signal }) => {
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-500/20 border border-slate-500/30 text-slate-400 text-xs font-bold">
+    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-200 border border-gray-300 text-gray-700 text-xs font-bold">
       HOLD
     </span>
   );
@@ -82,8 +82,8 @@ const ExecutedTradeCard = ({ trade, rank }) => {
             #{rank || '?'}
           </div>
           <div>
-            <h4 className="text-white font-bold text-lg">{trade.ticker}</h4>
-            <p className="text-slate-400 text-sm">{trade.sector || 'Unknown Sector'}</p>
+            <h4 className="text-gray-900 font-bold text-lg">{trade.ticker}</h4>
+            <p className="text-gray-600 text-sm">{trade.sector || 'Unknown Sector'}</p>
           </div>
         </div>
         <SignalBadge signal={trade.signal} />
@@ -91,23 +91,23 @@ const ExecutedTradeCard = ({ trade, rank }) => {
       
       <div className="grid grid-cols-3 gap-3 mb-3 text-sm">
         <div>
-          <p className="text-slate-400 text-xs mb-1">Entry</p>
-          <p className="text-white font-semibold">₹{trade.entry_price?.toFixed(2) || 'N/A'}</p>
+          <p className="text-gray-600 text-xs mb-1">Entry</p>
+          <p className="text-gray-900 font-semibold">₹{trade.entry_price?.toFixed(2) || 'N/A'}</p>
         </div>
         <div>
-          <p className="text-slate-400 text-xs mb-1">Target</p>
-          <p className="text-green-400 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
+          <p className="text-gray-600 text-xs mb-1">Target</p>
+          <p className="text-green-600 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
         </div>
         <div>
-          <p className="text-slate-400 text-xs mb-1">Stop Loss</p>
-          <p className="text-red-400 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
+          <p className="text-gray-600 text-xs mb-1">Stop Loss</p>
+          <p className="text-red-600 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
         </div>
       </div>
       
       {trade.selection_reason && (
         <div className="pt-3 border-t border-gray-200">
-          <p className="text-slate-300 text-xs flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+          <p className="text-gray-700 text-xs flex items-start gap-2">
+            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
             {trade.selection_reason}
           </p>
         </div>
@@ -121,35 +121,35 @@ const AnalysisRow = ({ analysis }) => {
   
   const getStatusIcon = () => {
     if (analysis.is_executed) {
-      return <CheckCircle className="w-5 h-5 text-green-400" />;
+      return <CheckCircle className="w-5 h-5 text-green-600" />;
     }
     if (analysis.portfolio_selected) {
-      return <Target className="w-5 h-5 text-blue-400" />;
+      return <Target className="w-5 h-5 text-blue-600" />;
     }
-    return <XCircle className="w-5 h-5 text-slate-500" />;
+    return <XCircle className="w-5 h-5 text-gray-500" />;
   };
 
   const getReasonColor = () => {
     const reason = analysis.selection_reason?.toLowerCase() || '';
-    if (reason.includes('selected')) return 'text-green-400';
-    if (reason.includes('sector')) return 'text-yellow-400';
-    if (reason.includes('portfolio full')) return 'text-orange-400';
-    return 'text-slate-400';
+    if (reason.includes('selected')) return 'text-green-600';
+    if (reason.includes('sector')) return 'text-yellow-600';
+    if (reason.includes('portfolio full')) return 'text-orange-600';
+    return 'text-gray-600';
   };
 
   return (
     <motion.tr
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors"
+      className="border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
       onClick={() => navigate(`/stock/${analysis.ticker}`)}
     >
       <td className="px-4 py-4">
         <div className="flex items-center gap-3">
           {getStatusIcon()}
           <div>
-            <p className="text-white font-semibold">{analysis.ticker}</p>
-            <p className="text-slate-400 text-xs">{analysis.sector || 'Unknown'}</p>
+            <p className="text-gray-900 font-semibold">{analysis.ticker}</p>
+            <p className="text-gray-600 text-xs">{analysis.sector || 'Unknown'}</p>
           </div>
         </div>
       </td>
@@ -157,12 +157,12 @@ const AnalysisRow = ({ analysis }) => {
         <SignalBadge signal={analysis.signal} />
       </td>
       <td className="px-4 py-4">
-        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-600' : 'text-red-600'}`}>
           {analysis.scrybeScore >= 0 ? '+' : ''}{analysis.scrybeScore || 0}
         </span>
       </td>
       <td className="px-4 py-4">
-        <span className="text-white font-semibold">
+        <span className="text-gray-900 font-semibold">
           #{analysis.portfolio_rank || 'N/A'}
         </span>
       </td>
@@ -260,17 +260,17 @@ const PortfolioDashboard = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-4">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 mb-4">
             Portfolio Management Dashboard
           </h1>
-          <p className="text-slate-400 text-lg">
-            AI analyzes <span className="text-white font-bold">~{total_analyzed} candidates</span> • 
-            Portfolio executes <span className="text-green-400 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
+          <p className="text-gray-700 text-lg">
+            AI analyzes <span className="text-gray-900 font-bold">~{total_analyzed} candidates</span> • 
+            Portfolio executes <span className="text-green-600 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
           </p>
-          <p className="text-slate-500 text-sm mt-2">Last Updated: {display_timestamp}</p>
+          <p className="text-gray-600 text-sm mt-2">Last Updated: {display_timestamp}</p>
           {prediction_for_date && (
-            <div className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30">
-              <span className="text-blue-400 text-sm font-semibold">📅 Analysis for: {prediction_for_date_short || prediction_for_date}</span>
+            <div className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 border border-primary-300">
+              <span className="text-primary-700 text-sm font-semibold">📅 Analysis for: {prediction_for_date_short || prediction_for_date}</span>
             </div>
           )}
         </div>
@@ -290,27 +290,27 @@ const PortfolioDashboard = () => {
         )}
 
         {/* Portfolio Management Education Section */}
-        <GlassCard className="p-8 mb-12 border-2 border-blue-500/30">
+        <GlassCard className="p-8 mb-12 border-2 border-primary-300">
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="w-8 h-8 text-blue-400" />
-            <h2 className="text-2xl font-bold text-white">Institutional Portfolio Management Process</h2>
+            <Shield className="w-8 h-8 text-primary-600" />
+            <h2 className="text-2xl font-bold text-gray-900">Institutional Portfolio Management Process</h2>
           </div>
           
-          <div className="space-y-6 text-slate-300">
+          <div className="space-y-6 text-gray-700">
             {/* Introduction */}
             <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-blue-400" />
+              <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-primary-600" />
                 How Scrybe AI Works as Your Portfolio Manager
               </h3>
-              <p className="text-slate-300 leading-relaxed mb-3">
+              <p className="text-gray-700 leading-relaxed mb-3">
                 Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
-                Every day, our AI analyzes <span className="text-white font-semibold">all 250 Nifty Smallcap stocks</span>, 
-                but only executes the <span className="text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
+                Every day, our AI analyzes <span className="text-gray-900 font-semibold">all 250 Nifty Smallcap stocks</span>, 
+                but only executes the <span className="text-green-600 font-semibold">top 10 highest-conviction opportunities</span> that 
                 pass strict risk controls.
               </p>
-              <p className="text-slate-300 leading-relaxed">
-                This isn't swing trading—it's <span className="text-blue-400 font-semibold">institutional positioning</span> with 
+              <p className="text-gray-700 leading-relaxed">
+                This isn't swing trading—it's <span className="text-primary-600 font-semibold">institutional positioning</span> with 
                 multi-layer AI analysis, quantitative screening, and professional risk management built into every decision.
               </p>
             </div>
@@ -318,10 +318,10 @@ const PortfolioDashboard = () => {
             {/* Daily Process */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <h4 className="text-lg font-bold text-white mb-3">📊 Step 1: Daily Analysis</h4>
-                <ul className="space-y-2 text-sm text-slate-300">
-                  <li>• <span className="text-white font-semibold">250 stocks screened</span> daily using quantitative filters</li>
-                  <li>• <span className="text-white font-semibold">~{total_analyzed} candidates</span> pass initial momentum/trend screens</li>
+                <h4 className="text-lg font-bold text-gray-900 mb-3">📊 Step 1: Daily Analysis</h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>• <span className="text-gray-900 font-semibold">250 stocks screened</span> daily using quantitative filters</li>
+                  <li>• <span className="text-gray-900 font-semibold">~{total_analyzed} candidates</span> pass initial momentum/trend screens</li>
                   <li>• Each candidate analyzed by AI "Committee of Experts":</li>
                   <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
                   <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
@@ -331,77 +331,77 @@ const PortfolioDashboard = () => {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <h4 className="text-lg font-bold text-white mb-3">🎯 Step 2: Portfolio Selection</h4>
-                <ul className="space-y-2 text-sm text-slate-300">
-                  <li>• Only <span className="text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
+                <h4 className="text-lg font-bold text-gray-900 mb-3">🎯 Step 2: Portfolio Selection</h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>• Only <span className="text-green-600 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
                   <li>• Ranked by conviction (highest score = highest priority)</li>
-                  <li>• Portfolio Manager applies <span className="text-white font-semibold">3 risk gates:</span></li>
-                  <li className="ml-4">→ <span className="text-yellow-400">Max 10 concurrent positions</span></li>
-                  <li className="ml-4">→ <span className="text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
-                  <li className="ml-4">→ <span className="text-yellow-400">Max 2% risk per position</span></li>
-                  <li>• Top 10 that pass all gates = <span className="text-green-400 font-semibold">EXECUTED</span></li>
-                  <li>• Others = <span className="text-slate-400">Available for review</span></li>
+                  <li>• Portfolio Manager applies <span className="text-gray-900 font-semibold">3 risk gates:</span></li>
+                  <li className="ml-4">→ <span className="text-yellow-600">Max 10 concurrent positions</span></li>
+                  <li className="ml-4">→ <span className="text-yellow-600">Max 40% per sector</span> (4 stocks max)</li>
+                  <li className="ml-4">→ <span className="text-yellow-600">Max 2% risk per position</span></li>
+                  <li>• Top 10 that pass all gates = <span className="text-green-600 font-semibold">EXECUTED</span></li>
+                  <li>• Others = <span className="text-gray-600">Available for review</span></li>
                 </ul>
               </div>
             </div>
 
             {/* Position Sizing */}
             <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h4 className="text-lg font-bold text-white mb-3">💰 Position Sizing & Risk Management</h4>
+              <h4 className="text-lg font-bold text-gray-900 mb-3">💰 Position Sizing & Risk Management</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="bg-gray-50 rounded p-4">
-                  <p className="text-xs text-slate-400 mb-1">Risk Per Trade</p>
-                  <p className="text-2xl font-bold text-yellow-400">1.5%</p>
-                  <p className="text-xs text-slate-400 mt-1">Of total capital at risk per position</p>
+                <div className="bg-white rounded p-4 border border-gray-200">
+                  <p className="text-xs text-gray-600 mb-1">Risk Per Trade</p>
+                  <p className="text-2xl font-bold text-yellow-600">1.5%</p>
+                  <p className="text-xs text-gray-600 mt-1">Of total capital at risk per position</p>
                 </div>
-                <div className="bg-gray-50 rounded p-4">
-                  <p className="text-xs text-slate-400 mb-1">Stop-Loss Method</p>
-                  <p className="text-2xl font-bold text-red-400">2× ATR</p>
-                  <p className="text-xs text-slate-400 mt-1">Dynamic stop based on volatility</p>
+                <div className="bg-white rounded p-4 border border-gray-200">
+                  <p className="text-xs text-gray-600 mb-1">Stop-Loss Method</p>
+                  <p className="text-2xl font-bold text-red-600">2× ATR</p>
+                  <p className="text-xs text-gray-600 mt-1">Dynamic stop based on volatility</p>
                 </div>
-                <div className="bg-gray-50 rounded p-4">
-                  <p className="text-xs text-slate-400 mb-1">Risk/Reward Target</p>
-                  <p className="text-2xl font-bold text-green-400">3:1</p>
-                  <p className="text-xs text-slate-400 mt-1">Target = 6× ATR above entry</p>
+                <div className="bg-white rounded p-4 border border-gray-200">
+                  <p className="text-xs text-gray-600 mb-1">Risk/Reward Target</p>
+                  <p className="text-2xl font-bold text-green-600">3:1</p>
+                  <p className="text-xs text-gray-600 mt-1">Target = 6× ATR above entry</p>
                 </div>
               </div>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                <span className="text-white font-semibold">Position Size Calculation:</span> If you have ₹1,00,000 capital 
+              <p className="text-sm text-gray-700 leading-relaxed">
+                <span className="text-gray-900 font-semibold">Position Size Calculation:</span> If you have ₹1,00,000 capital 
                 and risk 1.5% per trade (₹1,500), with a stop-loss 5% below entry, you'd invest 
-                <span className="text-green-400 font-semibold"> ₹30,000</span> (₹1,500 ÷ 5% = ₹30,000). 
+                <span className="text-green-600 font-semibold"> ₹30,000</span> (₹1,500 ÷ 5% = ₹30,000). 
                 This ensures controlled risk regardless of stock price or volatility.
               </p>
             </div>
 
             {/* Trade Execution */}
             <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h4 className="text-lg font-bold text-white mb-3">⚡ Trade Execution & Monitoring</h4>
-              <div className="space-y-3 text-sm text-slate-300">
+              <h4 className="text-lg font-bold text-gray-900 mb-3">⚡ Trade Execution & Monitoring</h4>
+              <div className="space-y-3 text-sm text-gray-700">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">Entry Price:</p>
-                    <p>System uses <span className="text-green-400">live market price (LTP)</span> from Angel One for precise entry calculation</p>
+                    <p className="font-semibold text-gray-900">Entry Price:</p>
+                    <p>System uses <span className="text-green-600">live market price (LTP)</span> from Angel One for precise entry calculation</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Target className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <Target className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">Stop-Loss & Target:</p>
+                    <p className="font-semibold text-gray-900">Stop-Loss & Target:</p>
                     <p>Automatically calculated using ATR (Average True Range) for volatility-adjusted exits</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Activity className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <Activity className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">Holding Period:</p>
+                    <p className="font-semibold text-gray-900">Holding Period:</p>
                     <p>Typically 7 days, adjusted based on market conditions and momentum</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">Exit Triggers:</p>
+                    <p className="font-semibold text-gray-900">Exit Triggers:</p>
                     <p>Position closes on: Target hit, Stop-loss hit, Holding period expiry, or AI reversal signal</p>
                   </div>
                 </div>
@@ -409,15 +409,15 @@ const PortfolioDashboard = () => {
             </div>
 
             {/* Transparency */}
-            <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-lg p-6 border border-blue-500/30">
-              <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                <Eye className="w-5 h-5 text-blue-400" />
+            <div className="bg-gradient-to-r from-primary-100/50 to-secondary-100/50 rounded-lg p-6 border border-primary-300">
+              <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <Eye className="w-5 h-5 text-primary-600" />
                 Complete Transparency
               </h4>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-white font-semibold">every analysis, 
+              <p className="text-sm text-gray-700 leading-relaxed">
+                Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-gray-900 font-semibold">every analysis, 
                 every decision, and every rejection reason</span>. Browse all 250 analyses in the 
-                <span className="text-blue-400 font-semibold"> Complete Analysis</span> page, understand why stocks were 
+                <span className="text-primary-600 font-semibold"> Complete Analysis</span> page, understand why stocks were 
                 selected or rejected, and see the exact trade plan for every position. You're not following blind 
                 signals—you're learning institutional portfolio management.
               </p>
@@ -461,15 +461,15 @@ const PortfolioDashboard = () => {
         {executed_trades.length > 0 && (
           <GlassCard className="p-6 mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <PieChart className="w-6 h-6 text-blue-400" />
-              <h2 className="text-2xl font-bold text-white">Sector Diversification</h2>
+              <PieChart className="w-6 h-6 text-primary-600" />
+              <h2 className="text-2xl font-bold text-gray-900">Sector Diversification</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(sector_breakdown).map(([sector, count]) => (
-                <div key={sector} className="text-center p-4 bg-white/5 rounded-lg">
-                  <p className="text-slate-400 text-sm mb-2">{sector}</p>
-                  <p className="text-3xl font-bold text-white">{count}</p>
-                  <p className="text-slate-500 text-xs mt-1">
+                <div key={sector} className="text-center p-4 bg-white rounded-lg border border-gray-200">
+                  <p className="text-gray-600 text-sm mb-2">{sector}</p>
+                  <p className="text-3xl font-bold text-gray-900">{count}</p>
+                  <p className="text-gray-600 text-xs mt-1">
                     {((count / portfolio_summary.selected_for_execution) * 100).toFixed(0)}% of portfolio
                   </p>
                 </div>
@@ -482,8 +482,8 @@ const PortfolioDashboard = () => {
         {executed_trades.length > 0 && (
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <CheckCircle className="w-7 h-7 text-green-400" />
-              <h2 className="text-3xl font-bold text-white">Executed Trades ({executed_trades.length})</h2>
+              <CheckCircle className="w-7 h-7 text-green-600" />
+              <h2 className="text-3xl font-bold text-gray-900">Executed Trades ({executed_trades.length})</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {executed_trades.map((trade) => (
@@ -497,8 +497,8 @@ const PortfolioDashboard = () => {
         <GlassCard className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <BarChart3 className="w-7 h-7 text-blue-400" />
-              <h2 className="text-3xl font-bold text-white">Browse All Analyses</h2>
+              <BarChart3 className="w-7 h-7 text-primary-600" />
+              <h2 className="text-3xl font-bold text-gray-900">Browse All Analyses</h2>
             </div>
           </div>
 
@@ -514,8 +514,8 @@ const PortfolioDashboard = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                   activeTab === tab.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {tab.label} ({tab.count})
@@ -526,21 +526,21 @@ const PortfolioDashboard = () => {
           {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search by ticker, sector, or reason..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-gray-200 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500"
               />
             </div>
             <div className="relative">
-              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
               <select
                 value={filterSignal}
                 onChange={(e) => setFilterSignal(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-gray-200 rounded-lg text-white focus:outline-none focus:border-blue-500 appearance-none"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-primary-500 appearance-none"
               >
                 <option value="all">All Signals</option>
                 <option value="BUY">BUY Only</option>
@@ -555,11 +555,11 @@ const PortfolioDashboard = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200 text-left">
-                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Stock</th>
-                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Signal</th>
-                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Score</th>
-                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Rank</th>
-                  <th className="px-4 py-3 text-slate-400 text-sm font-semibold">Selection Reason</th>
+                  <th className="px-4 py-3 text-gray-600 text-sm font-semibold">Stock</th>
+                  <th className="px-4 py-3 text-gray-600 text-sm font-semibold">Signal</th>
+                  <th className="px-4 py-3 text-gray-600 text-sm font-semibold">Score</th>
+                  <th className="px-4 py-3 text-gray-600 text-sm font-semibold">Rank</th>
+                  <th className="px-4 py-3 text-gray-600 text-sm font-semibold">Selection Reason</th>
                 </tr>
               </thead>
               <tbody>
@@ -573,7 +573,7 @@ const PortfolioDashboard = () => {
             
             {filteredAnalyses.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-slate-400 text-lg">No analyses match your filters</p>
+                <p className="text-gray-600 text-lg">No analyses match your filters</p>
               </div>
             )}
           </div>
@@ -581,18 +581,18 @@ const PortfolioDashboard = () => {
 
         {/* Footer Stats */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-8 text-slate-400 text-sm">
+          <div className="inline-flex items-center gap-8 text-gray-700 text-sm">
             <div>
-              <span className="font-semibold text-white">{portfolio_summary.selected_for_execution}</span> Executing
+              <span className="font-semibold text-gray-900">{portfolio_summary.selected_for_execution}</span> Executing
             </div>
             <div>
-              <span className="font-semibold text-yellow-400">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
+              <span className="font-semibold text-yellow-600">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
             </div>
             <div>
-              <span className="font-semibold text-orange-400">{portfolio_summary.sector_limits_reached}</span> Sector Limited
+              <span className="font-semibold text-orange-600">{portfolio_summary.sector_limits_reached}</span> Sector Limited
             </div>
             <div>
-              <span className="font-semibold text-slate-500">{portfolio_summary.no_signal_generated}</span> HOLD Signals
+              <span className="font-semibold text-gray-600">{portfolio_summary.no_signal_generated}</span> HOLD Signals
             </div>
           </div>
         </div>
