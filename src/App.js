@@ -45,6 +45,13 @@ import UserGuidePage from './pages/UserGuidePage.js';
 import IndexAnalysis from './pages/IndexAnalysis.js';
 import PortfolioDashboard from './pages/PortfolioDashboard.js';
 
+// New Landing and Legal Pages
+import NewLandingPage from './pages/NewLandingPage.js';
+import NewPrivacyPolicy from './pages/legal/NewPrivacyPolicy.js';
+import NewTermsOfService from './pages/legal/NewTermsOfService.js';
+import NewDisclaimer from './pages/legal/NewDisclaimer.js';
+import NewRefundPolicy from './pages/legal/NewRefundPolicy.js';
+
 // Context, Services, and Config
 import { useAuth } from './context/AuthContext.js';
 import { auth } from './services/firebase.js';
@@ -522,11 +529,13 @@ export default function App() {
   const [showUserGuide, setShowUserGuide] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showRefund, setShowRefund] = useState(false);
   const [analysisState, setAnalysisState] = useState("selector");
   const [error, setError] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
   const [isDemoOpen, setIsDemoOpen] = useState(false);
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
@@ -603,7 +612,7 @@ export default function App() {
 
   const handleAgreeToDisclaimer = useCallback(() => {
     localStorage.setItem("disclaimerAgreedTimestamp", Date.now().toString());
-    setShowDisclaimer(false);
+    setShowDisclaimerModal(false);
     setView("app");
   }, []);
 
@@ -800,7 +809,7 @@ export default function App() {
         {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
       </AnimatePresence>
       <AnimatePresence>
-        {showDisclaimer && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
+        {showDisclaimerModal && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
       </AnimatePresence>
 
       {/* Market Context Drawer */}
@@ -870,14 +879,50 @@ export default function App() {
         </button>
       )}
 
-      {/* Standalone pages */}
+      {/* Standalone pages - Old versions (to be deprecated) */}
       {showFaq && <FaqPage onBack={() => setShowFaq(false)} />}
       {showUserGuide && <UserGuidePage onBack={() => setShowUserGuide(false)} />}
-      {showPrivacy && <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />}
-      {showTerms && <TermsPage onBack={() => setShowTerms(false)} />}
+
+      {/* New Legal Pages */}
+      {showPrivacy && (
+        <NewPrivacyPolicy
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onClose={() => setShowPrivacy(false)}
+        />
+      )}
+      {showTerms && (
+        <NewTermsOfService
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onClose={() => setShowTerms(false)}
+        />
+      )}
+      {showDisclaimer && (
+        <NewDisclaimer
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onClose={() => setShowDisclaimer(false)}
+        />
+      )}
+      {showRefund && (
+        <NewRefundPolicy
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onClose={() => setShowRefund(false)}
+        />
+      )}
 
       {/* Main app / landing */}
-      {!showFaq && !showUserGuide && !showPrivacy && !showTerms && (
+      {!showFaq && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
         <div className="relative w-full max-w-7xl mx-auto px-4 flex flex-col min-h-screen">
           {view === "app" ? (
             <>
@@ -891,31 +936,17 @@ export default function App() {
             </>
           ) : (
             <>
-              <Header
-                mode="landing"
-                onBetaModalOpen={() => setIsBetaModalOpen(true)}
-                onFaqClick={() => setShowFaq(true)}
-                onGuideClick={() => setShowUserGuide(true)}
-                onLaunchAppClick={() => handleAuthAndNavigate(0)}
-                onDemoClick={() => setIsDemoOpen(true)}
-              />
-              <main>
-                <LandingPage
-                  onSignIn={() => setIsSignInModalOpen(true)}
-                  handleLaunchAndNavigate={handleAuthAndNavigate}
-                  onUserGuideOpen={() => setShowUserGuide(true)}
-                  onFaqOpen={() => setShowFaq(true)}
-                  onPrivacyOpen={() => setShowPrivacy(true)}
-                  onTermsOpen={() => setShowTerms(true)}
-                  onDemoOpen={() => setIsDemoOpen(true)}
-                  onBetaInfoClick={() => setIsBetaModalOpen(true)}
-                />
-              </main>
-              <Footer
-                onPrivacyClick={() => setShowPrivacy(true)}
-                onTermsClick={() => setShowTerms(true)}
-                onUserGuideClick={() => setShowUserGuide(true)}
-                onFaqClick={() => setShowFaq(true)}
+              {/* New Modern Landing Page */}
+              <NewLandingPage
+                currentUser={currentUser}
+                onSignIn={() => setIsSignInModalOpen(true)}
+                onSignOut={handleSignOut}
+                onGetStarted={() => handleAuthAndNavigate(0)}
+                onWatchDemo={() => setIsDemoOpen(true)}
+                onPrivacyOpen={() => setShowPrivacy(true)}
+                onTermsOpen={() => setShowTerms(true)}
+                onDisclaimerOpen={() => setShowDisclaimer(true)}
+                onRefundOpen={() => setShowRefund(true)}
               />
             </>
           )}
