@@ -46,7 +46,7 @@ const ConfidencePoll = ({ analysisId }) => {
         <button onClick={() => handleVote(type)} disabled={!!userVote} className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold ${userVote === type ? 'bg-blue-600 text-gray-900 ring-2 ring-blue-400' : 'bg-slate-700/50 text-gray-300'} ${!userVote ? 'hover:bg-slate-600/80' : ''} disabled:cursor-not-allowed disabled:opacity-50`}>{children}<span className="text-xs">{isLoading ? '...' : count}</span></button>
     );
     return (
-        <div className="bg-slate-900/40 backdrop-blur-md border border-slate-700/60 rounded-xl p-6 mt-8">
+        <div className="bg-white backdrop-blur-none border border-gray-200 rounded-xl p-6 mt-8">
             <h3 className="font-bold text-xl text-gray-900 mb-4">Analyst's Desk: Do you agree?</h3>
             <div className="flex items-center justify-center gap-4"><VoteButton type="agree" count={votes.agree_votes}>👍 Agree</VoteButton><VoteButton type="unsure" count={votes.unsure_votes}>🤔 Unsure</VoteButton><VoteButton type="disagree" count={votes.disagree_votes}>👎 Disagree</VoteButton></div>
             {error && <p className="text-xs text-red-400 mt-3">{error}</p>}

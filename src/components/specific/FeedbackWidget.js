@@ -90,7 +90,7 @@ const FeedbackWidget = () => {
       <button
         onClick={handleOpen}
         aria-label="Open feedback widget"
-        className="hidden md:flex fixed top-4 right-5 bg-white/10 border border-white/20 backdrop-blur-lg text-slate-100 text-sm font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-white/20 transition-colors items-center gap-2 z-40"
+        className="hidden md:flex fixed top-4 right-5 bg-white/10 border border-white/20 backdrop-blur-lg text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-white/20 transition-colors items-center gap-2 z-40"
       >
         <MessageSquare size={16} />
         Feedback
@@ -104,7 +104,7 @@ const FeedbackWidget = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="fixed top-5 right-5 w-80 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl z-50 backdrop-blur-xl"
+            className="fixed top-5 right-5 w-80 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 backdrop-blur-none"
           >
             <div className="p-5">
               {/* Header */}
@@ -139,7 +139,7 @@ const FeedbackWidget = () => {
                         <button
                           key={cat.id}
                           onClick={() => handleSelectCategory(cat)}
-                          className="w-full flex items-center gap-3 text-left bg-slate-800/50 p-3 rounded-lg hover:bg-slate-700/70 text-slate-100 font-semibold transition-colors"
+                          className="w-full flex items-center gap-3 text-left bg-gray-50 p-3 rounded-lg hover:bg-gray-100 text-gray-900 font-semibold transition-colors"
                         >
                           <cat.icon size={20} className="text-blue-400" />
                           {cat.label}
@@ -154,7 +154,7 @@ const FeedbackWidget = () => {
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
                         rows="5"
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        className="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                         placeholder={currentCategoryDetails?.placeholder}
                         required
                       />
@@ -163,7 +163,7 @@ const FeedbackWidget = () => {
                           type="email"
                           value={userEmail}
                           onChange={(e) => setUserEmail(e.target.value)}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                          className="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                           placeholder="Your Email (Optional, for attribution)"
                         />
                       )}

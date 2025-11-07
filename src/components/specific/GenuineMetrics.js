@@ -49,7 +49,7 @@ const GenuineMetrics = () => {
         {metrics.map((metric, idx) => (
           <div
             key={idx}
-            className="flex flex-col items-center text-center bg-slate-900/40 border border-white/10 rounded-2xl p-6 shadow-lg backdrop-blur-md hover:bg-slate-800/60 transition"
+            className="flex flex-col items-center text-center bg-white border border-gray-200 rounded-2xl p-6 shadow-lg backdrop-blur-none hover:bg-gray-100 transition"
           >
             {metric.icon}
             <p className="text-2xl font-bold text-white mt-3">{metric.value}</p>

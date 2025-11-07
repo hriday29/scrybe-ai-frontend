@@ -110,7 +110,7 @@ const LandingWalkthrough = ({
         {sections.map((section, index) => (
           <motion.div
             key={section.title}
-            className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-xl flex flex-col"
+            className="bg-white backdrop-blur-none border border-gray-200 rounded-3xl p-8 shadow-xl flex flex-col"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -118,7 +118,7 @@ const LandingWalkthrough = ({
           >
             <div className="flex items-center gap-4 mb-6">
               <div
-                className={`flex items-center justify-center w-14 h-14 rounded-xl ${section.badge} border border-white/10 shadow-inner`}
+                className={`flex items-center justify-center w-14 h-14 rounded-xl ${section.badge} border border-gray-200 shadow-inner`}
               >
                 {section.icon}
               </div>
@@ -134,7 +134,7 @@ const LandingWalkthrough = ({
                 <button
                   key={link.text}
                   onClick={link.action}
-                  className="px-4 py-2 rounded-full bg-white/10 text-blue-400 font-medium hover:bg-blue-500/20 hover:text-blue-300 transition-colors backdrop-blur-md border border-white/10"
+                  className="px-4 py-2 rounded-full bg-white/10 text-blue-400 font-medium hover:bg-blue-500/20 hover:text-blue-300 transition-colors backdrop-blur-md border border-gray-200"
                 >
                   {link.text}
                 </button>

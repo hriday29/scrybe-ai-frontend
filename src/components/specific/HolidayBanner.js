@@ -77,7 +77,7 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
                   <>Today is a market holiday ({holidayReason}).</>
                 )}
               </p>
-              <div className="flex items-center gap-2 bg-slate-800/50 rounded-lg px-3 py-2 inline-flex">
+              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2 inline-flex">
                 <span className="text-sm text-gray-400">Next Trading Day:</span>
                 <span className="text-sm font-semibold text-white">{nextTradingDay}</span>
               </div>

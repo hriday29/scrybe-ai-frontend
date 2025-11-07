@@ -38,7 +38,7 @@ const MetricsShowcase = () => {
       {/* Header with toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center bg-slate-900/50 border border-white/10 px-6 py-4 rounded-2xl shadow-lg backdrop-blur-md hover:bg-slate-800/60 transition"
+        className="w-full flex justify-between items-center bg-white border border-gray-200 px-6 py-4 rounded-2xl shadow-lg backdrop-blur-none hover:bg-gray-100 transition"
       >
         <h2 className="text-2xl md:text-3xl font-extrabold text-white">
           Validated Performance
@@ -72,7 +72,7 @@ const MetricsShowcase = () => {
                 {stats.map((stat, idx) => (
                   <div
                     key={idx}
-                    className="bg-slate-900/40 border border-white/10 rounded-xl p-6 text-center shadow-lg backdrop-blur-md"
+                    className="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center shadow-lg backdrop-blur-none"
                   >
                     <p className={`text-2xl font-bold ${stat.color}`}>
                       {stat.value}
@@ -87,7 +87,7 @@ const MetricsShowcase = () => {
                 {highlights.map((item, idx) => (
                   <div
                     key={idx}
-                    className="bg-slate-900/40 border border-white/10 rounded-xl p-6 shadow-md backdrop-blur-md hover:bg-slate-800/60 transition"
+                    className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-md backdrop-blur-none hover:bg-gray-100 transition"
                   >
                     <div className="text-2xl mb-3">{item.icon}</div>
                     <h3 className="text-lg font-semibold text-white">

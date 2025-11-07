@@ -205,11 +205,11 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2">Signal</p>
                     <p className="text-4xl font-bold">{signal}</p>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-slate-900/40 border border-slate-700/60">
+                <div className="text-center p-6 rounded-xl bg-white border border-gray-200">
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2">Scrybe Score</p>
                     <p className="text-4xl font-bold font-mono">{scoreText}</p>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-slate-900/40 border border-slate-700/60">
+                <div className="text-center p-6 rounded-xl bg-white border border-gray-200">
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2">Confidence</p>
                     <p className="text-4xl font-bold">{confidence}</p>
                 </div>
@@ -253,7 +253,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     <h3 className="font-bold text-xl text-gray-900 mb-2">Key Insight</h3>
                     <p className="text-indigo-200">{keyInsight}</p>
                 </div>
-                <div className="lg:col-span-3 bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                <div className="lg:col-span-3 bg-white border border-gray-200 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-gray-900 mb-2">Analyst Verdict</h3>
                     <p className="text-gray-300 whitespace-pre-wrap">{analystVerdict}</p>
                 </div>
@@ -283,7 +283,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             {/* --- FIXED EVIDENCE CARDS --- */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Technical Snapshot */}
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <Zap size={18} className="mr-2 text-blue-400" />Technical Snapshot
                     </h3>
@@ -297,7 +297,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
 
                 {/* Options Sentiment */}
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment
                     </h3>
@@ -320,7 +320,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
 
                 {/* Futures & Volatility Data */}
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <TrendingUp size={18} className="mr-2 text-cyan-400" />Futures & Volatility
                     </h3>
@@ -367,7 +367,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
 
                 {/* Price-Based Fundamentals */}
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6 flex flex-col">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
                 <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                     <Rss size={18} className="mr-2 text-orange-400" />
                     Price-Based Fundamentals
@@ -578,7 +578,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                <div className="bg-white border border-gray-200 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center">
                         <ShieldAlert size={20} className="mr-2 text-yellow-400" /> Key Risks & Invalidation
                     </h3>
@@ -592,7 +592,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                         </li>
                     </ul>
                 </div>
-                <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-6">
+                <div className="bg-white border border-gray-200 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-gray-900 mb-4">Key Observations</h3>
                     <div>
                         <h4 className="font-semibold text-green-400 mb-2">Confluence Points</h4>
