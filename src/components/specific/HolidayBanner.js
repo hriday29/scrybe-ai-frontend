@@ -54,12 +54,12 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 border-2 border-orange-500/50 rounded-xl p-4 mb-6 shadow-lg backdrop-blur-sm">
+    <div className="rounded-2xl p-5 mb-6 bg-orange-50 border border-orange-200 shadow-soft-lg">
       <div className="flex items-start gap-4">
         {/* Icon */}
         <div className="flex-shrink-0 mt-1">
-          <div className="bg-orange-500/30 p-3 rounded-lg">
-            <CalendarX className="w-6 h-6 text-orange-400" />
+          <div className="bg-orange-100 p-3 rounded-xl shadow-inner">
+            <CalendarX className="w-6 h-6 text-orange-600" />
           </div>
         </div>
 
@@ -67,26 +67,26 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-orange-400 font-bold text-lg mb-1">
-                🏖️ Market is Closed Today
+              <h3 className="text-orange-700 font-bold text-lg mb-1 flex items-center gap-1">
+                <span>🏖️ Market is Closed Today</span>
               </h3>
-              <p className="text-gray-200 text-base mb-2">
+              <p className="text-sm text-orange-800/90 mb-3">
                 {holidayReason === 'Weekend' ? (
                   <>It's the weekend! Markets are closed for trading.</>
                 ) : (
                   <>Today is a market holiday ({holidayReason}).</>
                 )}
               </p>
-              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2 inline-flex">
-                <span className="text-sm text-gray-400">Next Trading Day:</span>
-                <span className="text-sm font-semibold text-white">{nextTradingDay}</span>
+              <div className="flex items-center gap-2 bg-white border border-orange-200 rounded-lg px-3 py-2 inline-flex shadow-sm">
+                <span className="text-xs font-medium text-orange-600/90">Next Trading Day:</span>
+                <span className="text-xs font-semibold text-orange-800">{nextTradingDay}</span>
               </div>
             </div>
 
             {/* Dismiss Button */}
             <button
               onClick={handleDismiss}
-              className="flex-shrink-0 text-gray-400 hover:text-orange-400 transition-colors p-1 rounded-lg hover:bg-orange-500/10"
+              className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors p-1 rounded-lg hover:bg-orange-100"
               aria-label="Dismiss holiday banner"
               title="Dismiss (will show again tomorrow)"
             >
@@ -95,10 +95,9 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
           </div>
 
           {/* Additional Info */}
-          <div className="mt-3 pt-3 border-t border-orange-500/20">
-            <p className="text-xs text-gray-400">
-              ℹ️ <strong>Note:</strong> Analysis shown is from the last trading day. 
-              Fresh predictions will be available on the next trading day.
+          <div className="mt-4 pt-4 border-t border-orange-100">
+            <p className="text-xs text-orange-700/80">
+              ℹ️ <strong>Note:</strong> Analysis shown is from the last trading day. Fresh predictions will be available on the next trading day.
             </p>
           </div>
         </div>
