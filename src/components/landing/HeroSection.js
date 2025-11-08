@@ -7,7 +7,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
   return (
     <section
       id="hero"
-      className="relative w-full bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 overflow-hidden min-h-[calc(100vh-5rem)] flex items-center"
+      className="relative w-full bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 overflow-hidden min-h-[calc(100svh-5rem)] flex items-center"
     >
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -15,7 +15,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-200/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-24">
+  <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8 md:py-12">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text Content */}
           <motion.div
