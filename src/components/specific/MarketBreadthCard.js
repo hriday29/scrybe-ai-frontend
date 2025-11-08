@@ -55,7 +55,7 @@ const MarketBreadthCard = ({ breadthData }) => {
   const breadthBarWidth = bullish_breadth_pct;
 
   return (
-    <div className="bg-white backdrop-blur-sm rounded-lg p-6 border border-gray-200">
+    <div className="bg-white dark:bg-neutral-900 backdrop-blur-sm rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">

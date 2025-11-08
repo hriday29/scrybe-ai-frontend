@@ -49,8 +49,8 @@ const ConversationalQa = ({ analysisContext }) => {
     };
 
     return (
-        <div className="bg-white backdrop-blur-none border border-gray-200 rounded-xl p-6">
-            <h3 className="font-bold text-xl text-gray-900 mb-4">
+        <div className="bg-white dark:bg-neutral-900 backdrop-blur-none border border-gray-200 dark:border-neutral-700 rounded-xl p-6">
+            <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4">
                 Ask a Question About This Analysis
             </h3>
 
@@ -66,7 +66,7 @@ const ConversationalQa = ({ analysisContext }) => {
                             className={`p-3 rounded-lg max-w-lg ${
                                 entry.type === 'user'
                                     ? 'bg-primary-500 text-white'
-                                    : 'bg-gray-100 text-gray-900'
+                                    : 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-gray-100'
                             }`}
                         >
                             <p className="text-sm">{entry.text}</p>
@@ -75,7 +75,7 @@ const ConversationalQa = ({ analysisContext }) => {
                 ))}
 
                 {isLoading && (
-                    <p className="text-center text-sm text-gray-600 animate-pulse">
+                    <p className="text-center text-sm text-gray-600 dark:text-gray-400 animate-pulse">
                         AI is thinking...
                     </p>
                 )}
@@ -88,20 +88,20 @@ const ConversationalQa = ({ analysisContext }) => {
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         placeholder="e.g., Why is the RSI considered bullish?"
-                        className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none focus:border-blue-500"
+                        className="flex-grow bg-gray-50 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none focus:border-primary-500 dark:focus:border-primary-400"
                         disabled={isLoading}
                     />
                     <button
                         type="submit"
                         disabled={isLoading || !question.trim()}
-                        className="bg-blue-600 text-gray-900 font-semibold text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed"
+                        className="bg-primary-600 text-white font-semibold text-sm px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                         Ask
                     </button>
                 </div>
 
                 {error && (
-                    <p className="text-center text-sm text-red-400 mt-2">{error}</p>
+                    <p className="text-center text-sm text-red-600 dark:text-red-400 mt-2">{error}</p>
                 )}
             </form>
         </div>

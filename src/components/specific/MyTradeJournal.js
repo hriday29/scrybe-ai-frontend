@@ -53,31 +53,31 @@ const MyTradeJournal = () => {
                 <BookMarked className="mr-3 text-blue-300" />
                 Personal Trade Journal
             </h2>
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left min-w-[600px]">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-gray-50 dark:bg-neutral-800">
                             <tr>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Ticker</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Entry Date</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider text-right">Entry Price</th>
-                                <th className="p-4 text-sm font-semibold text-gray-300 tracking-wider">Notes</th>
+                                <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider">Ticker</th>
+                                <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider">Entry Date</th>
+                                <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider text-right">Entry Price</th>
+                                <th className="p-4 text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider">Notes</th>
                             </tr>
                         </thead>
                         <tbody>
                             {myTrades.map(trade => (
-                                <tr key={trade._id} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
-                                    <td className="p-4 text-gray-900 font-semibold flex items-center">
+                                <tr key={trade._id} className="border-b border-gray-200 dark:border-neutral-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors">
+                                    <td className="p-4 text-gray-900 dark:text-gray-100 font-semibold flex items-center">
                                         <TrendingUp size={16} className="mr-2 text-sky-400" />
                                         {trade.ticker}
                                     </td>
-                                    <td className="p-4 text-gray-300">
+                                    <td className="p-4 text-gray-600 dark:text-gray-300">
                                         {new Date(trade.user_entry_date).toLocaleDateString()}
                                     </td>
-                                    <td className="p-4 font-mono text-gray-300 text-right">
+                                    <td className="p-4 font-mono text-gray-600 dark:text-gray-300 text-right">
                                         ₹{trade.user_entry_price.toFixed(2)}
                                     </td>
-                                    <td className="p-4 text-gray-400 italic">
+                                    <td className="p-4 text-gray-500 dark:text-gray-400 italic">
                                         {trade.user_notes || '-'}
                                     </td>
                                 </tr>

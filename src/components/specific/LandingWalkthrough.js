@@ -110,7 +110,7 @@ const LandingWalkthrough = ({
         {sections.map((section, index) => (
           <motion.div
             key={section.title}
-            className="bg-white backdrop-blur-none border border-gray-200 rounded-3xl p-8 shadow-xl flex flex-col"
+            className="bg-white dark:bg-neutral-900 backdrop-blur-none border border-gray-200 dark:border-neutral-700 rounded-3xl p-8 shadow-xl flex flex-col"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}

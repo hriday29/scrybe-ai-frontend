@@ -30,9 +30,9 @@ const steps = [
 
 export default function StrategyStepper() {
   return (
-    <div className="py-20 px-6 max-w-6xl mx-auto relative">
+    <div className="py-20 px-6 max-w-6xl mx-auto relative text-gray-900 dark:text-gray-100">
       {/* Section separator */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-white/10 to-transparent" />
 
       {/* Section header */}
       <motion.div
@@ -50,8 +50,8 @@ export default function StrategyStepper() {
         >
           An AI Strategy You Can Understand
         </h2>
-        <p className="text-gray-300 max-w-2xl mx-auto">
-          Our AI isn’t a magic black box. It follows a clear, three-pillar scoring
+        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Our AI isn't a magic black box. It follows a clear, three-pillar scoring
           system for every stock.
         </p>
       </motion.div>
@@ -80,10 +80,10 @@ export default function StrategyStepper() {
             )}
 
             {/* Step content */}
-            <h3 className="text-xl font-semibold mb-2 text-white">
+            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
               {step.title}
             </h3>
-            <p className="text-gray-400 max-w-xs">{step.description}</p>
+            <p className="text-gray-600 dark:text-gray-400 max-w-xs">{step.description}</p>
           </motion.div>
         ))}
       </div>

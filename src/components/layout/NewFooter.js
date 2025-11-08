@@ -54,12 +54,12 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
                 </button>
               </li>
               <li>
-                <button type="button" onClick={onDisclaimerOpen} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
+                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
                   Get Started
                 </button>
               </li>
               <li>
-                <button type="button" onClick={onTermsOpen} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
+                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
                   Sign In
                 </button>
               </li>

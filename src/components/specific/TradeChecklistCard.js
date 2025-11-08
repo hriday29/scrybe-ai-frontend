@@ -74,7 +74,7 @@ const TradeChecklistCard = ({ checklistData }) => {
   };
 
   return (
-    <div className="bg-white backdrop-blur-sm rounded-xl p-6 border border-gray-200">
+    <div className="bg-white dark:bg-neutral-900 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-neutral-700">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-semibold">📋 Trade Management Checklist</h3>
         <div className="text-right">

@@ -25,9 +25,9 @@ import InfoNote from '../ui/InfoNote.jsx';
 const VolatilityCard = ({ volatilityData, analysisData }) => {
   if (!volatilityData || volatilityData.error) {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-6 backdrop-blur-sm">
+      <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg p-6 backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 text-primary-500" />
+          <Activity className="w-5 h-5 text-primary-500 dark:text-primary-400" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Enhanced Volatility Analysis</h3>
         </div>
         <p className="text-gray-600 dark:text-gray-400">

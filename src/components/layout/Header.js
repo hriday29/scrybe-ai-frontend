@@ -14,11 +14,11 @@ const variants = {
   primary:
     "bg-primary-500 hover:bg-primary-600 text-white border-primary-500",
   secondary:
-    "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 border-gray-300",
+    "bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 border-gray-300 dark:border-neutral-700",
   accent:
     "bg-secondary-500 hover:bg-secondary-600 text-white border-secondary-500",
   danger:
-    "bg-white hover:bg-red-50 text-red-600 border-red-200",
+    "bg-white dark:bg-neutral-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700",
 };
 
 // Button (for actions)
@@ -72,7 +72,7 @@ export default function Header({
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-white/90 dark:bg-neutral-900/90 backdrop-blur border-b border-gray-200 dark:border-neutral-700">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -82,7 +82,7 @@ export default function Header({
           {mode === "landing" ? (
             <>
               <img src="/logo192.png" alt="Scrybe AI Logo" className="w-9 h-9" />
-              <span className="text-2xl font-bold tracking-tight text-gray-900">
+              <span className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                 Scrybe <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">AI</span>
               </span>
             </>
@@ -98,7 +98,7 @@ export default function Header({
 
         {/* Mobile Menu Toggle */}
         <button
-          className="md:hidden text-gray-700 hover:text-gray-900"
+          className="md:hidden text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
@@ -111,7 +111,7 @@ export default function Header({
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="flex flex-col gap-3 px-6 py-4 bg-white border-t border-gray-200 md:hidden"
+          className="flex flex-col gap-3 px-6 py-4 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-700 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         >
           {mode === "landing" ? (

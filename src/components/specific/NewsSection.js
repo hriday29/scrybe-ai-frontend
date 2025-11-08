@@ -33,7 +33,7 @@ const NewsSection = ({ newsData }) => { // It now receives newsData directly
                         key={index}
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="block p-4 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+                        className="block p-4 bg-white dark:bg-neutral-800 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
                     >
                         <div className="flex justify-between items-start">
                             <div>

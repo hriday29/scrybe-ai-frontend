@@ -3,8 +3,8 @@ import { ArrowLeft } from "lucide-react";
 
 const LegalPageLayout = ({ title, lastUpdated, summaryPoints, onBack, children }) => {
   return (
-  <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 px-4 py-10 flex justify-center">
-      <div className="w-full max-w-4xl">
+  <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 w-full py-10 flex justify-center">
+      <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
           onClick={onBack}

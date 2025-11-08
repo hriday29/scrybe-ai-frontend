@@ -72,7 +72,7 @@ const MetricsShowcase = () => {
                 {stats.map((stat, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center shadow-lg backdrop-blur-none"
+                    className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 text-center shadow-lg backdrop-blur-none"
                   >
                     <p className={`text-2xl font-bold ${stat.color}`}>
                       {stat.value}
@@ -87,7 +87,7 @@ const MetricsShowcase = () => {
                 {highlights.map((item, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-md backdrop-blur-none hover:bg-gray-100 transition"
+                    className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 shadow-md backdrop-blur-none hover:bg-gray-100 dark:hover:bg-neutral-700 transition"
                   >
                     <div className="text-2xl mb-3">{item.icon}</div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">

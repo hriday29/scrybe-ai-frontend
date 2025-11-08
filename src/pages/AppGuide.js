@@ -69,10 +69,10 @@ const AppGuide = ({ navigateToTab }) => {
     <div className="w-full max-w-7xl mx-auto p-6 md:p-12 animate-fadeIn">
       {/* Header */}
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-gray-900 mb-4">
+        <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           Welcome to Scrybe AI
         </h2>
-        <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+        <p className="text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
           Your institutional-grade AI analyst for the Nifty Smallcap 250 universe.
           Master the app with this interactive guide.
         </p>
@@ -84,24 +84,24 @@ const AppGuide = ({ navigateToTab }) => {
           <div
             key={item.title}
             onClick={() => navigateToTab(item.targetIndex)}
-            className="flex flex-col bg-white border border-gray-200 rounded-2xl p-6 shadow-soft-lg cursor-pointer 
-                       transition-all duration-300 hover:border-primary-300 hover:shadow-soft-xl hover:scale-[1.02] group"
+            className="flex flex-col bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-6 shadow-soft-lg cursor-pointer 
+                       transition-all duration-300 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-soft-xl hover:scale-[1.02] group"
           >
             {/* Icon */}
             <div className="mb-4">{item.icon}</div>
 
             {/* Title */}
-            <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary-600 transition">
+            <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition">
               {item.title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-700 mt-2 flex-grow">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 flex-grow">
               {item.description}
             </p>
 
             {/* Benefit */}
-            <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-neutral-700">
               <p className="text-xs font-semibold text-green-700 dark:text-green-300 mb-1">
                 Why This Is Useful:
               </p>
@@ -109,7 +109,7 @@ const AppGuide = ({ navigateToTab }) => {
             </div>
 
             {/* CTA */}
-            <p className="text-sm font-semibold text-primary-600 mt-6 pt-4 border-t border-gray-200">
+            <p className="text-sm font-semibold text-primary-600 dark:text-primary-400 mt-6 pt-4 border-t border-gray-200 dark:border-neutral-700">
               Go to Section →
             </p>
           </div>
