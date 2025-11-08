@@ -1,6 +1,6 @@
 // src/components/layout/NewFooter.js
 import React from 'react';
-import { Mail, Phone, Instagram, CheckCircle, Shield } from 'lucide-react';
+import { Mail, Phone, CheckCircle, Shield } from 'lucide-react';
 
 const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen }) => {
   return (
@@ -88,21 +88,6 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
                 </a>
               </li>
             </ul>
-
-            {/* Social */}
-            <div className="mt-6">
-              <p className="text-gray-900 font-semibold mb-3 dark:text-gray-100">Follow us:</p>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  aria-label="Instagram (coming soon)"
-                  className="w-10 h-10 bg-white border border-gray-200 hover:border-primary-500 hover:bg-primary-50 rounded-lg flex items-center justify-center transition-all duration-300 dark:bg-gray-800/40 dark:border-gray-700 dark:hover:border-primary-400 dark:hover:bg-primary-500/10"
-                  onClick={() => console.info('Social link coming soon')}
-                >
-                  <Instagram className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Legal */}
@@ -138,32 +123,6 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
                 </button>
               </li>
             </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Newsletter Section */}
-      <div className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h3 className="text-gray-900 font-bold text-xl mb-2 dark:text-gray-100">Stay Updated</h3>
-            <p className="text-gray-600 mb-6 dark:text-gray-300">
-              Get the latest updates on trading strategies and market insights.
-            </p>
-            
-            <form className="max-w-md mx-auto flex gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-900/40"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors"
-              >
-                Subscribe Now
-              </button>
-            </form>
           </div>
         </div>
       </div>

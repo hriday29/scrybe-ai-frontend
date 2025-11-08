@@ -63,7 +63,7 @@ const MetricsShowcase = () => {
           >
             <div className="mt-6 text-center">
               <p className="text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Our strategy was tested over five month of real market data,
+                Our strategy was tested over five months of real market data,
                 delivering precision, consistency, and performance.
               </p>
 

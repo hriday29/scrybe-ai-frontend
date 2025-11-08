@@ -92,7 +92,6 @@ const TradePlanCard = ({ plan }) => (
 // =========================================================================
 
 const ApexAnalysisDashboard = ({ analysisData }) => {
-    console.log("INSPECTING ANALYSIS DATA:", JSON.stringify(analysisData, null, 2));
     if (!analysisData) { return <div className="text-center p-8 text-gray-600 dark:text-gray-400">No analysis data available.</div>; }
 
     const {

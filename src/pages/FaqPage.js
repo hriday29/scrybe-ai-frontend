@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext"; // Corrected path
 import { submitFeedback } from '../api/api'; // Corrected path
 
 const FaqItem = ({ question, answer, isBeta = false }) => (
-    // ... component code remains the same
     <motion.details
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -39,7 +38,6 @@ const FaqPage = ({ onBack }) => {
   const [status, setStatus] = useState("initial");
   const [errorMessage, setErrorMessage] = useState("");
 
-    // ... component logic remains the same
     const betaFaqs = [
     {
       q: "What does 'Beta' mean for Scrybe AI?",
