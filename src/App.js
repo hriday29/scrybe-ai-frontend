@@ -875,7 +875,7 @@ export default function App() {
 
       {/* Main app / landing */}
       {!showFaq && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
-        <div className="relative w-full max-w-7xl mx-auto px-4 flex flex-col min-h-screen">
+        <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "max-w-7xl mx-auto px-4" : ""}`}>
           {view === "app" ? (
             <>
               <Header
