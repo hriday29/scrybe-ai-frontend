@@ -20,7 +20,7 @@ const MicrosoftIcon = () => (
   </svg>
 );
 
-export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
+export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTermsOpen, onPrivacyOpen }) {
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === 'Escape') {
@@ -85,11 +85,19 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose }) {
       {/* Footer */}
       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed text-center">
         By signing in, you agree to our{' '}
-        <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline">
+        <button
+          onClick={() => { onClose?.(); onTermsOpen?.(); }}
+          type="button"
+          className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500/30 rounded-sm"
+        >
           Terms of Service
         </button>
         {' '}and{' '}
-        <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline">
+        <button
+          onClick={() => { onClose?.(); onPrivacyOpen?.(); }}
+          type="button"
+          className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500/30 rounded-sm"
+        >
           Privacy Policy
         </button>
       </p>

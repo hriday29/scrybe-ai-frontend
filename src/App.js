@@ -749,6 +749,8 @@ export default function App() {
             onSignIn={handleSignIn}
             onMicrosoftSignIn={handleMicrosoftSignIn}
             onClose={() => setIsSignInModalOpen(false)}
+            onTermsOpen={() => setShowTerms(true)}
+            onPrivacyOpen={() => setShowPrivacy(true)}
           />
         )}
       </AnimatePresence>
