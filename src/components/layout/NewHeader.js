@@ -13,7 +13,7 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img 
-              src="/scrybe-logo.ico" 
+              src="/logo192.png" 
               alt="Scrybe AI Logo" 
               className="w-10 h-10"
             />
