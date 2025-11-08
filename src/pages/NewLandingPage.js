@@ -7,6 +7,7 @@ import FeaturesSection from '../components/landing/FeaturesSection';
 import TestimonialsSection from '../components/landing/TestimonialsSection';
 import CTASection from '../components/landing/CTASection';
 import AboutSection from '../components/landing/AboutSection';
+import ContactSection from '../components/landing/ContactSection';
 
 const NewLandingPage = ({
   currentUser,
@@ -49,6 +50,9 @@ const NewLandingPage = ({
       <section id="testimonials">
         <TestimonialsSection />
       </section>
+
+      {/* Contact Section */}
+      <ContactSection />
 
       {/* CTA Section */}
       <CTASection

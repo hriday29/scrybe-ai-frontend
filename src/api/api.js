@@ -98,6 +98,17 @@ export const submitFeedback = async (authFetch, currentUser, category, feedbackT
   }
 };
 
+// Public contact request (no auth required). Uses plain axios instance.
+export const submitContactRequest = async (payload) => {
+  try {
+    const response = await api.post('/contact/submit', payload);
+    return response.data;
+  } catch (error) {
+    console.error('Error submitting contact request:', error);
+    throw error;
+  }
+};
+
 export const getOpenTrades = async (authFetch, currentUser) => {
   try {
     const response = await authFetch(`${API_BASE_URL}/api/open-trades`, currentUser);
