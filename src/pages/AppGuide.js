@@ -102,10 +102,10 @@ const AppGuide = ({ navigateToTab }) => {
 
             {/* Benefit */}
             <div className="mt-6 pt-4 border-t border-gray-200">
-              <p className="text-xs font-semibold text-green-700 mb-1">
+              <p className="text-xs font-semibold text-green-700 dark:text-green-300 mb-1">
                 Why This Is Useful:
               </p>
-              <p className="text-sm text-green-600">{item.benefit}</p>
+              <p className="text-sm text-green-600 dark:text-green-400">{item.benefit}</p>
             </div>
 
             {/* CTA */}

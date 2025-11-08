@@ -92,39 +92,39 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
               {/* Score Visualization */}
               <div className="space-y-4 mb-8">
                 {/* High Conviction BUY */}
-                <div className="bg-green-50 rounded-2xl p-5 border-2 border-green-200">
+                <div className="bg-green-50 dark:bg-green-500/10 rounded-2xl p-5 border-2 border-green-200 dark:border-green-700">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-green-900">High Conviction BUY</span>
-                    <span className="text-2xl font-bold text-green-600">+85</span>
+                    <span className="text-sm font-semibold text-green-900 dark:text-green-300">High Conviction BUY</span>
+                    <span className="text-2xl font-bold text-green-600 dark:text-green-400">+85</span>
                   </div>
-                  <div className="w-full bg-green-100 rounded-full h-2.5">
+                  <div className="w-full bg-green-100 dark:bg-green-500/20 rounded-full h-2.5">
                     <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '85%' }} />
                   </div>
-                  <p className="text-xs text-green-700 mt-2">Strong technical + fundamental alignment</p>
+                  <p className="text-xs text-green-700 dark:text-green-300 mt-2">Strong technical + fundamental alignment</p>
                 </div>
 
                 {/* Medium Conviction */}
-                <div className="bg-blue-50 rounded-2xl p-5 border border-blue-200">
+                <div className="bg-blue-50 dark:bg-blue-500/10 rounded-2xl p-5 border border-blue-200 dark:border-blue-700">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-blue-900">Medium Conviction</span>
-                    <span className="text-2xl font-bold text-blue-600">+45</span>
+                    <span className="text-sm font-semibold text-blue-900 dark:text-blue-300">Medium Conviction</span>
+                    <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">+45</span>
                   </div>
-                  <div className="w-full bg-blue-100 rounded-full h-2.5">
+                  <div className="w-full bg-blue-100 dark:bg-blue-500/20 rounded-full h-2.5">
                     <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '65%' }} />
                   </div>
-                  <p className="text-xs text-blue-700 mt-2">Positive signals, moderate strength</p>
+                  <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">Positive signals, moderate strength</p>
                 </div>
 
                 {/* Neutral/Avoid */}
-                <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+                <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl p-5 border border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-700">Neutral - No Position</span>
-                    <span className="text-2xl font-bold text-gray-600">0</span>
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Neutral - No Position</span>
+                    <span className="text-2xl font-bold text-gray-600 dark:text-gray-200">0</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div className="bg-gray-400 h-2.5 rounded-full" style={{ width: '50%' }} />
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div className="bg-gray-400 dark:bg-gray-500 h-2.5 rounded-full" style={{ width: '50%' }} />
                   </div>
-                  <p className="text-xs text-gray-600 mt-2">No clear directional bias</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-2">No clear directional bias</p>
                 </div>
               </div>
 

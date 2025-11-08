@@ -38,7 +38,11 @@ const OpenPositions = ({ onAnalyze }) => {
             return <div className="text-center p-8 animate-pulse">Loading Open Positions...</div>;
         }
         if (error) {
-            return <div className="text-red-400 text-center p-8">Error: {error}</div>;
+            return (
+                <div className="max-w-2xl mx-auto mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-2xl text-center">
+                    <p className="text-red-700 dark:text-red-300 font-semibold">Error: {error}</p>
+                </div>
+            );
         }
         if (!currentUser) {
             return (

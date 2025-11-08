@@ -51,7 +51,7 @@ const PrivacyPolicyPage = ({ onBack }) => {
           icon={<Database className="w-5 h-5 text-amber-400" />}
           accent="border-amber-500/40"
         >
-          <p className="text-amber-300 font-medium">
+          <p className="text-amber-700 dark:text-amber-300 font-medium">
             While in beta, we may collect extra diagnostic and performance data
             to improve stability and fix issues.
           </p>

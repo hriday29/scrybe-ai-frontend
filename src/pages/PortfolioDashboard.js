@@ -61,7 +61,7 @@ const SignalBadge = ({ signal }) => {
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-200 border border-gray-300 text-gray-700 text-xs font-bold">
+    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-xs font-bold">
       HOLD
     </span>
   );
@@ -96,18 +96,18 @@ const ExecutedTradeCard = ({ trade, rank }) => {
         </div>
         <div>
           <p className="text-gray-600 text-xs mb-1">Target</p>
-          <p className="text-green-600 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
+          <p className="text-green-600 dark:text-green-400 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
         </div>
         <div>
           <p className="text-gray-600 text-xs mb-1">Stop Loss</p>
-          <p className="text-red-600 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
+          <p className="text-red-600 dark:text-red-400 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
         </div>
       </div>
       
       {trade.selection_reason && (
         <div className="pt-3 border-t border-gray-200">
-          <p className="text-gray-700 text-xs flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+          <p className="text-gray-700 dark:text-gray-300 text-xs flex items-start gap-2">
+            <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
             {trade.selection_reason}
           </p>
         </div>
@@ -121,20 +121,20 @@ const AnalysisRow = ({ analysis }) => {
   
   const getStatusIcon = () => {
     if (analysis.is_executed) {
-      return <CheckCircle className="w-5 h-5 text-green-600" />;
+      return <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />;
     }
     if (analysis.portfolio_selected) {
-      return <Target className="w-5 h-5 text-blue-600" />;
+      return <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
     }
-    return <XCircle className="w-5 h-5 text-gray-500" />;
+    return <XCircle className="w-5 h-5 text-gray-500 dark:text-gray-400" />;
   };
 
   const getReasonColor = () => {
     const reason = analysis.selection_reason?.toLowerCase() || '';
-    if (reason.includes('selected')) return 'text-green-600';
-    if (reason.includes('sector')) return 'text-yellow-600';
-    if (reason.includes('portfolio full')) return 'text-orange-600';
-    return 'text-gray-600';
+    if (reason.includes('selected')) return 'text-green-600 dark:text-green-400';
+    if (reason.includes('sector')) return 'text-yellow-600 dark:text-yellow-400';
+    if (reason.includes('portfolio full')) return 'text-orange-600 dark:text-orange-400';
+    return 'text-gray-600 dark:text-gray-300';
   };
 
   return (
@@ -157,7 +157,7 @@ const AnalysisRow = ({ analysis }) => {
         <SignalBadge signal={analysis.signal} />
       </td>
       <td className="px-4 py-4">
-        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
           {analysis.scrybeScore >= 0 ? '+' : ''}{analysis.scrybeScore || 0}
         </span>
       </td>
@@ -263,9 +263,9 @@ const PortfolioDashboard = () => {
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 mb-4">
             Portfolio Management Dashboard
           </h1>
-          <p className="text-gray-700 text-lg">
-            AI analyzes <span className="text-gray-900 font-bold">~{total_analyzed} candidates</span> • 
-            Portfolio executes <span className="text-green-600 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
+          <p className="text-gray-700 dark:text-gray-300 text-lg">
+            AI analyzes <span className="text-gray-900 dark:text-white font-bold">~{total_analyzed} candidates</span> • 
+            Portfolio executes <span className="text-green-600 dark:text-green-400 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
           </p>
           <p className="text-gray-600 text-sm mt-2">Last Updated: {display_timestamp}</p>
           {prediction_for_date && (
@@ -573,7 +573,7 @@ const PortfolioDashboard = () => {
             
             {filteredAnalyses.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">No analyses match your filters</p>
+                <p className="text-gray-600 dark:text-gray-300 text-lg">No analyses match your filters</p>
               </div>
             )}
           </div>
@@ -581,18 +581,18 @@ const PortfolioDashboard = () => {
 
         {/* Footer Stats */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-8 text-gray-700 text-sm">
+          <div className="inline-flex items-center gap-8 text-gray-700 dark:text-gray-300 text-sm">
             <div>
-              <span className="font-semibold text-gray-900">{portfolio_summary.selected_for_execution}</span> Executing
+              <span className="font-semibold text-gray-900 dark:text-white">{portfolio_summary.selected_for_execution}</span> Executing
             </div>
             <div>
-              <span className="font-semibold text-yellow-600">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
+              <span className="font-semibold text-yellow-600 dark:text-yellow-400">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
             </div>
             <div>
-              <span className="font-semibold text-orange-600">{portfolio_summary.sector_limits_reached}</span> Sector Limited
+              <span className="font-semibold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached}</span> Sector Limited
             </div>
             <div>
-              <span className="font-semibold text-gray-600">{portfolio_summary.no_signal_generated}</span> HOLD Signals
+              <span className="font-semibold text-gray-600 dark:text-gray-300">{portfolio_summary.no_signal_generated}</span> HOLD Signals
             </div>
           </div>
         </div>

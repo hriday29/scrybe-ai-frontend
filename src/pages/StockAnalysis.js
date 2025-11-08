@@ -117,9 +117,9 @@ const StockSelector = ({ onAnalyze }) => {
       );
     }, [stocks, searchTerm]);
   
-    const ScoreBadge = ({ score }) => {
-        if (typeof score !== "number" || isNaN(score)) return <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-gray-500 bg-gray-200 ring-1 ring-inset ring-gray-300">N/A</span>
-        const scoreColor = score > 49 ? "text-green-300 bg-green-500/10 ring-green-500/30" : score < -49 ? "text-red-300 bg-red-500/10 ring-red-500/30" : "text-gray-600 bg-gray-200 ring-gray-300";
+  const ScoreBadge = ({ score }) => {
+    if (typeof score !== "number" || isNaN(score)) return <span className="font-mono font-semibold text-sm px-2.5 py-1 rounded-md text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600">N/A</span>
+    const scoreColor = score > 49 ? "text-green-300 bg-green-500/10 ring-green-500/30" : score < -49 ? "text-red-300 bg-red-500/10 ring-red-500/30" : "text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 ring-gray-300 dark:ring-gray-600";
         const scoreText = score > 0 ? `+${score.toFixed(0)}` : score.toFixed(0);
         return <span className={`font-mono font-semibold text-sm px-2.5 py-1 rounded-md ring-1 ring-inset ${scoreColor}`}>{scoreText}</span>
     };

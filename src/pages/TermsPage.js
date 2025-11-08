@@ -48,7 +48,7 @@ const TermsPage = ({ onBack }) => {
           icon={<AlertTriangle className="w-5 h-5 text-amber-400" />}
           accent="border-amber-500/40"
         >
-          <p className="text-amber-300 font-medium">
+          <p className="text-amber-700 dark:text-amber-300 font-medium">
             This application is in beta. Limitations include:
           </p>
           <ul className="list-disc list-inside mt-2 space-y-1">
@@ -71,8 +71,8 @@ const TermsPage = ({ onBack }) => {
               All content is for informational purposes only — not financial
               advice.
             </strong>{" "}
-            AI-generated insights are not investment recommendations. Always do
-            your own research and consult a licensed professional.
+            <span className="text-gray-700 dark:text-gray-300">AI-generated insights are not investment recommendations. Always do
+            your own research and consult a licensed professional.</span>
           </p>
         </Section>
 
