@@ -47,9 +47,7 @@ const NewLandingPage = ({
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials">
-        <TestimonialsSection />
-      </section>
+      <TestimonialsSection />
 
       {/* Contact Section */}
       <ContactSection />
