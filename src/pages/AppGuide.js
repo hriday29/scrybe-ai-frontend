@@ -19,21 +19,21 @@ const AppGuide = ({ navigateToTab }) => {
       icon: <BarChart3 className="w-8 h-8 text-blue-400" />,
     },
     {
-      title: "Portfolio Dashboard",
+      title: "My Trades",
       description:
-        "View the AI's complete portfolio management process. See all 250 analyzed stocks daily, with the top 10 highest-conviction trades selected for execution based on institutional risk management.",
+        "View the AI's complete portfolio management process. See all 250 analyzed stocks daily, with the top 10 highest-conviction trades selected for execution based on institutional risk management. Includes both your open and closed positions with detailed performance stats.",
       benefit:
-        "Complete transparency into why stocks are selected or rejected, with sector limits and risk controls clearly visible.",
-      targetIndex: 2, // Navigates to the 'Portfolio' tab
+        "Complete transparency into why stocks are selected or rejected, with sector limits and risk controls clearly visible. Track your full trading history in one place.",
+      targetIndex: 2, // Navigates to the 'My Trades' tab (PortfolioDashboard)
       icon: <Layers className="w-8 h-8 text-purple-400" />,
     },
     {
-      title: "Open Positions",
+      title: "Active Trades",
       description:
-        "A real-time dashboard of the top 10 active trades currently executing. Monitor entry prices, targets, stop-losses, and live P&L for institutional-grade position tracking.",
+        "A real-time dashboard of the top 10 active trades currently executing. Monitor entry prices, targets, stop-losses, and live P&L for institutional-grade position tracking. Focus exclusively on your currently open positions.",
       benefit:
-        "Track the AI's highest-conviction trades with complete transparency on risk management and exit strategy.",
-      targetIndex: 3, // Navigates to the 'Open Positions' tab
+        "Track the AI's highest-conviction trades with complete transparency on risk management and exit strategy. Focused view of your active portfolio.",
+      targetIndex: 3, // Navigates to the 'Active Trades' tab (OpenPositions)
       icon: <TrendingUp className="w-8 h-8 text-green-400" />,
     },
     {

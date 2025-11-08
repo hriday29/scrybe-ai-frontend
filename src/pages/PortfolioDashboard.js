@@ -6,7 +6,6 @@ import {
   PieChart, BarChart3, Activity, Eye, Target, Shield
 } from 'lucide-react';
 import { API_BASE_URL } from '../apiConfig';
-import { useNavigate } from 'react-router-dom';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
 
@@ -67,11 +66,11 @@ const SignalBadge = ({ signal }) => {
   );
 };
 
-const ExecutedTradeCard = ({ trade, rank }) => {
-  const navigate = useNavigate();
-  
+const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
   const handleClick = () => {
-    navigate(`/stock/${trade.ticker}`);
+    if (onStockSelect) {
+      onStockSelect(trade.ticker);
+    }
   };
 
   return (
@@ -116,9 +115,7 @@ const ExecutedTradeCard = ({ trade, rank }) => {
   );
 };
 
-const AnalysisRow = ({ analysis }) => {
-  const navigate = useNavigate();
-  
+const AnalysisRow = ({ analysis, onStockSelect }) => {
   const getStatusIcon = () => {
     if (analysis.is_executed) {
       return <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />;
@@ -142,7 +139,7 @@ const AnalysisRow = ({ analysis }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="border-b border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer transition-colors"
-      onClick={() => navigate(`/stock/${analysis.ticker}`)}
+      onClick={() => onStockSelect && onStockSelect(analysis.ticker)}
     >
       <td className="px-4 py-4">
         <div className="flex items-center gap-3">
@@ -175,7 +172,7 @@ const AnalysisRow = ({ analysis }) => {
   );
 };
 
-const PortfolioDashboard = () => {
+const PortfolioDashboard = ({ onStockSelect }) => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -487,7 +484,7 @@ const PortfolioDashboard = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {executed_trades.map((trade) => (
-                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank} />
+                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank} onStockSelect={onStockSelect} />
               ))}
             </div>
           </div>
@@ -565,7 +562,7 @@ const PortfolioDashboard = () => {
               <tbody>
                 <AnimatePresence>
                   {filteredAnalyses.map((analysis) => (
-                    <AnalysisRow key={analysis._id} analysis={analysis} />
+                    <AnalysisRow key={analysis._id} analysis={analysis} onStockSelect={onStockSelect} />
                   ))}
                 </AnimatePresence>
               </tbody>
