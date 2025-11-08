@@ -84,8 +84,8 @@ const AppGuide = ({ navigateToTab }) => {
           <div
             key={item.title}
             onClick={() => navigateToTab(item.targetIndex)}
-            className="flex flex-col bg-slate-900/50 border border-slate-700/70 rounded-2xl p-6 shadow-lg cursor-pointer 
-                       transition-all duration-300 hover:border-blue-500/80 hover:bg-slate-800/60 hover:scale-105 group"
+            className="flex flex-col bg-white border border-gray-200 rounded-2xl p-6 shadow-soft-lg cursor-pointer 
+                       transition-all duration-300 hover:border-primary-300 hover:shadow-soft-xl hover:scale-[1.02] group"
           >
             {/* Icon */}
             <div className="mb-4">{item.icon}</div>
@@ -96,20 +96,20 @@ const AppGuide = ({ navigateToTab }) => {
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 mt-2 flex-grow">
+            <p className="text-sm text-gray-700 mt-2 flex-grow">
               {item.description}
             </p>
 
             {/* Benefit */}
-            <div className="mt-6 pt-4 border-t border-slate-700">
-              <p className="text-xs font-semibold text-success-700 mb-1">
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <p className="text-xs font-semibold text-green-700 mb-1">
                 Why This Is Useful:
               </p>
-              <p className="text-sm text-success-600">{item.benefit}</p>
+              <p className="text-sm text-green-600">{item.benefit}</p>
             </div>
 
             {/* CTA */}
-            <p className="text-sm font-semibold text-primary-600 mt-6 pt-4 border-t border-slate-200">
+            <p className="text-sm font-semibold text-primary-600 mt-6 pt-4 border-t border-gray-200">
               Go to Section →
             </p>
           </div>

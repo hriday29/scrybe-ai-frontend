@@ -6,6 +6,7 @@ import HeroSection from '../components/landing/HeroSection';
 import FeaturesSection from '../components/landing/FeaturesSection';
 import TestimonialsSection from '../components/landing/TestimonialsSection';
 import CTASection from '../components/landing/CTASection';
+import AboutSection from '../components/landing/AboutSection';
 import ContactSection from '../components/landing/ContactSection';
 
 const NewLandingPage = ({
@@ -39,6 +40,9 @@ const NewLandingPage = ({
       <section id="features">
         <FeaturesSection />
       </section>
+
+      {/* About Section */}
+      <AboutSection />
 
       {/* Testimonials Section */}
       <section id="testimonials">
