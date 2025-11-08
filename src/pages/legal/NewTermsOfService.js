@@ -6,7 +6,7 @@ import NewFooter from '../../components/layout/NewFooter';
 
 const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onClose }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <NewHeader
         currentUser={currentUser}
         onSignIn={onSignIn}
@@ -31,7 +31,7 @@ const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onC
           </div>
 
           {/* Content */}
-          <div className="bg-white rounded-3xl shadow-soft-lg p-8 md:p-12 space-y-8">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft-lg p-8 md:p-12 space-y-8 border border-gray-200 dark:border-gray-700">
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-700 leading-relaxed">
@@ -67,14 +67,14 @@ const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onC
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Trading Risks and Disclaimers</h2>
-              <div className="bg-warning-50 border-l-4 border-warning-500 p-6 rounded-lg mb-4">
-                <p className="text-gray-900 font-semibold mb-2">⚠️ Important Trading Disclaimer</p>
-                <p className="text-gray-700 leading-relaxed">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">4. Trading Risks and Disclaimers</h2>
+              <div className="bg-warning-50 dark:bg-warning-900/20 border-l-4 border-warning-500 dark:border-warning-600 p-6 rounded-lg mb-4">
+                <p className="text-gray-900 dark:text-gray-100 font-semibold mb-2">⚠️ Important Trading Disclaimer</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   Trading in securities involves substantial risk. Past performance is not indicative of future results. You should carefully consider your financial situation and risk tolerance before making any trading decisions.
                 </p>
               </div>
-              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+              <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
                 <li>Our recommendations are for informational purposes only</li>
                 <li>We do not guarantee profits or prevent losses</li>
                 <li>You are solely responsible for your trading decisions</li>
