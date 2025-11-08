@@ -37,9 +37,6 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
             <a href="#about" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
               About
             </a>
-            <a href="#contact" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
-              Contact
-            </a>
           </div>
 
           {/* Auth Buttons */}
@@ -102,9 +99,6 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
                 </a>
                 <a href="#about" className="block text-gray-700 hover:text-primary-600 font-medium py-2">
                   About
-                </a>
-                <a href="#contact" className="block text-gray-700 hover:text-primary-600 font-medium py-2">
-                  Contact
                 </a>
                 
                 {currentUser ? (
