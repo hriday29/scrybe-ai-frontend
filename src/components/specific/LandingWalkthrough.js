@@ -94,10 +94,10 @@ const LandingWalkthrough = ({
     <section className="w-full max-w-7xl mx-auto my-20 px-6">
       {/* Heading */}
       <div className="text-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Institutional-Grade Analysis for Nifty Smallcap 250
         </h2>
-        <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed">
+        <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-slate-400 leading-relaxed">
           Scrybe AI analyzes all 250 smallcap stocks daily and selects the top 10 highest-conviction 
           trades using professional fund manager principles. Complete transparency, strict risk controls, 
           and systematic discipline.
@@ -122,10 +122,9 @@ const LandingWalkthrough = ({
               >
                 {section.icon}
               </div>
-              <h3 className="text-2xl font-semibold text-white">{section.title}</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{section.title}</h3>
             </div>
-
-            <p className="text-slate-300 leading-relaxed flex-grow">
+              <p className="text-gray-700 dark:text-slate-300 leading-relaxed flex-grow">
               {section.description}
             </p>
 
@@ -134,7 +133,7 @@ const LandingWalkthrough = ({
                 <button
                   key={link.text}
                   onClick={link.action}
-                  className="px-4 py-2 rounded-full bg-white/10 text-blue-400 font-medium hover:bg-blue-500/20 hover:text-blue-300 transition-colors backdrop-blur-md border border-gray-200"
+                  className="px-4 py-2 rounded-full bg-gray-100 text-blue-600 font-medium hover:bg-gray-200 hover:text-blue-700 transition-colors border border-gray-200 dark:bg-white/10 dark:text-blue-400 dark:hover:bg-blue-500/20 dark:hover:text-blue-300 backdrop-blur-md dark:border-gray-200"
                 >
                   {link.text}
                 </button>

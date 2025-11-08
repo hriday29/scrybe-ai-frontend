@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 
 const LegalPageLayout = ({ title, lastUpdated, summaryPoints, onBack, children }) => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 px-4 py-10 flex justify-center">
+  <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 px-4 py-10 flex justify-center">
       <div className="w-full max-w-4xl">
         {/* Back Button */}
         <button
@@ -16,19 +16,19 @@ const LegalPageLayout = ({ title, lastUpdated, summaryPoints, onBack, children }
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-sm">
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             {title}
           </h1>
-          <p className="text-sm text-gray-400 mt-2">
-            Last updated: <span className="text-gray-300">{lastUpdated}</span>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            Last updated: <span className="text-gray-700 dark:text-gray-300">{lastUpdated}</span>
           </p>
         </div>
 
         {/* Summary Section */}
         {summaryPoints && (
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mb-10 shadow-lg">
-            <h2 className="text-lg font-semibold text-white mb-3">🔑 Summary</h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed">
+          <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-xl rounded-2xl p-6 mb-10 shadow-lg">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">🔑 Summary</h2>
+            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 leading-relaxed">
               {summaryPoints.map((point, idx) => (
                 <li key={idx}>{point}</li>
               ))}
@@ -41,7 +41,7 @@ const LegalPageLayout = ({ title, lastUpdated, summaryPoints, onBack, children }
           {React.Children.map(children, (child, idx) => (
             <div
               key={idx}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow"
+              className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow"
             >
               {child}
             </div>

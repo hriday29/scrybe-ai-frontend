@@ -50,13 +50,13 @@ const StockDetailPage = ({ ticker, onBackClick }) => {
                 <div className="w-full max-w-5xl mx-auto px-4 mb-6">
                     <button
                         onClick={() => setShowMarketContext(!showMarketContext)}
-                        className="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl p-4 flex items-center justify-between transition-colors"
+                        className="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl p-4 flex items-center justify-between transition-colors dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-slate-700"
                     >
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">📊</span>
                             <div className="text-left">
-                                <h3 className="text-white font-semibold">Market Context</h3>
-                                <p className="text-slate-400 text-sm">Daily market indicators (applies to all stocks)</p>
+                                <h3 className="text-gray-900 dark:text-white font-semibold">Market Context</h3>
+                                <p className="text-gray-600 dark:text-slate-400 text-sm">Daily market indicators (applies to all stocks)</p>
                             </div>
                         </div>
                         {showMarketContext ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}

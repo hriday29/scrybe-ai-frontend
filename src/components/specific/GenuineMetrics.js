@@ -38,10 +38,10 @@ const GenuineMetrics = () => {
 
   return (
     <section className="w-full max-w-7xl mx-auto px-6 my-20">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-white text-center">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white text-center">
         Genuine AI Metrics
       </h2>
-      <p className="text-slate-400 text-center mt-2 max-w-2xl mx-auto">
+      <p className="text-gray-600 dark:text-slate-400 text-center mt-2 max-w-2xl mx-auto">
         Real-time system benchmarks that highlight how Scrybe AI works under the hood.
       </p>
 
@@ -52,9 +52,9 @@ const GenuineMetrics = () => {
             className="flex flex-col items-center text-center bg-white border border-gray-200 rounded-2xl p-6 shadow-lg backdrop-blur-none hover:bg-gray-100 transition"
           >
             {metric.icon}
-            <p className="text-2xl font-bold text-white mt-3">{metric.value}</p>
-            <h3 className="text-lg font-semibold text-slate-200 mt-1">{metric.title}</h3>
-            <p className="text-sm text-slate-400 mt-2">{metric.desc}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-3">{metric.value}</p>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-200 mt-1">{metric.title}</h3>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">{metric.desc}</p>
           </div>
         ))}
       </div>

@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react';
 
 const CTASection = ({ onStartJourney, onSignIn }) => {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+  <section className="relative py-20 md:py-28 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-600" />
       
@@ -17,7 +17,7 @@ const CTASection = ({ onStartJourney, onSignIn }) => {
         </div>
       </div>
 
-      <div className="relative w-full px-6 sm:px-8 lg:px-12 text-center">
+  <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

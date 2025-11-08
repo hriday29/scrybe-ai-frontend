@@ -12,11 +12,11 @@ const FaqItem = ({ question, answer, isBeta = false }) => (
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
     viewport={{ once: true }}
-    className={`group mb-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-soft-lg hover:shadow-xl transition ${
+  className={`group mb-4 rounded-2xl border border-gray-200 bg-white dark:bg-slate-900 dark:border-slate-700 p-6 shadow-soft-lg hover:shadow-xl transition ${
       isBeta ? "ring-1 ring-amber-400/40" : ""
     }`}
   >
-    <summary className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 list-none">
+  <summary className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 dark:text-white list-none">
       <span className="flex items-center gap-2">
         {isBeta && (
           <span className="text-amber-400 text-sm font-normal">[BETA]</span>
@@ -27,7 +27,7 @@ const FaqItem = ({ question, answer, isBeta = false }) => (
         ▼
       </span>
     </summary>
-    <p className="mt-3 prose prose-lg max-w-none leading-relaxed text-gray-700">
+  <p className="mt-3 prose prose-lg max-w-none leading-relaxed text-gray-700 dark:text-gray-300">
       {answer}
     </p>
   </motion.details>
@@ -162,7 +162,7 @@ const FaqPage = ({ onBack }) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 text-gray-900 font-sans overflow-hidden">
+  <div className="relative min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-gray-100 font-sans overflow-hidden">
       {/* Background gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40" />
       <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-primary-200/20 blur-3xl" />
@@ -171,11 +171,11 @@ const FaqPage = ({ onBack }) => {
       {/* Subtle grid overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(100,100,100,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,100,100,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-40 pointer-events-none" />
 
-      <div className="relative max-w-5xl mx-auto px-6 py-12">
+  <div className="relative max-w-5xl mx-auto px-6 py-12">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50 shadow-soft transition"
+          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50 shadow-soft transition dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700"
         >
           ← Back to Main Site
         </button>
@@ -190,7 +190,7 @@ const FaqPage = ({ onBack }) => {
           <h1 className="inline-block text-6xl font-extrabold mb-4 pt-2 pb-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg leading-tight">
             Frequently Asked Questions
           </h1>
-          <p className="text-lg max-w-2xl mx-auto text-gray-700">
+          <p className="text-lg max-w-2xl mx-auto text-gray-700 dark:text-gray-300">
             Find answers to common questions about{" "}
             <span className="font-semibold text-primary-600">Scrybe AI</span>.
           </p>
@@ -198,8 +198,8 @@ const FaqPage = ({ onBack }) => {
 
         {/* Beta Section */}
         <div className="mb-20">
-          <h2 className="text-2xl font-bold mb-6 text-amber-400 flex items-center gap-3">
-            <span className="bg-amber-500/20 text-amber-300 text-sm font-semibold px-2 py-1 rounded">
+          <h2 className="text-2xl font-bold mb-6 text-amber-600 dark:text-amber-400 flex items-center gap-3">
+            <span className="bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 text-sm font-semibold px-2 py-1 rounded">
               BETA
             </span>
             Beta Testing Questions
@@ -218,7 +218,7 @@ const FaqPage = ({ onBack }) => {
 
         {/* General FAQ Section */}
         <div className="mb-20">
-          <h2 className="text-2xl font-bold mb-6">General Questions</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">General Questions</h2>
           <div className="space-y-4">
             {generalFaqs.map((faq, i) => (
               <FaqItem key={`general-${i}`} question={faq.q} answer={faq.a} />
@@ -227,11 +227,11 @@ const FaqPage = ({ onBack }) => {
         </div>
 
         {/* Question Submission */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-soft-lg">
-          <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">
+  <div className="rounded-2xl border border-gray-200 bg-white dark:bg-slate-900 dark:border-slate-700 p-8 shadow-soft-lg">
+          <h2 className="text-3xl font-bold mb-4 text-center text-gray-900 dark:text-white">
             Can't find your answer?
           </h2>
-          <p className="text-gray-700 mb-8 text-center">
+          <p className="text-gray-700 dark:text-gray-300 mb-8 text-center">
             Ask our team! We'll review your question and add it to our list.
           </p>
 
@@ -247,7 +247,7 @@ const FaqPage = ({ onBack }) => {
                   }
                 }}
                 rows="4"
-                className={`w-full rounded-lg p-3 text-sm focus:outline-none focus:ring-2 bg-gray-50 text-gray-900 placeholder-gray-500 ${
+                className={`w-full rounded-lg p-3 text-sm focus:outline-none focus:ring-2 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
                   status === "error"
                     ? "border border-red-400 focus:ring-red-500"
                     : "border border-gray-200 focus:ring-primary-500"
@@ -255,7 +255,7 @@ const FaqPage = ({ onBack }) => {
                 placeholder="Type your question here... (e.g., 'I found a bug when...', 'Feature request...', 'How do I...')"
                 required
               />
-              <p className="text-xs text-gray-600">
+                <p className="text-xs text-gray-600 dark:text-gray-400">
                 Please do not submit personal information. Your question will be
                 reviewed by our team.
               </p>
@@ -272,7 +272,7 @@ const FaqPage = ({ onBack }) => {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="text-gray-400 hover:text-gray-200 font-medium"
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-medium"
                   >
                     Clear
                   </button>
@@ -280,8 +280,8 @@ const FaqPage = ({ onBack }) => {
               </div>
 
               {status === "error" && (
-                <div className="mt-4 p-3 bg-red-500/10 border border-red-400 rounded-lg">
-                  <p className="text-red-400 text-sm font-medium">
+                <div className="mt-4 p-3 bg-red-50 dark:bg-red-500/10 border border-red-400 rounded-lg">
+                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">
                     ❌ {errorMessage}
                   </p>
                 </div>
@@ -289,16 +289,16 @@ const FaqPage = ({ onBack }) => {
             </form>
           ) : (
             <div className="text-center space-y-4">
-              <p className="text-green-400 font-semibold text-lg">
+              <p className="text-green-600 dark:text-green-400 font-semibold text-lg">
                 ✅ Thank you! Your question has been submitted for review.
               </p>
-              <p className="text-gray-300 text-sm">
+              <p className="text-gray-600 dark:text-gray-300 text-sm">
                 We typically respond to questions within 1-2 business days during
                 the beta phase.
               </p>
               <button
                 onClick={resetForm}
-                className="text-blue-400 hover:text-blue-300 font-medium"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
               >
                 Submit Another Question
               </button>
