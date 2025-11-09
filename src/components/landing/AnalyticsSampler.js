@@ -17,8 +17,18 @@ export default function AnalyticsSampler() {
           fetch(`${API_BASE_URL}/api/market-status`),
           fetch(`${API_BASE_URL}/api/portfolio-summary`)
         ]);
-        if (pulseResp.ok) setPulse(await pulseResp.json());
-        if (portfolioResp.ok) setPortfolio(await portfolioResp.json());
+        
+        if (pulseResp.ok) {
+          const pulseData = await pulseResp.json();
+          setPulse(pulseData);
+          console.log('Market status loaded:', pulseData);
+        }
+        
+        if (portfolioResp.ok) {
+          const portfolioData = await portfolioResp.json();
+          setPortfolio(portfolioData);
+          console.log('Portfolio summary loaded:', portfolioData);
+        }
       } catch (e) {
         console.error('Analytics sampler error:', e);
         setError(true);
