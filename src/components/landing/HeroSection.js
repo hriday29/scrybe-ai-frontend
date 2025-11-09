@@ -81,81 +81,96 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-soft-2xl p-5 border border-gray-100 dark:border-neutral-700">
-              <div className="mb-3">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1 text-center">
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-soft-2xl p-6 border border-gray-100 dark:border-neutral-700">
+              <div className="mb-4">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1 text-center">
                   Scrybe Score System
                 </h3>
-                <p className="text-center text-xs text-gray-600 dark:text-gray-400 mb-2">
+                <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-2">
                   AI-powered scoring: -100 to +100
                 </p>
-                <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-2 mb-3 border border-primary-200 dark:border-primary-700">
-                  <p className="text-[9px] text-center text-primary-900 dark:text-primary-300 leading-tight">
-                    <strong>±60 Threshold:</strong> High-conviction BUY/SHORT signals
+                <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-2.5 mb-4 border border-primary-200 dark:border-primary-700">
+                  <p className="text-[10px] text-center text-primary-900 dark:text-primary-300 leading-snug">
+                    <strong>±60 Threshold:</strong> High-conviction BUY/SHORT signals ready for execution
                   </p>
                 </div>
               </div>
 
-              {/* Score Visualization - Only show HIGH conviction levels */}
-              <div className="space-y-2 mb-3">
+              {/* Score Visualization - Balanced 3 levels */}
+              <div className="space-y-2.5 mb-4">
                 {/* High Conviction BUY */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-lg p-3 border-2 border-green-300 dark:border-green-600">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-xl p-3.5 border-2 border-green-300 dark:border-green-600">
+                  <div className="flex items-center justify-between mb-2">
                     <div>
-                      <span className="text-xs font-bold text-green-900 dark:text-green-300">High Conviction BUY</span>
-                      <div className="text-[8px] text-green-700 dark:text-green-400">+60 to +100</div>
+                      <span className="text-sm font-bold text-green-900 dark:text-green-300">High Conviction BUY</span>
+                      <div className="text-[9px] text-green-700 dark:text-green-400 mt-0.5">Score +60 to +100</div>
                     </div>
-                    <span className="text-xl font-extrabold text-green-600 dark:text-green-400">+85</span>
+                    <span className="text-2xl font-extrabold text-green-600 dark:text-green-400">+85</span>
                   </div>
-                  <div className="w-full bg-green-200 dark:bg-green-500/30 rounded-full h-1.5">
-                    <div className="bg-gradient-to-r from-green-600 to-emerald-500 h-1.5 rounded-full" style={{ width: '85%' }} />
+                  <div className="w-full bg-green-200 dark:bg-green-500/30 rounded-full h-2 mb-1.5">
+                    <div className="bg-gradient-to-r from-green-600 to-emerald-500 h-2 rounded-full shadow-lg" style={{ width: '85%' }} />
                   </div>
+                  <p className="text-[10px] text-green-800 dark:text-green-300 leading-snug">
+                    Strong technical setup + bullish sentiment + solid fundamentals
+                  </p>
+                </div>
+
+                {/* Neutral Range */}
+                <div className="bg-gray-50 dark:bg-gray-800/40 rounded-xl p-3.5 border border-gray-300 dark:border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-sm font-bold text-gray-700 dark:text-gray-300">Neutral - Hold</span>
+                      <div className="text-[9px] text-gray-600 dark:text-gray-400 mt-0.5">Score -59 to +59</div>
+                    </div>
+                    <span className="text-2xl font-extrabold text-gray-600 dark:text-gray-200">0</span>
+                  </div>
+                  <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2 mb-1.5">
+                    <div className="bg-gradient-to-r from-gray-500 to-gray-400 h-2 rounded-full shadow-lg" style={{ width: '50%' }} />
+                  </div>
+                  <p className="text-[10px] text-gray-700 dark:text-gray-300 leading-snug">
+                    No clear directional bias. Wait for stronger signals
+                  </p>
                 </div>
 
                 {/* High Conviction SHORT */}
-                <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-500/10 dark:to-orange-500/10 rounded-lg p-3 border-2 border-red-300 dark:border-red-600">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-500/10 dark:to-orange-500/10 rounded-xl p-3.5 border-2 border-red-300 dark:border-red-600">
+                  <div className="flex items-center justify-between mb-2">
                     <div>
-                      <span className="text-xs font-bold text-red-900 dark:text-red-300">High Conviction SHORT</span>
-                      <div className="text-[8px] text-red-700 dark:text-red-400">-60 to -100</div>
+                      <span className="text-sm font-bold text-red-900 dark:text-red-300">High Conviction SHORT</span>
+                      <div className="text-[9px] text-red-700 dark:text-red-400 mt-0.5">Score -60 to -100</div>
                     </div>
-                    <span className="text-xl font-extrabold text-red-600 dark:text-red-400">-85</span>
+                    <span className="text-2xl font-extrabold text-red-600 dark:text-red-400">-85</span>
                   </div>
-                  <div className="w-full bg-red-200 dark:bg-red-500/30 rounded-full h-1.5">
-                    <div className="bg-gradient-to-r from-red-600 to-orange-500 h-1.5 rounded-full" style={{ width: '85%' }} />
+                  <div className="w-full bg-red-200 dark:bg-red-500/30 rounded-full h-2 mb-1.5">
+                    <div className="bg-gradient-to-r from-red-600 to-orange-500 h-2 rounded-full shadow-lg" style={{ width: '85%' }} />
                   </div>
-                </div>
-
-                {/* Neutral Range - Single line */}
-                <div className="bg-gray-50 dark:bg-gray-800/40 rounded-lg p-2 border border-gray-300 dark:border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300">Neutral (-59 to +59)</span>
-                    <span className="text-sm font-bold text-gray-600 dark:text-gray-200">Hold</span>
-                  </div>
+                  <p className="text-[10px] text-red-800 dark:text-red-300 leading-snug">
+                    Bearish breakdown + negative sentiment. Strong short opportunity
+                  </p>
                 </div>
               </div>
 
-              {/* Enhanced Stats - Single row */}
-              <div className="grid grid-cols-3 gap-1.5 text-center mb-2.5">
-                <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-1.5 border border-violet-200 dark:border-violet-700">
-                  <div className="text-base font-extrabold text-violet-600 dark:text-violet-400">250</div>
-                  <div className="text-[8px] font-bold text-violet-900 dark:text-violet-300">Analyzed</div>
+              {/* Stats - Compact */}
+              <div className="grid grid-cols-3 gap-2 text-center mb-3">
+                <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-2 border border-violet-200 dark:border-violet-700">
+                  <div className="text-lg font-extrabold text-violet-600 dark:text-violet-400">250</div>
+                  <div className="text-[9px] font-bold text-violet-900 dark:text-violet-300">Analyzed</div>
                 </div>
-                <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-1.5 border border-teal-200 dark:border-teal-700">
-                  <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">Top 10</div>
-                  <div className="text-[8px] font-bold text-teal-900 dark:text-teal-300">Selected</div>
+                <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-2 border border-teal-200 dark:border-teal-700">
+                  <div className="text-lg font-extrabold text-teal-600 dark:text-teal-400">Top 10</div>
+                  <div className="text-[9px] font-bold text-teal-900 dark:text-teal-300">Selected</div>
                 </div>
-                <div className="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-1.5 border border-rose-200 dark:border-rose-700">
-                  <div className="text-base font-extrabold text-rose-600 dark:text-rose-400">2%</div>
-                  <div className="text-[8px] font-bold text-rose-900 dark:text-rose-300">Max Risk</div>
+                <div className="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-2 border border-rose-200 dark:border-rose-700">
+                  <div className="text-lg font-extrabold text-rose-600 dark:text-rose-400">2%</div>
+                  <div className="text-[9px] font-bold text-rose-900 dark:text-rose-300">Max Risk</div>
                 </div>
               </div>
 
-              {/* What Drives - Ultra compact */}
-              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-2 border border-primary-200 dark:border-primary-700">
-                <div className="text-[9px] font-bold text-primary-900 dark:text-primary-300 mb-1">Score Factors:</div>
-                <div className="text-[8px] text-primary-800 dark:text-primary-300 leading-tight">
-                  Technical (RSI, MACD) • AI Sentiment • Fundamentals • Market Regime
+              {/* Score Factors - Single line without specific indicators */}
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-2.5 border border-primary-200 dark:border-primary-700">
+                <div className="text-[9px] font-bold text-primary-900 dark:text-primary-300 mb-1">Comprehensive Analysis:</div>
+                <div className="text-[9px] text-primary-800 dark:text-primary-300 leading-snug">
+                  15+ Technical Indicators • AI Sentiment Analysis • Fundamental Metrics • Market Regime Detection
                 </div>
               </div>
             </div>

@@ -8,7 +8,6 @@ import { API_BASE_URL } from '../../apiConfig';
 export default function AnalyticsSampler() {
   const [pulse, setPulse] = useState(null);
   const [portfolio, setPortfolio] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -23,8 +22,6 @@ export default function AnalyticsSampler() {
       } catch (e) {
         console.error('Analytics sampler error:', e);
         setError(true);
-      } finally {
-        setLoading(false);
       }
     };
     fetchData();
@@ -76,7 +73,7 @@ export default function AnalyticsSampler() {
                 <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Next Trading Day</span>
               </div>
               <p className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
-                {loading ? '...' : pulse?.prediction_date || 'Monday, Nov 10'}
+                {pulse?.prediction_date || 'Monday, Nov 11'}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
                 {pulse?.is_holiday ? (
@@ -105,7 +102,7 @@ export default function AnalyticsSampler() {
               </div>
               <div className="flex items-baseline gap-2 mb-2">
                 <p className="text-5xl font-extrabold text-green-600 dark:text-green-400">
-                  {loading ? '—' : portfolio?.portfolio_summary?.selected_for_execution ?? '4'}
+                  {portfolio?.portfolio_summary?.selected_for_execution ?? '4'}
                 </p>
                 <span className="text-2xl text-gray-500 dark:text-gray-400">/</span>
                 <span className="text-2xl text-gray-600 dark:text-gray-300">
@@ -134,7 +131,7 @@ export default function AnalyticsSampler() {
                 <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Analyzed Today</span>
               </div>
               <p className="text-5xl font-extrabold text-purple-600 dark:text-purple-400 mb-2">
-                {loading ? '—' : portfolio?.total_analyzed ?? '250'}
+                {portfolio?.total_analyzed ?? '250'}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Stocks screened • <span className="text-purple-600 dark:text-purple-400 font-semibold">Top 10 executed</span>
