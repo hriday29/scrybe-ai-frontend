@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ArrowLeft, TrendingUp, AlertCircle } from 'lucide-react';
+import { Search, ArrowLeft, TrendingUp, AlertCircle, X, BarChart3 } from 'lucide-react';
 
 // Import child components from their new locations
 import ApexAnalysisDashboard from '../components/specific/ApexAnalysisDashboard.js';
@@ -83,23 +83,31 @@ const StockSelector = ({ onAnalyze }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [marketContext, setMarketContext] = useState(null);
+    const [isMarketDrawerOpen, setIsMarketDrawerOpen] = useState(false);
   
     useEffect(() => {
       const fetchStocks = async () => {
         try {
+          console.log('🔍 Fetching all-analysis data from:', `${API_BASE_URL}/api/all-analysis`);
           const response = await fetch(`${API_BASE_URL}/api/all-analysis`);
           if (!response.ok) throw new Error("Failed to load stock analysis data.");
           
           const analysisData = await response.json();
-          analysisData.sort((a, b) => (b.scrybeScore || 0) - (a.scrybeScore || 0));
+          console.log('📊 Received analysis data:', analysisData.length, 'stocks');
+          console.log('📊 First stock data:', analysisData[0]);
           
+          analysisData.sort((a, b) => (b.scrybeScore || 0) - (a.scrybeScore || 0));
           setStocks(analysisData);
           
           // Extract market context from first item
           if (analysisData.length > 0 && analysisData[0].market_context) {
+            console.log('🌍 Market context found:', analysisData[0].market_context);
             setMarketContext(analysisData[0].market_context);
+          } else {
+            console.warn('⚠️ No market_context in API response');
           }
         } catch (err) {
+          console.error('❌ Error fetching stock data:', err);
           setError(new Error("Failed to load analysis data."));
         } finally {
           setIsLoading(false);
@@ -132,62 +140,112 @@ const StockSelector = ({ onAnalyze }) => {
     if (error) return <ErrorDisplay error={error.message} onReset={() => window.location.reload()} />;
   
     return (
-      <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-12 md:pt-12 md:pb-16">
-        <div className="w-full max-w-7xl mx-auto px-4">
-          <SectionTitle
-            title="Ranked Analysis Universe"
-            subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
-          />
-
-          {/* Market Context Section */}
-          {marketContext && !isLoading && (
-            <div className="mt-12 space-y-6 mb-12">
-              <MarketRegimeCard marketContext={marketContext} />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {marketContext.sector_performance && (
-                  <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
-                )}
-                {marketContext.breadth_indicators && (
-                  <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Stock Search and List */}
-          <div className="mt-8 w-full max-w-2xl mx-auto">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="text-gray-500 dark:text-gray-400" aria-hidden="true" />
-              </div>
-              <input
-                type="text"
-                aria-label="Search stocks"
-                placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white dark:bg-neutral-900 backdrop-blur-none border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-primary-500 dark:focus:border-primary-400"
-                disabled={isLoading}
+      <>
+        {/* Market Context Drawer */}
+        <AnimatePresence>
+          {isMarketDrawerOpen && marketContext && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                onClick={() => setIsMarketDrawerOpen(false)}
               />
-            </div>
-    
-            <GlassCard className="mt-4 max-h-96 overflow-y-auto p-2 space-y-1 dark:bg-neutral-900 dark:border-neutral-700">
-              {isLoading && <p className="text-gray-600 dark:text-gray-400 text-center p-4">Loading...</p>}
-              {!isLoading && filteredStocks.length === 0 && <p className="text-gray-600 dark:text-gray-400 text-center p-4">No setups found for today.</p>}
-              {!isLoading && filteredStocks.map((stock, index) => (
-                  <button key={stock.ticker} onClick={() => onAnalyze(stock.ticker)} className="w-full text-left p-3 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono text-gray-500 dark:text-gray-400 text-sm w-8">{index + 1}.</span>
-                      <span className="font-semibold text-gray-900 dark:text-gray-100">{stock.companyName}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{stock.ticker}</span>
-                    </div>
-                    <ScoreBadge score={stock.scrybeScore} />
+
+              {/* Drawer */}
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                className="fixed top-0 right-0 bottom-0 w-full max-w-2xl bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto"
+              >
+                <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 flex justify-between items-center z-10">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <BarChart3 className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                    Market Context
+                  </h2>
+                  <button
+                    onClick={() => setIsMarketDrawerOpen(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                    aria-label="Close drawer"
+                  >
+                    <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                   </button>
-              ))}
-            </GlassCard>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  <MarketRegimeCard marketContext={marketContext} />
+                  {marketContext.sector_performance && (
+                    <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
+                  )}
+                  {marketContext.breadth_indicators && (
+                    <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
+                  )}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Floating Market Context Button */}
+        {marketContext && !isLoading && (
+          <button
+            onClick={() => setIsMarketDrawerOpen(true)}
+            className="fixed bottom-6 right-6 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white px-5 py-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
+            title="View Market Context"
+          >
+            <BarChart3 className="w-6 h-6" />
+            <span className="hidden group-hover:inline-block font-semibold text-sm whitespace-nowrap">
+              Market Context
+            </span>
+          </button>
+        )}
+
+        <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-12 md:pt-12 md:pb-16">
+          <div className="w-full max-w-2xl mx-auto px-4">
+            <SectionTitle
+              title="Ranked Analysis Universe"
+              subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
+            />
+
+            {/* Stock Search and List */}
+            <div className="mt-8 w-full">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                </div>
+                <input
+                  type="text"
+                  aria-label="Search stocks"
+                  placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-white dark:bg-neutral-900 backdrop-blur-none border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 shadow-sm"
+                  disabled={isLoading}
+                />
+              </div>
+      
+              <GlassCard className="mt-4 max-h-96 overflow-y-auto p-2 space-y-1 dark:bg-neutral-900 dark:border-neutral-700">
+                {isLoading && <p className="text-gray-600 dark:text-gray-400 text-center p-4">Loading...</p>}
+                {!isLoading && filteredStocks.length === 0 && <p className="text-gray-600 dark:text-gray-400 text-center p-4">No setups found for today.</p>}
+                {!isLoading && filteredStocks.map((stock, index) => (
+                    <button key={stock.ticker} onClick={() => onAnalyze(stock.ticker)} className="w-full text-left p-3 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-gray-500 dark:text-gray-400 text-sm w-8">{index + 1}.</span>
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">{stock.companyName}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{stock.ticker}</span>
+                      </div>
+                      <ScoreBadge score={stock.scrybeScore} />
+                    </button>
+                ))}
+              </GlassCard>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
 };
 
