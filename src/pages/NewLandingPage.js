@@ -6,7 +6,6 @@ import HeroSection from '../components/landing/HeroSection';
 import FeaturesSection from '../components/landing/FeaturesSection';
 import MicroFaqSection from '../components/landing/MicroFaqSection';
 import AnalyticsSampler from '../components/landing/AnalyticsSampler';
-import LiveStatusStrip from '../components/specific/LiveStatusStrip';
 import TestimonialsSection from '../components/landing/TestimonialsSection';
 import CTASection from '../components/landing/CTASection';
 import AboutSection from '../components/landing/AboutSection';
@@ -32,13 +31,6 @@ const NewLandingPage = ({
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
       />
-
-      {/* Live Status (pre-signup insight) */}
-      <div className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <LiveStatusStrip />
-        </div>
-      </div>
 
       {/* Hero Section */}
       <HeroSection
