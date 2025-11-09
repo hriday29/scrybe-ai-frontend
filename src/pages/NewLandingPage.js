@@ -6,6 +6,7 @@ import HeroSection from '../components/landing/HeroSection';
 import FeaturesSection from '../components/landing/FeaturesSection';
 import MicroFaqSection from '../components/landing/MicroFaqSection';
 import AnalyticsSampler from '../components/landing/AnalyticsSampler';
+import TrustMetricsShowcase from '../components/landing/TrustMetricsShowcase';
 import TestimonialsSection from '../components/landing/TestimonialsSection';
 import CTASection from '../components/landing/CTASection';
 import AboutSection from '../components/landing/AboutSection';
@@ -31,6 +32,9 @@ const NewLandingPage = ({
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
       />
+
+      {/* Trust Metrics Banner */}
+      <TrustMetricsShowcase />
 
       {/* Hero Section */}
       <HeroSection

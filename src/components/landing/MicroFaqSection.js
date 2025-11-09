@@ -142,9 +142,12 @@ export default function MicroFaqSection() {
           className="mt-12 text-center"
         >
           <p className="text-gray-600 dark:text-gray-400 mb-4">Still have questions?</p>
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full font-semibold shadow-lg hover:bg-primary-700 transition-colors cursor-pointer">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full font-semibold shadow-lg hover:bg-primary-700 transition-colors cursor-pointer"
+          >
             <span>Sign up and explore the full platform</span>
-          </div>
+          </button>
         </motion.div>
       </div>
     </section>
