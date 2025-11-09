@@ -105,7 +105,7 @@ const FaqItem = ({ faq, index }) => {
   );
 };
 
-export default function MicroFaqSection() {
+export default function MicroFaqSection({ onGetStarted }) {
   return (
     <section aria-labelledby="micro-faq-heading" className="relative w-full py-20 bg-gradient-to-b from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
       <div className="max-w-5xl mx-auto px-6">
@@ -143,7 +143,7 @@ export default function MicroFaqSection() {
         >
           <p className="text-gray-600 dark:text-gray-400 mb-4">Still have questions?</p>
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={onGetStarted}
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full font-semibold shadow-lg hover:bg-primary-700 transition-colors cursor-pointer"
           >
             <span>Sign up and explore the full platform</span>

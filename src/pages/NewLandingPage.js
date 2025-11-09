@@ -60,7 +60,7 @@ const NewLandingPage = ({
 
       {/* Analytics Sampler & Micro FAQ (placed before signup CTA) */}
       <AnalyticsSampler />
-      <MicroFaqSection />
+      <MicroFaqSection onGetStarted={onGetStarted} />
 
       {/* CTA Section */}
       <CTASection
