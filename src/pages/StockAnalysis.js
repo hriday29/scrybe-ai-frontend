@@ -116,24 +116,15 @@ const StockSelector = ({ onAnalyze }) => {
         console.log('🌍 Fetching market context from:', `${API_BASE_URL}/api/market-context`);
         const response = await fetch(`${API_BASE_URL}/api/market-context`);
         if (!response.ok) {
-          console.warn('⚠️ Failed to fetch market context, status:', response.status);
-          setMarketContext({ 
-            error: 'Failed to fetch market context. The server may be unavailable.' 
-          });
+          console.warn('⚠️ Failed to fetch market context');
+          setMarketContext({ error: 'Failed to fetch market context. Please try again.' });
           return;
         }
         
         const contextData = await response.json();
         console.log('🌍 Market context received:', contextData);
         
-        // Check if this is placeholder data (no analysis run yet)
-        if (contextData._placeholder) {
-          console.warn('⚠️ Market context is placeholder data - analysis not run yet');
-          setMarketContext({ 
-            ...contextData,
-            error: 'Market analysis has not been run yet. Data shown is placeholder.' 
-          });
-        } else if (contextData.error) {
+        if (contextData.error) {
           console.warn('⚠️ Market context error:', contextData.error);
           setMarketContext(contextData);
         } else {
@@ -141,9 +132,7 @@ const StockSelector = ({ onAnalyze }) => {
         }
       } catch (err) {
         console.error('❌ Error fetching market context:', err);
-        setMarketContext({ 
-          error: 'Could not connect to the backend. Please check if the server is running.' 
-        });
+        setMarketContext({ error: 'An error occurred while fetching market context.' });
       } finally {
         setIsLoadingMarketContext(false);
       }
