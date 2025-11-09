@@ -89,9 +89,15 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 <p className="text-center text-gray-600 dark:text-gray-400 mb-1">
                   AI-powered scoring from -100 to +100
                 </p>
-                <p className="text-center text-xs text-gray-500 dark:text-gray-500 mb-6">
+                <p className="text-center text-xs text-gray-500 dark:text-gray-500 mb-2">
                   Combining 15+ technical indicators, AI sentiment, and fundamental analysis
                 </p>
+                <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-3 mb-6 border border-primary-200 dark:border-primary-700">
+                  <p className="text-xs text-center text-primary-900 dark:text-primary-300 leading-relaxed">
+                    <strong>High Conviction Threshold:</strong> Scores above <strong>+60</strong> indicate strong BUY opportunities. 
+                    Scores below <strong>-60</strong> indicate strong SHORT opportunities. Both signal high-conviction trades ready for execution.
+                  </p>
+                </div>
               </div>
 
               {/* Score Visualization - Enhanced */}
@@ -100,8 +106,8 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-2xl p-5 border-2 border-green-300 dark:border-green-600 hover:scale-[1.02] transition-transform">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <span className="text-sm font-bold text-green-900 dark:text-green-300">🚀 High Conviction BUY</span>
-                      <div className="text-[10px] text-green-700 dark:text-green-400 mt-0.5">Score 75 to 100</div>
+                      <span className="text-sm font-bold text-green-900 dark:text-green-300">High Conviction BUY</span>
+                      <div className="text-[10px] text-green-700 dark:text-green-400 mt-0.5">Score +60 to +100</div>
                     </div>
                     <span className="text-3xl font-extrabold text-green-600 dark:text-green-400">+85</span>
                   </div>
@@ -117,8 +123,8 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10 rounded-2xl p-5 border border-blue-300 dark:border-blue-600 hover:scale-[1.02] transition-transform">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <span className="text-sm font-bold text-blue-900 dark:text-blue-300">📈 Medium Conviction</span>
-                      <div className="text-[10px] text-blue-700 dark:text-blue-400 mt-0.5">Score 30 to 74</div>
+                      <span className="text-sm font-bold text-blue-900 dark:text-blue-300">Medium Conviction</span>
+                      <div className="text-[10px] text-blue-700 dark:text-blue-400 mt-0.5">Score +30 to +59</div>
                     </div>
                     <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">+45</span>
                   </div>
@@ -134,8 +140,8 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl p-5 border border-gray-300 dark:border-gray-600 hover:scale-[1.02] transition-transform">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <span className="text-sm font-bold text-gray-700 dark:text-gray-300">⚪ Neutral - No Position</span>
-                      <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">Score -29 to +29</div>
+                      <span className="text-sm font-bold text-gray-700 dark:text-gray-300">Neutral - No Position</span>
+                      <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">Score -59 to +29</div>
                     </div>
                     <span className="text-3xl font-extrabold text-gray-600 dark:text-gray-200">0</span>
                   </div>
@@ -151,8 +157,8 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-500/10 dark:to-orange-500/10 rounded-2xl p-5 border-2 border-red-300 dark:border-red-600 hover:scale-[1.02] transition-transform">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <span className="text-sm font-bold text-red-900 dark:text-red-300">📉 High Conviction SHORT</span>
-                      <div className="text-[10px] text-red-700 dark:text-red-400 mt-0.5">Score -75 to -100</div>
+                      <span className="text-sm font-bold text-red-900 dark:text-red-300">High Conviction SHORT</span>
+                      <div className="text-[10px] text-red-700 dark:text-red-400 mt-0.5">Score -60 to -100</div>
                     </div>
                     <span className="text-3xl font-extrabold text-red-600 dark:text-red-400">-85</span>
                   </div>
@@ -160,7 +166,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                     <div className="bg-gradient-to-r from-red-600 to-orange-500 h-3 rounded-full shadow-lg" style={{ width: '85%' }} />
                   </div>
                   <p className="text-xs text-red-800 dark:text-red-300 leading-relaxed">
-                    Bearish breakdown + negative sentiment. Avoid or consider shorting opportunities.
+                    Bearish breakdown + negative sentiment. Strong short-selling opportunity.
                   </p>
                 </div>
               </div>

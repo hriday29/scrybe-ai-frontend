@@ -107,7 +107,7 @@ const FaqItem = ({ faq, index }) => {
 
 export default function MicroFaqSection({ onGetStarted }) {
   return (
-    <section aria-labelledby="micro-faq-heading" className="relative w-full py-20 bg-gradient-to-b from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
+    <section id="faq" aria-labelledby="micro-faq-heading" className="relative w-full py-20 bg-gradient-to-b from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
       <div className="max-w-5xl mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
