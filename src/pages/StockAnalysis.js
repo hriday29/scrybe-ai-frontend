@@ -194,7 +194,7 @@ const StockSelector = ({ onAnalyze }) => {
         {marketContext && !isLoading && (
           <button
             onClick={() => setIsMarketDrawerOpen(true)}
-            className="fixed bottom-6 right-6 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white px-5 py-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
+            className="fixed bottom-6 right-24 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white px-5 py-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
             title="View Market Context"
           >
             <BarChart3 className="w-6 h-6" />
