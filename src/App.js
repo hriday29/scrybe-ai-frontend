@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, BarChart3 } from 'lucide-react';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { getAnalysis, getTrackRecord } from './api/api.js';
 
@@ -170,7 +170,6 @@ const StockSelector = ({ onAnalyze }) => {
   const [stocks, setStocks] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [marketContext, setMarketContext] = useState(null);
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -185,11 +184,6 @@ const StockSelector = ({ onAnalyze }) => {
         analysisData.sort((a, b) => (b.scrybeScore || 0) - (a.scrybeScore || 0));
         
         setStocks(analysisData);
-
-        // Extract market_context from the first stock (it's the same for all stocks)
-        if (analysisData.length > 0 && analysisData[0].market_context) {
-          setMarketContext(analysisData[0].market_context);
-        }
       } catch (err) {
         // If the fetch fails, we can use a more generic error message.
         setError(new Error("Failed to load analysis data."));
@@ -506,25 +500,41 @@ export default function App() {
     fetchMarketStatus();
   }, []);
 
-  // Fetch global market context
-  useEffect(() => {
-    const fetchGlobalMarketContext = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/all-analysis`);
-        if (response.ok) {
-          const analysisData = await response.json();
-          if (analysisData.length > 0 && analysisData[0].market_context) {
-            setGlobalMarketContext(analysisData[0].market_context);
+  // Fetch global market context - Use dedicated endpoint for better data
+  // This fetches on app load, but drawer can also trigger fetch on demand
+  const fetchGlobalMarketContext = useCallback(async () => {
+    try {
+      // Use the dedicated market-context endpoint for better data quality
+      const response = await fetch(`${API_BASE_URL}/api/market-context`);
+      if (response.ok) {
+        const contextData = await response.json();
+        if (contextData && !contextData.error) {
+          setGlobalMarketContext(contextData);
+          return contextData;
+        } else {
+          // Fallback to all-analysis if market-context endpoint fails
+          const fallbackResponse = await fetch(`${API_BASE_URL}/api/all-analysis`);
+          if (fallbackResponse.ok) {
+            const analysisData = await fallbackResponse.json();
+            if (analysisData.length > 0 && analysisData[0].market_context) {
+              setGlobalMarketContext(analysisData[0].market_context);
+              return analysisData[0].market_context;
+            }
           }
         }
-      } catch (err) {
-        console.error('Failed to fetch global market context:', err);
       }
-    };
-    if (currentUser && view === 'app') {
+    } catch (err) {
+      console.error('Failed to fetch global market context:', err);
+      setGlobalMarketContext({ error: 'Failed to fetch market context. Please try again.' });
+    }
+    return null;
+  }, []);
+
+  useEffect(() => {
+    if (currentUser && view === 'app' && !globalMarketContext) {
       fetchGlobalMarketContext();
     }
-  }, [currentUser, view]);
+  }, [currentUser, view, fetchGlobalMarketContext, globalMarketContext]);
 
   const handleStockSelect = useCallback((ticker) => setSelectedTicker(ticker), []);
   const handleBackToList = useCallback(() => setSelectedTicker(null), []);
@@ -641,12 +651,14 @@ export default function App() {
     <div className="w-full">
       {/* Market Holiday Banner - Shows at top when market is closed */}
       {marketStatus && (
-        <div className="w-full max-w-5xl mx-auto px-4 pt-4">
-          <HolidayBanner
-            isHoliday={marketStatus.is_holiday}
-            holidayReason={marketStatus.holiday_reason}
-            nextTradingDay={marketStatus.next_trading_day_display}
-          />
+        <div className="w-full px-4 md:px-6 lg:px-8 pt-4">
+          <div className="max-w-7xl mx-auto">
+            <HolidayBanner
+              isHoliday={marketStatus.is_holiday}
+              holidayReason={marketStatus.holiday_reason}
+              nextTradingDay={marketStatus.next_trading_day_display}
+            />
+          </div>
         </div>
       )}
 
@@ -654,7 +666,7 @@ export default function App() {
         <StockDetailPage ticker={selectedTicker} onBackClick={handleBackToList} />
       ) : (
         <Tab.Group selectedIndex={tabIndex} onChange={setTabIndex}>
-          <div className="flex flex-wrap justify-center p-1 bg-white border border-gray-200 rounded-2xl sticky top-4 z-10 w-fit mx-auto shadow-sm">
+          <div className="flex flex-wrap justify-center p-1 bg-white border border-gray-200 rounded-2xl sticky top-20 z-10 w-fit mx-auto shadow-sm mb-4 mt-4 px-4">
             {[
               { label: "App Guide", tooltip: "Learn how to use Scrybe AI effectively" },
               { label: "Stock Analysis", tooltip: "Get AI-powered analysis for any stock" },
@@ -736,7 +748,7 @@ export default function App() {
 
       {/* Market Context Drawer */}
       <AnimatePresence>
-        {isMarketDrawerOpen && globalMarketContext && (
+        {isMarketDrawerOpen && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -744,7 +756,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMarketDrawerOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[55]"
             />
             {/* Drawer */}
             <motion.div
@@ -752,52 +764,88 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 bg-white shadow-2xl z-50 overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 xl:w-2/5 bg-white dark:bg-neutral-900 shadow-2xl z-[60] overflow-hidden flex flex-col"
             >
-              <div className="p-6 space-y-6">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                      📊 Market Context
-                    </h2>
-                    <p className="text-gray-600 text-sm mt-1">Universal daily indicators for all stocks</p>
-                  </div>
-                  <button
-                    onClick={() => setIsMarketDrawerOpen(false)}
-                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+              {/* Sticky Header - Fixed at top with proper z-index */}
+              <div className="sticky top-0 z-[61] bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 md:p-5 flex items-center justify-between shadow-sm backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+                <div className="flex-1">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-primary-600 dark:text-primary-400" />
+                    Market Context
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm mt-1">Real-time market indicators and analysis</p>
                 </div>
+                <button
+                  onClick={() => setIsMarketDrawerOpen(false)}
+                  className="p-2 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 ml-4"
+                  aria-label="Close drawer"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-                {/* Market Indicators */}
-                <MarketRegimeCard marketContext={globalMarketContext} />
-                <div className="grid grid-cols-1 gap-6">
-                  {globalMarketContext.sector_performance && (
-                    <SectorHeatmapCard sectorPerformance={globalMarketContext.sector_performance} />
-                  )}
-                  {globalMarketContext.breadth_indicators && (
-                    <MarketBreadthCard breadthData={globalMarketContext.breadth_indicators} />
-                  )}
-                </div>
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 md:space-y-5">
+                {globalMarketContext && !globalMarketContext.error ? (
+                  <>
+                    <MarketRegimeCard marketContext={globalMarketContext} />
+                    {globalMarketContext.sector_performance && (
+                      <SectorHeatmapCard sectorPerformance={globalMarketContext.sector_performance} />
+                    )}
+                    {globalMarketContext.breadth_indicators && (
+                      <MarketBreadthCard breadthData={globalMarketContext.breadth_indicators} />
+                    )}
+                  </>
+                ) : globalMarketContext && globalMarketContext.error ? (
+                  <div className="flex flex-col items-center justify-center py-16 px-4">
+                    <div className="text-center max-w-md">
+                      <div className="text-4xl mb-4">⚠️</div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        Market Context Unavailable
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {globalMarketContext.error || "Market context data is not available. The daily analysis may not have been run yet."}
+                      </p>
+                      <button
+                        onClick={() => fetchGlobalMarketContext()}
+                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
+                      >
+                        Retry
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center py-16">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600 dark:text-gray-400">Loading market context...</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">Fetching latest market data</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Floating Market Context Button - Only show when logged in */}
-      {view === 'app' && globalMarketContext && (
+      {/* Floating Market Context Button - Always visible when logged in - Made more prominent */}
+      {view === 'app' && (
         <button
-          onClick={() => setIsMarketDrawerOpen(true)}
-          className="fixed bottom-6 right-6 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white p-4 rounded-full shadow-soft-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
-          title="View Market Context"
+          onClick={() => {
+            setIsMarketDrawerOpen(true);
+            // Trigger fetch if context not loaded
+            if (!globalMarketContext) {
+              fetchGlobalMarketContext();
+            }
+          }}
+          className="fixed bottom-24 right-6 bg-gradient-to-br from-primary-500 via-purple-600 to-secondary-600 hover:from-primary-600 hover:via-purple-700 hover:to-secondary-700 text-white px-5 py-3.5 md:px-6 md:py-4 rounded-full shadow-2xl z-40 transition-all hover:scale-110 active:scale-95 flex items-center gap-2 md:gap-3 group border-2 border-white/30 animate-pulse hover:animate-none ring-2 ring-primary-400/50"
+          title="View Market Context - Real-time market indicators and analysis"
         >
-          <span className="text-2xl">📊</span>
-          <span className="hidden group-hover:inline-block font-semibold text-sm whitespace-nowrap">Market Context</span>
+          <BarChart3 className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" />
+          <span className="font-bold text-sm md:text-base whitespace-nowrap">Market Context</span>
         </button>
       )}
 
@@ -845,7 +893,7 @@ export default function App() {
 
       {/* Main app / landing */}
       {!showFaq && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
-        <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "max-w-7xl mx-auto px-4" : ""}`}>
+        <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
           {view === "app" ? (
             <>
               <Header
@@ -854,7 +902,7 @@ export default function App() {
                 onSignOut={handleSignOut}
                 onBetaModalOpen={() => setIsBetaModalOpen(true)}
               />
-              <main className="flex-grow">{renderMainApp()}</main>
+              <main className="flex-grow w-full">{renderMainApp()}</main>
             </>
           ) : (
             <>

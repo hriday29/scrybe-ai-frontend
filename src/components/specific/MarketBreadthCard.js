@@ -55,16 +55,16 @@ const MarketBreadthCard = ({ breadthData }) => {
   const breadthBarWidth = bullish_breadth_pct;
 
   return (
-    <div className="bg-white dark:bg-neutral-900 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-neutral-700 shadow-lg">
+    <div className="bg-white dark:bg-neutral-900 backdrop-blur-sm rounded-2xl p-4 md:p-5 border border-gray-200 dark:border-neutral-700 shadow-lg">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg">
-            <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="p-1.5 md:p-2 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg">
+            <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Market Breadth Indicators</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Market Breadth Indicators</h3>
+            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
               Analyzing {total_stocks_analyzed || 0} stocks in the Smallcap 250 universe
             </p>
           </div>
@@ -77,15 +77,15 @@ const MarketBreadthCard = ({ breadthData }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Advance/Decline Ratio */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Advance/Decline Ratio</span>
+              <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">Advance/Decline Ratio</span>
             </div>
-            <span className={`text-xl font-bold ${getADColor(advance_decline_ratio)}`}>
+            <span className={`text-lg md:text-xl font-bold ${getADColor(advance_decline_ratio)}`}>
               {advance_decline_ratio.toFixed(2)}
             </span>
           </div>
@@ -116,10 +116,10 @@ const MarketBreadthCard = ({ breadthData }) => {
         </div>
 
         {/* New Highs/Lows */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">52-Week Highs vs Lows</span>
-            <span className={`text-xl font-bold ${getADColor(high_low_ratio)}`}>
+            <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">52-Week Highs vs Lows</span>
+            <span className={`text-lg md:text-xl font-bold ${getADColor(high_low_ratio)}`}>
               {high_low_ratio.toFixed(1)}x
             </span>
           </div>
@@ -128,7 +128,7 @@ const MarketBreadthCard = ({ breadthData }) => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-600 dark:text-gray-400">New 52W Highs</span>
-              <span className="text-sm font-semibold text-green-600 dark:text-green-400">{new_highs_52w}</span>
+              <span className="text-xs md:text-sm font-semibold text-green-600 dark:text-green-400">{new_highs_52w}</span>
             </div>
             <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
@@ -137,9 +137,9 @@ const MarketBreadthCard = ({ breadthData }) => {
               />
             </div>
 
-            <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center justify-between mt-2">
               <span className="text-xs text-gray-600 dark:text-gray-400">New 52W Lows</span>
-              <span className="text-sm font-semibold text-red-600 dark:text-red-400">{new_lows_52w}</span>
+              <span className="text-xs md:text-sm font-semibold text-red-600 dark:text-red-400">{new_lows_52w}</span>
             </div>
             <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
@@ -151,13 +151,13 @@ const MarketBreadthCard = ({ breadthData }) => {
         </div>
 
         {/* Bullish Breadth Percentage */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Bullish Breadth</span>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">{bullish_breadth_pct.toFixed(1)}%</span>
+            <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">Bullish Breadth</span>
+            <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{bullish_breadth_pct.toFixed(1)}%</span>
           </div>
 
-          <div className="relative h-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="relative h-5 md:h-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className={`absolute left-0 top-0 h-full transition-all duration-500 ${
                 bullish_breadth_pct > 50 ? 'bg-green-500' : 'bg-red-500'
@@ -173,16 +173,16 @@ const MarketBreadthCard = ({ breadthData }) => {
         </div>
 
         {/* Sector Rotation Strength */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Sector Rotation</span>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getRotationColor(sector_rotation_strength)}`}>
+            <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">Sector Rotation</span>
+            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getRotationColor(sector_rotation_strength)}`}>
               {sector_rotation_strength || 'Neutral'}
             </span>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-3 space-y-2">
-            <div className="text-xs text-gray-700 dark:text-gray-400">
+          <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 space-y-1">
+            <div className="text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
               {sector_rotation_strength === 'Strong' && (
                 <>
                   <span className="text-green-600 dark:text-green-400 font-medium">Strong rotation:</span> Many stocks hitting new highs
@@ -212,13 +212,13 @@ const MarketBreadthCard = ({ breadthData }) => {
       </div>
 
       {/* Bottom Insight */}
-      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-neutral-700">
-        <div className="flex items-start gap-3">
-          <div className="p-1.5 bg-purple-500/10 dark:bg-purple-500/20 rounded-lg mt-0.5">
-            <Activity className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-neutral-700">
+        <div className="flex items-start gap-2">
+          <div className="p-1 bg-purple-500/10 dark:bg-purple-500/20 rounded-lg mt-0.5 flex-shrink-0">
+            <Activity className="w-3 h-3 md:w-4 md:h-4 text-purple-600 dark:text-purple-400" />
           </div>
           <div className="flex-1">
-            <div className="text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">What This Means</div>
+            <div className="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">What This Means</div>
             <p className="text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
               {advance_decline_ratio > 1.5 && bullish_breadth_pct > 60 ? (
                 <>

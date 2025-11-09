@@ -48,16 +48,16 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="w-full"
         >
-            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 backdrop-blur-xl rounded-2xl p-6 shadow-lg">
+            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 backdrop-blur-xl rounded-2xl p-4 md:p-5 shadow-lg">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
-                            <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="p-1.5 md:p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                            <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Sector Performance</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Where the AI is hunting opportunities</p>
+                            <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Sector Performance</h3>
+                            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Where the AI is hunting opportunities</p>
                         </div>
                     </div>
 
@@ -80,11 +80,11 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                 </div>
 
                 {/* Benchmark Reference */}
-                <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
                     <div className="flex items-center justify-between">
                         <div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Nifty 50 Benchmark</span>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                            <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">Nifty 50 Benchmark</span>
+                            <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-1">
                                 {benchmarkPerf >= 0 ? '+' : ''}{benchmarkPerf.toFixed(2)}%
                             </p>
                         </div>
@@ -98,7 +98,7 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                 </div>
 
                 {/* Heatmap Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                     {sortedSectors.map((sector, index) => {
                         const performance = getPerformance(sector);
                         const colorClass = getColorClass(performance, benchmarkPerf);
@@ -128,18 +128,18 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                                     </div>
                                 )}
 
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex-1">
-                                        <h4 className="font-bold text-gray-900 dark:text-gray-100 text-sm mb-1">
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-bold text-gray-900 dark:text-gray-100 text-xs md:text-sm mb-1 truncate">
                                             {sector.name.replace('NIFTY ', '')}
                                         </h4>
                                         <div className="flex items-center gap-1">
                                             {getStrengthIcon(sector.relative_strength)}
-                                            <span className="text-xs text-gray-700 dark:text-gray-600">{sector.relative_strength}</span>
+                                            <span className="text-xs text-gray-700 dark:text-gray-600">{sector.relative_strength || 'Neutral'}</span>
                                         </div>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                    <div className="text-right flex-shrink-0 ml-2">
+                                        <p className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">
                                             {performance >= 0 ? '+' : ''}{performance.toFixed(1)}%
                                         </p>
                                     </div>
@@ -149,16 +149,16 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                                 <div className="space-y-1">
                                     <div className="flex justify-between text-xs">
                                         <span className="text-gray-700 dark:text-gray-600">Momentum</span>
-                                        <span className="font-semibold text-gray-900 dark:text-gray-100">{sector.momentum_score}/10</span>
+                                        <span className="font-semibold text-gray-900 dark:text-gray-100">{sector.momentum_score || 0}/10</span>
                                     </div>
-                                    <div className="h-1.5 bg-gray-200 dark:bg-gray-100 rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
                                             className={`h-full rounded-full transition-all duration-500 ${
-                                                sector.momentum_score >= 7 ? 'bg-green-500' :
-                                                sector.momentum_score >= 5 ? 'bg-yellow-500' :
+                                                (sector.momentum_score || 0) >= 7 ? 'bg-green-500' :
+                                                (sector.momentum_score || 0) >= 5 ? 'bg-yellow-500' :
                                                 'bg-red-500'
                                             }`}
-                                            style={{ width: `${sector.momentum_score * 10}%` }}
+                                            style={{ width: `${Math.min((sector.momentum_score || 0) * 10, 100)}%` }}
                                         />
                                     </div>
                                 </div>
@@ -168,39 +168,43 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                 </div>
 
                 {/* Summary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-green-50 dark:bg-green-500/10 border border-green-400 dark:border-green-500/30 rounded-lg p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div className="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
-                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-700">Strongest Sectors</span>
+                            <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            <span className="text-xs md:text-sm font-semibold text-gray-800 dark:text-gray-300">Strongest Sectors</span>
                         </div>
                         <div className="space-y-1">
-                            {top_3.map((name, idx) => (
-                                <div key={idx} className="text-green-700 dark:text-green-300 text-sm font-medium">
+                            {top_3 && top_3.length > 0 ? top_3.map((name, idx) => (
+                                <div key={idx} className="text-green-700 dark:text-green-300 text-xs md:text-sm font-medium">
                                     {idx + 1}. {name.replace('NIFTY ', '')}
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="text-gray-500 dark:text-gray-400 text-xs">No data available</div>
+                            )}
                         </div>
                     </div>
 
-                    <div className="bg-red-50 dark:bg-red-500/10 border border-red-400 dark:border-red-500/30 rounded-lg p-4">
+                    <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-2">
-                            <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
-                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-700">Weakest Sectors</span>
+                            <TrendingDown className="w-4 h-4 text-red-600 dark:text-red-400" />
+                            <span className="text-xs md:text-sm font-semibold text-gray-800 dark:text-gray-300">Weakest Sectors</span>
                         </div>
                         <div className="space-y-1">
-                            {bottom_3.map((name, idx) => (
-                                <div key={idx} className="text-red-700 dark:text-red-300 text-sm font-medium">
+                            {bottom_3 && bottom_3.length > 0 ? bottom_3.map((name, idx) => (
+                                <div key={idx} className="text-red-700 dark:text-red-300 text-xs md:text-sm font-medium">
                                     {idx + 1}. {name.replace('NIFTY ', '')}
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="text-gray-500 dark:text-gray-400 text-xs">No data available</div>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Info Footer */}
-                <div className="pt-4 border-t border-gray-200 dark:border-neutral-700 flex items-start gap-2">
-                    <Info className="w-4 h-4 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+                <div className="pt-3 border-t border-gray-200 dark:border-neutral-700 flex items-start gap-2">
+                    <Info className="w-3 h-3 md:w-4 md:h-4 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
                         Sectors marked as <span className="text-green-700 dark:text-green-400 font-semibold">Strong</span> outperform the Nifty 50 
                         benchmark (potential BUY opportunities), while <span className="text-red-700 dark:text-red-400 font-semibold">Weak</span> sectors 

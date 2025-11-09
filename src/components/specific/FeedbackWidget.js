@@ -86,11 +86,11 @@ const FeedbackWidget = () => {
 
   return (
     <>
-      {/* Floating Trigger Button */}
+      {/* Floating Trigger Button - Repositioned to avoid overlap */}
       <button
         onClick={handleOpen}
         aria-label="Open feedback widget"
-        className="hidden md:flex fixed bottom-5 right-5 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 backdrop-blur-lg text-gray-900 dark:text-gray-100 text-sm font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-gray-50 dark:hover:bg-neutral-700 hover:shadow-xl transition-all items-center gap-2 z-50"
+        className="hidden md:flex fixed bottom-5 right-5 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 backdrop-blur-lg text-gray-900 dark:text-gray-100 text-sm font-semibold px-4 py-2 rounded-lg shadow-lg hover:bg-gray-50 dark:hover:bg-neutral-700 hover:shadow-xl transition-all items-center gap-2 z-30"
       >
         <MessageSquare size={16} />
         Feedback

@@ -268,8 +268,8 @@ const StockSelector = ({ onAnalyze }) => {
           </button>
         )}
 
-        <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-20 md:pt-12 md:pb-24">
-          <div className="w-full max-w-3xl mx-auto px-4">
+        <div className="relative z-10 w-full pt-8 pb-20 md:pt-12 md:pb-24">
+          <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
             <SectionTitle
               title="Ranked Analysis Universe"
               subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
