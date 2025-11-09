@@ -84,7 +84,9 @@ const StockSelector = ({ onAnalyze }) => {
     const [error, setError] = useState(null);
     const [marketContext, setMarketContext] = useState(null);
     const [isMarketDrawerOpen, setIsMarketDrawerOpen] = useState(false);
+    const [isLoadingMarketContext, setIsLoadingMarketContext] = useState(false);
   
+    // Fetch stocks list
     useEffect(() => {
       const fetchStocks = async () => {
         try {
@@ -94,18 +96,9 @@ const StockSelector = ({ onAnalyze }) => {
           
           const analysisData = await response.json();
           console.log('📊 Received analysis data:', analysisData.length, 'stocks');
-          console.log('📊 First stock data:', analysisData[0]);
           
           analysisData.sort((a, b) => (b.scrybeScore || 0) - (a.scrybeScore || 0));
           setStocks(analysisData);
-          
-          // Extract market context from first item
-          if (analysisData.length > 0 && analysisData[0].market_context) {
-            console.log('🌍 Market context found:', analysisData[0].market_context);
-            setMarketContext(analysisData[0].market_context);
-          } else {
-            console.warn('⚠️ No market_context in API response');
-          }
         } catch (err) {
           console.error('❌ Error fetching stock data:', err);
           setError(new Error("Failed to load analysis data."));
@@ -115,6 +108,42 @@ const StockSelector = ({ onAnalyze }) => {
       };
       fetchStocks();
     }, []);
+
+    // Fetch market context on-demand when drawer opens
+    const fetchMarketContext = useCallback(async () => {
+      setIsLoadingMarketContext(true);
+      try {
+        console.log('🌍 Fetching market context from:', `${API_BASE_URL}/api/market-context`);
+        const response = await fetch(`${API_BASE_URL}/api/market-context`);
+        if (!response.ok) {
+          console.warn('⚠️ Failed to fetch market context');
+          setMarketContext({ error: 'Failed to fetch market context. Please try again.' });
+          return;
+        }
+        
+        const contextData = await response.json();
+        console.log('🌍 Market context received:', contextData);
+        
+        if (contextData.error) {
+          console.warn('⚠️ Market context error:', contextData.error);
+          setMarketContext(contextData);
+        } else {
+          setMarketContext(contextData);
+        }
+      } catch (err) {
+        console.error('❌ Error fetching market context:', err);
+        setMarketContext({ error: 'An error occurred while fetching market context.' });
+      } finally {
+        setIsLoadingMarketContext(false);
+      }
+    }, []);
+
+    // Fetch market context when drawer opens (only if not already loaded)
+    useEffect(() => {
+      if (isMarketDrawerOpen && !marketContext && !isLoadingMarketContext) {
+        fetchMarketContext();
+      }
+    }, [isMarketDrawerOpen, marketContext, isLoadingMarketContext, fetchMarketContext]);
   
     const [searchTerm, setSearchTerm] = useState("");
   
@@ -160,29 +189,64 @@ const StockSelector = ({ onAnalyze }) => {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="fixed top-0 right-0 bottom-0 w-full max-w-2xl bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto"
+                className="fixed top-0 right-0 bottom-0 w-full max-w-4xl bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 flex justify-between items-center z-10">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <BarChart3 className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                    Market Context
-                  </h2>
+                {/* Sticky Header */}
+                <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 md:p-6 flex justify-between items-start gap-4 z-10 shadow-sm backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+                  <div className="flex-1">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-primary-600 dark:text-primary-400" />
+                      Market Context
+                    </h2>
+                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Real-time market indicators, sector performance, and breadth analysis
+                    </p>
+                  </div>
                   <button
                     onClick={() => setIsMarketDrawerOpen(false)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-lg transition-colors flex-shrink-0"
                     aria-label="Close drawer"
                   >
-                    <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <X className="w-5 h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-400" />
                   </button>
                 </div>
 
-                <div className="p-6 space-y-6">
-                  <MarketRegimeCard marketContext={marketContext} />
-                  {marketContext.sector_performance && (
-                    <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
-                  )}
-                  {marketContext.breadth_indicators && (
-                    <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
+                {/* Drawer Content */}
+                <div className="p-4 md:p-6 space-y-6 pb-8">
+                  {isLoadingMarketContext ? (
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mb-4"></div>
+                      <span className="text-gray-600 dark:text-gray-400">Loading market context...</span>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">Fetching latest market data</p>
+                    </div>
+                  ) : marketContext && !marketContext.error ? (
+                    <>
+                      <MarketRegimeCard marketContext={marketContext} />
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {marketContext.sector_performance && (
+                          <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
+                        )}
+                        {marketContext.breadth_indicators && (
+                          <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-xl p-8 text-center max-w-2xl mx-auto">
+                      <AlertCircle className="w-16 h-16 text-yellow-600 dark:text-yellow-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        Market Context Unavailable
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {marketContext?.error || "Market context data is not available. The daily analysis may not have been run yet."}
+                      </p>
+                      <button
+                        onClick={() => fetchMarketContext()}
+                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
+                      >
+                        Retry
+                      </button>
+                    </div>
                   )}
                 </div>
               </motion.div>
@@ -190,58 +254,87 @@ const StockSelector = ({ onAnalyze }) => {
           )}
         </AnimatePresence>
 
-        {/* Floating Market Context Button */}
-        {marketContext && !isLoading && (
+        {/* Floating Market Context Button - Positioned to avoid FeedbackWidget overlap */}
+        {!isLoading && (
           <button
             onClick={() => setIsMarketDrawerOpen(true)}
-            className="fixed bottom-6 right-24 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white px-5 py-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-3 group"
+            className="fixed bottom-6 right-32 md:right-40 bg-gradient-to-br from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white px-4 py-3 md:px-5 md:py-4 rounded-full shadow-2xl z-30 transition-all hover:scale-110 flex items-center gap-2 md:gap-3 group"
             title="View Market Context"
           >
-            <BarChart3 className="w-6 h-6" />
-            <span className="hidden group-hover:inline-block font-semibold text-sm whitespace-nowrap">
+            <BarChart3 className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="hidden lg:inline-block font-semibold text-sm whitespace-nowrap">
               Market Context
             </span>
           </button>
         )}
 
-        <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-12 md:pt-12 md:pb-16">
-          <div className="w-full max-w-2xl mx-auto px-4">
+        <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-20 md:pt-12 md:pb-24">
+          <div className="w-full max-w-3xl mx-auto px-4">
             <SectionTitle
               title="Ranked Analysis Universe"
               subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
             />
 
             {/* Stock Search and List */}
-            <div className="mt-8 w-full">
+            <div className="mt-10 w-full space-y-4">
+              {/* Search Bar */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                  <Search className="w-5 h-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                 </div>
                 <input
                   type="text"
                   aria-label="Search stocks"
-                  placeholder={isLoading ? "Loading ranked list..." : "Search for a stock..."}
+                  placeholder={isLoading ? "Loading ranked list..." : "Search for a stock by name or ticker..."}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white dark:bg-neutral-900 backdrop-blur-none border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-lg rounded-xl py-4 pl-12 pr-4 transition-all focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 shadow-sm"
+                  className="w-full bg-white dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-base md:text-lg rounded-xl py-3 md:py-4 pl-12 pr-4 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:border-primary-400 shadow-md hover:shadow-lg"
                   disabled={isLoading}
                 />
               </div>
       
-              <GlassCard className="mt-4 max-h-96 overflow-y-auto p-2 space-y-1 dark:bg-neutral-900 dark:border-neutral-700">
-                {isLoading && <p className="text-gray-600 dark:text-gray-400 text-center p-4">Loading...</p>}
-                {!isLoading && filteredStocks.length === 0 && <p className="text-gray-600 dark:text-gray-400 text-center p-4">No setups found for today.</p>}
+              {/* Results List */}
+              <GlassCard className="max-h-[32rem] overflow-y-auto divide-y divide-gray-100 dark:divide-neutral-800 shadow-lg">
+                {isLoading && (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                    <span className="ml-3 text-gray-600 dark:text-gray-400">Loading stocks...</span>
+                  </div>
+                )}
+                {!isLoading && filteredStocks.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">No stocks found.</p>
+                    <p className="text-gray-500 dark:text-gray-500 text-sm mt-2">Try adjusting your search term.</p>
+                  </div>
+                )}
                 {!isLoading && filteredStocks.map((stock, index) => (
-                    <button key={stock.ticker} onClick={() => onAnalyze(stock.ticker)} className="w-full text-left p-3 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-gray-500 dark:text-gray-400 text-sm w-8">{index + 1}.</span>
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">{stock.companyName}</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{stock.ticker}</span>
+                    <button 
+                      key={stock.ticker} 
+                      onClick={() => onAnalyze(stock.ticker)} 
+                      className="w-full text-left p-4 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors flex justify-between items-center group"
+                    >
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <span className="font-mono text-gray-400 dark:text-gray-500 text-sm w-8 flex-shrink-0">{index + 1}.</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 truncate">
+                            {stock.companyName}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{stock.ticker}</div>
+                        </div>
                       </div>
-                      <ScoreBadge score={stock.scrybeScore} />
+                      <div className="ml-4 flex-shrink-0">
+                        <ScoreBadge score={stock.scrybeScore} />
+                      </div>
                     </button>
                 ))}
               </GlassCard>
+
+              {/* Info Message */}
+              {!isLoading && filteredStocks.length > 0 && (
+                <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                  Showing {filteredStocks.length} of {stocks?.length || 0} stocks. Click any stock to view detailed analysis.
+                </p>
+              )}
             </div>
           </div>
         </div>

@@ -48,29 +48,29 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="w-full"
         >
-            <div className="bg-white border border-gray-200 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
+            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 backdrop-blur-xl rounded-2xl p-6 shadow-lg">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-purple-500/10">
-                            <BarChart3 className="w-6 h-6 text-purple-400" />
+                        <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                            <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-bold text-gray-900">Sector Performance</h3>
-                            <p className="text-sm text-gray-600">Where the AI is hunting opportunities</p>
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Sector Performance</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Where the AI is hunting opportunities</p>
                         </div>
                     </div>
 
                     {/* Timeframe Selector */}
-                    <div className="flex gap-2 bg-gray-50 rounded-lg p-1">
+                    <div className="flex gap-2 bg-gray-50 dark:bg-neutral-800 rounded-lg p-1">
                         {['1d', '5d', '21d'].map((tf) => (
                             <button
                                 key={tf}
                                 onClick={() => setSelectedTimeframe(tf)}
-                                className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${
+                                className={`px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-semibold transition-all ${
                                     selectedTimeframe === tf
-                                        ? 'bg-purple-500 text-gray-900 shadow-lg'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-purple-500 text-white shadow-lg'
+                                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
                                 }`}
                             >
                                 {tf === '1d' ? '1 Day' : tf === '5d' ? '5 Days' : '21 Days'}
@@ -80,16 +80,16 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                 </div>
 
                 {/* Benchmark Reference */}
-                <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-400 dark:border-blue-500/30 rounded-lg">
+                <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
                     <div className="flex items-center justify-between">
                         <div>
-                            <span className="text-sm text-gray-700 dark:text-gray-600">Nifty 50 Benchmark</span>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Nifty 50 Benchmark</span>
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                                 {benchmarkPerf >= 0 ? '+' : ''}{benchmarkPerf.toFixed(2)}%
                             </p>
                         </div>
                         <div className="text-right">
-                            <span className="text-xs text-gray-600 dark:text-gray-500">
+                            <span className="text-xs text-gray-600 dark:text-gray-400">
                                 {selectedTimeframe === '1d' ? 'Today' : 
                                  selectedTimeframe === '5d' ? 'Last Week' : 'Last Month'}
                             </span>
@@ -199,9 +199,9 @@ const SectorHeatmapCard = ({ sectorPerformance }) => {
                 </div>
 
                 {/* Info Footer */}
-                <div className="pt-4 border-t border-gray-200 dark:border-slate-700/50 flex items-start gap-2">
+                <div className="pt-4 border-t border-gray-200 dark:border-neutral-700 flex items-start gap-2">
                     <Info className="w-4 h-4 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-gray-700 dark:text-gray-600 leading-relaxed">
+                    <p className="text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
                         Sectors marked as <span className="text-green-700 dark:text-green-400 font-semibold">Strong</span> outperform the Nifty 50 
                         benchmark (potential BUY opportunities), while <span className="text-red-700 dark:text-red-400 font-semibold">Weak</span> sectors 
                         underperform (potential SHORT opportunities in bearish regimes). Momentum score indicates recent price velocity.

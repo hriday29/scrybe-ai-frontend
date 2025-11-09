@@ -258,23 +258,7 @@ const StockSelector = ({ onAnalyze }) => {
         />
       </GlassCard>
 
-      {/* ========== MARKET-WIDE CONTEXT (UNIVERSAL INDICATORS) ========== */}
-      {!isLoading && marketContext && (
-        <div className="mt-8 w-full max-w-6xl space-y-6 px-4">
-          {/* Market Regime Card - Shows overall market direction */}
-          <MarketRegimeCard marketContext={marketContext} />
-
-          {/* Sector Performance & Market Breadth - Side by side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {marketContext.sector_performance && (
-              <SectorHeatmapCard sectorPerformance={marketContext.sector_performance} />
-            )}
-            {marketContext.breadth_indicators && (
-              <MarketBreadthCard breadthData={marketContext.breadth_indicators} />
-            )}
-          </div>
-        </div>
-      )}
+      {/* Market context is now shown in a drawer via the floating button */}
 
       {/* Search + results container */}
       <div className="mt-10 w-full max-w-2xl space-y-4">
