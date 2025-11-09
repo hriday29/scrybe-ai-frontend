@@ -16,7 +16,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
       </div>
 
   <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8 md:py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -81,15 +81,15 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-soft-2xl p-8 border border-gray-100 dark:border-neutral-700">
-              <div className="mb-6">
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-soft-2xl p-6 border border-gray-100 dark:border-neutral-700">
+              <div className="mb-4">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
                   Scrybe Score System
                 </h3>
-                <p className="text-center text-base text-gray-600 dark:text-gray-400 mb-3">
+                <p className="text-center text-base text-gray-600 dark:text-gray-400 mb-2">
                   AI-powered scoring: -100 to +100
                 </p>
-                <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-3 mb-4 border border-primary-200 dark:border-primary-700">
+                <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-2.5 mb-3 border border-primary-200 dark:border-primary-700">
                   <p className="text-xs text-center text-primary-900 dark:text-primary-300 leading-relaxed">
                     <strong>±60 Threshold:</strong> High-conviction BUY/SHORT signals ready for execution
                   </p>
@@ -97,17 +97,17 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
               </div>
 
               {/* Score Visualization - Balanced 3 levels */}
-              <div className="space-y-3 mb-5">
+              <div className="space-y-2.5 mb-4">
                 {/* High Conviction BUY */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-xl p-4 border-2 border-green-300 dark:border-green-600">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-xl p-3.5 border-2 border-green-300 dark:border-green-600">
+                  <div className="flex items-center justify-between mb-1.5">
                     <div>
                       <span className="text-base font-bold text-green-900 dark:text-green-300">High Conviction BUY</span>
                       <div className="text-xs text-green-700 dark:text-green-400 mt-0.5">Score +60 to +100</div>
                     </div>
                     <span className="text-3xl font-extrabold text-green-600 dark:text-green-400">+85</span>
                   </div>
-                  <div className="w-full bg-green-200 dark:bg-green-500/30 rounded-full h-2.5 mb-2">
+                  <div className="w-full bg-green-200 dark:bg-green-500/30 rounded-full h-2.5 mb-1.5">
                     <div className="bg-gradient-to-r from-green-600 to-emerald-500 h-2.5 rounded-full shadow-lg" style={{ width: '85%' }} />
                   </div>
                   <p className="text-xs text-green-800 dark:text-green-300 leading-relaxed">
@@ -116,15 +116,15 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 </div>
 
                 {/* Neutral Range */}
-                <div className="bg-gray-50 dark:bg-gray-800/40 rounded-xl p-4 border border-gray-300 dark:border-gray-600">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="bg-gray-50 dark:bg-gray-800/40 rounded-xl p-3.5 border border-gray-300 dark:border-gray-600">
+                  <div className="flex items-center justify-between mb-1.5">
                     <div>
                       <span className="text-base font-bold text-gray-700 dark:text-gray-300">Neutral - Hold</span>
                       <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">Score -59 to +59</div>
                     </div>
                     <span className="text-3xl font-extrabold text-gray-600 dark:text-gray-200">0</span>
                   </div>
-                  <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5 mb-2">
+                  <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5 mb-1.5">
                     <div className="bg-gradient-to-r from-gray-500 to-gray-400 h-2.5 rounded-full shadow-lg" style={{ width: '50%' }} />
                   </div>
                   <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -133,15 +133,15 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
                 </div>
 
                 {/* High Conviction SHORT */}
-                <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-500/10 dark:to-orange-500/10 rounded-xl p-4 border-2 border-red-300 dark:border-red-600">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-500/10 dark:to-orange-500/10 rounded-xl p-3.5 border-2 border-red-300 dark:border-red-600">
+                  <div className="flex items-center justify-between mb-1.5">
                     <div>
                       <span className="text-base font-bold text-red-900 dark:text-red-300">High Conviction SHORT</span>
                       <div className="text-xs text-red-700 dark:text-red-400 mt-0.5">Score -60 to -100</div>
                     </div>
                     <span className="text-3xl font-extrabold text-red-600 dark:text-red-400">-85</span>
                   </div>
-                  <div className="w-full bg-red-200 dark:bg-red-500/30 rounded-full h-2.5 mb-2">
+                  <div className="w-full bg-red-200 dark:bg-red-500/30 rounded-full h-2.5 mb-1.5">
                     <div className="bg-gradient-to-r from-red-600 to-orange-500 h-2.5 rounded-full shadow-lg" style={{ width: '85%' }} />
                   </div>
                   <p className="text-xs text-red-800 dark:text-red-300 leading-relaxed">
@@ -151,7 +151,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
               </div>
 
               {/* Stats - Compact */}
-              <div className="grid grid-cols-3 gap-3 text-center mb-4">
+              <div className="grid grid-cols-3 gap-3 text-center mb-3">
                 <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-3 border border-violet-200 dark:border-violet-700">
                   <div className="text-2xl font-extrabold text-violet-600 dark:text-violet-400">250</div>
                   <div className="text-xs font-bold text-violet-900 dark:text-violet-300">Analyzed</div>
@@ -167,8 +167,8 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
               </div>
 
               {/* Score Factors - Single line without specific indicators */}
-              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 border border-primary-200 dark:border-primary-700">
-                <div className="text-xs font-bold text-primary-900 dark:text-primary-300 mb-1.5">Comprehensive Analysis:</div>
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-2.5 border border-primary-200 dark:border-primary-700">
+                <div className="text-xs font-bold text-primary-900 dark:text-primary-300 mb-1">Comprehensive Analysis:</div>
                 <div className="text-xs text-primary-800 dark:text-primary-300 leading-relaxed">
                   15+ Technical Indicators • AI Sentiment Analysis • Fundamental Metrics • Market Regime Detection
                 </div>

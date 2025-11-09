@@ -33,14 +33,14 @@ const NewLandingPage = ({
         onSignOut={onSignOut}
       />
 
+      {/* Trust Metrics Banner */}
+      <TrustMetricsShowcase />
+
       {/* Hero Section */}
       <HeroSection
         onGetStarted={onGetStarted}
         onWatchDemo={onWatchDemo}
       />
-
-      {/* Trust Metrics Banner - After Hero */}
-      <TrustMetricsShowcase />
 
       {/* Features Section */}
       <section id="features">
