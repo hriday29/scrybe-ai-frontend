@@ -43,6 +43,20 @@ const Gauge = ({ value, label }) => {
                     <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{Math.round(percentage)}</span>
                 </div>
             </div>
+
+            {/* ========== POSITION SIZING CALCULATOR (moved here) ========== */}
+            {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
+                <PositionSizeCard 
+                    tradePlan={{
+                        ...strategy_signal.trade_plan,
+                        entryPrice: strategy_signal.trade_plan.entry_price,
+                        stopLoss: strategy_signal.trade_plan.stop_loss,
+                        target: strategy_signal.trade_plan.target_price,
+                        position_sizing: strategy_signal.trade_plan.position_sizing
+                    }}
+                    analysisData={analysisData}
+                />
+            )}
             <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">{label}</span>
         </div>
     );
@@ -386,19 +400,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
             
-            {/* ========== PHASE 2: POSITION SIZING CALCULATOR ========== */}
-            {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
-                <PositionSizeCard 
-                    tradePlan={{
-                        ...strategy_signal.trade_plan,
-                        entryPrice: strategy_signal.trade_plan.entry_price,
-                        stopLoss: strategy_signal.trade_plan.stop_loss,
-                        target: strategy_signal.trade_plan.target_price,
-                        position_sizing: strategy_signal.trade_plan.position_sizing
-                    }}
-                    analysisData={analysisData}
-                />
-            )}
+            {/* Position sizing moved after Trade Opportunity Overview for better flow */}
 
             {/* ===== UNIFIED TRADE OPPORTUNITY OVERVIEW ===== */}
             <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 space-y-6">
