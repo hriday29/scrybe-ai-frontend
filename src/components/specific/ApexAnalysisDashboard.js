@@ -43,20 +43,6 @@ const Gauge = ({ value, label }) => {
                     <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{Math.round(percentage)}</span>
                 </div>
             </div>
-
-            {/* ========== POSITION SIZING CALCULATOR (moved here) ========== */}
-            {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
-                <PositionSizeCard 
-                    tradePlan={{
-                        ...strategy_signal.trade_plan,
-                        entryPrice: strategy_signal.trade_plan.entry_price,
-                        stopLoss: strategy_signal.trade_plan.stop_loss,
-                        target: strategy_signal.trade_plan.target_price,
-                        position_sizing: strategy_signal.trade_plan.position_sizing
-                    }}
-                    analysisData={analysisData}
-                />
-            )}
             <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">{label}</span>
         </div>
     );
@@ -568,6 +554,20 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     </p>
                 </div>
             </div>
+
+            {/* ========== POSITION SIZING CALCULATOR (moved after Trade Opportunity) ========== */}
+            {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
+                <PositionSizeCard 
+                    tradePlan={{
+                        ...strategy_signal.trade_plan,
+                        entryPrice: strategy_signal.trade_plan.entry_price,
+                        stopLoss: strategy_signal.trade_plan.stop_loss,
+                        target: strategy_signal.trade_plan.target_price,
+                        position_sizing: strategy_signal.trade_plan.position_sizing
+                    }}
+                    analysisData={analysisData}
+                />
+            )}
 
             {/* ========== PHASE 2: TRADE MANAGEMENT CHECKLIST ========== */}
             {strategy_signal && strategy_signal.trade_checklist && (
