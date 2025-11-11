@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ArrowLeft, TrendingUp, AlertCircle, X, BarChart3 } from 'lucide-react';
+import { Search, ArrowLeft, TrendingUp, AlertCircle, X, BarChart3, Activity, Calculator } from 'lucide-react';
 
 // Import child components from their new locations
 import ApexAnalysisDashboard from '../components/specific/ApexAnalysisDashboard.js';
@@ -18,6 +18,7 @@ import VolatilityCard from '../components/specific/VolatilityCard.js';  // Featu
 import MomentumCard from '../components/specific/MomentumCard.js';  // Feature 8/15
 import TradeChecklistCard from '../components/specific/TradeChecklistCard.js';  // Feature 9/15
 import FuturesBasisCard from '../components/specific/FuturesBasisCard.js';  // Feature 10/15
+import CollapsibleSection from '../components/common/CollapsibleSection.js';
 
 // Import config and utils
 import { API_BASE_URL } from '../apiConfig.js';
@@ -517,14 +518,30 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                 <ArrowLeft size={16} />
                 Back to List
               </button>
-              <ApexAnalysisDashboard analysisData={analysisData} />
+<ApexAnalysisDashboard analysisData={analysisData} />
               <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
-                {/* Market-wide indicators (Regime, Sector, Breadth) removed - now shown on main dashboard */}
-                <PriceActionCard priceActionContext={analysisData?.price_action_context} />
+                {/* Keep vitals always visible: insights, analyst verdict, trade plan */}
                 <AIDecisionCard analysisData={analysisData} />
-                <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
-                <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
-                <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} />
+
+                {/* Collapsible sections (hamburger-style) */}
+                <div className="space-y-4">
+                  <CollapsibleSection title="Price Action" icon={TrendingUp}>
+                    <PriceActionCard priceActionContext={analysisData?.price_action_context} />
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="Volatility" icon={Activity}>
+                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="Momentum" icon={BarChart3}>
+                    <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} />
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="Position Sizing Calculator" icon={Calculator}>
+                    <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
+                  </CollapsibleSection>
+                </div>
+
                 <TradeChecklistCard checklistData={analysisData?.trade_checklist} />
                 <FuturesBasisCard basisData={analysisData?.futures_basis_analysis} />
                 <NewsSection newsData={analysisData?.news_context} />
