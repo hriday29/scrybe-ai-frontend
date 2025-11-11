@@ -249,138 +249,60 @@ export default function TrustMetricsShowcase() {
 
   return (
     <>
-      {/* Enhanced Metrics Banner */}
-      <section className="w-full bg-gradient-to-br from-primary-600 via-secondary-600 to-purple-600 py-8 md:py-12 relative overflow-hidden">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
+      {/* Compact Metrics Banner - Expandable */}
+      <section className="w-full bg-gradient-to-r from-primary-600 via-secondary-600 to-purple-600 py-3">
+        <div className="max-w-7xl mx-auto px-6">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="w-full flex flex-col md:flex-row items-center justify-between gap-3 hover:bg-white/5 rounded-xl p-3 transition-all group"
           >
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4 border border-white/30">
-              <Award className="w-5 h-5 text-white" />
-              <span className="text-sm font-bold text-white tracking-wide">BACKTESTING RESULTS</span>
+            {/* Left Side - Metrics */}
+            <div className="flex items-center gap-4 md:gap-8 text-white flex-wrap justify-center md:justify-start">
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4" />
+                <span className="text-xs font-semibold opacity-90">BACKTESTING</span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                <div>
+                  <div className="text-2xl font-bold">+7.59%</div>
+                  <div className="text-xs opacity-75">Sep 2025</div>
+                </div>
+              </div>
+
+              <div className="hidden md:block w-px h-10 bg-white/30" />
+
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <div>
+                  <div className="text-lg font-bold">&lt;15s</div>
+                  <div className="text-xs opacity-75">Analysis</div>
+                </div>
+              </div>
+
+              <div className="hidden md:block w-px h-10 bg-white/30" />
+
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                <div>
+                  <div className="text-lg font-bold">250</div>
+                  <div className="text-xs opacity-75">Stocks/Day</div>
+                </div>
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
-              Proven Performance
-            </h2>
-            <p className="text-white/90 text-sm md:text-base">
-              September 2025 • Real Market Conditions • Verified Results
-            </p>
-          </motion.div>
 
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-            {/* Main Return Metric - Larger */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="md:col-span-1 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-xs font-bold text-gray-600 tracking-wider">RETURNS</div>
-              </div>
-              <div className="text-5xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-1">
-                +7.59%
-              </div>
-              <div className="text-xs text-gray-600 font-medium">Sep 2025 Net Returns</div>
-            </motion.div>
-
-            {/* Analysis Speed */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.15 }}
-              className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-xs font-bold text-gray-600 tracking-wider">SPEED</div>
-              </div>
-              <div className="text-4xl font-extrabold text-gray-900 mb-1">
-                &lt;15s
-              </div>
-              <div className="text-xs text-gray-600 font-medium">Analysis Per Stock</div>
-            </motion.div>
-
-            {/* Daily Coverage */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-xs font-bold text-gray-600 tracking-wider">COVERAGE</div>
-              </div>
-              <div className="text-4xl font-extrabold text-gray-900 mb-1">
-                250
-              </div>
-              <div className="text-xs text-gray-600 font-medium">Stocks Daily Analysis</div>
-            </motion.div>
-
-            {/* Holding Period */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.25 }}
-              className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-gradient-to-br from-rose-600 to-pink-600 rounded-xl">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-xs font-bold text-gray-600 tracking-wider">HOLDING</div>
-              </div>
-              <div className="text-4xl font-extrabold text-gray-900 mb-1">
-                7 days
-              </div>
-              <div className="text-xs text-gray-600 font-medium">Avg Position Duration</div>
-            </motion.div>
-          </div>
-
-          {/* CTA Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-center"
-          >
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-white text-primary-700 font-bold text-lg rounded-full hover:bg-gray-50 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 border-2 border-white/50"
-            >
-              <Award className="w-6 h-6" />
-              View Detailed Performance
+            {/* Right Side - CTA */}
+            <div className="flex items-center gap-2 text-white font-semibold text-sm group-hover:gap-3 transition-all">
+              <span>View Details</span>
               <motion.span
-                animate={{ x: [0, 4, 0] }}
+                animate={{ x: [0, 3, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
                 →
               </motion.span>
-            </button>
-          </motion.div>
+            </div>
+          </button>
         </div>
       </section>
 
