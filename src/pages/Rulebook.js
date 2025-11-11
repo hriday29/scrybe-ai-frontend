@@ -1,173 +1,254 @@
 // src/pages/Rulebook.js
 
 import React from 'react';
-import { ShieldCheckIcon, TargetIcon, ZapIcon, LightbulbIcon, DatabaseIcon, BarChart3Icon, FilterIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldCheckIcon, TargetIcon, ZapIcon, LightbulbIcon, DatabaseIcon, BarChart3Icon, FilterIcon, TrendingUp } from 'lucide-react';
 
 const Rulebook = () => {
-  const Section = ({ title, children }) => (
-    <div className="bg-white border border-gray-200 dark:bg-slate-900 dark:border-slate-700 rounded-2xl p-6 mb-8">
-      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-slate-700 pb-3">{title}</h3>
+  const Section = ({ title, children, delay = 0 }) => (
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay }}
+      className="bg-white border-2 border-gray-200 dark:bg-slate-900 dark:border-slate-700 rounded-2xl p-6 md:p-8 mb-8 shadow-lg hover:shadow-2xl transition-all duration-300"
+    >
+      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-5 border-b-2 border-gradient-to-r from-blue-500 to-indigo-500 pb-4 flex items-center gap-3">
+        <div className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+        {title}
+      </h3>
       <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 text-base">{children}</div>
-    </div>
+    </motion.div>
   );
+
+  const ScoreRange = ({ range, label, color, bgColor }) => (
+    <motion.div
+      whileHover={{ scale: 1.05, y: -5 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className={`${bgColor} p-4 rounded-xl border-2 ${color} shadow-md`}
+    >
+      <strong className={color.replace('border-', 'text-')}>{range}:</strong> {label}
+    </motion.div>
+  );
+
+  const ProcessStep = ({ icon: Icon, title, description, color = "blue" }) => {
+    const colorClasses = {
+      blue: "text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20",
+      cyan: "text-cyan-500 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20",
+      purple: "text-purple-500 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20",
+      pink: "text-pink-500 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20",
+      amber: "text-amber-500 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20",
+      green: "text-green-500 dark:text-green-400 bg-green-50 dark:bg-green-900/20",
+      emerald: "text-emerald-500 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20"
+    };
+    
+    return (
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="flex items-start gap-4"
+      >
+        <div className={`p-3 rounded-xl ${colorClasses[color]} flex-shrink-0 mt-1`}>
+          <Icon className="w-6 h-6" />
+        </div>
+        <div>
+          <h4 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">{title}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 md:p-8 animate-fadeIn">
       {/* HEADER */}
-      <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 text-center">The Scrybe AI Rulebook</h2>
-      <p className="text-lg text-gray-600 dark:text-gray-400 text-center mb-12">
-        Understanding our institutional-grade portfolio management system for the Nifty Smallcap 250 universe.
-      </p>
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-12"
+      >
+        <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 mb-3">
+          The Scrybe AI Rulebook
+        </h2>
+        <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full mb-4"></div>
+        <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          Understanding our institutional-grade portfolio management system for the Nifty Smallcap 250 universe.
+        </p>
+      </motion.div>
 
       {/* CORE CONCEPT */}
-      <Section title="The Core Concept: The Scrybe Score">
+      <Section title="The Core Concept: The Scrybe Score" delay={0.1}>
         <p>
           Instead of just a simple signal, the AI's primary output is the{" "}
-          <strong>Scrybe Score</strong>. It's a single number from{" "}
-          <strong>-100 (high-conviction short)</strong> to{" "}
-          <strong>+100 (high-conviction long)</strong> that represents the holistic quality of a trading setup based on all available data.
+          <strong className="text-blue-600 dark:text-blue-400">Scrybe Score</strong>. It's a single number from{" "}
+          <strong className="text-red-600 dark:text-red-400">-100 (high-conviction short)</strong> to{" "}
+          <strong className="text-green-600 dark:text-green-400">+100 (high-conviction long)</strong> that represents the holistic quality of a trading setup based on all available data.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-center">
-          <div className="bg-green-50 dark:bg-green-500/10 p-3 rounded-lg border border-green-200 dark:border-green-600/40">
-            <strong className="text-green-700 dark:text-green-300">+60 to +100:</strong> High-Conviction BUY
-          </div>
-          <div className="bg-red-50 dark:bg-red-500/10 p-3 rounded-lg border border-red-200 dark:border-red-600/40">
-            <strong className="text-red-700 dark:text-red-300">-60 to -100:</strong> High-Conviction SELL (Short)
-          </div>
-          <div className="md:col-span-2 bg-gray-100 dark:bg-slate-800 p-3 rounded-lg border border-gray-200 dark:border-slate-700">
-            <strong className="text-amber-600 dark:text-amber-400">-59 to +59:</strong> HOLD (Neutral / Low-Conviction / Contradictory Data)
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <ScoreRange 
+            range="+60 to +100"
+            label="High-Conviction BUY"
+            color="border-green-400 dark:border-green-600"
+            bgColor="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20"
+          />
+          <ScoreRange 
+            range="-60 to -100"
+            label="High-Conviction SELL (Short)"
+            color="border-red-400 dark:border-red-600"
+            bgColor="bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-900/20"
+          />
+        </div>
+        
+        <div className="mt-4">
+          <ScoreRange 
+            range="-59 to +59"
+            label="HOLD (Neutral / Low-Conviction / Contradictory Data)"
+            color="border-amber-400 dark:border-amber-600"
+            bgColor="bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-900/20 dark:to-yellow-900/20"
+          />
         </div>
       </Section>
 
       {/* ANALYSIS PROTOCOL */}
-      <Section title="The Analysis Protocol: Data Funnel">
-        <p>
+      <Section title="The Analysis Protocol: Data Funnel" delay={0.2}>
+        <p className="mb-6">
           Every trading day, Scrybe AI analyzes the complete <strong>Nifty Smallcap 250 universe</strong> through a 
           disciplined, institutional-grade pipeline. Out of 250 stocks analyzed daily, only the <strong>top 10 
           highest-conviction setups</strong> are selected for execution based on strict risk management rules:
         </p>
 
-        <div className="space-y-4 mt-4">
-          <div className="flex items-start gap-4">
-            <ZapIcon className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Universe Analysis (250 Stocks)</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Each trading day begins with comprehensive analysis of all 250 stocks in the Nifty Smallcap 250 index, 
-                ensuring no opportunity is missed in this high-growth segment.
-              </p>
-            </div>
-          </div>
+        <div className="space-y-5 mt-6">
+          <ProcessStep 
+            icon={ZapIcon}
+            title="Universe Analysis (250 Stocks)"
+            description="Each trading day begins with comprehensive analysis of all 250 stocks in the Nifty Smallcap 250 index, ensuring no opportunity is missed in this high-growth segment."
+            color="blue"
+          />
 
-          <div className="flex items-start gap-4">
-            <BarChart3Icon className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Market Regime Analysis</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Both Nifty 50 and Nifty Smallcap 250 index trends are analyzed to define the overall market regime 
-                (Bullish, Bearish, or Neutral) and smallcap-specific momentum. This acts as the foundation for all trades.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={BarChart3Icon}
+            title="Market Regime Analysis"
+            description="Both Nifty 50 and Nifty Smallcap 250 index trends are analyzed to define the overall market regime (Bullish, Bearish, or Neutral) and smallcap-specific momentum. This acts as the foundation for all trades."
+            color="cyan"
+          />
 
-          <div className="flex items-start gap-4">
-            <TargetIcon className="w-6 h-6 text-purple-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Sector Analysis & Rotation Detection</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Top-performing sectors within the smallcap universe are identified. Sector rotation patterns are tracked 
-                to identify emerging themes and avoid concentrated exposure.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={TargetIcon}
+            title="Sector Analysis & Rotation Detection"
+            description="Top-performing sectors within the smallcap universe are identified. Sector rotation patterns are tracked to identify emerging themes and avoid concentrated exposure."
+            color="purple"
+          />
 
-          <div className="flex items-start gap-4">
-            <FilterIcon className="w-6 h-6 text-pink-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Quantitative Screening</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                A regime-adaptive screener filters 250 stocks into Momentum, Pullback, or Mean Reversion setups, 
-                with fundamental health checks to ensure quality.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={FilterIcon}
+            title="Quantitative Screening"
+            description="A regime-adaptive screener filters 250 stocks into Momentum, Pullback, or Mean Reversion setups, with fundamental health checks to ensure quality."
+            color="pink"
+          />
 
-          <div className="flex items-start gap-4">
-            <LightbulbIcon className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">AI Deep-Dive Analysis</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                All 250 stocks undergo "Apex Analysis" by Scrybe (powered by advanced AI). Each receives a comprehensive 
-                trade plan, structured insights, and a proprietary Scrybe Score from -100 to +100.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={LightbulbIcon}
+            title="AI Deep-Dive Analysis"
+            description="All 250 stocks undergo 'Apex Analysis' by Scrybe (powered by advanced AI). Each receives a comprehensive trade plan, structured insights, and a proprietary Scrybe Score from -100 to +100."
+            color="amber"
+          />
 
-          <div className="flex items-start gap-4">
-            <ShieldCheckIcon className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Portfolio Selection (Top 10)</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                An institutional-grade Portfolio Manager ranks all signals by conviction and applies strict risk controls: 
-                <strong> max 10 concurrent positions</strong>, <strong>40% sector concentration limit</strong>, and 
-                <strong>2% max risk per stock</strong>. Only the highest-conviction trades that pass all constraints are executed.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={ShieldCheckIcon}
+            title="Portfolio Selection (Top 10)"
+            description="An institutional-grade Portfolio Manager ranks all signals by conviction and applies strict risk controls: max 10 concurrent positions, 40% sector concentration limit, and 2% max risk per stock. Only the highest-conviction trades that pass all constraints are executed."
+            color="green"
+          />
 
-          <div className="flex items-start gap-4">
-            <DatabaseIcon className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">Complete Transparency</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                All 250 analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each 
-                stock was selected or rejected, with clear reasons like "High conviction, sector limit reached" or 
-                "Below conviction threshold". No black boxes.
-              </p>
-            </div>
-          </div>
+          <ProcessStep 
+            icon={DatabaseIcon}
+            title="Complete Transparency"
+            description="All 250 analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each stock was selected or rejected, with clear reasons like 'High conviction, sector limit reached' or 'Below conviction threshold'. No black boxes."
+            color="emerald"
+          />
         </div>
       </Section>
 
       {/* HIGH SCORE */}
-      <Section title="Anatomy of a High Scrybe Score">
-        <p>
+      <Section title="Anatomy of a High Scrybe Score" delay={0.3}>
+        <p className="mb-4">
           A top-grade score (e.g., +85) in the <strong>Nifty Smallcap 250 universe</strong> isn't just about price 
           movement. It represents a powerful confluence of factors specific to emerging growth opportunities:
         </p>
-        <ul className="list-none mt-4 space-y-2">
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>Favorable Market:</strong> Both broad market and smallcap indices show bullish momentum.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>Strong Sector:</strong> The stock's sector is outperforming within the smallcap universe.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>Confirmed Technicals:</strong> Chart patterns show clear momentum with volume confirmation.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>Quality Fundamentals:</strong> Company shows solid business fundamentals despite smallcap classification.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>Portfolio Fit:</strong> Trade passes institutional risk controls (sector limits, position sizing).
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="text-green-400">✅</span>{" "}
-            <strong>No Major Contradictions:</strong> No red flags or negative catalysts detected.
-          </li>
+        <ul className="list-none mt-6 space-y-3">
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>Favorable Market:</strong> Both broad market and smallcap indices show bullish momentum.</span>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>Strong Sector:</strong> The stock's sector is outperforming within the smallcap universe.</span>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>Confirmed Technicals:</strong> Chart patterns show clear momentum with volume confirmation.</span>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>Quality Fundamentals:</strong> Company shows solid business fundamentals despite smallcap classification.</span>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>Portfolio Fit:</strong> Trade passes institutional risk controls (sector limits, position sizing).</span>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
+          >
+            <span className="text-green-500 text-xl">✅</span>
+            <span><strong>No Major Contradictions:</strong> No red flags or negative catalysts detected.</span>
+          </motion.li>
         </ul>
-        <p className="mt-4">
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-lg"
+        >
           When all these conditions align, the AI generates a high Scrybe Score. The Portfolio Manager then ranks 
           all signals and selects only the <strong>top 10 highest-conviction trades</strong> that fit within our 
           institutional risk framework for execution.
-        </p>
+        </motion.p>
       </Section>
     </div>
   );

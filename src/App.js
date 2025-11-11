@@ -308,7 +308,7 @@ const StockSelector = ({ onAnalyze }) => {
 };
 
 // =========================================================================
-// AI Track Record (mobile-first + glass table)
+// AI Track Record (Enhanced institutional design)
 // =========================================================================
 
 const AITrackRecord = () => {
@@ -343,48 +343,124 @@ const AITrackRecord = () => {
   }, []);
 
   const getReasonDisplay = (reason) => {
-    if (!reason) return { text: 'Closed', color: 'bg-gray-200 text-gray-700' };
+    if (!reason) return { 
+      text: 'Closed', 
+      color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+      icon: '⚪'
+    };
     const lower = reason.toLowerCase();
-    if (lower.includes('target hit')) return { text: 'Target Hit', color: 'bg-green-100 text-green-700' };
-    if (lower.includes('stop-loss hit')) return { text: 'Stop-Loss Hit', color: 'bg-red-100 text-red-700' };
-    if (lower.includes('time exit')) return { text: 'Time Exit', color: 'bg-amber-100 text-amber-700' };
-    return { text: 'Closed', color: 'bg-gray-200 text-gray-700' };
+    if (lower.includes('target hit')) return { 
+      text: 'Target Hit', 
+      color: 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-300 border border-green-300 dark:border-green-700',
+      icon: '🎯'
+    };
+    if (lower.includes('stop-loss hit')) return { 
+      text: 'Stop-Loss Hit', 
+      color: 'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 dark:from-red-900/30 dark:to-rose-900/30 dark:text-red-300 border border-red-300 dark:border-red-700',
+      icon: '🛑'
+    };
+    if (lower.includes('time exit')) return { 
+      text: 'Time Exit', 
+      color: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 dark:from-amber-900/30 dark:to-yellow-900/30 dark:text-amber-300 border border-amber-300 dark:border-amber-700',
+      icon: '⏰'
+    };
+    return { 
+      text: 'Closed', 
+      color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+      icon: '⚪'
+    };
   };
 
-  if (error) return <div className="text-red-600 text-center p-8">Error loading track record: {error}</div>;
-  if (!trackRecordData) return <div className="text-center p-8 text-gray-600 animate-pulse">Loading AI Track Record...</div>;
+  if (error) return (
+    <div className="text-center p-12 max-w-2xl mx-auto">
+      <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8">
+        <div className="text-red-600 dark:text-red-400 text-xl font-semibold mb-2">Error loading track record</div>
+        <p className="text-red-500 dark:text-red-400">{error}</p>
+      </div>
+    </div>
+  );
+  
+  if (!trackRecordData) return (
+    <div className="text-center p-12">
+      <div className="relative inline-block mb-4">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-neutral-800"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 dark:border-t-blue-400 border-r-transparent border-b-transparent border-l-transparent absolute top-0 left-0"></div>
+      </div>
+      <div className="text-gray-600 dark:text-gray-400 font-medium">Loading AI Track Record...</div>
+    </div>
+  );
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8">
-      <SectionTitle title="AI Performance Record" subtitle="A transparent log of all closed trades from the live engine." />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <SectionTitle 
+          title="AI Performance Record" 
+          subtitle="A transparent log of all closed trades from the live engine." 
+        />
+      </motion.div>
 
       <GlassCard className="mt-8 overflow-hidden">
         {/* Mobile cards */}
         <div className="md:hidden">
           {trackRecordData.length > 0 ? (
-            trackRecordData.map((trade) => {
+            trackRecordData.map((trade, index) => {
               const reasonDisplay = getReasonDisplay(trade.closing_reason);
-              const returnColor = trade.net_return_pct >= 0 ? 'text-green-600' : 'text-red-600';
+              const returnColor = trade.net_return_pct >= 0 
+                ? 'text-green-600 dark:text-green-400' 
+                : 'text-red-600 dark:text-red-400';
+              const signalColor = trade.signal === 'BUY' 
+                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300';
+              
               return (
-                <div key={trade._id} className="p-4 border-b border-gray-200 last:border-b-0">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="font-semibold text-gray-900">
-                      {trade.ticker} ({trade.signal})
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${reasonDisplay.color}`}>
+                <motion.div 
+                  key={trade._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="p-5 border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors"
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <div>
+                      <div className="font-bold text-lg text-gray-900 dark:text-white">{trade.ticker}</div>
+                      <span className={`inline-block mt-1 px-3 py-1 rounded-lg text-xs font-semibold ${signalColor}`}>
+                        {trade.signal}
+                      </span>
+                    </div>
+                    <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} flex items-center gap-1.5`}>
+                      <span>{reasonDisplay.icon}</span>
                       {reasonDisplay.text}
                     </span>
                   </div>
-                  <div className="text-sm space-y-2">
-                    <div className="flex justify-between"><span className="text-gray-600">Net Return</span><span className={`font-mono font-semibold ${returnColor}`}>{trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%</span></div>
-                    <div className="flex justify-between"><span className="text-gray-600">Days Held</span><span className="text-gray-700">{trade.days_held}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-600">Closed On</span><span className="text-gray-700">{new Date(trade.close_date).toLocaleDateString()}</span></div>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Net Return</div>
+                      <div className={`font-mono font-bold text-lg ${returnColor}`}>
+                        {trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Days Held</div>
+                      <div className="text-gray-900 dark:text-white font-bold text-lg">{trade.days_held}</div>
+                    </div>
+                    <div className="col-span-2 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Closed On</div>
+                      <div className="text-gray-900 dark:text-white font-semibold">{new Date(trade.close_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })
           ) : (
-            <div className="text-center text-gray-500 py-16">No performance data has been recorded yet.</div>
+            <div className="text-center text-gray-500 dark:text-gray-400 py-20">
+              <div className="text-6xl mb-4">📊</div>
+              <div className="text-lg font-semibold mb-2">No performance data yet</div>
+              <p className="text-sm">Track record will appear here once trades are closed</p>
+            </div>
           )}
         </div>
 
@@ -392,10 +468,10 @@ const AITrackRecord = () => {
         <div className="hidden md:block">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-gray-50">
+              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-800 dark:to-neutral-900">
                 <tr>
                   {['Ticker', 'Signal', 'Open Date', 'Close Date', 'Days Held', 'Closing Reason', 'Net Return'].map((h) => (
-                    <th key={h} className="p-4 text-sm font-semibold text-gray-700 tracking-wider">
+                    <th key={h} className="p-4 text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wider uppercase">
                       {h}
                     </th>
                   ))}
@@ -403,25 +479,47 @@ const AITrackRecord = () => {
               </thead>
               <tbody>
                 {trackRecordData.length > 0 ? (
-                  trackRecordData.map((trade) => {
+                  trackRecordData.map((trade, index) => {
                     const reasonDisplay = getReasonDisplay(trade.closing_reason);
-                    const returnColor = trade.net_return_pct >= 0 ? 'text-green-600' : 'text-red-600';
+                    const returnColor = trade.net_return_pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                    const signalColor = trade.signal === 'BUY' 
+                      ? 'text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/30' 
+                      : 'text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30';
                     return (
-                      <tr key={trade._id} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-gray-900 font-semibold">{trade.ticker}</td>
-                        <td className={`p-4 font-semibold ${trade.signal === 'BUY' ? 'text-green-600' : 'text-red-600'}`}>{trade.signal}</td>
-                        <td className="p-4 text-gray-600">{new Date(trade.open_date).toLocaleDateString()}</td>
-                        <td className="p-4 text-gray-600">{new Date(trade.close_date).toLocaleDateString()}</td>
-                        <td className="p-4 text-gray-600">{trade.days_held}</td>
-                        <td className="p-4"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${reasonDisplay.color}`}>{reasonDisplay.text}</span></td>
-                        <td className={`p-4 font-mono font-semibold ${returnColor}`}>{trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%</td>
-                      </tr>
+                      <motion.tr 
+                        key={trade._id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                        className="border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-300"
+                      >
+                        <td className="p-4 text-gray-900 dark:text-white font-bold">{trade.ticker}</td>
+                        <td className="p-4">
+                          <span className={`px-3 py-1 rounded-lg text-sm font-bold ${signalColor}`}>
+                            {trade.signal}
+                          </span>
+                        </td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400">{new Date(trade.open_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400">{new Date(trade.close_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400 font-semibold">{trade.days_held}</td>
+                        <td className="p-4">
+                          <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5`}>
+                            <span>{reasonDisplay.icon}</span>
+                            {reasonDisplay.text}
+                          </span>
+                        </td>
+                        <td className={`p-4 font-mono font-bold text-lg ${returnColor}`}>
+                          {trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%
+                        </td>
+                      </motion.tr>
                     );
                   })
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center text-gray-500 py-16">
-                      No performance data has been recorded yet.
+                    <td colSpan="7" className="text-center py-20">
+                      <div className="text-6xl mb-4">📊</div>
+                      <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No performance data yet</div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Track record will appear here once trades are closed</p>
                     </td>
                   </tr>
                 )}
