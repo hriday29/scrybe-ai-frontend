@@ -252,7 +252,6 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                     distance_to_nearest_resistance_pct: safe_technicals.distance_to_nearest_resistance_pct,
                                     price_position: safe_technicals.price_position
                                 }}
-                            } }
                                 hideTitle={true}
                             />
                         )}
