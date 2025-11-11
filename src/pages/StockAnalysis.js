@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ArrowLeft, TrendingUp, AlertCircle, X, BarChart3, Activity, Calculator } from 'lucide-react';
+import { Search, ArrowLeft, TrendingUp, AlertCircle, X, BarChart3, Activity, Calculator, Layers } from 'lucide-react';
 
 // Import child components from their new locations
 import ApexAnalysisDashboard from '../components/specific/ApexAnalysisDashboard.js';
@@ -523,24 +523,24 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                 {/* Keep vitals always visible: insights, analyst verdict, trade plan */}
                 <AIDecisionCard analysisData={analysisData} />
 
-                {/* Collapsible sections (hamburger-style) */}
-                <div className="space-y-4">
-                  <CollapsibleSection title="Price Action" icon={TrendingUp}>
+                {/* Grouped technicals to avoid scatter, keep sizing outside */}
+                <CollapsibleSection title="Technical Analysis (Price Action, Momentum, Volatility)" icon={Layers}>
+                  <div className="space-y-6">
+                    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-4">
+                      <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Why these matter</h4>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                        <li><span className="font-medium">Price Action</span> frames the 52-week context and key levels to anchor risk/reward.</li>
+                        <li><span className="font-medium">Momentum</span> assesses follow-through and timing via ADX/MACD/RSI/volume.</li>
+                        <li><span className="font-medium">Volatility</span> estimates expected swing and informs stop width and expectations.</li>
+                      </ul>
+                    </div>
                     <PriceActionCard priceActionContext={analysisData?.price_action_context} />
-                  </CollapsibleSection>
-
-                  <CollapsibleSection title="Volatility" icon={Activity}>
-                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
-                  </CollapsibleSection>
-
-                  <CollapsibleSection title="Momentum" icon={BarChart3}>
                     <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} />
-                  </CollapsibleSection>
+                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
+                  </div>
+                </CollapsibleSection>
 
-                  <CollapsibleSection title="Position Sizing Calculator" icon={Calculator}>
-                    <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
-                  </CollapsibleSection>
-                </div>
+                <PositionSizeCard tradePlan={analysisData?.trade_plan} analysisData={analysisData} />
 
                 <TradeChecklistCard checklistData={analysisData?.trade_checklist} />
                 <FuturesBasisCard basisData={analysisData?.futures_basis_analysis} />

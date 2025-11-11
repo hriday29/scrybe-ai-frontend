@@ -1,6 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
-import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap, Activity, Calculator } from 'lucide-react';
+import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap, Activity, Calculator, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
 // import MarketRegimeCard from './MarketRegimeCard';
@@ -213,37 +213,64 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 </div>
             </div>
 
-            {/* ========== PHASE 1: PRICE ACTION CONTEXT (52W HIGH/LOW, SUPPORT/RESISTANCE) ========== */}
-            {/* Note: Sector Performance & Market Breadth moved to main dashboard (universal indicators) */}
-            {safe_technicals && safe_technicals.daily_close && (
-                <CollapsibleSection title="Price Action" icon={TrendingUp}>
-                    <PriceActionCard 
-                        priceActionContext={{
-                            current_price: safe_technicals.daily_close,
-                            "52w_high": safe_technicals["52w_high"],
-                            "52w_low": safe_technicals["52w_low"],
-                            distance_from_52w_high_pct: safe_technicals.distance_from_52w_high_pct,
-                            // Calculate distance from 52w low if not provided
-                            distance_from_52w_low_pct: safe_technicals.distance_from_52w_low_pct !== undefined 
-                                ? safe_technicals.distance_from_52w_low_pct
-                                : (safe_technicals["52w_low"] && safe_technicals.daily_close 
-                                    ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / safe_technicals["52w_low"] * 100)
-                                    : null),
-                            // Calculate percentile position in 52w range
-                            price_percentile_52w: safe_technicals.price_percentile_52w !== undefined
-                                ? safe_technicals.price_percentile_52w
-                                : (safe_technicals["52w_high"] && safe_technicals["52w_low"] && safe_technicals.daily_close
-                                    ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / (safe_technicals["52w_high"] - safe_technicals["52w_low"]) * 100)
-                                    : null),
-                            support_levels: safe_technicals.support_levels,
-                            resistance_levels: safe_technicals.resistance_levels,
-                            nearest_support: safe_technicals.nearest_support,
-                            nearest_resistance: safe_technicals.nearest_resistance,
-                            distance_to_nearest_support_pct: safe_technicals.distance_to_nearest_support_pct,
-                            distance_to_nearest_resistance_pct: safe_technicals.distance_to_nearest_resistance_pct,
-                            price_position: safe_technicals.price_position
-                        }}
-                    />
+            {/* Grouped Technicals: Price Action + Momentum + Volatility */}
+            {(safe_technicals || safe_futures) && (
+                <CollapsibleSection title="Technical Analysis (Price Action, Momentum, Volatility)" icon={Layers} defaultOpen={false}>
+                    <div className="space-y-6">
+                        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-4">
+                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Why these matter</h4>
+                            <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                                <li><span className="font-medium">Price Action</span> shows where we sit in the 52-week context and around key support/resistance—helps frame risk and reward.</li>
+                                <li><span className="font-medium">Momentum</span> gauges follow-through and timing using ADX, MACD, RSI, and volume—helps avoid fighting the tape.</li>
+                                <li><span className="font-medium">Volatility</span> sizes the expected swing (ATR, HV)—drives stop width and expectations for path-to-target.</li>
+                            </ul>
+                        </div>
+
+                        {/* Price Action */}
+                        {safe_technicals && safe_technicals.daily_close && (
+                            <PriceActionCard 
+                                priceActionContext={{
+                                    current_price: safe_technicals.daily_close,
+                                    "52w_high": safe_technicals["52w_high"],
+                                    "52w_low": safe_technicals["52w_low"],
+                                    distance_from_52w_high_pct: safe_technicals.distance_from_52w_high_pct,
+                                    distance_from_52w_low_pct: safe_technicals.distance_from_52w_low_pct !== undefined 
+                                        ? safe_technicals.distance_from_52w_low_pct
+                                        : (safe_technicals["52w_low"] && safe_technicals.daily_close 
+                                            ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / safe_technicals["52w_low"] * 100)
+                                            : null),
+                                    price_percentile_52w: safe_technicals.price_percentile_52w !== undefined
+                                        ? safe_technicals.price_percentile_52w
+                                        : (safe_technicals["52w_high"] && safe_technicals["52w_low"] && safe_technicals.daily_close
+                                            ? ((safe_technicals.daily_close - safe_technicals["52w_low"]) / (safe_technicals["52w_high"] - safe_technicals["52w_low"]) * 100)
+                                            : null),
+                                    support_levels: safe_technicals.support_levels,
+                                    resistance_levels: safe_technicals.resistance_levels,
+                                    nearest_support: safe_technicals.nearest_support,
+                                    nearest_resistance: safe_technicals.nearest_resistance,
+                                    distance_to_nearest_support_pct: safe_technicals.distance_to_nearest_support_pct,
+                                    distance_to_nearest_resistance_pct: safe_technicals.distance_to_nearest_resistance_pct,
+                                    price_position: safe_technicals.price_position
+                                }}
+                            />
+                        )}
+
+                        {/* Momentum */}
+                        {safe_technicals && (
+                            <MomentumCard 
+                                momentumData={safe_technicals}
+                                analysisData={analysisData}
+                            />
+                        )}
+
+                        {/* Volatility */}
+                        {safe_futures && (
+                            <VolatilityCard 
+                                volatilityData={safe_futures}
+                                analysisData={analysisData}
+                            />
+                        )}
+                    </div>
                 </CollapsibleSection>
             )}
 
@@ -260,24 +287,10 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             </div>
 
             {/* ========== PHASE 2: MOMENTUM INDICATORS DASHBOARD (ENTRY TIMING) ========== */}
-            {safe_technicals && (
-                <CollapsibleSection title="Momentum" icon={BarChart}>
-                    <MomentumCard 
-                        momentumData={safe_technicals}
-                        analysisData={analysisData}
-                    />
-                </CollapsibleSection>
-            )}
+            {/* Momentum now included in grouped section above */}
 
             {/* ========== PHASE 2: ENHANCED VOLATILITY ANALYSIS ========== */}
-            {safe_futures && (
-                <CollapsibleSection title="Volatility" icon={Activity}>
-                    <VolatilityCard 
-                        volatilityData={safe_futures}
-                        analysisData={analysisData}
-                    />
-                </CollapsibleSection>
-            )}
+            {/* Volatility now included in grouped section above */}
 
             {/* ========== PHASE 2: FUTURES BASIS ANALYSIS (INSTITUTIONAL BIAS) ========== */}
             {safe_futures && safe_futures.futures_spot_basis_percent && safe_futures.futures_spot_basis_percent !== 'N/A' && (
@@ -564,18 +577,16 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
             {/* ========== POSITION SIZING CALCULATOR (moved after Trade Opportunity) ========== */}
             {strategy_signal && strategy_signal.trade_plan && strategy_signal.trade_plan.position_sizing && (
-                <CollapsibleSection title="Position Sizing Calculator" icon={Calculator}>
-                    <PositionSizeCard 
-                        tradePlan={{
-                            ...strategy_signal.trade_plan,
-                            entryPrice: strategy_signal.trade_plan.entry_price,
-                            stopLoss: strategy_signal.trade_plan.stop_loss,
-                            target: strategy_signal.trade_plan.target_price,
-                            position_sizing: strategy_signal.trade_plan.position_sizing
-                        }}
-                        analysisData={analysisData}
-                    />
-                </CollapsibleSection>
+                <PositionSizeCard 
+                    tradePlan={{
+                        ...strategy_signal.trade_plan,
+                        entryPrice: strategy_signal.trade_plan.entry_price,
+                        stopLoss: strategy_signal.trade_plan.stop_loss,
+                        target: strategy_signal.trade_plan.target_price,
+                        position_sizing: strategy_signal.trade_plan.position_sizing
+                    }}
+                    analysisData={analysisData}
+                />
             )}
 
             {/* ========== PHASE 2: TRADE MANAGEMENT CHECKLIST ========== */}
