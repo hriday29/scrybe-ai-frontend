@@ -356,7 +356,16 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             <div className="hidden lg:flex items-center gap-4">
               <div className="text-right">
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Last Updated</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{display_timestamp}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  {display_timestamp || new Date().toLocaleString('en-IN', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true 
+                  })}
+                </p>
               </div>
               {prediction_for_date && (
                 <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-500/10 to-secondary-500/10 dark:from-primary-500/20 dark:to-secondary-500/20 border border-primary-300 dark:border-primary-700">
