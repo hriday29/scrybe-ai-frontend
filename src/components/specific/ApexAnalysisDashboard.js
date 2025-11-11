@@ -296,10 +296,10 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                <div className="lg:col-span-2 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-xl p-6 flex flex-col items-center text-center">
-                    <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full mb-3"><Info className="text-indigo-700 dark:text-indigo-400 h-6 w-6" /></div>
+                <div className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 flex flex-col items-center text-center">
+                    <div className="bg-gray-100 dark:bg-neutral-800 p-3 rounded-full mb-3"><Info className="text-gray-700 dark:text-gray-300 h-6 w-6" /></div>
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">Key Insight</h3>
-                    <p className="text-indigo-800 dark:text-indigo-300">{keyInsight}</p>
+                    <p className="text-gray-700 dark:text-gray-300">{keyInsight}</p>
                 </div>
                 <div className="lg:col-span-3 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">Analyst Verdict</h3>
@@ -323,13 +323,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {/* Technical Snapshot */}
                 <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                        <Zap size={18} className="mr-2 text-blue-400" />Technical Snapshot
+                        <Zap size={18} className="mr-2 text-gray-500" />Technical Snapshot
                     </h3>
                     <div className="flex items-center justify-between flex-1">
                         <Gauge value={rsiValue} label="RSI" />
                         <div className="flex flex-col gap-4 items-start">
-                            <Indicator label="Trend (ADX)" value={adxState} state={adxState === 'Strong Trend' ? 'Bullish' : 'Bearish'} />
-                            <Indicator label="Momentum (MACD)" value="Crossover" state={macdState} />
+                            <Indicator label="Trend (ADX)" value={adxState} state={'Neutral'} />
+                            <Indicator label="Momentum (MACD)" value="Crossover" state={'Neutral'} />
                         </div>
                     </div>
                 </div>
@@ -337,7 +337,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 {/* Options Sentiment */}
                 <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                        <BarChart size={18} className="mr-2 text-purple-400" />Options Sentiment
+                        <BarChart size={18} className="mr-2 text-gray-500" />Options Sentiment
                     </h3>
                     {safe_options.put_call_ratio_oi && safe_options.put_call_ratio_oi !== 'N/A' ? (
                         <div className="flex-1 flex flex-col justify-center space-y-3 text-sm">
@@ -585,8 +585,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 )}
 
                 {/* Summary Flow Explanation */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                    <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+                <div className="bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg p-4">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         <strong>🔄 How it all connects:</strong> Step 1 shows reference levels (based on today's close) to help you 
                         understand the stock's normal volatility range. Step 2 is the AI's market prediction and reasoning. 
                         Step 3 gives you exact execution prices (based on live market price) using the same risk framework. 
@@ -635,15 +635,15 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6">
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4">Key Observations</h3>
                     <div>
-                        <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">Confluence Points</h4>
+                        <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Confluence Points</h4>
                         <ul className="space-y-2">
-                            {(keyObservations.confluencePoints || []).map((point, i) => (<PointItem key={i} text={point} Icon={CheckCircle} colorClass="text-green-600 dark:text-green-400" />))}
+                            {(keyObservations.confluencePoints || []).map((point, i) => (<PointItem key={i} text={point} Icon={CheckCircle} colorClass="text-gray-600 dark:text-gray-300" />))}
                         </ul>
                     </div>
                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-neutral-700">
-                        <h4 className="font-semibold text-red-700 dark:text-red-400 mb-2">Contradiction Points</h4>
+                        <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Contradiction Points</h4>
                         <ul className="space-y-2">
-                            {(keyObservations.contradictionPoints || []).map((point, i) => (<PointItem key={i} text={point} Icon={XCircle} colorClass="text-red-600 dark:text-red-400" />))}
+                            {(keyObservations.contradictionPoints || []).map((point, i) => (<PointItem key={i} text={point} Icon={XCircle} colorClass="text-gray-600 dark:text-gray-300" />))}
                         </ul>
                     </div>
                 </div>

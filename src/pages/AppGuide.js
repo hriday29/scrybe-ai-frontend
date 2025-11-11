@@ -165,18 +165,15 @@ const AppGuide = ({ navigateToTab }) => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 px-4 py-2 rounded-full mb-4">
-          <Sparkles className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-          <span className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+        <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-neutral-800 px-4 py-2 rounded-lg mb-4 border border-gray-200 dark:border-neutral-700">
+          <Sparkles className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
             Your Institutional-Grade AI Trading Platform
           </span>
         </div>
         
         <h2 className="text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">
-          Welcome to{" "}
-          <span className="bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent">
-            Scrybe AI
-          </span>
+          Welcome to Scrybe AI
         </h2>
         
         <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
@@ -198,14 +195,14 @@ const AppGuide = ({ navigateToTab }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + idx * 0.05 }}
-            whileHover={{ scale: 1.05, y: -5 }}
-            className={`bg-gradient-to-br ${stat.bgGradient} rounded-2xl p-5 border ${stat.borderColor} shadow-lg hover:shadow-xl transition-all duration-300`}
+            whileHover={{ scale: 1.02, y: -3 }}
+            className="bg-white dark:bg-neutral-900 rounded-2xl p-5 border border-gray-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <stat.icon className={`w-7 h-7 ${stat.iconColor} mb-3`} />
-            <div className={`text-2xl font-extrabold ${stat.textColor} mb-1`}>
+            <stat.icon className="w-7 h-7 text-gray-700 dark:text-gray-300 mb-3" />
+            <div className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-1">
               {stat.label}
             </div>
-            <div className={`text-xs font-semibold ${stat.iconColor} uppercase tracking-wide`}>
+            <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               {stat.sublabel}
             </div>
           </motion.div>
@@ -224,27 +221,18 @@ const AppGuide = ({ navigateToTab }) => {
             onMouseEnter={() => setHoveredCard(idx)}
             onMouseLeave={() => setHoveredCard(null)}
             onClick={() => navigateToTab(item.targetIndex)}
-            className="group relative bg-white dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-700 rounded-2xl p-6 shadow-lg cursor-pointer 
-                       transition-all duration-300 hover:shadow-2xl overflow-hidden"
+            className="group relative bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-6 shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md overflow-hidden"
           >
-            {/* Animated gradient glow on hover */}
-            <motion.div 
-              className={`absolute inset-0 bg-gradient-to-br ${item.bgGradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}
-              animate={hoveredCard === idx ? { scale: [1, 1.05, 1] } : {}}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            {/* Subtle hover overlay */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/0 rounded-2xl pointer-events-none" />
             
-            {/* Icon with enhanced gradient background */}
-            <motion.div 
-              whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 0.5 }}
-              className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${item.iconBg} text-white mb-5 shadow-lg group-hover:shadow-xl`}
-            >
+            {/* Icon */}
+            <div className="inline-flex p-3 rounded-xl bg-gray-100 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 mb-5">
               {item.icon}
-            </motion.div>
+            </div>
 
-            {/* Title with gradient on hover */}
-            <h3 className="font-extrabold text-2xl text-gray-900 dark:text-gray-100 mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-indigo-600 group-hover:to-purple-600 dark:group-hover:from-blue-400 dark:group-hover:via-indigo-400 dark:group-hover:to-purple-400 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+            {/* Title */}
+            <h3 className="font-extrabold text-2xl text-gray-900 dark:text-gray-100 mb-3">
               {item.title}
             </h3>
 
@@ -253,7 +241,7 @@ const AppGuide = ({ navigateToTab }) => {
               {item.description}
             </p>
 
-            {/* Feature Badges - Enhanced with gradients */}
+            {/* Feature Badges */}
             <div className="flex flex-wrap gap-2 mb-5">
               {item.features.map((feature, i) => (
                 <motion.span
@@ -261,20 +249,20 @@ const AppGuide = ({ navigateToTab }) => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3 + idx * 0.08 + i * 0.05 }}
-                  className={`text-xs px-3 py-1.5 rounded-full bg-gradient-to-r ${item.cardGradient} ${item.textColor} border ${item.borderColor} font-semibold shadow-sm`}
+                  className="text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-neutral-700 font-semibold"
                 >
                   {feature}
                 </motion.span>
               ))}
             </div>
 
-            {/* Benefit Box - Enhanced design */}
-            <div className={`p-4 rounded-xl bg-gradient-to-br ${item.cardGradient} border ${item.borderColor} shadow-sm`}>
+            {/* Benefit Box */}
+            <div className="p-4 rounded-xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
               <div className="flex items-start gap-2 mb-2">
-                <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.iconBg}`}>
-                  <Info className="w-3.5 h-3.5 text-white" />
+                <div className="p-1.5 rounded-lg bg-gray-100 dark:bg-neutral-800">
+                  <Info className="w-3.5 h-3.5 text-gray-700 dark:text-gray-300" />
                 </div>
-                <p className={`text-xs font-bold ${item.textColor} uppercase tracking-wide`}>
+                <p className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
                   Why This Matters
                 </p>
               </div>
@@ -283,15 +271,11 @@ const AppGuide = ({ navigateToTab }) => {
               </p>
             </div>
 
-            {/* CTA Arrow - Enhanced animation */}
-            <motion.div 
-              className={`mt-5 pt-4 border-t-2 ${item.borderColor} flex items-center justify-between ${item.textColor} font-bold`}
-              animate={hoveredCard === idx ? { x: [0, 5, 0] } : {}}
-              transition={{ duration: 0.6, repeat: Infinity }}
-            >
+            {/* CTA Arrow */}
+            <div className="mt-5 pt-4 border-t border-gray-200 dark:border-neutral-700 flex items-center justify-between text-gray-700 dark:text-gray-300 font-semibold">
               <span className="text-sm">Explore Feature</span>
               <ArrowRight className="w-5 h-5" />
-            </motion.div>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -301,9 +285,9 @@ const AppGuide = ({ navigateToTab }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="mt-16 text-center p-8 bg-gradient-to-r from-primary-50 via-secondary-50 to-purple-50 dark:from-primary-900/20 dark:via-secondary-900/20 dark:to-purple-900/20 rounded-3xl border border-primary-200 dark:border-primary-700"
+        className="mt-16 text-center p-8 bg-gray-50 dark:bg-neutral-900 rounded-3xl border border-gray-200 dark:border-neutral-700"
       >
-        <Sparkles className="w-12 h-12 text-primary-500 mx-auto mb-4" />
+        <Sparkles className="w-12 h-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
         <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
           Ready to Start Trading?
         </h3>
@@ -313,7 +297,7 @@ const AppGuide = ({ navigateToTab }) => {
         </p>
         <button
           onClick={() => navigateToTab(1)}
-          className="px-8 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+          className="px-8 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl shadow-sm transition-colors"
         >
           Start with Stock Analysis
         </button>
