@@ -960,7 +960,10 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
-          onContactOpen={() => setShowContact(true)}
+          onContactOpen={() => {
+            setShowFaq(false);
+            setShowContact(true);
+          }}
           onBack={() => setShowFaq(false)} 
         />
       )}
@@ -974,7 +977,10 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
-          onFaqOpen={() => setShowFaq(true)}
+          onFaqOpen={() => {
+            setShowContact(false);
+            setShowFaq(true);
+          }}
           onClose={() => setShowContact(false)}
         />
       )}
