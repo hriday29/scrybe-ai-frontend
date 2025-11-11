@@ -251,57 +251,57 @@ export default function TrustMetricsShowcase() {
   return (
     <>
       {/* Collapsible Metrics Banner */}
-      <section className="w-full bg-gradient-to-br from-primary-600 via-secondary-600 to-purple-600 relative overflow-hidden">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+      <section className="w-full bg-gradient-to-r from-gray-800 via-gray-900 to-slate-900 relative overflow-hidden border-b border-gray-700">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Collapsed State - Compact Banner */}
           <motion.button
             onClick={() => setExpanded(!expanded)}
-            className="w-full py-4 flex flex-col md:flex-row items-center justify-between gap-3 hover:bg-white/5 rounded-xl transition-all group"
+            className="w-full py-4 flex flex-col md:flex-row items-center justify-between gap-3 hover:bg-white/5 rounded-xl transition-all group px-4"
           >
             {/* Left Side - Key Metrics */}
             <div className="flex items-center gap-4 md:gap-8 text-white flex-wrap justify-center md:justify-start">
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4" />
-                <span className="text-xs font-semibold opacity-90">BACKTESTING RESULTS</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <Award className="w-4 h-4 text-blue-400" />
+                <span className="text-xs font-semibold">BACKTESTING RESULTS</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5" />
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
+                <TrendingUp className="w-5 h-5 text-green-400" />
                 <div>
                   <div className="text-2xl font-bold">+7.59%</div>
-                  <div className="text-xs opacity-75">Sep 2025</div>
+                  <div className="text-xs opacity-60">Sep 2025</div>
                 </div>
               </div>
 
-              <div className="hidden md:block w-px h-10 bg-white/30" />
+              <div className="hidden md:block w-px h-10 bg-white/20" />
 
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
+                <Clock className="w-4 h-4 text-blue-400" />
                 <div>
                   <div className="text-lg font-bold">&lt;15s</div>
-                  <div className="text-xs opacity-75">Analysis</div>
+                  <div className="text-xs opacity-60">Analysis</div>
                 </div>
               </div>
 
-              <div className="hidden md:block w-px h-10 bg-white/30" />
+              <div className="hidden md:block w-px h-10 bg-white/20" />
 
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
+                <BarChart3 className="w-4 h-4 text-purple-400" />
                 <div>
                   <div className="text-lg font-bold">250</div>
-                  <div className="text-xs opacity-75">Stocks/Day</div>
+                  <div className="text-xs opacity-60">Stocks/Day</div>
                 </div>
               </div>
             </div>
 
             {/* Right Side - Expand/Collapse Indicator */}
-            <div className="flex items-center gap-2 text-white font-semibold text-sm">
+            <div className="flex items-center gap-2 text-white font-semibold text-sm px-4 py-2 bg-white/5 rounded-lg border border-white/10 group-hover:border-white/30 transition-all">
               <span>{expanded ? 'Hide Details' : 'Show Details'}</span>
               <motion.div
                 animate={{ rotate: expanded ? 180 : 0 }}
@@ -335,7 +335,7 @@ export default function TrustMetricsShowcase() {
                     <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
                       Proven Performance
                     </h2>
-                    <p className="text-white/90 text-sm md:text-base">
+                    <p className="text-gray-300 text-sm md:text-base">
                       September 2025 • Real Market Conditions • Verified Results
                     </p>
                   </motion.div>
@@ -347,10 +347,10 @@ export default function TrustMetricsShowcase() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.15 }}
-                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
+                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-green-300 hover:shadow-2xl hover:bg-white transition-all group"
                     >
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl">
+                        <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl group-hover:scale-110 transition-transform">
                           <TrendingUp className="w-6 h-6 text-white" />
                         </div>
                         <div className="text-xs font-bold text-gray-600 tracking-wider">RETURNS</div>
@@ -366,10 +366,10 @@ export default function TrustMetricsShowcase() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.2 }}
-                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
+                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-blue-300 hover:shadow-2xl hover:bg-white transition-all group"
                     >
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl">
+                        <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl group-hover:scale-110 transition-transform">
                           <Clock className="w-6 h-6 text-white" />
                         </div>
                         <div className="text-xs font-bold text-gray-600 tracking-wider">SPEED</div>
@@ -385,10 +385,10 @@ export default function TrustMetricsShowcase() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.25 }}
-                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
+                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-indigo-300 hover:shadow-2xl hover:bg-white transition-all group"
                     >
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl">
+                        <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl group-hover:scale-110 transition-transform">
                           <BarChart3 className="w-6 h-6 text-white" />
                         </div>
                         <div className="text-xs font-bold text-gray-600 tracking-wider">COVERAGE</div>
@@ -404,10 +404,10 @@ export default function TrustMetricsShowcase() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.3 }}
-                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/50"
+                      className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-rose-300 hover:shadow-2xl hover:bg-white transition-all group"
                     >
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-gradient-to-br from-rose-600 to-pink-600 rounded-xl">
+                        <div className="p-2 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl group-hover:scale-110 transition-transform">
                           <Clock className="w-6 h-6 text-white" />
                         </div>
                         <div className="text-xs font-bold text-gray-600 tracking-wider">HOLDING</div>
@@ -431,13 +431,14 @@ export default function TrustMetricsShowcase() {
                         e.stopPropagation();
                         setDrawerOpen(true);
                       }}
-                      className="inline-flex items-center gap-3 px-8 py-4 bg-white text-primary-700 font-bold text-lg rounded-full hover:bg-gray-50 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 border-2 border-white/50"
+                      className="inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 font-bold text-lg rounded-full hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl hover:scale-105 border border-gray-200"
                     >
-                      <Award className="w-6 h-6" />
+                      <Award className="w-6 h-6 text-primary-600" />
                       View Detailed Performance
                       <motion.span
                         animate={{ x: [0, 4, 0] }}
                         transition={{ repeat: Infinity, duration: 1.5 }}
+                        className="text-primary-600"
                       >
                         →
                       </motion.span>
