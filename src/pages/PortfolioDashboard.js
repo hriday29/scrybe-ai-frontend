@@ -9,58 +9,109 @@ import { API_BASE_URL } from '../apiConfig';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
 
-const GlassCard = ({ className = '', children, onClick }) => (
-  <motion.div
-    whileHover={onClick ? { scale: 1.02 } : {}}
-    className={`bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 backdrop-blur-none shadow-2xl shadow-gray-200 dark:shadow-gray-900 rounded-2xl ${className} ${onClick ? 'cursor-pointer' : ''}`}
-    onClick={onClick}
-  >
-    {children}
-  </motion.div>
-);
-
-const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue' }) => {
-  const colorClasses = {
-    blue: 'from-blue-500/20 to-blue-600/20 border-blue-500/30',
-    green: 'from-green-500/20 to-green-600/20 border-green-500/30',
-    yellow: 'from-yellow-500/20 to-yellow-600/20 border-yellow-500/30',
-    red: 'from-red-500/20 to-red-600/20 border-red-500/30',
-    purple: 'from-purple-500/20 to-purple-600/20 border-purple-500/30'
+const GlassCard = ({ className = '', children, onClick, variant = 'default' }) => {
+  const variants = {
+    default: 'bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800',
+    elevated: 'bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 shadow-lg',
+    subtle: 'bg-gray-50 dark:bg-neutral-900/50 border border-gray-100 dark:border-neutral-800',
+    accent: 'bg-gradient-to-br from-white to-gray-50 dark:from-neutral-900 dark:to-neutral-800 border border-gray-200 dark:border-neutral-700'
   };
 
   return (
-    <GlassCard className={`p-6 bg-gradient-to-br ${colorClasses[color]}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">{label}</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">{value}</p>
-          {subtitle && <p className="text-gray-600 dark:text-gray-400 text-xs">{subtitle}</p>}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={onClick ? { y: -4, transition: { duration: 0.2 } } : {}}
+      className={`${variants[variant]} backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 ${className} ${onClick ? 'cursor-pointer hover:shadow-xl hover:border-primary-400 dark:hover:border-primary-600' : ''}`}
+      onClick={onClick}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue', trend }) => {
+  const colorClasses = {
+    blue: {
+      bg: 'from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20',
+      border: 'border-blue-200 dark:border-blue-800',
+      icon: 'text-blue-600 dark:text-blue-400',
+      iconBg: 'bg-blue-500/10 dark:bg-blue-500/20'
+    },
+    green: {
+      bg: 'from-emerald-50 to-emerald-100/50 dark:from-emerald-950/30 dark:to-emerald-900/20',
+      border: 'border-emerald-200 dark:border-emerald-800',
+      icon: 'text-emerald-600 dark:text-emerald-400',
+      iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20'
+    },
+    yellow: {
+      bg: 'from-amber-50 to-amber-100/50 dark:from-amber-950/30 dark:to-amber-900/20',
+      border: 'border-amber-200 dark:border-amber-800',
+      icon: 'text-amber-600 dark:text-amber-400',
+      iconBg: 'bg-amber-500/10 dark:bg-amber-500/20'
+    },
+    red: {
+      bg: 'from-rose-50 to-rose-100/50 dark:from-rose-950/30 dark:to-rose-900/20',
+      border: 'border-rose-200 dark:border-rose-800',
+      icon: 'text-rose-600 dark:text-rose-400',
+      iconBg: 'bg-rose-500/10 dark:bg-rose-500/20'
+    },
+    purple: {
+      bg: 'from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20',
+      border: 'border-purple-200 dark:border-purple-800',
+      icon: 'text-purple-600 dark:text-purple-400',
+      iconBg: 'bg-purple-500/10 dark:bg-purple-500/20'
+    }
+  };
+
+  const colors = colorClasses[color];
+
+  return (
+    <GlassCard variant="elevated" className={`p-6 bg-gradient-to-br ${colors.bg} border ${colors.border}`}>
+      <div className="flex items-start justify-between mb-4">
+        <div className={`w-12 h-12 rounded-xl ${colors.iconBg} flex items-center justify-center`}>
+          <Icon className={`w-6 h-6 ${colors.icon}`} />
         </div>
-        <Icon className="w-8 h-8 text-gray-700 dark:text-gray-300" />
+        {trend && (
+          <span className={`text-xs font-semibold px-2 py-1 rounded-full ${trend > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
+            {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+          </span>
+        )}
+      </div>
+      <div>
+        <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">{label}</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1 tracking-tight">{value}</p>
+        {subtitle && <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{subtitle}</p>}
       </div>
     </GlassCard>
   );
 };
 
-const SignalBadge = ({ signal }) => {
+const SignalBadge = ({ signal, size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'px-2 py-0.5 text-xs',
+    md: 'px-3 py-1 text-xs',
+    lg: 'px-4 py-1.5 text-sm'
+  };
+
   if (signal === 'BUY') {
     return (
-      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-500/20 dark:bg-green-900/20 border border-green-500/30 dark:border-green-700 text-green-600 dark:text-green-400 text-xs font-bold">
-        <ArrowUpCircle className="w-3 h-3" />
+      <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gradient-to-r from-emerald-500/20 to-green-500/20 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-500/40 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 font-bold shadow-sm`}>
+        <ArrowUpCircle className="w-3.5 h-3.5" />
         BUY
       </span>
     );
   }
   if (signal === 'SHORT') {
     return (
-      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-500/20 dark:bg-red-900/20 border border-red-500/30 dark:border-red-700 text-red-600 dark:text-red-400 text-xs font-bold">
-        <ArrowDownCircle className="w-3 h-3" />
+      <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gradient-to-r from-rose-500/20 to-red-500/20 dark:from-rose-900/30 dark:to-red-900/30 border border-rose-500/40 dark:border-rose-700 text-rose-700 dark:text-rose-300 font-bold shadow-sm`}>
+        <ArrowDownCircle className="w-3.5 h-3.5" />
         SHORT
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-xs font-bold">
+    <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold shadow-sm`}>
       HOLD
     </span>
   );
@@ -73,44 +124,65 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
     }
   };
 
+  const riskReward = trade.target && trade.entry_price && trade.stop_loss
+    ? ((trade.target - trade.entry_price) / (trade.entry_price - trade.stop_loss)).toFixed(2)
+    : null;
+
   return (
-    <GlassCard className="p-4 hover:border-blue-500/50 dark:hover:border-blue-700 transition-all" onClick={handleClick}>
-      <div className="flex items-start justify-between mb-3">
+    <GlassCard variant="elevated" className="p-6 group" onClick={handleClick}>
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-            #{rank || '?'}
+          <div className="relative">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+              #{rank || '?'}
+            </div>
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-neutral-900 animate-pulse"></div>
           </div>
           <div>
-            <h4 className="text-gray-900 dark:text-gray-100 font-bold text-lg">{trade.ticker}</h4>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">{trade.sector || 'Unknown Sector'}</p>
+            <h4 className="text-gray-900 dark:text-gray-100 font-bold text-xl tracking-tight">{trade.ticker}</h4>
+            <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">{trade.sector || 'Unknown Sector'}</p>
           </div>
         </div>
-        <SignalBadge signal={trade.signal} />
+        <SignalBadge signal={trade.signal} size="lg" />
       </div>
       
-      <div className="grid grid-cols-3 gap-3 mb-3 text-sm">
-        <div>
-          <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Entry</p>
-          <p className="text-gray-900 dark:text-gray-100 font-semibold">₹{trade.entry_price?.toFixed(2) || 'N/A'}</p>
+      {/* Price Grid */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-3 border border-gray-200 dark:border-neutral-700">
+          <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">Entry</p>
+          <p className="text-gray-900 dark:text-gray-100 font-bold text-lg">₹{trade.entry_price?.toFixed(2) || 'N/A'}</p>
         </div>
-        <div>
-          <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Target</p>
-          <p className="text-green-600 dark:text-green-400 font-semibold">₹{trade.target?.toFixed(2) || 'N/A'}</p>
+        <div className="bg-emerald-50 dark:bg-emerald-950/30 rounded-lg p-3 border border-emerald-200 dark:border-emerald-800">
+          <p className="text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">Target</p>
+          <p className="text-emerald-700 dark:text-emerald-300 font-bold text-lg">₹{trade.target?.toFixed(2) || 'N/A'}</p>
         </div>
-        <div>
-          <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Stop Loss</p>
-          <p className="text-red-600 dark:text-red-400 font-semibold">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
+        <div className="bg-rose-50 dark:bg-rose-950/30 rounded-lg p-3 border border-rose-200 dark:border-rose-800">
+          <p className="text-rose-600 dark:text-rose-400 text-xs font-semibold uppercase tracking-wider mb-1">Stop</p>
+          <p className="text-rose-700 dark:text-rose-300 font-bold text-lg">₹{trade.stop_loss?.toFixed(2) || 'N/A'}</p>
         </div>
       </div>
+
+      {/* Risk/Reward Ratio */}
+      {riskReward && (
+        <div className="flex items-center justify-between mb-4 p-2 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <span className="text-blue-700 dark:text-blue-300 text-xs font-semibold">Risk/Reward Ratio</span>
+          <span className="text-blue-900 dark:text-blue-100 font-bold">1:{riskReward}</span>
+        </div>
+      )}
       
+      {/* Selection Reason */}
       {trade.selection_reason && (
-        <div className="pt-3 border-t border-gray-200 dark:border-neutral-700">
-          <p className="text-gray-700 dark:text-gray-300 text-xs flex items-start gap-2">
+        <div className="pt-4 border-t border-gray-200 dark:border-neutral-700">
+          <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            {trade.selection_reason}
+            <span>{trade.selection_reason}</span>
           </p>
         </div>
       )}
+
+      {/* Hover Effect Indicator */}
+      <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-primary-500 dark:group-hover:border-primary-400 transition-all pointer-events-none"></div>
     </GlassCard>
   );
 };
@@ -136,35 +208,47 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
 
   return (
     <motion.tr
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-b border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer transition-colors"
+      className="border-b border-gray-100 dark:border-neutral-800 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-950/20 dark:hover:to-purple-950/20 cursor-pointer transition-all group"
       onClick={() => onStockSelect && onStockSelect(analysis.ticker)}
     >
-      <td className="px-4 py-4">
+      <td className="px-6 py-4">
         <div className="flex items-center gap-3">
-          {getStatusIcon()}
+          <div className="relative">
+            {getStatusIcon()}
+            {analysis.is_executed && (
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            )}
+          </div>
           <div>
-            <p className="text-gray-900 dark:text-gray-100 font-semibold">{analysis.ticker}</p>
-            <p className="text-gray-600 dark:text-gray-400 text-xs">{analysis.sector || 'Unknown'}</p>
+            <p className="text-gray-900 dark:text-gray-100 font-bold text-base group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{analysis.ticker}</p>
+            <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{analysis.sector || 'Unknown'}</p>
           </div>
         </div>
       </td>
-      <td className="px-4 py-4">
+      <td className="px-6 py-4">
         <SignalBadge signal={analysis.signal} />
       </td>
-      <td className="px-4 py-4">
-        <span className={`font-bold ${analysis.scrybeScore >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-          {analysis.scrybeScore >= 0 ? '+' : ''}{analysis.scrybeScore || 0}
-        </span>
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-2">
+          <span className={`font-bold text-lg ${analysis.scrybeScore >= 45 ? 'text-emerald-600 dark:text-emerald-400' : analysis.scrybeScore >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+            {analysis.scrybeScore >= 0 ? '+' : ''}{analysis.scrybeScore || 0}
+          </span>
+          {analysis.scrybeScore >= 45 && (
+            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+          )}
+        </div>
       </td>
-      <td className="px-4 py-4">
-        <span className="text-gray-900 dark:text-gray-100 font-semibold">
-          #{analysis.portfolio_rank || 'N/A'}
-        </span>
+      <td className="px-6 py-4">
+        <div className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
+          <span className="text-gray-900 dark:text-gray-100 font-bold text-sm">
+            #{analysis.portfolio_rank || 'N/A'}
+          </span>
+        </div>
       </td>
-      <td className="px-4 py-4 max-w-md">
-        <p className={`text-sm ${getReasonColor()}`}>
+      <td className="px-6 py-4 max-w-md">
+        <p className={`text-sm leading-relaxed ${getReasonColor()}`}>
           {analysis.selection_reason || 'No reason provided'}
         </p>
       </td>
@@ -253,23 +337,54 @@ const PortfolioDashboard = ({ onStockSelect }) => {
   const { portfolio_summary, sector_breakdown, executed_trades, total_analyzed, display_timestamp, prediction_for_date, prediction_for_date_short } = portfolioData;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 dark:from-primary-400 dark:via-secondary-400 dark:to-purple-400 mb-4">
-            Portfolio Management Dashboard
-          </h1>
-          <p className="text-gray-700 dark:text-gray-300 text-lg">
-            AI analyzes <span className="text-gray-900 dark:text-white font-bold">~{total_analyzed} candidates</span> • 
-            Portfolio executes <span className="text-green-600 dark:text-green-400 font-bold"> Top {portfolio_summary.selected_for_execution}</span>
-          </p>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">Last Updated: {display_timestamp}</p>
-          {prediction_for_date && (
-            <div className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/20 border border-primary-300 dark:border-primary-700">
-              <span className="text-primary-700 dark:text-primary-300 text-sm font-semibold">📅 Analysis for: {prediction_for_date_short || prediction_for_date}</span>
+        {/* Header Section - Institutional Grade */}
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-2 h-8 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                  Portfolio Management
+                </h1>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 text-base ml-5">
+                Institutional-grade AI portfolio construction and risk management
+              </p>
             </div>
-          )}
+            <div className="hidden lg:flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Last Updated</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{display_timestamp}</p>
+              </div>
+              {prediction_for_date && (
+                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-500/10 to-secondary-500/10 dark:from-primary-500/20 dark:to-secondary-500/20 border border-primary-300 dark:border-primary-700">
+                  <span className="text-primary-700 dark:text-primary-300 text-sm font-semibold">📅 {prediction_for_date_short || prediction_for_date}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Key Stats Summary Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gradient-to-r from-white to-gray-50 dark:from-neutral-900 dark:to-neutral-800 rounded-xl border border-gray-200 dark:border-neutral-800 shadow-sm">
+            <div className="text-center">
+              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Analyzed Today</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">~{total_analyzed}</p>
+            </div>
+            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
+              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Executing</p>
+              <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{portfolio_summary.selected_for_execution}</p>
+            </div>
+            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
+              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">High Conviction</p>
+              <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{portfolio_summary.high_conviction_not_selected}</p>
+            </div>
+            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
+              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Sectors Active</p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{Object.keys(sector_breakdown).length}</p>
+            </div>
+          </div>
         </div>
 
         {/* Market Regime Card - Feature 1/15 */}
@@ -287,10 +402,15 @@ const PortfolioDashboard = ({ onStockSelect }) => {
         )}
 
         {/* Portfolio Management Education Section */}
-        <GlassCard className="p-8 mb-12 border-2 border-primary-300 dark:border-primary-700">
-          <div className="flex items-center gap-3 mb-6">
-            <Shield className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management Process</h2>
+        <GlassCard variant="accent" className="p-8 mb-12 border-l-4 border-l-primary-500">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 rounded-xl bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center">
+              <Shield className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Professional-grade process & risk controls</p>
+            </div>
           </div>
           
           <div className="space-y-6 text-gray-700 dark:text-gray-300">
@@ -456,21 +576,46 @@ const PortfolioDashboard = ({ onStockSelect }) => {
 
         {/* Sector Breakdown */}
         {executed_trades.length > 0 && (
-          <GlassCard className="p-6 mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <PieChart className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sector Diversification</h2>
+          <GlassCard variant="elevated" className="p-8 mb-12">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center">
+                <PieChart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sector Diversification</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Risk distribution across market sectors</p>
+              </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(sector_breakdown).map(([sector, count]) => (
-                <div key={sector} className="text-center p-4 bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-700">
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">{sector}</p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{count}</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                    {((count / portfolio_summary.selected_for_execution) * 100).toFixed(0)}% of portfolio
-                  </p>
-                </div>
-              ))}
+              {Object.entries(sector_breakdown).map(([sector, count]) => {
+                const percentage = ((count / portfolio_summary.selected_for_execution) * 100).toFixed(0);
+                const isHighAllocation = percentage >= 30;
+                return (
+                  <motion.div 
+                    key={sector}
+                    whileHover={{ y: -4 }}
+                    className={`text-center p-5 rounded-xl border-2 transition-all ${
+                      isHighAllocation 
+                        ? 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-300 dark:border-amber-700'
+                        : 'bg-white dark:bg-neutral-900 border-gray-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700'
+                    }`}
+                  >
+                    <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">{sector}</p>
+                    <p className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">{count}</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="flex-1 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${isHighAllocation ? 'bg-amber-500' : 'bg-primary-500'}`}
+                          style={{ width: `${percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className={`text-sm font-bold ${isHighAllocation ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                        {percentage}%
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </GlassCard>
         )}
@@ -478,9 +623,19 @@ const PortfolioDashboard = ({ onStockSelect }) => {
         {/* Executed Trades Section */}
         {executed_trades.length > 0 && (
           <div className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <CheckCircle className="w-7 h-7 text-green-600 dark:text-green-400" />
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Executed Trades ({executed_trades.length})</h2>
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Active Positions</h2>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Top {executed_trades.length} highest conviction trades executing</p>
+                </div>
+              </div>
+              <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800">
+                <span className="text-emerald-700 dark:text-emerald-300 font-semibold text-sm">{executed_trades.length}/{portfolio_summary.max_positions} slots filled</span>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {executed_trades.map((trade) => (
@@ -491,53 +646,67 @@ const PortfolioDashboard = ({ onStockSelect }) => {
         )}
 
         {/* All Analyses Browser */}
-        <GlassCard className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <BarChart3 className="w-7 h-7 text-primary-600 dark:text-primary-400" />
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Browse All Analyses</h2>
+        <GlassCard variant="elevated" className="p-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Complete Analysis Browser</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Full transparency into every AI decision</p>
+              </div>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 mb-6 flex-wrap">
+          <div className="flex gap-3 mb-8 flex-wrap">
             {[
-              { id: 'executed', label: 'Executed', count: executed_trades.length },
-              { id: 'not-selected', label: 'Not Selected', count: portfolio_summary.high_conviction_not_selected + portfolio_summary.sector_limits_reached },
-              { id: 'all', label: 'All Analyses', count: total_analyzed }
+              { id: 'executed', label: 'Executed', count: executed_trades.length, color: 'emerald' },
+              { id: 'not-selected', label: 'Not Selected', count: portfolio_summary.high_conviction_not_selected + portfolio_summary.sector_limits_reached, color: 'amber' },
+              { id: 'all', label: 'All Analyses', count: total_analyzed, color: 'blue' }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                className={`px-6 py-3 rounded-xl font-semibold transition-all border-2 ${
                   activeTab === tab.id
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-700'
+                    ? `bg-${tab.color}-500 border-${tab.color}-500 text-white shadow-lg shadow-${tab.color}-500/20`
+                    : 'bg-white dark:bg-neutral-800 border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-neutral-600'
                 }`}
               >
-                {tab.label} ({tab.count})
+                <span className="flex items-center gap-2">
+                  {tab.label}
+                  <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
+                    activeTab === tab.id
+                      ? 'bg-white/20'
+                      : 'bg-gray-100 dark:bg-neutral-700'
+                  }`}>
+                    {tab.count}
+                  </span>
+                </span>
               </button>
             ))}
           </div>
 
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 placeholder="Search by ticker, sector, or reason..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary-500 dark:focus:border-primary-400"
+                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-neutral-800 border-2 border-gray-200 dark:border-neutral-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 focus:ring-4 focus:ring-primary-500/10 transition-all"
               />
             </div>
             <div className="relative">
-              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
               <select
                 value={filterSignal}
                 onChange={(e) => setFilterSignal(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 appearance-none"
+                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-neutral-800 border-2 border-gray-200 dark:border-neutral-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer"
               >
                 <option value="all">All Signals</option>
                 <option value="BUY">BUY Only</option>
@@ -548,15 +717,15 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-neutral-800">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-neutral-700 text-left">
-                  <th className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm font-semibold">Stock</th>
-                  <th className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm font-semibold">Signal</th>
-                  <th className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm font-semibold">Score</th>
-                  <th className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm font-semibold">Rank</th>
-                  <th className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm font-semibold">Selection Reason</th>
+                <tr className="bg-gray-50 dark:bg-neutral-800/50 border-b-2 border-gray-200 dark:border-neutral-700">
+                  <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Stock</th>
+                  <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Signal</th>
+                  <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Score</th>
+                  <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Rank</th>
+                  <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Selection Reason</th>
                 </tr>
               </thead>
               <tbody>
@@ -569,29 +738,55 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             </table>
             
             {filteredAnalyses.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-600 dark:text-gray-300 text-lg">No analyses match your filters</p>
+              <div className="text-center py-16 bg-gray-50 dark:bg-neutral-900/50">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-neutral-800 flex items-center justify-center">
+                    <Search className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100 text-lg font-semibold mb-1">No analyses found</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Try adjusting your filters or search terms</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
         </GlassCard>
 
-        {/* Footer Stats */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-8 text-gray-700 dark:text-gray-300 text-sm">
-            <div>
-              <span className="font-semibold text-gray-900 dark:text-white">{portfolio_summary.selected_for_execution}</span> Executing
+        {/* Footer Stats - Refined */}
+        <div className="mt-12">
+          <GlassCard variant="subtle" className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center mb-1">
+                  <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{portfolio_summary.selected_for_execution}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Executing</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 border-l border-gray-200 dark:border-neutral-700">
+                <div className="w-10 h-10 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center mb-1">
+                  <Target className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">{portfolio_summary.high_conviction_not_selected}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">High Conviction</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 border-l border-gray-200 dark:border-neutral-700">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center mb-1">
+                  <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                </div>
+                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Sector Limited</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 border-l border-gray-200 dark:border-neutral-700">
+                <div className="w-10 h-10 rounded-lg bg-gray-500/10 dark:bg-gray-500/20 flex items-center justify-center mb-1">
+                  <Activity className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                </div>
+                <span className="text-2xl font-bold text-gray-600 dark:text-gray-400">{portfolio_summary.no_signal_generated}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">HOLD Signals</span>
+              </div>
             </div>
-            <div>
-              <span className="font-semibold text-yellow-600 dark:text-yellow-400">{portfolio_summary.high_conviction_not_selected}</span> High Conviction
-            </div>
-            <div>
-              <span className="font-semibold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached}</span> Sector Limited
-            </div>
-            <div>
-              <span className="font-semibold text-gray-600 dark:text-gray-300">{portfolio_summary.no_signal_generated}</span> HOLD Signals
-            </div>
-          </div>
+          </GlassCard>
         </div>
       </div>
     </div>

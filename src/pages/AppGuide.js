@@ -33,21 +33,21 @@ const AppGuide = ({ navigateToTab }) => {
       features: ["Scrybe Score (-100 to +100)", "Technical + Fundamental Analysis", "Real-time Market Data"],
     },
     {
-      title: "My Trades",
+      title: "Portfolio Manager",
       description:
-        "Complete portfolio management transparency. View all 250 daily analyzed stocks with the AI's top 10 highest-conviction trades selected for execution. Track both open and closed positions.",
+        "Institutional-grade portfolio construction and management. View all 250 daily analyzed stocks with the AI's top 10 highest-conviction trades selected for execution. Complete transparency into portfolio decisions, sector allocation, and risk controls.",
       benefit:
-        "See exactly why stocks are selected or rejected with sector limits, risk controls, and portfolio rankings clearly visible.",
+        "Professional portfolio management with clear visibility into why stocks are selected or rejected, sector diversification limits, and institutional risk management.",
       targetIndex: 2,
       icon: <Layers className="w-8 h-8" />,
       color: "purple",
       gradient: "from-purple-500 to-pink-500",
-      features: ["250 Stocks Daily Analysis", "Top 10 Trade Selection", "Full Trade History"],
+      features: ["250 Stocks Daily Analysis", "Top 10 Trade Selection", "Risk-Controlled Portfolio Construction"],
     },
     {
-      title: "Active Trades",
+      title: "Fund Dashboard",
       description:
-        "Real-time dashboard of your top 10 active positions. Monitor entry prices, targets, stop-losses, and live P&L with institutional-grade position tracking.",
+        "Real-time monitoring dashboard of your active positions. Track entry prices, targets, stop-losses, and live P&L with institutional-grade position tracking and execution management.",
       benefit:
         "Focused view of highest-conviction trades with complete transparency on risk management and exit strategy.",
       targetIndex: 3,

@@ -670,8 +670,8 @@ export default function App() {
             {[
               { label: "App Guide", tooltip: "Learn how to use Scrybe AI effectively" },
               { label: "Stock Analysis", tooltip: "Get AI-powered analysis for any stock" },
-              { label: "My Trades", tooltip: "View all your trades (open + closed) with performance stats" },
-              { label: "Active Trades", tooltip: "Monitor your currently open positions" },
+              { label: "Portfolio Manager", tooltip: "AI-powered portfolio construction & position management" },
+              { label: "Fund Dashboard", tooltip: "Real-time monitoring of active positions & trade execution" },
               { label: "Index Analysis", tooltip: "Analyze market indices (NIFTY, SENSEX)" },
               { label: "AI Track Record", tooltip: "See Scrybe AI's historical performance" },
               { label: "Rulebook", tooltip: "Understand the AI's trading strategy and rules" }

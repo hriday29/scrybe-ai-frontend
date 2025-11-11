@@ -50,7 +50,7 @@ const LandingWalkthrough = ({
       description:
         "Every trading day, Scrybe AI analyzes all 250 stocks in the Nifty Smallcap 250 universe. Using our proprietary 'Scrybe Score' system (-100 to +100), the AI evaluates each stock's technical setup, fundamentals, and market context to identify the best opportunities in India's emerging growth segment.",
       links: [
-        { text: "Launch My Trades Dashboard", action: () => handleLaunchAndNavigate(2) },
+        { text: "Launch Portfolio Manager", action: () => handleLaunchAndNavigate(2) },
         { text: "Read the Full Strategy", action: onUserGuideOpen },
       ],
     },
@@ -62,7 +62,7 @@ const LandingWalkthrough = ({
         "Out of 250 daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 40% sector concentration limit, and 2% max risk per stock—just like professional fund managers.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
-        { text: "View Active Trades", action: () => handleLaunchAndNavigate(3) },
+        { text: "View Fund Dashboard", action: () => handleLaunchAndNavigate(3) },
       ],
     },
     {
@@ -70,7 +70,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-green-500/30 to-green-700/30",
       title: "Complete Transparency",
       description:
-        "Unlike black-box systems, we show you everything. Browse all 250 analyses in My Trades with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",
+        "Unlike black-box systems, we show you everything. Browse all 250 analyses in the Portfolio Manager with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",
       links: [
         { text: "View AI Track Record", action: () => handleLaunchAndNavigate(5) },
         { text: "Read the Rulebook", action: () => handleLaunchAndNavigate(6) },
