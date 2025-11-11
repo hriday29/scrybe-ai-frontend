@@ -534,9 +534,27 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                         <li><span className="font-medium">Volatility</span> estimates expected swing and informs stop width and expectations.</li>
                       </ul>
                     </div>
-                    <PriceActionCard priceActionContext={analysisData?.price_action_context} hideTitle={true} />
-                    <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} hideTitle={true} />
-                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} hideTitle={true} />
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="w-4 h-4 text-blue-500" />
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Price Action</h4>
+                      </div>
+                      <PriceActionCard priceActionContext={analysisData?.price_action_context} hideTitle={true} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mt-2 mb-2">
+                        <BarChart3 className="w-4 h-4 text-yellow-500" />
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Momentum</h4>
+                      </div>
+                      <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} hideTitle={true} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mt-2 mb-2">
+                        <Activity className="w-4 h-4 text-purple-500" />
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Volatility</h4>
+                      </div>
+                      <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} hideTitle={true} />
+                    </div>
                   </div>
                 </CollapsibleSection>
 

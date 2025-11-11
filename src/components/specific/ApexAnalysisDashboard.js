@@ -228,7 +228,12 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
                         {/* Price Action */}
                         {safe_technicals && safe_technicals.daily_close && (
-                            <PriceActionCard 
+                            <>
+                                <div className="flex items-center gap-2 mt-2 mb-2">
+                                    <TrendingUp className="w-4 h-4 text-blue-500" />
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Price Action</h4>
+                                </div>
+                                <PriceActionCard 
                                 priceActionContext={{
                                     current_price: safe_technicals.daily_close,
                                     "52w_high": safe_technicals["52w_high"],
@@ -253,25 +258,38 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                     price_position: safe_technicals.price_position
                                 }}
                                 hideTitle={true}
-                            />
+                                />
+                            </>
                         )}
 
                         {/* Momentum */}
                         {safe_technicals && (
-                            <MomentumCard 
+                            <>
+                                <div className="flex items-center gap-2 mt-4 mb-2">
+                                    <BarChart className="w-4 h-4 text-yellow-500" />
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Momentum</h4>
+                                </div>
+                                <MomentumCard 
                                 momentumData={safe_technicals}
                                 analysisData={analysisData}
                                 hideTitle={true}
-                            />
+                                />
+                            </>
                         )}
 
                         {/* Volatility */}
                         {safe_futures && (
-                            <VolatilityCard 
+                            <>
+                                <div className="flex items-center gap-2 mt-4 mb-2">
+                                    <Activity className="w-4 h-4 text-purple-500" />
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Volatility</h4>
+                                </div>
+                                <VolatilityCard 
                                 volatilityData={safe_futures}
                                 analysisData={analysisData}
                                 hideTitle={true}
-                            />
+                                />
+                            </>
                         )}
                     </div>
                 </CollapsibleSection>
