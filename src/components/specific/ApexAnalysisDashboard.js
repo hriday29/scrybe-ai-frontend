@@ -1,6 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
-import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap, AlertTriangle, Lightbulb, Calculator, Activity } from 'lucide-react';
+import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
 // import MarketRegimeCard from './MarketRegimeCard';
@@ -16,35 +16,6 @@ import TradeChecklistCard from './TradeChecklistCard';
 // =========================================================================
 // Helper & Display Components
 // =========================================================================
-
-// Section Header Component for better visual hierarchy
-const SectionHeader = ({ icon: Icon, title, subtitle, color = "blue" }) => {
-    const colorClasses = {
-        blue: "from-blue-500 to-indigo-500 text-blue-50",
-        green: "from-green-500 to-emerald-500 text-green-50",
-        purple: "from-purple-500 to-pink-500 text-purple-50",
-        amber: "from-amber-500 to-orange-500 text-amber-50",
-        red: "from-red-500 to-rose-500 text-red-50",
-    };
-    
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className={`bg-gradient-to-r ${colorClasses[color]} rounded-xl p-5 md:p-6 shadow-lg mb-6`}
-        >
-            <div className="flex items-center gap-3">
-                <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
-                    <Icon className="w-6 h-6" />
-                </div>
-                <div>
-                    <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
-                    {subtitle && <p className="text-sm opacity-90 mt-1">{subtitle}</p>}
-                </div>
-            </div>
-        </motion.div>
-    );
-};
 
 const Gauge = ({ value, label }) => {
     const percentage = Math.max(0, Math.min(100, value || 0));
@@ -149,227 +120,100 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
     const adxState = adxValue > 25 ? "Strong Trend" : "Weak Trend";
     const macdState = (safe_technicals.MACD_status || {}).interpretation === 'Bullish Crossover' ? 'Bullish' : 'Bearish';
 
+    const getSignalStyle = (sig) => {
+        switch (sig) {
+            case 'BUY': return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700';
+            default: return 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-neutral-700';
+        }
+    };
+
     const scoreText = scrybeScore > 0 ? `+${scrybeScore}` : scrybeScore;
 
     return (
-        <div className="w-full max-w-7xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
-            {/* ========== HERO SECTION: Stock Header & Key Metrics ========== */}
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-8 md:p-10 text-white shadow-2xl"
-            >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div className="flex-1">
-                        <h1 className="text-4xl md:text-5xl font-extrabold mb-2">{ticker?.replace('.NS', '')}</h1>
-                        <p className="text-xl md:text-2xl opacity-90 mb-3">{companyName || 'N/A'}</p>
-                        <div className="flex flex-wrap gap-3 items-center">
-                            <span className="text-sm bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-                                Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
-                            </span>
-                            {prediction_for_date && (
-                                <span className="text-sm bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-                                    📅 Prediction for: {prediction_for_date_short || prediction_for_date}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    
-                    {/* Key Metrics Cards - Prominent Display */}
-                    <div className="grid grid-cols-3 gap-4 md:gap-6">
-                        <motion.div 
-                            whileHover={{ scale: 1.05, y: -5 }}
-                            className={`text-center p-6 rounded-2xl backdrop-blur-sm border-2 border-white/30 shadow-xl ${
-                                signal === 'BUY' ? 'bg-green-500/90' : 'bg-white/20'
-                            }`}
-                        >
-                            <p className="text-xs font-bold uppercase tracking-wider mb-2 opacity-90">Signal</p>
-                            <p className="text-3xl md:text-4xl font-black">{signal}</p>
-                        </motion.div>
-                        <motion.div 
-                            whileHover={{ scale: 1.05, y: -5 }}
-                            className="text-center p-6 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 shadow-xl"
-                        >
-                            <p className="text-xs font-bold uppercase tracking-wider mb-2 opacity-90">Scrybe Score</p>
-                            <p className="text-3xl md:text-4xl font-black font-mono">{scoreText}</p>
-                        </motion.div>
-                        <motion.div 
-                            whileHover={{ scale: 1.05, y: -5 }}
-                            className="text-center p-6 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 shadow-xl"
-                        >
-                            <p className="text-xs font-bold uppercase tracking-wider mb-2 opacity-90">Confidence</p>
-                            <p className="text-3xl md:text-4xl font-black">{confidence}</p>
-                        </motion.div>
-                    </div>
-                </div>
-            </motion.div>
+        <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
+            {/* ========== MARKET-WIDE CONTEXT REMOVED ========== */}
+            {/* Market Regime, Sector Performance, and Market Breadth moved to main dashboard */}
+            {/* These are universal indicators that update daily and apply to ALL stocks */}
 
-            {/* ========== STRATEGY SIGNAL BANNER ========== */}
             {strategy_signal && (
                 <>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 rounded-xl p-6 flex items-start gap-4 shadow-lg"
-                    >
-                        <Megaphone size={40} className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
-                        <div className="flex-1">
-                            <h2 className="font-bold text-2xl text-gray-900 dark:text-gray-100 mb-2">Actionable Signal Identified</h2>
-                            <p className="text-blue-700 dark:text-blue-300 text-lg leading-relaxed">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-5 flex items-center gap-4">
+                        <Megaphone size={32} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                        <div>
+                            <h2 className="font-bold text-xl text-gray-900 dark:text-gray-100">Actionable Signal Identified</h2>
+                            <p className="text-blue-700 dark:text-blue-300">
                                 This stock passed the rigorous **{strategy_signal.type}** strategy filter.
                                 {strategy_signal.signal === 'HOLD' && ` It was vetoed due to: ${strategy_signal.veto_reason}.`}
                             </p>
                         </div>
-                    </motion.div>
+                    </div>
                     
-                    {/* Educational Note for Mean-Reversion Trades */}
+                    {/* Educational Note for Mean-Reversion Trades (Bearish Pattern → BUY Signal) */}
                     {strategy_signal.type && strategy_signal.type.includes('Short Pattern') && signal === 'BUY' && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl p-6 shadow-lg"
-                        >
-                            <div className="flex items-start gap-4">
-                                <div className="text-5xl">💡</div>
+                        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-5">
+                            <div className="flex items-start gap-3">
+                                <div className="text-amber-600 dark:text-amber-400 text-2xl">💡</div>
                                 <div className="flex-1">
-                                    <h3 className="font-bold text-2xl text-amber-800 dark:text-amber-300 mb-3">Wait, a bearish pattern but BUY signal? Here's why:</h3>
-                                    <p className="text-amber-800 dark:text-amber-300 leading-relaxed mb-4">
+                                    <h3 className="font-bold text-amber-800 dark:text-amber-300 mb-2">Wait, a bearish pattern but BUY signal? Here's why:</h3>
+                                    <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed mb-3">
                                         This is called a <strong>"mean-reversion trade"</strong> or <strong>"buy-the-dip"</strong> strategy. The stock showed a bearish pattern (like Three Black Crows), 
                                         which means it dropped sharply. But our AI analyzed the bigger picture and found:
                                     </p>
-                                    <ul className="space-y-2 text-amber-800 dark:text-amber-300 list-disc list-inside mb-4">
+                                    <ul className="space-y-2 text-amber-800 dark:text-amber-300 text-sm list-disc list-inside">
                                         <li><strong>Oversold conditions:</strong> The stock fell too far too fast (RSI below 30)</li>
                                         <li><strong>Strong fundamentals:</strong> The company's business is still healthy</li>
                                         <li><strong>Market context:</strong> Overall market trend is positive, supporting a bounce</li>
                                     </ul>
-                                    <p className="text-amber-800 dark:text-amber-300 leading-relaxed">
+                                    <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed mt-3">
                                         <strong>The Strategy:</strong> When panic selling exhausts itself and a good company is unfairly beaten down, 
-                                        smart traders step in to buy at discount prices before it recovers.
+                                        smart traders step in to buy at discount prices before it recovers. This is a <em>contrarian</em> approach - 
+                                        buying when others are fearful, but only when data supports a rebound.
+                                    </p>
+                                    <p className="text-amber-700 dark:text-amber-400 text-xs mt-3 italic">
+                                        📊 The Scrybe Score of +{Math.abs(scrybeScore)} reflects confidence in this bounce, NOT the bearish pattern itself.
                                     </p>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     )}
                 </>
             )}
 
-            {/* ========== SECTION 1: KEY INSIGHTS (Quick Overview) ========== */}
-            <SectionHeader 
-                icon={Info} 
-                title="Key Insights" 
-                subtitle="AI's analysis summary and verdict"
-                color="purple"
-            />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-2 border-indigo-200 dark:border-indigo-700 rounded-2xl p-6 shadow-lg"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="bg-indigo-500 p-3 rounded-xl">
-                            <Info className="text-white h-6 w-6" />
-                        </div>
-                        <h3 className="font-bold text-2xl text-gray-900 dark:text-gray-100">Key Insight</h3>
+            <div>
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">{ticker?.replace('.NS', '')}</h1>
+                <p className="text-lg text-gray-600 dark:text-gray-400">{companyName || 'N/A'}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+                </p>
+                {prediction_for_date && (
+                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 dark:bg-blue-900/30 border border-blue-500/30 dark:border-blue-700">
+                        <span className="text-blue-600 dark:text-blue-400 text-xs font-semibold">
+                            📅 Prediction for: {prediction_for_date_short || prediction_for_date}
+                        </span>
+                        <span className="text-xs text-blue-600/70 dark:text-blue-400/70 italic ml-1">
+                            (Next trading day)
+                        </span>
                     </div>
-                    <p className="text-indigo-900 dark:text-indigo-200 text-lg leading-relaxed">{keyInsight}</p>
-                </motion.div>
-                
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className="bg-white dark:bg-neutral-900 border-2 border-gray-300 dark:border-neutral-700 rounded-2xl p-6 shadow-lg"
-                >
-                    <h3 className="font-bold text-2xl text-gray-900 dark:text-gray-100 mb-4">Analyst Verdict</h3>
-                    <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-wrap">{analystVerdict}</p>
-                </motion.div>
+                )}
             </div>
 
-            {/* ========== SECTION 2: TRADE PLAN (MOST IMPORTANT - HIGHLIGHTED) ========== */}
-            <SectionHeader 
-                icon={Target} 
-                title="🎯 Your Trade Plan" 
-                subtitle="Entry, Exit, and Risk Management"
-                color="green"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className={`text-center p-6 rounded-xl border ${getSignalStyle(signal)}`}>
+                    <p className="text-sm font-semibold uppercase tracking-wider mb-2">Signal</p>
+                    <p className="text-4xl font-bold">{signal}</p>
+                </div>
+                <div className="text-center p-6 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
+                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-gray-600 dark:text-gray-400">Scrybe Score</p>
+                    <p className="text-4xl font-bold font-mono text-gray-900 dark:text-gray-100">{scoreText}</p>
+                </div>
+                <div className="text-center p-6 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
+                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-gray-600 dark:text-gray-400">Confidence</p>
+                    <p className="text-4xl font-bold text-gray-900 dark:text-gray-100">{confidence}</p>
+                </div>
+            </div>
 
-            {analysisData.trade_plan && (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.01 }}
-                    className="relative"
-                >
-                    {/* Glowing border effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 rounded-2xl blur-xl opacity-30"></div>
-                    <div className="relative bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border-4 border-green-300 dark:border-green-700 rounded-2xl p-8 shadow-2xl">
-                        <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-green-300 dark:border-green-700">
-                            <div className="bg-green-500 p-4 rounded-xl shadow-lg">
-                                <Target size={32} className="text-white" />
-                            </div>
-                            <div>
-                                <h3 className="font-extrabold text-3xl text-gray-900 dark:text-gray-100">Scrybe Trade Plan</h3>
-                                <p className="text-green-700 dark:text-green-300 text-sm mt-1">Institutional-grade risk management</p>
-                            </div>
-                        </div>
-                        
-                        <div className="bg-green-100 dark:bg-green-900/40 rounded-xl p-5 mb-6 border-2 border-green-200 dark:border-green-800">
-                            <p className="text-green-800 dark:text-green-200 leading-relaxed">
-                                <strong>📚 Educational Note:</strong> This trade plan combines AI's directional analysis with institutional risk management rules. 
-                                Entry is at current market price, Stop-Loss is 2× ATR (Average True Range), and Target is 6× ATR for a 3:1 risk-reward ratio.
-                            </p>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-white dark:bg-neutral-800 rounded-xl p-5 border-2 border-green-300 dark:border-green-700 shadow-md">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-gray-600 dark:text-gray-400 font-semibold">Entry Price</span>
-                                    <span className="text-2xl md:text-3xl text-gray-900 dark:text-gray-100 font-mono font-bold">₹{analysisData.trade_plan.entry_price}</span>
-                                </div>
-                            </div>
-                            
-                            <div className="bg-red-50 dark:bg-red-900/30 rounded-xl p-5 border-2 border-red-300 dark:border-red-700 shadow-md">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-red-700 dark:text-red-400 font-semibold">Stop-Loss (2× ATR)</span>
-                                    <span className="text-2xl md:text-3xl text-red-700 dark:text-red-300 font-mono font-bold">₹{analysisData.trade_plan.stop_loss}</span>
-                                </div>
-                            </div>
-                            
-                            <div className="bg-green-100 dark:bg-green-900/40 rounded-xl p-5 border-2 border-green-400 dark:border-green-600 shadow-md">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-green-700 dark:text-green-300 font-semibold">Target Price (6× ATR)</span>
-                                    <span className="text-2xl md:text-3xl text-green-700 dark:text-green-200 font-mono font-bold">₹{analysisData.trade_plan.target_price}</span>
-                                </div>
-                            </div>
-                            
-                            <div className="bg-white dark:bg-neutral-800 rounded-xl p-5 border-2 border-gray-300 dark:border-neutral-700 shadow-md">
-                                <div className="space-y-3">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Risk/Reward</span>
-                                        <span className="text-gray-900 dark:text-gray-100 font-mono font-bold">{analysisData.trade_plan.risk_reward_ratio}:1</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Holding Period</span>
-                                        <span className="text-gray-900 dark:text-gray-100 font-mono font-bold">~{analysisData.trade_plan.holding_period_days} days</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-            )}
-
-            {/* ========== SECTION 3: PRICE ACTION & TECHNICAL CONTEXT ========== */}
-            <SectionHeader 
-                icon={TrendingUp} 
-                title="Price Action & Support/Resistance" 
-                subtitle="52-week range and key price levels"
-                color="blue"
-            />
+            {/* ========== PHASE 1: PRICE ACTION CONTEXT (52W HIGH/LOW, SUPPORT/RESISTANCE) ========== */}
+            {/* Note: Sector Performance & Market Breadth moved to main dashboard (universal indicators) */}
             {safe_technicals && safe_technicals.daily_close && (
                 <PriceActionCard 
                     priceActionContext={{
@@ -400,16 +244,19 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 />
             )}
 
-            {/* Visual divider */}
-            <div className="my-12 border-t-2 border-gray-200 dark:border-neutral-700"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="lg:col-span-2 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-xl p-6 flex flex-col items-center text-center">
+                    <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full mb-3"><Info className="text-indigo-700 dark:text-indigo-400 h-6 w-6" /></div>
+                    <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">Key Insight</h3>
+                    <p className="text-indigo-800 dark:text-indigo-300">{keyInsight}</p>
+                </div>
+                <div className="lg:col-span-3 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6">
+                    <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">Analyst Verdict</h3>
+                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{analystVerdict}</p>
+                </div>
+            </div>
 
-            {/* ========== SECTION 4: TECHNICAL ANALYSIS (Momentum, Volatility, Evidence) ========== */}
-            <SectionHeader 
-                icon={Activity} 
-                title="Technical Analysis Deep Dive" 
-                subtitle="Momentum indicators, volatility metrics, and market evidence"
-                color="blue"
-            />
+            {/* ========== PHASE 2: MOMENTUM INDICATORS DASHBOARD (ENTRY TIMING) ========== */}
             {safe_technicals && (
                 <MomentumCard 
                     momentumData={safe_technicals}
@@ -430,20 +277,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                 <FuturesBasisCard basisData={safe_futures} />
             )}
 
-            {/* Supporting Evidence Grid */}
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-8"
-            >
-                <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-amber-500" />
-                    Supporting Evidence
-                </h3>
-            
-                {/* --- FIXED EVIDENCE CARDS --- */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* --- FIXED EVIDENCE CARDS --- */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Technical Snapshot */}
                 <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center">
@@ -549,21 +384,9 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     </div>
                 </div>
                 </div>
-                </div>
-            </motion.div>
+            </div>
             
-            {/* Visual divider */}
-            <div className="my-12 border-t-2 border-gray-200 dark:border-neutral-700"></div>
-
-            {/* ========== SECTION 5: POSITION SIZING & RISK MANAGEMENT ========== */}
-            <SectionHeader 
-                icon={Calculator} 
-                title="Position Sizing Calculator" 
-                subtitle="Determine optimal position size based on your capital and risk tolerance"
-                color="purple"
-            />
-            
-            {/* Position sizing - kept here for logical flow */}
+            {/* Position sizing moved after Trade Opportunity Overview for better flow */}
 
             {/* ===== UNIFIED TRADE OPPORTUNITY OVERVIEW ===== */}
             <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 space-y-6">
@@ -752,17 +575,6 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                     checklistData={strategy_signal.trade_checklist}
                 />
             )}
-
-            {/* Visual divider */}
-            <div className="my-12 border-t-2 border-gray-200 dark:border-neutral-700"></div>
-
-            {/* ========== SECTION 6: RISKS & KEY OBSERVATIONS ========== */}
-            <SectionHeader 
-                icon={AlertTriangle} 
-                title="Risk Assessment & Key Observations" 
-                subtitle="What could go wrong and what supports this trade"
-                color="amber"
-            />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6">
