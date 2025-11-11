@@ -20,7 +20,7 @@ import CollapsibleSection from '../common/CollapsibleSection';
 
 const Gauge = ({ value, label }) => {
     const percentage = Math.max(0, Math.min(100, value || 0));
-    const color = percentage > 66 ? 'text-green-600' : percentage > 33 ? 'text-amber-600' : 'text-red-600';
+    const color = percentage > 66 ? 'text-emerald-600 dark:text-emerald-400' : percentage > 33 ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400';
     const circumference = 2 * Math.PI * 30; // 30 is the radius
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
@@ -28,32 +28,32 @@ const Gauge = ({ value, label }) => {
         <div className="flex flex-col items-center gap-2">
             <div className="relative h-20 w-20">
                 <svg className="transform -rotate-90" width="80" height="80" viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="8" className="text-gray-200" fill="transparent" />
+                    <circle cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="7" className="text-slate-200 dark:text-slate-700" fill="transparent" />
                     <motion.circle
-                        cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="8"
+                        cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="7"
                         className={color} fill="transparent"
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
                         strokeLinecap="round"
                         initial={{ strokeDashoffset: circumference }}
                         animate={{ strokeDashoffset }}
-                        transition={{ duration: 1, ease: "circOut" }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{Math.round(percentage)}</span>
+                    <span className="text-xl font-bold text-slate-900 dark:text-slate-100">{Math.round(percentage)}</span>
                 </div>
             </div>
-            <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">{label}</span>
+            <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">{label}</span>
         </div>
     );
 };
 
 const Indicator = ({ label, value, state }) => {
-    const stateColor = state === 'Bullish' ? 'text-green-600 dark:text-green-400' : state === 'Bearish' ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400';
+    const stateColor = state === 'Bullish' ? 'text-emerald-600 dark:text-emerald-400' : state === 'Bearish' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400';
     return (
         <div className="text-left">
-            <p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">{label}</p>
             <p className={`text-lg font-bold ${stateColor}`}>{value}</p>
         </div>
     );
@@ -62,28 +62,28 @@ const Indicator = ({ label, value, state }) => {
 const PointItem = ({ text, Icon, colorClass }) => (
     <li className="flex items-start gap-3">
         <Icon className={`w-5 h-5 mt-1 flex-shrink-0 ${colorClass}`} />
-        <span className="text-gray-700 dark:text-gray-300">{text || 'Data Not Available'}</span>
+        <span className="text-slate-700 dark:text-slate-300">{text || 'Data Not Available'}</span>
     </li>
 );
 
 const TradePlanCard = ({ plan }) => (
-    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl p-6">
-        <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <Target size={20} className="mr-2 text-green-600 dark:text-green-400" />
+    <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-6">
+        <h3 className="font-bold text-xl text-slate-900 dark:text-slate-100 mb-4 flex items-center">
+            <Target size={20} className="mr-2 text-emerald-600 dark:text-emerald-400" />
             Scrybe Trade Plan
         </h3>
-        <div className="mb-4 text-xs text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/30 rounded-lg p-3 border border-green-200 dark:border-green-700">
+        <div className="mb-4 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg p-3 border border-emerald-200 dark:border-emerald-700">
             <p className="leading-relaxed">
                 📚 <strong>Educational Note:</strong> This trade plan combines AI's directional analysis with institutional risk management rules. 
                 Entry is at current market price, Stop-Loss is 2× ATR (Average True Range), and Target is 6× ATR for a 3:1 risk-reward ratio.
             </p>
         </div>
         <ul className="space-y-3 text-md">
-            <li className="flex justify-between"><span className="text-gray-600 dark:text-gray-400">Entry Price:</span><span className="text-gray-900 dark:text-gray-100 font-mono font-semibold">₹{plan.entry_price}</span></li>
-            <li className="flex justify-between"><span className="text-gray-600 dark:text-gray-400">Stop-Loss (2× ATR):</span><span className="text-gray-900 dark:text-gray-100 font-mono font-semibold">₹{plan.stop_loss}</span></li>
-            <li className="flex justify-between"><span className="text-gray-600 dark:text-gray-400">Target Price (6× ATR):</span><span className="text-gray-900 dark:text-gray-100 font-mono font-semibold">₹{plan.target_price}</span></li>
-            <li className="flex justify-between pt-3 border-t border-green-200 dark:border-green-700"><span className="text-gray-600 dark:text-gray-400">Risk/Reward Ratio:</span><span className="text-gray-900 dark:text-gray-100 font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
-            <li className="flex justify-between"><span className="text-gray-600 dark:text-gray-400">Expected Holding Period:</span><span className="text-gray-900 dark:text-gray-100 font-mono font-semibold">~{plan.holding_period_days} days</span></li>
+            <li className="flex justify-between"><span className="text-slate-600 dark:text-slate-400">Entry Price:</span><span className="text-slate-900 dark:text-slate-100 font-mono font-semibold">₹{plan.entry_price}</span></li>
+            <li className="flex justify-between"><span className="text-slate-600 dark:text-slate-400">Stop-Loss (2× ATR):</span><span className="text-slate-900 dark:text-slate-100 font-mono font-semibold">₹{plan.stop_loss}</span></li>
+            <li className="flex justify-between"><span className="text-slate-600 dark:text-slate-400">Target Price (6× ATR):</span><span className="text-slate-900 dark:text-slate-100 font-mono font-semibold">₹{plan.target_price}</span></li>
+            <li className="flex justify-between pt-3 border-t border-emerald-200 dark:border-emerald-700"><span className="text-slate-600 dark:text-slate-400">Risk/Reward Ratio:</span><span className="text-slate-900 dark:text-slate-100 font-mono font-semibold">{plan.risk_reward_ratio}:1</span></li>
+            <li className="flex justify-between"><span className="text-slate-600 dark:text-slate-400">Expected Holding Period:</span><span className="text-slate-900 dark:text-slate-100 font-mono font-semibold">~{plan.holding_period_days} days</span></li>
         </ul>
     </div>
 );
@@ -93,7 +93,7 @@ const TradePlanCard = ({ plan }) => (
 // =========================================================================
 
 const ApexAnalysisDashboard = ({ analysisData }) => {
-    if (!analysisData) { return <div className="text-center p-8 text-gray-600 dark:text-gray-400">No analysis data available.</div>; }
+    if (!analysisData) { return <div className="text-center p-8 text-slate-600 dark:text-slate-400">No analysis data available.</div>; }
 
     const {
         ticker, companyName, last_updated,
@@ -123,8 +123,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
     const getSignalStyle = (sig) => {
         switch (sig) {
-            case 'BUY': return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700';
-            default: return 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-neutral-700';
+            case 'BUY': return 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700';
+            default: return 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700';
         }
     };
 
@@ -132,17 +132,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
-            {/* ========== MARKET-WIDE CONTEXT REMOVED ========== */}
-            {/* Market Regime, Sector Performance, and Market Breadth moved to main dashboard */}
-            {/* These are universal indicators that update daily and apply to ALL stocks */}
-
             {strategy_signal && (
                 <>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-5 flex items-center gap-4">
-                        <Megaphone size={32} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-5 flex items-center gap-4">
+                        <Megaphone size={28} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
                         <div>
-                            <h2 className="font-bold text-xl text-gray-900 dark:text-gray-100">Actionable Signal Identified</h2>
-                            <p className="text-blue-700 dark:text-blue-300">
+                            <h2 className="font-bold text-lg text-slate-900 dark:text-slate-100">Actionable Signal Identified</h2>
+                            <p className="text-blue-700 dark:text-blue-300 text-sm">
                                 This stock passed the rigorous **{strategy_signal.type}** strategy filter.
                                 {strategy_signal.signal === 'HOLD' && ` It was vetoed due to: ${strategy_signal.veto_reason}.`}
                             </p>
@@ -181,13 +177,13 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             )}
 
             <div>
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">{ticker?.replace('.NS', '')}</h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400">{companyName || 'N/A'}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{ticker?.replace('.NS', '')}</h1>
+                <p className="text-lg text-slate-600 dark:text-slate-400">{companyName || 'N/A'}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">
                     Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
                 </p>
                 {prediction_for_date && (
-                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 dark:bg-blue-900/30 border border-blue-500/30 dark:border-blue-700">
+                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700">
                         <span className="text-blue-600 dark:text-blue-400 text-xs font-semibold">
                             📅 Prediction for: {prediction_for_date_short || prediction_for_date}
                         </span>
@@ -199,17 +195,17 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`text-center p-6 rounded-xl border ${getSignalStyle(signal)}`}>
+                <div className={`text-center p-6 rounded-lg border ${getSignalStyle(signal)}`}>
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2">Signal</p>
-                    <p className="text-4xl font-bold">{signal}</p>
+                    <p className="text-3xl font-bold">{signal}</p>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
-                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-gray-600 dark:text-gray-400">Scrybe Score</p>
-                    <p className="text-4xl font-bold font-mono text-gray-900 dark:text-gray-100">{scoreText}</p>
+                <div className="text-center p-6 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-slate-600 dark:text-slate-400">Scrybe Score</p>
+                    <p className="text-3xl font-bold font-mono text-slate-900 dark:text-slate-100">{scoreText}</p>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
-                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-gray-600 dark:text-gray-400">Confidence</p>
-                    <p className="text-4xl font-bold text-gray-900 dark:text-gray-100">{confidence}</p>
+                <div className="text-center p-6 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-slate-600 dark:text-slate-400">Confidence</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{confidence}</p>
                 </div>
             </div>
 
