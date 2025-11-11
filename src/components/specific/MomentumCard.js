@@ -20,7 +20,7 @@
 import React from 'react';
 import { TrendingUp, Activity, Zap, BarChart3, CheckCircle, XCircle } from 'lucide-react';
 
-const MomentumCard = ({ momentumData, analysisData }) => {
+const MomentumCard = ({ momentumData, analysisData, hideTitle = false }) => {
   if (!momentumData || momentumData.error) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-6 backdrop-blur-sm">
@@ -88,17 +88,19 @@ const MomentumCard = ({ momentumData, analysisData }) => {
   return (
     <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg p-6 backdrop-blur-sm">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-yellow-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Momentum Indicators Dashboard</h3>
+      {!hideTitle && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-400" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Momentum Indicators Dashboard</h3>
+          </div>
+          {timing_signal.signal && (
+            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTimingSignalClass(timing_signal.color)}`}>
+              Timing: {timing_signal.signal}
+            </span>
+          )}
         </div>
-        {timing_signal.signal && (
-          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTimingSignalClass(timing_signal.color)}`}>
-            Timing: {timing_signal.signal}
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Momentum Score & Gauge */}
       <div className="mb-4 p-4 bg-gray-50 dark:bg-neutral-800 rounded-lg border border-gray-200 dark:border-neutral-700">

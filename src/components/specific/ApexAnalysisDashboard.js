@@ -252,6 +252,8 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                                     distance_to_nearest_resistance_pct: safe_technicals.distance_to_nearest_resistance_pct,
                                     price_position: safe_technicals.price_position
                                 }}
+                            } }
+                                hideTitle={true}
                             />
                         )}
 
@@ -260,6 +262,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <MomentumCard 
                                 momentumData={safe_technicals}
                                 analysisData={analysisData}
+                                hideTitle={true}
                             />
                         )}
 
@@ -268,6 +271,7 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
                             <VolatilityCard 
                                 volatilityData={safe_futures}
                                 analysisData={analysisData}
+                                hideTitle={true}
                             />
                         )}
                     </div>

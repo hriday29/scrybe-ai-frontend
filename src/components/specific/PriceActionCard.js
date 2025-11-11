@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Card from '../ui/Card.jsx';
 import InfoNote from '../ui/InfoNote.jsx';
 
-const PriceActionCard = ({ priceActionContext }) => {
+const PriceActionCard = ({ priceActionContext, hideTitle = false }) => {
     if (!priceActionContext || priceActionContext.error) {
         return null;
     }
@@ -58,23 +58,25 @@ const PriceActionCard = ({ priceActionContext }) => {
         >
             <Card className="p-6">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-blue-500/10">
-                            <Target className="w-6 h-6 text-blue-400" />
+                {!hideTitle && (
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-blue-500/10">
+                                <Target className="w-6 h-6 text-blue-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-900">Price Action</h3>
+                                <p className="text-sm text-gray-600">52-week range & key levels</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-2xl font-bold text-gray-900">Price Action</h3>
-                            <p className="text-sm text-gray-600">52-week range & key levels</p>
-                        </div>
-                    </div>
 
-                    {/* Current Price Badge */}
-                    <div className="text-right">
-                        <p className="text-sm text-gray-600">Current Price</p>
-                        <p className="text-3xl font-bold text-gray-900">₹{current_price}</p>
+                        {/* Current Price Badge */}
+                        <div className="text-right">
+                            <p className="text-sm text-gray-600">Current Price</p>
+                            <p className="text-3xl font-bold text-gray-900">₹{current_price}</p>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* 52-Week Range Visualization */}
                 <div className={`border rounded-xl p-5 mb-6 transition-colors ${getPositionBg()}`}>

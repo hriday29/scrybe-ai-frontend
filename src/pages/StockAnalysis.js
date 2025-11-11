@@ -534,9 +534,9 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
                         <li><span className="font-medium">Volatility</span> estimates expected swing and informs stop width and expectations.</li>
                       </ul>
                     </div>
-                    <PriceActionCard priceActionContext={analysisData?.price_action_context} />
-                    <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} />
-                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} />
+                    <PriceActionCard priceActionContext={analysisData?.price_action_context} hideTitle={true} />
+                    <MomentumCard momentumData={analysisData?.momentum_analysis} analysisData={analysisData} hideTitle={true} />
+                    <VolatilityCard volatilityData={analysisData?.enhanced_volatility_analysis} analysisData={analysisData} hideTitle={true} />
                   </div>
                 </CollapsibleSection>
 

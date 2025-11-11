@@ -22,7 +22,7 @@ import { TrendingUp, AlertTriangle, Activity, Target } from 'lucide-react';
 import Card from '../ui/Card.jsx';
 import InfoNote from '../ui/InfoNote.jsx';
 
-const VolatilityCard = ({ volatilityData, analysisData }) => {
+const VolatilityCard = ({ volatilityData, analysisData, hideTitle = false }) => {
   if (!volatilityData || volatilityData.error) {
     return (
       <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg p-6 backdrop-blur-sm">
@@ -92,17 +92,19 @@ const VolatilityCard = ({ volatilityData, analysisData }) => {
   return (
   <Card className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Activity className="w-5 h-5 text-primary-500" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Enhanced Volatility Analysis</h3>
+      {!hideTitle && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-primary-500" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Enhanced Volatility Analysis</h3>
+          </div>
+          {volatility_regime.classification && (
+            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRegimeColorClass(volatility_regime.color)}`}>
+              {volatility_regime.classification} Volatility
+            </span>
+          )}
         </div>
-        {volatility_regime.classification && (
-          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRegimeColorClass(volatility_regime.color)}`}>
-            {volatility_regime.classification} Volatility
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Volatility Regime Summary */}
       {volatility_regime.advice && (
