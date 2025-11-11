@@ -4,13 +4,11 @@ import NewHeader from '../components/layout/NewHeader';
 import NewFooter from '../components/layout/NewFooter';
 import HeroSection from '../components/landing/HeroSection';
 import FeaturesSection from '../components/landing/FeaturesSection';
-import MicroFaqSection from '../components/landing/MicroFaqSection';
 import AnalyticsSampler from '../components/landing/AnalyticsSampler';
 import TrustMetricsShowcase from '../components/landing/TrustMetricsShowcase';
 import TestimonialsSection from '../components/landing/TestimonialsSection';
 import CTASection from '../components/landing/CTASection';
 import AboutSection from '../components/landing/AboutSection';
-import ContactSection from '../components/landing/ContactSection';
 
 const NewLandingPage = ({
   currentUser,
@@ -22,6 +20,8 @@ const NewLandingPage = ({
   onTermsOpen,
   onDisclaimerOpen,
   onRefundOpen,
+  onFaqOpen,
+  onContactOpen,
 }) => {
   return (
     <div className="min-h-screen bg-white">
@@ -55,12 +55,8 @@ const NewLandingPage = ({
       {/* Testimonials Section */}
       <TestimonialsSection />
 
-      {/* Contact Section */}
-      <ContactSection />
-
-      {/* Analytics Sampler & Micro FAQ (placed before signup CTA) */}
+      {/* Analytics Sampler */}
       <AnalyticsSampler />
-      <MicroFaqSection onGetStarted={onGetStarted} />
 
       {/* CTA Section */}
       <CTASection
@@ -74,6 +70,8 @@ const NewLandingPage = ({
         onTermsOpen={onTermsOpen}
         onDisclaimerOpen={onDisclaimerOpen}
         onRefundOpen={onRefundOpen}
+        onFaqOpen={onFaqOpen}
+        onContactOpen={onContactOpen}
       />
     </div>
   );

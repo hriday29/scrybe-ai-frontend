@@ -34,6 +34,7 @@ import MarketBreadthCard from './components/specific/MarketBreadthCard.js';
 // Page Components
 import AppGuide from './pages/AppGuide.js';
 import FaqPage from './pages/FaqPage.js';
+import ContactPage from './pages/ContactPage.js';
 import OpenPositions from './pages/OpenPositions.js';
 import Rulebook from './pages/Rulebook.js';
 import StockDetailPage from './pages/StockDetailPage.js';
@@ -540,6 +541,7 @@ export default function App() {
   const { currentUser } = useAuth();
   const [view, setView] = useState("landing");
   const [showFaq, setShowFaq] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const [showUserGuide, setShowUserGuide] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
@@ -948,7 +950,32 @@ export default function App() {
       )}
 
       {/* FAQ and User Guide Pages */}
-      {showFaq && <FaqPage onBack={() => setShowFaq(false)} />}
+      {showFaq && (
+        <FaqPage 
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onPrivacyOpen={() => setShowPrivacy(true)}
+          onTermsOpen={() => setShowTerms(true)}
+          onDisclaimerOpen={() => setShowDisclaimer(true)}
+          onRefundOpen={() => setShowRefund(true)}
+          onBack={() => setShowFaq(false)} 
+        />
+      )}
+      {showContact && (
+        <ContactPage
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onPrivacyOpen={() => setShowPrivacy(true)}
+          onTermsOpen={() => setShowTerms(true)}
+          onDisclaimerOpen={() => setShowDisclaimer(true)}
+          onRefundOpen={() => setShowRefund(true)}
+          onClose={() => setShowContact(false)}
+        />
+      )}
       {showUserGuide && <UserGuidePage onBack={() => setShowUserGuide(false)} />}
 
       {/* Legal Pages */}
@@ -990,7 +1017,7 @@ export default function App() {
       )}
 
       {/* Main app / landing */}
-      {!showFaq && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
+      {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
         <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
           {view === "app" ? (
             <>
@@ -1015,6 +1042,8 @@ export default function App() {
                 onTermsOpen={() => setShowTerms(true)}
                 onDisclaimerOpen={() => setShowDisclaimer(true)}
                 onRefundOpen={() => setShowRefund(true)}
+                onFaqOpen={() => setShowFaq(true)}
+                onContactOpen={() => setShowContact(true)}
               />
             </>
           )}

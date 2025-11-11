@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Phone, CheckCircle, Shield } from 'lucide-react';
 
-const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen }) => {
+const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen, onFaqOpen, onContactOpen }) => {
   return (
     <footer className="bg-gray-50 text-gray-700 border-t border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700">
       {/* Main Footer Content */}
@@ -44,28 +44,18 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
             <h3 className="text-gray-900 font-bold text-lg mb-6 dark:text-gray-100">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
+                <a href="#features" className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
                   Features
-                </button>
+                </a>
               </li>
               <li>
-                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
-                  Testimonials
-                </button>
+                <a href="#about" className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
+                  About Us
+                </a>
               </li>
               <li>
                 <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
                   Get Started
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
-                  Sign In
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
-                  Contact Us
                 </button>
               </li>
             </ul>
@@ -76,15 +66,27 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen 
             <h3 className="text-gray-900 font-bold text-lg mb-6 dark:text-gray-100">Support</h3>
             <ul className="space-y-3">
               <li>
-                <a href="mailto:support@scrybeai.com" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
-                  <Mail className="w-4 h-4" />
-                  support@scrybeai.com
-                </a>
+                <button
+                  type="button"
+                  onClick={onFaqOpen}
+                  className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400"
+                >
+                  FAQ
+                </button>
               </li>
               <li>
-                <a href="tel:+919876543210" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
-                  <Phone className="w-4 h-4" />
-                  +91 98765 43210
+                <button
+                  type="button"
+                  onClick={onContactOpen}
+                  className="text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400"
+                >
+                  Contact Us
+                </button>
+              </li>
+              <li>
+                <a href="mailto:support@scrybeai.com" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors dark:text-gray-300 dark:hover:text-primary-400">
+                  <Mail className="w-4 h-4" />
+                  Email Support
                 </a>
               </li>
             </ul>

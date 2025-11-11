@@ -1,39 +1,76 @@
 // src/pages/FaqPage.js
-
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { useAuth } from "../context/AuthContext"; // Corrected path
-import { submitFeedback } from '../api/api'; // Corrected path
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, HelpCircle, ChevronDown, Send, CheckCircle } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { submitFeedback } from '../api/api';
+import NewHeader from '../components/layout/NewHeader';
+import NewFooter from '../components/layout/NewFooter';
 
-const FaqItem = ({ question, answer, isBeta = false }) => (
-    <motion.details
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-    viewport={{ once: true }}
-  className={`group mb-4 rounded-2xl border border-gray-200 bg-white dark:bg-slate-900 dark:border-slate-700 p-6 shadow-soft-lg hover:shadow-xl transition ${
-      isBeta ? "ring-1 ring-amber-400/40" : ""
-    }`}
-  >
-  <summary className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 dark:text-white list-none">
-      <span className="flex items-center gap-2">
-        {isBeta && (
-          <span className="text-amber-400 text-sm font-normal">[BETA]</span>
+const FaqItem = ({ question, answer, isBeta = false, index = 0 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05 }}
+      className={`bg-white dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 transition-all ${
+        isBeta ? "ring-2 ring-amber-400/40" : ""
+      }`}
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full p-6 text-left flex items-start gap-4 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+      >
+        <div className="flex-1">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+            {isBeta && (
+              <span className="px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-bold rounded">
+                BETA
+              </span>
+            )}
+            {question}
+          </h3>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6 pt-2">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {answer}
+              </p>
+            </div>
+          </motion.div>
         )}
-        {question}
-      </span>
-      <span className="text-gray-400 group-open:rotate-180 transition-transform">
-        ▼
-      </span>
-    </summary>
-  <p className="mt-3 prose prose-lg max-w-none leading-relaxed text-gray-700 dark:text-gray-300">
-      {answer}
-    </p>
-  </motion.details>
-);
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
-const FaqPage = ({ onBack }) => {
-  const { currentUser } = useAuth();
+const FaqPage = ({ 
+  currentUser, 
+  onSignIn, 
+  onSignOut, 
+  onGetStarted,
+  onPrivacyOpen,
+  onTermsOpen,
+  onDisclaimerOpen,
+  onRefundOpen,
+  onBack 
+}) => {
+  const authContext = useAuth();
+  const user = currentUser || authContext.currentUser;
   const [questionText, setQuestionText] = useState("");
   const [status, setStatus] = useState("initial");
   const [errorMessage, setErrorMessage] = useState("");
@@ -115,7 +152,7 @@ const FaqPage = ({ onBack }) => {
           setStatus("error");
           return;
       }
-      if (!currentUser) {
+      if (!user) {
           setErrorMessage(
               "You must be logged in to submit a question. Please sign in and try again."
           );
@@ -160,150 +197,203 @@ const FaqPage = ({ onBack }) => {
   };
 
   return (
-  <div className="relative min-h-screen bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-gray-100 font-sans overflow-hidden">
-      {/* Background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-teal-50/30 to-purple-50/40" />
-      <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-primary-200/20 blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-secondary-200/20 blur-3xl" />
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
+      {/* Header */}
+      <NewHeader
+        currentUser={user}
+        onSignIn={onSignIn}
+        onGetStarted={onGetStarted}
+        onSignOut={onSignOut}
+      />
 
-      {/* Subtle grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(100,100,100,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,100,100,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-40 pointer-events-none" />
+      {/* Hero Section */}
+      <div className="pt-32 pb-16 px-6 sm:px-8 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          {/* Back Button */}
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-8 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-medium">Back</span>
+            </button>
+          )}
 
-  <div className="relative max-w-5xl mx-auto px-6 py-12">
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="sticky top-6 mb-12 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50 shadow-soft transition dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700"
-        >
-          ← Back to Main Site
-        </button>
+          {/* Page Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-full mb-6 border border-indigo-200 dark:border-indigo-800">
+              <HelpCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span className="text-sm font-bold text-indigo-700 dark:text-indigo-300 tracking-wide">
+                HELP CENTER
+              </span>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Frequently Asked Questions
+            </h1>
+            
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Find answers to common questions about{" "}
+              <span className="font-semibold text-indigo-600 dark:text-indigo-400">Scrybe AI</span>.
+              Can't find what you're looking for? Submit your question below.
+            </p>
+          </motion.div>
 
-        {/* Page Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="inline-block text-6xl font-extrabold mb-4 pt-2 pb-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg leading-tight">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-lg max-w-2xl mx-auto text-gray-700 dark:text-gray-300">
-            Find answers to common questions about{" "}
-            <span className="font-semibold text-primary-600">Scrybe AI</span>.
-          </p>
-        </motion.div>
-
-        {/* Beta Section */}
-        <div className="mb-20">
-          <h2 className="text-2xl font-bold mb-6 text-amber-600 dark:text-amber-400 flex items-center gap-3">
-            <span className="bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 text-sm font-semibold px-2 py-1 rounded">
-              BETA
-            </span>
-            Beta Testing Questions
-          </h2>
-          <div className="space-y-4">
-            {betaFaqs.map((faq, i) => (
-              <FaqItem
-                key={`beta-${i}`}
-                question={faq.q}
-                answer={faq.a}
-                isBeta={true}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* General FAQ Section */}
-        <div className="mb-20">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">General Questions</h2>
-          <div className="space-y-4">
-            {generalFaqs.map((faq, i) => (
-              <FaqItem key={`general-${i}`} question={faq.q} answer={faq.a} />
-            ))}
-          </div>
-        </div>
-
-        {/* Question Submission */}
-  <div className="rounded-2xl border border-gray-200 bg-white dark:bg-slate-900 dark:border-slate-700 p-8 shadow-soft-lg">
-          <h2 className="text-3xl font-bold mb-4 text-center text-gray-900 dark:text-white">
-            Can't find your answer?
-          </h2>
-          <p className="text-gray-700 dark:text-gray-300 mb-8 text-center">
-            Ask our team! We'll review your question and add it to our list.
-          </p>
-
-          {status !== "submitted" ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <textarea
-                value={questionText}
-                onChange={(e) => {
-                  setQuestionText(e.target.value);
-                  if (status === "error") {
-                    setStatus("initial");
-                    setErrorMessage("");
-                  }
-                }}
-                rows="4"
-                className={`w-full rounded-lg p-3 text-sm focus:outline-none focus:ring-2 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
-                  status === "error"
-                    ? "border border-red-400 focus:ring-red-500"
-                    : "border border-gray-200 focus:ring-primary-500"
-                }`}
-                placeholder="Type your question here... (e.g., 'I found a bug when...', 'Feature request...', 'How do I...')"
-                required
-              />
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                Please do not submit personal information. Your question will be
-                reviewed by our team.
-              </p>
-
-              <div className="flex justify-center items-center gap-4">
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="bg-primary-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                >
-                  {status === "submitting" ? "Submitting..." : "Submit Question"}
-                </button>
-                {status === "error" && (
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-medium"
-                  >
-                    Clear
-                  </button>
-                )}
+          {/* Beta Section */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm font-bold rounded-lg border border-amber-300 dark:border-amber-700">
+                BETA
               </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Beta Testing Questions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {betaFaqs.map((faq, i) => (
+                <FaqItem
+                  key={`beta-${i}`}
+                  question={faq.q}
+                  answer={faq.a}
+                  isBeta={true}
+                  index={i}
+                />
+              ))}
+            </div>
+          </div>
 
-              {status === "error" && (
-                <div className="mt-4 p-3 bg-red-50 dark:bg-red-500/10 border border-red-400 rounded-lg">
-                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">
-                    ❌ {errorMessage}
+          {/* General FAQ Section */}
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              General Questions
+            </h2>
+            <div className="space-y-4">
+              {generalFaqs.map((faq, i) => (
+                <FaqItem 
+                  key={`general-${i}`} 
+                  question={faq.q} 
+                  answer={faq.a}
+                  index={i}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Question Submission */}
+          <div className="rounded-2xl border-2 border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-8 shadow-xl">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                Can't Find Your Answer?
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                Ask our team! We'll review your question and respond within 24-48 hours.
+              </p>
+            </div>
+
+            {status !== "submitted" ? (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Your Question *
+                  </label>
+                  <textarea
+                    value={questionText}
+                    onChange={(e) => {
+                      setQuestionText(e.target.value);
+                      if (status === "error") {
+                        setStatus("initial");
+                        setErrorMessage("");
+                      }
+                    }}
+                    rows="5"
+                    className={`w-full border-2 rounded-xl p-4 text-gray-900 dark:text-white transition-all outline-none resize-none ${
+                      status === "error"
+                        ? "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/10 focus:ring-2 focus:ring-red-500"
+                        : "border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    }`}
+                    placeholder="Type your question here... (e.g., 'I found a bug when...', 'Feature request...', 'How do I...')"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                    Please do not submit personal information. Your question will be reviewed by our team.
                   </p>
                 </div>
-              )}
-            </form>
-          ) : (
-            <div className="text-center space-y-4">
-              <p className="text-green-600 dark:text-green-400 font-semibold text-lg">
-                ✅ Thank you! Your question has been submitted for review.
-              </p>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                We typically respond to questions within 1-2 business days during
-                the beta phase.
-              </p>
-              <button
-                onClick={resetForm}
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
-              >
-                Submit Another Question
-              </button>
-            </div>
-          )}
+
+                {status === "error" && (
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <p className="text-red-600 dark:text-red-400 text-sm font-medium">
+                      ❌ {errorMessage}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex justify-center items-center gap-4">
+                  <button
+                    type="submit"
+                    disabled={status === "submitting"}
+                    className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-semibold px-8 py-3.5 rounded-xl transition-all disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  >
+                    {status === "submitting" ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Submit Question</span>
+                        <Send className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+                  {status === "error" && (
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-semibold transition-colors"
+                    >
+                      Clear Form
+                    </button>
+                  )}
+                </div>
+              </form>
+            ) : (
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800 rounded-2xl p-10">
+                <div className="flex flex-col items-center gap-4 text-center">
+                  <div className="p-4 bg-green-100 dark:bg-green-900/40 rounded-full">
+                    <CheckCircle className="text-green-600 dark:text-green-400 w-12 h-12" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    Question Submitted!
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-lg">
+                    Thank you! We typically respond within 24-48 hours during the beta phase.
+                  </p>
+                  <button
+                    onClick={resetForm}
+                    className="mt-4 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors"
+                  >
+                    Submit Another Question
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <NewFooter
+        onPrivacyOpen={onPrivacyOpen}
+        onTermsOpen={onTermsOpen}
+        onDisclaimerOpen={onDisclaimerOpen}
+        onRefundOpen={onRefundOpen}
+      />
     </div>
   );
 };
