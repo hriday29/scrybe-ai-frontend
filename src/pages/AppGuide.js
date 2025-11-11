@@ -29,6 +29,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 1,
       icon: <BarChart3 className="w-7 h-7" />,
       features: ["Scrybe Score (-100 to +100)", "Technical + Fundamental Analysis", "Real-time Market Data"],
+      colorScheme: {
+        iconBg: "bg-blue-50 dark:bg-blue-900/20",
+        iconText: "text-blue-600 dark:text-blue-400",
+        hoverIconBg: "group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30",
+        border: "border-blue-200 dark:border-blue-900/50",
+        hoverBorder: "hover:border-blue-300 dark:hover:border-blue-800",
+      }
     },
     {
       title: "Portfolio Manager",
@@ -39,6 +46,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 2,
       icon: <Layers className="w-7 h-7" />,
       features: ["250 Stocks Daily Analysis", "Top 10 Trade Selection", "Risk-Controlled Portfolio Construction"],
+      colorScheme: {
+        iconBg: "bg-emerald-50 dark:bg-emerald-900/20",
+        iconText: "text-emerald-600 dark:text-emerald-400",
+        hoverIconBg: "group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30",
+        border: "border-emerald-200 dark:border-emerald-900/50",
+        hoverBorder: "hover:border-emerald-300 dark:hover:border-emerald-800",
+      }
     },
     {
       title: "Fund Dashboard",
@@ -49,6 +63,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 3,
       icon: <TrendingUp className="w-7 h-7" />,
       features: ["Live P&L Tracking", "Risk Management Metrics", "Entry/Exit Levels"],
+      colorScheme: {
+        iconBg: "bg-amber-50 dark:bg-amber-900/20",
+        iconText: "text-amber-600 dark:text-amber-400",
+        hoverIconBg: "group-hover:bg-amber-100 dark:group-hover:bg-amber-900/30",
+        border: "border-amber-200 dark:border-amber-900/50",
+        hoverBorder: "hover:border-amber-300 dark:hover:border-amber-800",
+      }
     },
     {
       title: "Index Analysis",
@@ -59,6 +80,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 4,
       icon: <LineChart className="w-7 h-7" />,
       features: ["Market Regime Detection", "Sectoral Analysis", "Index Momentum Tracking"],
+      colorScheme: {
+        iconBg: "bg-indigo-50 dark:bg-indigo-900/20",
+        iconText: "text-indigo-600 dark:text-indigo-400",
+        hoverIconBg: "group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30",
+        border: "border-indigo-200 dark:border-indigo-900/50",
+        hoverBorder: "hover:border-indigo-300 dark:hover:border-indigo-800",
+      }
     },
     {
       title: "AI Track Record",
@@ -69,6 +97,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 5,
       icon: <Activity className="w-7 h-7" />,
       features: ["Complete Trade History", "Performance Metrics", "Win/Loss Analysis"],
+      colorScheme: {
+        iconBg: "bg-rose-50 dark:bg-rose-900/20",
+        iconText: "text-rose-600 dark:text-rose-400",
+        hoverIconBg: "group-hover:bg-rose-100 dark:group-hover:bg-rose-900/30",
+        border: "border-rose-200 dark:border-rose-900/50",
+        hoverBorder: "hover:border-rose-300 dark:hover:border-rose-800",
+      }
     },
     {
       title: "The Rulebook",
@@ -79,6 +114,13 @@ const AppGuide = ({ navigateToTab }) => {
       targetIndex: 6,
       icon: <BookOpen className="w-7 h-7" />,
       features: ["Portfolio Rules", "Risk Management", "Selection Criteria"],
+      colorScheme: {
+        iconBg: "bg-slate-50 dark:bg-slate-800",
+        iconText: "text-slate-600 dark:text-slate-400",
+        hoverIconBg: "group-hover:bg-slate-100 dark:group-hover:bg-slate-700",
+        border: "border-slate-200 dark:border-slate-700",
+        hoverBorder: "hover:border-slate-300 dark:hover:border-slate-600",
+      }
     },
   ];
 
@@ -86,22 +128,26 @@ const AppGuide = ({ navigateToTab }) => {
     { 
       icon: Target, 
       label: "250 Stocks", 
-      sublabel: "Analyzed Daily"
+      sublabel: "Analyzed Daily",
+      color: "text-blue-600 dark:text-blue-400"
     },
     { 
       icon: Zap, 
       label: "Top 10", 
-      sublabel: "Selected Trades"
+      sublabel: "Selected Trades",
+      color: "text-amber-600 dark:text-amber-400"
     },
     { 
       icon: Shield, 
       label: "2% Risk", 
-      sublabel: "Per Trade Max"
+      sublabel: "Per Trade Max",
+      color: "text-emerald-600 dark:text-emerald-400"
     },
     { 
       icon: CheckCircle2, 
       label: "±60 Score", 
-      sublabel: "High Conviction"
+      sublabel: "High Conviction",
+      color: "text-indigo-600 dark:text-indigo-400"
     },
   ];
 
@@ -145,7 +191,7 @@ const AppGuide = ({ navigateToTab }) => {
             transition={{ delay: 0.1 + idx * 0.05 }}
             className="bg-white dark:bg-slate-900 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm"
           >
-            <stat.icon className="w-6 h-6 text-slate-600 dark:text-slate-400 mb-4" />
+            <stat.icon className={`w-6 h-6 ${stat.color} mb-4`} />
             <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
               {stat.label}
             </div>
@@ -167,10 +213,10 @@ const AppGuide = ({ navigateToTab }) => {
             onMouseEnter={() => setHoveredCard(idx)}
             onMouseLeave={() => setHoveredCard(null)}
             onClick={() => navigateToTab(item.targetIndex)}
-            className="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600"
+            className={`group relative bg-white dark:bg-slate-900 border ${item.colorScheme.border} rounded-xl p-6 shadow-sm cursor-pointer transition-all duration-200 hover:shadow-lg ${item.colorScheme.hoverBorder}`}
           >
             {/* Icon */}
-            <div className="inline-flex p-3 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 mb-5 group-hover:bg-slate-100 dark:group-hover:bg-slate-700 transition-colors">
+            <div className={`inline-flex p-3 rounded-lg ${item.colorScheme.iconBg} ${item.colorScheme.iconText} mb-5 ${item.colorScheme.hoverIconBg} transition-colors`}>
               {item.icon}
             </div>
 
@@ -223,9 +269,9 @@ const AppGuide = ({ navigateToTab }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="mt-20 text-center p-10 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700"
+        className="mt-20 text-center p-10 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-blue-200 dark:border-blue-900/50"
       >
-        <Sparkles className="w-10 h-10 text-slate-600 dark:text-slate-400 mx-auto mb-5" />
+        <Sparkles className="w-10 h-10 text-blue-600 dark:text-blue-400 mx-auto mb-5" />
         <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
           Ready to Get Started?
         </h3>
@@ -235,7 +281,7 @@ const AppGuide = ({ navigateToTab }) => {
         </p>
         <button
           onClick={() => navigateToTab(1)}
-          className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-semibold rounded-lg shadow-sm transition-colors"
+          className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors"
         >
           Begin with Stock Analysis
         </button>
