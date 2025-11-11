@@ -50,9 +50,15 @@ const SectionTitle = ({ title, subtitle }) => (
     transition={{ duration: 0.5 }}
     className="text-center"
   >
-    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400">
+    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 leading-tight pb-2">
       {title}
     </h2>
+    <motion.div
+      initial={{ width: 0 }}
+      animate={{ width: "128px" }}
+      transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
+      className="h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 rounded-full mx-auto mb-4"
+    />
     {subtitle && (
       <p className="mt-4 text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">{subtitle}</p>
     )}

@@ -28,8 +28,12 @@ const AppGuide = ({ navigateToTab }) => {
         "Saves hours of research with data-driven analysis covering 15+ technical indicators, AI sentiment, and market regime detection.",
       targetIndex: 1,
       icon: <BarChart3 className="w-8 h-8" />,
-      color: "blue",
-      gradient: "from-blue-500 to-cyan-500",
+      colorClass: "blue",
+      bgGradient: "from-blue-500 to-cyan-500",
+      cardGradient: "from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20",
+      iconBg: "from-blue-500 to-cyan-500",
+      textColor: "text-blue-700 dark:text-blue-300",
+      borderColor: "border-blue-200 dark:border-blue-700",
       features: ["Scrybe Score (-100 to +100)", "Technical + Fundamental Analysis", "Real-time Market Data"],
     },
     {
@@ -40,8 +44,12 @@ const AppGuide = ({ navigateToTab }) => {
         "Professional portfolio management with clear visibility into why stocks are selected or rejected, sector diversification limits, and institutional risk management.",
       targetIndex: 2,
       icon: <Layers className="w-8 h-8" />,
-      color: "purple",
-      gradient: "from-purple-500 to-pink-500",
+      colorClass: "purple",
+      bgGradient: "from-purple-500 to-pink-500",
+      cardGradient: "from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20",
+      iconBg: "from-purple-500 to-pink-500",
+      textColor: "text-purple-700 dark:text-purple-300",
+      borderColor: "border-purple-200 dark:border-purple-700",
       features: ["250 Stocks Daily Analysis", "Top 10 Trade Selection", "Risk-Controlled Portfolio Construction"],
     },
     {
@@ -52,8 +60,12 @@ const AppGuide = ({ navigateToTab }) => {
         "Focused view of highest-conviction trades with complete transparency on risk management and exit strategy.",
       targetIndex: 3,
       icon: <TrendingUp className="w-8 h-8" />,
-      color: "green",
-      gradient: "from-green-500 to-emerald-500",
+      colorClass: "green",
+      bgGradient: "from-green-500 to-emerald-500",
+      cardGradient: "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20",
+      iconBg: "from-green-500 to-emerald-500",
+      textColor: "text-green-700 dark:text-green-300",
+      borderColor: "border-green-200 dark:border-green-700",
       features: ["Live P&L Tracking", "Risk Management Metrics", "Entry/Exit Levels"],
     },
     {
@@ -64,8 +76,12 @@ const AppGuide = ({ navigateToTab }) => {
         "Align your trading decisions with broader market trends and smallcap universe momentum for better timing.",
       targetIndex: 4,
       icon: <LineChart className="w-8 h-8" />,
-      color: "cyan",
-      gradient: "from-cyan-500 to-teal-500",
+      colorClass: "cyan",
+      bgGradient: "from-cyan-500 to-teal-500",
+      cardGradient: "from-cyan-50 to-teal-50 dark:from-cyan-900/20 dark:to-teal-900/20",
+      iconBg: "from-cyan-500 to-teal-500",
+      textColor: "text-cyan-700 dark:text-cyan-300",
+      borderColor: "border-cyan-200 dark:border-cyan-700",
       features: ["Market Regime Detection", "Sectoral Analysis", "Index Momentum Tracking"],
     },
     {
@@ -76,8 +92,12 @@ const AppGuide = ({ navigateToTab }) => {
         "Build trust through transparency with honest historical performance data and detailed trade breakdowns.",
       targetIndex: 5,
       icon: <Activity className="w-8 h-8" />,
-      color: "pink",
-      gradient: "from-pink-500 to-rose-500",
+      colorClass: "pink",
+      bgGradient: "from-pink-500 to-rose-500",
+      cardGradient: "from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20",
+      iconBg: "from-pink-500 to-rose-500",
+      textColor: "text-pink-700 dark:text-pink-300",
+      borderColor: "border-pink-200 dark:border-pink-700",
       features: ["Complete Trade History", "Performance Metrics", "Win/Loss Analysis"],
     },
     {
@@ -88,17 +108,53 @@ const AppGuide = ({ navigateToTab }) => {
         "Understand the professional fund manager logic behind every decision with clear, documented trading rules.",
       targetIndex: 6,
       icon: <BookOpen className="w-8 h-8" />,
-      color: "orange",
-      gradient: "from-orange-500 to-amber-500",
+      colorClass: "orange",
+      bgGradient: "from-orange-500 to-amber-500",
+      cardGradient: "from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20",
+      iconBg: "from-orange-500 to-amber-500",
+      textColor: "text-orange-700 dark:text-orange-300",
+      borderColor: "border-orange-200 dark:border-orange-700",
       features: ["Portfolio Rules", "Risk Management", "Selection Criteria"],
     },
   ];
 
   const quickStats = [
-    { icon: Target, label: "250 Stocks", sublabel: "Analyzed Daily", color: "violet" },
-    { icon: Zap, label: "Top 10", sublabel: "Selected Trades", color: "teal" },
-    { icon: Shield, label: "2% Risk", sublabel: "Per Trade Max", color: "rose" },
-    { icon: CheckCircle2, label: "±60 Score", sublabel: "High Conviction", color: "green" },
+    { 
+      icon: Target, 
+      label: "250 Stocks", 
+      sublabel: "Analyzed Daily", 
+      bgGradient: "from-violet-50 to-violet-100 dark:from-violet-900/20 dark:to-violet-800/20",
+      iconColor: "text-violet-600 dark:text-violet-400",
+      textColor: "text-violet-700 dark:text-violet-300",
+      borderColor: "border-violet-200 dark:border-violet-700"
+    },
+    { 
+      icon: Zap, 
+      label: "Top 10", 
+      sublabel: "Selected Trades", 
+      bgGradient: "from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20",
+      iconColor: "text-teal-600 dark:text-teal-400",
+      textColor: "text-teal-700 dark:text-teal-300",
+      borderColor: "border-teal-200 dark:border-teal-700"
+    },
+    { 
+      icon: Shield, 
+      label: "2% Risk", 
+      sublabel: "Per Trade Max", 
+      bgGradient: "from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20",
+      iconColor: "text-rose-600 dark:text-rose-400",
+      textColor: "text-rose-700 dark:text-rose-300",
+      borderColor: "border-rose-200 dark:border-rose-700"
+    },
+    { 
+      icon: CheckCircle2, 
+      label: "±60 Score", 
+      sublabel: "High Conviction", 
+      bgGradient: "from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20",
+      iconColor: "text-green-600 dark:text-green-400",
+      textColor: "text-green-700 dark:text-green-300",
+      borderColor: "border-green-200 dark:border-green-700"
+    },
   ];
 
   return (
@@ -129,7 +185,7 @@ const AppGuide = ({ navigateToTab }) => {
         </p>
       </motion.div>
 
-      {/* Quick Stats Bar */}
+      {/* Quick Stats Bar - Enhanced with motion */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -137,83 +193,105 @@ const AppGuide = ({ navigateToTab }) => {
         className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
       >
         {quickStats.map((stat, idx) => (
-          <div
+          <motion.div
             key={stat.label}
-            className={`bg-gradient-to-br from-${stat.color}-50 to-${stat.color}-100 dark:from-${stat.color}-900/20 dark:to-${stat.color}-800/20 rounded-2xl p-4 border border-${stat.color}-200 dark:border-${stat.color}-700`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 + idx * 0.05 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            className={`bg-gradient-to-br ${stat.bgGradient} rounded-2xl p-5 border ${stat.borderColor} shadow-lg hover:shadow-xl transition-all duration-300`}
           >
-            <stat.icon className={`w-6 h-6 text-${stat.color}-600 dark:text-${stat.color}-400 mb-2`} />
-            <div className={`text-2xl font-extrabold text-${stat.color}-700 dark:text-${stat.color}-300`}>
+            <stat.icon className={`w-7 h-7 ${stat.iconColor} mb-3`} />
+            <div className={`text-2xl font-extrabold ${stat.textColor} mb-1`}>
               {stat.label}
             </div>
-            <div className={`text-xs font-medium text-${stat.color}-600 dark:text-${stat.color}-400`}>
+            <div className={`text-xs font-semibold ${stat.iconColor} uppercase tracking-wide`}>
               {stat.sublabel}
             </div>
-          </div>
+          </motion.div>
         ))}
       </motion.div>
 
-      {/* Feature Cards Grid */}
+      {/* Feature Cards Grid - Enhanced institutional design */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {roadmapItems.map((item, idx) => (
           <motion.div
             key={item.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
+            transition={{ delay: 0.2 + idx * 0.08, type: "spring", stiffness: 100 }}
+            whileHover={{ y: -8, scale: 1.02 }}
             onMouseEnter={() => setHoveredCard(idx)}
             onMouseLeave={() => setHoveredCard(null)}
             onClick={() => navigateToTab(item.targetIndex)}
             className="group relative bg-white dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-700 rounded-2xl p-6 shadow-lg cursor-pointer 
-                       transition-all duration-300 hover:border-transparent hover:shadow-2xl hover:scale-[1.03] overflow-hidden"
+                       transition-all duration-300 hover:shadow-2xl overflow-hidden"
           >
-            {/* Gradient Border on Hover */}
-            <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 rounded-2xl blur-xl`} />
+            {/* Animated gradient glow on hover */}
+            <motion.div 
+              className={`absolute inset-0 bg-gradient-to-br ${item.bgGradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}
+              animate={hoveredCard === idx ? { scale: [1, 1.05, 1] } : {}}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
             
-            {/* Icon with Gradient Background */}
-            <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${item.gradient} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+            {/* Icon with enhanced gradient background */}
+            <motion.div 
+              whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+              transition={{ duration: 0.5 }}
+              className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${item.iconBg} text-white mb-5 shadow-lg group-hover:shadow-xl`}
+            >
               {item.icon}
-            </div>
+            </motion.div>
 
-            {/* Title */}
-            <h3 className={`font-extrabold text-2xl text-gray-900 dark:text-gray-100 mb-3 group-hover:bg-gradient-to-r group-hover:${item.gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+            {/* Title with gradient on hover */}
+            <h3 className="font-extrabold text-2xl text-gray-900 dark:text-gray-100 mb-3 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-indigo-600 group-hover:to-purple-600 dark:group-hover:from-blue-400 dark:group-hover:via-indigo-400 dark:group-hover:to-purple-400 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
               {item.title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed min-h-[80px]">
               {item.description}
             </p>
 
-            {/* Feature Badges */}
-            <div className="flex flex-wrap gap-2 mb-4">
+            {/* Feature Badges - Enhanced with gradients */}
+            <div className="flex flex-wrap gap-2 mb-5">
               {item.features.map((feature, i) => (
-                <span
+                <motion.span
                   key={i}
-                  className={`text-xs px-2 py-1 rounded-full bg-${item.color}-50 dark:bg-${item.color}-900/20 text-${item.color}-700 dark:text-${item.color}-300 border border-${item.color}-200 dark:border-${item.color}-700`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + idx * 0.08 + i * 0.05 }}
+                  className={`text-xs px-3 py-1.5 rounded-full bg-gradient-to-r ${item.cardGradient} ${item.textColor} border ${item.borderColor} font-semibold shadow-sm`}
                 >
                   {feature}
-                </span>
+                </motion.span>
               ))}
             </div>
 
-            {/* Benefit Box */}
-            <div className={`mt-4 p-3 rounded-xl bg-gradient-to-r from-${item.color}-50/50 to-${item.color}-100/50 dark:from-${item.color}-900/10 dark:to-${item.color}-800/10 border border-${item.color}-200 dark:border-${item.color}-700`}>
-              <div className="flex items-start gap-2 mb-1">
-                <Info className={`w-4 h-4 text-${item.color}-600 dark:text-${item.color}-400 flex-shrink-0 mt-0.5`} />
-                <p className={`text-xs font-semibold text-${item.color}-800 dark:text-${item.color}-300`}>
-                  Why This Matters:
+            {/* Benefit Box - Enhanced design */}
+            <div className={`p-4 rounded-xl bg-gradient-to-br ${item.cardGradient} border ${item.borderColor} shadow-sm`}>
+              <div className="flex items-start gap-2 mb-2">
+                <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.iconBg}`}>
+                  <Info className="w-3.5 h-3.5 text-white" />
+                </div>
+                <p className={`text-xs font-bold ${item.textColor} uppercase tracking-wide`}>
+                  Why This Matters
                 </p>
               </div>
-              <p className={`text-sm text-${item.color}-700 dark:text-${item.color}-400 leading-relaxed`}>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 {item.benefit}
               </p>
             </div>
 
-            {/* CTA Arrow */}
-            <div className={`mt-4 pt-4 border-t border-gray-200 dark:border-neutral-700 flex items-center justify-between text-${item.color}-600 dark:text-${item.color}-400 font-semibold`}>
+            {/* CTA Arrow - Enhanced animation */}
+            <motion.div 
+              className={`mt-5 pt-4 border-t-2 ${item.borderColor} flex items-center justify-between ${item.textColor} font-bold`}
+              animate={hoveredCard === idx ? { x: [0, 5, 0] } : {}}
+              transition={{ duration: 0.6, repeat: Infinity }}
+            >
               <span className="text-sm">Explore Feature</span>
-              <ArrowRight className={`w-5 h-5 transform transition-transform duration-300 ${hoveredCard === idx ? 'translate-x-1' : ''}`} />
-            </div>
+              <ArrowRight className="w-5 h-5" />
+            </motion.div>
           </motion.div>
         ))}
       </div>
