@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
+const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut, onFaqOpen, onContactOpen }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -37,12 +37,20 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
             <a href="#about" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
               About
             </a>
-            <a href="#contact" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+            <button 
+              type="button"
+              onClick={onContactOpen}
+              className="text-gray-700 hover:text-primary-600 font-medium transition-colors"
+            >
               Contact
-            </a>
-            <a href="#faq" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+            </button>
+            <button 
+              type="button"
+              onClick={onFaqOpen}
+              className="text-gray-700 hover:text-primary-600 font-medium transition-colors"
+            >
               FAQ
-            </a>
+            </button>
           </div>
 
           {/* Auth Buttons */}
@@ -106,12 +114,26 @@ const NewHeader = ({ onSignIn, onGetStarted, currentUser, onSignOut }) => {
                 <a href="#about" className="block text-gray-700 hover:text-primary-600 font-medium py-2">
                   About
                 </a>
-                <a href="#contact" className="block text-gray-700 hover:text-primary-600 font-medium py-2">
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onContactOpen();
+                  }}
+                  className="block w-full text-left text-gray-700 hover:text-primary-600 font-medium py-2"
+                >
                   Contact
-                </a>
-                <a href="#faq" className="block text-gray-700 hover:text-primary-600 font-medium py-2">
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onFaqOpen();
+                  }}
+                  className="block w-full text-left text-gray-700 hover:text-primary-600 font-medium py-2"
+                >
                   FAQ
-                </a>
+                </button>
                 
                 {currentUser ? (
                   <button

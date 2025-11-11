@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import NewHeader from '../../components/layout/NewHeader';
 import NewFooter from '../../components/layout/NewFooter';
 
-const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onClose }) => {
+const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOpen, onContactOpen, onClose }) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <NewHeader
@@ -12,6 +12,8 @@ const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onC
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
+        onFaqOpen={onFaqOpen}
+        onContactOpen={onContactOpen}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">

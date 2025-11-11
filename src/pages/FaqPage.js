@@ -67,6 +67,7 @@ const FaqPage = ({
   onTermsOpen,
   onDisclaimerOpen,
   onRefundOpen,
+  onContactOpen,
   onBack 
 }) => {
   const authContext = useAuth();
@@ -204,6 +205,8 @@ const FaqPage = ({
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
+        onFaqOpen={onBack}
+        onContactOpen={onContactOpen}
       />
 
       {/* Hero Section */}

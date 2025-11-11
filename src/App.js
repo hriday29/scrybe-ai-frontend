@@ -960,6 +960,7 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
+          onContactOpen={() => setShowContact(true)}
           onBack={() => setShowFaq(false)} 
         />
       )}
@@ -973,6 +974,7 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
+          onFaqOpen={() => setShowFaq(true)}
           onClose={() => setShowContact(false)}
         />
       )}
@@ -985,6 +987,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
           onClose={() => setShowPrivacy(false)}
         />
       )}
@@ -994,6 +998,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
           onClose={() => setShowTerms(false)}
         />
       )}
@@ -1003,6 +1009,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
           onClose={() => setShowDisclaimer(false)}
         />
       )}
@@ -1012,6 +1020,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
           onClose={() => setShowRefund(false)}
         />
       )}

@@ -15,6 +15,7 @@ const ContactPage = ({
   onTermsOpen,
   onDisclaimerOpen,
   onRefundOpen,
+  onFaqOpen,
   onClose,
 }) => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -62,6 +63,8 @@ const ContactPage = ({
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
+        onFaqOpen={onFaqOpen}
+        onContactOpen={onClose}
       />
 
       {/* Hero Section */}
@@ -307,7 +310,7 @@ const ContactPage = ({
                   Check out our FAQ page for instant answers to common questions about Scrybe AI.
                 </p>
                 <button
-                  onClick={() => window.location.href = '/#faq'}
+                  onClick={onFaqOpen}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                 >
                   <span>Visit FAQ</span>

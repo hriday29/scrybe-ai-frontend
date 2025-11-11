@@ -31,6 +31,8 @@ const NewLandingPage = ({
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
         onSignOut={onSignOut}
+        onFaqOpen={onFaqOpen}
+        onContactOpen={onContactOpen}
       />
 
       {/* Trust Metrics Banner */}
