@@ -179,7 +179,7 @@ const MarketRegimeCard = ({ marketContext }) => {
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-700 flex items-start gap-2">
                     <Info className="w-3 h-3 md:w-4 md:h-4 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                        The market regime is recalculated daily at 4:00 PM IST. It determines which signal types are allowed 
+                        The market regime is recalculated daily at 10:00 PM IST. It determines which signal types are allowed 
                         (BUY only in bull markets, BUY+SHORT in other conditions) to align with overall market momentum.
                     </p>
                 </div>

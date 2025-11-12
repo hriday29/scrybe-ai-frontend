@@ -122,7 +122,7 @@ const FaqPage = ({
     },
     {
       q: "How often is the analysis updated?",
-      a: "The complete 250-stock analysis runs once daily after market close (typically around 4 PM IST). The Portfolio Manager then selects the top 10 trades immediately after. You always see the latest daily snapshot with all analyses and selection reasons visible in the Portfolio Dashboard.",
+      a: "The complete 250-stock analysis runs once daily after market close (typically around 10 PM IST). The Portfolio Manager then selects the top 10 trades immediately after. You always see the latest daily snapshot with all analyses and selection reasons visible in the Portfolio Dashboard.",
     },
     {
       q: "What markets/exchanges do you cover?",
