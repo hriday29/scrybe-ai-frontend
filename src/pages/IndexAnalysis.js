@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { getIndexList, getIndexAnalysis } from '../api/api';
-import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, TrendingDown, ArrowRight, Shield, Activity, BarChart3, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown, ArrowRight, Shield, Activity, AlertTriangle } from 'lucide-react';
 
 // Reusable info card with enhanced institutional design
 const InfoCard = ({ title, children, icon: Icon, gradient = 'from-blue-500 to-indigo-500' }) => (
@@ -60,6 +60,18 @@ const IndexDashboard = ({ data, indexName }) => (
                         <span className="text-gray-600 dark:text-gray-400">Volatility:</span>
                         <span className="font-bold text-gray-900 dark:text-white">{data.marketPulse.volatilityIndexStatus}</span>
                     </div>
+                    {data.marketPulse.trendStrength && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-600 dark:text-gray-400">Trend Strength:</span>
+                            <span className="font-bold text-gray-900 dark:text-white">{data.marketPulse.trendStrength}</span>
+                        </div>
+                    )}
+                    {data.marketPulse.marketSentiment && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-600 dark:text-gray-400">Sentiment:</span>
+                            <span className="font-bold text-gray-900 dark:text-white">{data.marketPulse.marketSentiment}</span>
+                        </div>
+                    )}
                 </div>
             </InfoCard>
             
@@ -73,29 +85,89 @@ const IndexDashboard = ({ data, indexName }) => (
                         <span className="text-gray-600 dark:text-gray-400">Medium-Term:</span>
                         <span className="font-bold text-gray-900 dark:text-white">{data.trendAnalysis.mediumTermTrend}</span>
                     </div>
+                    {data.trendAnalysis.longTermTrend && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-600 dark:text-gray-400">Long-Term:</span>
+                            <span className="font-bold text-gray-900 dark:text-white">{data.trendAnalysis.longTermTrend}</span>
+                        </div>
+                    )}
                 </div>
             </InfoCard>
             
+            {/* Technical Analysis Card - NEW */}
+            {data.technicalAnalysis && (
+                <InfoCard title="Technical Analysis" icon={Activity} gradient="from-cyan-500 to-blue-500">
+                    <div className="space-y-2 text-sm">
+                        {data.technicalAnalysis.rsiAnalysis && (
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-400 font-semibold">RSI: </span>
+                                <span className="text-gray-900 dark:text-white">{data.technicalAnalysis.rsiAnalysis}</span>
+                            </div>
+                        )}
+                        {data.technicalAnalysis.macdSignal && (
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-400 font-semibold">MACD: </span>
+                                <span className="text-gray-900 dark:text-white">{data.technicalAnalysis.macdSignal}</span>
+                            </div>
+                        )}
+                        {data.technicalAnalysis.volumeAnalysis && (
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-400 font-semibold">Volume: </span>
+                                <span className="text-gray-900 dark:text-white">{data.technicalAnalysis.volumeAnalysis}</span>
+                            </div>
+                        )}
+                    </div>
+                </InfoCard>
+            )}
+            
             <InfoCard title="Forward Outlook (7 Days)" icon={TrendingDown} gradient="from-purple-500 to-pink-500">
                 <p className="text-gray-700 dark:text-gray-300 mb-3">{data.forwardOutlook.next7Days}</p>
+                {data.forwardOutlook.targetLevels && (
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3">
+                        <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-1">Target Levels</div>
+                        <p className="text-blue-700 dark:text-blue-300 text-sm">{data.forwardOutlook.targetLevels}</p>
+                    </div>
+                )}
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
                     <div className="flex items-start gap-2">
                         <span className="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide">Primary Risk:</span>
                     </div>
                     <p className="text-red-700 dark:text-red-300 text-sm mt-1 font-medium">{data.forwardOutlook.primaryRisk}</p>
                 </div>
+                {data.forwardOutlook.tradingStrategy && (
+                    <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mt-3">
+                        <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide mb-1">Strategy</div>
+                        <p className="text-amber-700 dark:text-amber-300 text-sm">{data.forwardOutlook.tradingStrategy}</p>
+                    </div>
+                )}
             </InfoCard>
             
             <InfoCard title="Key Levels" icon={Shield} gradient="from-amber-500 to-orange-500">
                 <div className="space-y-3">
                     <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
                         <div className="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide mb-1">Support</div>
-                        <div className="text-green-700 dark:text-green-300 font-bold">{data.keyLevels.support.join(', ')}</div>
+                        <div className="text-green-700 dark:text-green-300 font-bold">
+                            {/* Handle both old and new schema */}
+                            {data.keyLevels.support ? data.keyLevels.support.join(', ') : 
+                             data.keyLevels.immediateSupport ? [...(data.keyLevels.immediateSupport || []), ...(data.keyLevels.majorSupport || [])].join(', ') : 
+                             'N/A'}
+                        </div>
                     </div>
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
                         <div className="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide mb-1">Resistance</div>
-                        <div className="text-red-700 dark:text-red-300 font-bold">{data.keyLevels.resistance.join(', ')}</div>
+                        <div className="text-red-700 dark:text-red-300 font-bold">
+                            {/* Handle both old and new schema */}
+                            {data.keyLevels.resistance ? data.keyLevels.resistance.join(', ') : 
+                             data.keyLevels.immediateResistance ? [...(data.keyLevels.immediateResistance || []), ...(data.keyLevels.majorResistance || [])].join(', ') : 
+                             'N/A'}
+                        </div>
                     </div>
+                    {data.keyLevels.levelsRationale && (
+                        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                            <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">Why These Levels?</div>
+                            <p className="text-gray-700 dark:text-gray-300 text-sm">{data.keyLevels.levelsRationale}</p>
+                        </div>
+                    )}
                 </div>
             </InfoCard>
             
@@ -109,11 +181,37 @@ const IndexDashboard = ({ data, indexName }) => (
                         <span className="text-gray-600 dark:text-gray-400">Max OI Put:</span>
                         <span className="font-mono font-bold text-gray-900 dark:text-white">{data.optionsMatrix.maxOpenInterestPut}</span>
                     </div>
+                    {data.optionsMatrix.maxPainLevel && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-gray-600 dark:text-gray-400">Max Pain:</span>
+                            <span className="font-mono font-bold text-gray-900 dark:text-white">{data.optionsMatrix.maxPainLevel}</span>
+                        </div>
+                    )}
                     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                         <p className="text-sm text-gray-700 dark:text-gray-300">{data.optionsMatrix.putCallRatioAnalysis}</p>
                     </div>
                 </div>
             </InfoCard>
+            
+            {/* Risk Management Card - NEW */}
+            {data.riskManagement && (
+                <InfoCard title="Risk Management" icon={AlertTriangle} gradient="from-red-500 to-orange-500">
+                    <div className="space-y-3">
+                        {data.riskManagement.stopLossGuidance && (
+                            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                                <div className="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide mb-1">Stop Loss</div>
+                                <p className="text-red-700 dark:text-red-300 text-sm">{data.riskManagement.stopLossGuidance}</p>
+                            </div>
+                        )}
+                        {data.riskManagement.positionSizingAdvice && (
+                            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+                                <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide mb-1">Position Sizing</div>
+                                <p className="text-amber-700 dark:text-amber-300 text-sm">{data.riskManagement.positionSizingAdvice}</p>
+                            </div>
+                        )}
+                    </div>
+                </InfoCard>
+            )}
         </div>
     </motion.div>
 );
