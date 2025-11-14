@@ -404,6 +404,7 @@ const FaqPage = ({
         onRefundOpen={onRefundOpen}
         onPaymentsTermsOpen={onPaymentsTermsOpen}
         onPaymentsPrivacyOpen={onPaymentsPrivacyOpen}
+        onLegalNoticeOpen={onLegalNoticeOpen}
       />
     </div>
   );
