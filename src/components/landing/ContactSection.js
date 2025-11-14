@@ -108,7 +108,7 @@ const ContactSection = () => {
                     value={form.phone}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-xl pl-10 pr-3 py-3 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 95820 70505"
                   />
                 </div>
               </div>

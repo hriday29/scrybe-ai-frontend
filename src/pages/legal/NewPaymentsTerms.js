@@ -4,7 +4,16 @@ import { motion } from 'framer-motion';
 import NewHeader from '../../components/layout/NewHeader';
 import NewFooter from '../../components/layout/NewFooter';
 
-const NewPaymentsTerms = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOpen, onContactOpen, onClose }) => {
+const NewPaymentsTerms = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOpen, onContactOpen, onClose, onRefundOpen, onPaymentsTermsOpen, onPaymentsPrivacyOpen, onLegalNoticeOpen, onPrivacyOpen, onTermsOpen }) => {
+                <a
+                  href="/legal/refund-policy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onClose) onClose();
+                    if (onRefundOpen) onRefundOpen();
+                  }}
+                  className="text-primary-500 hover:underline"
+                >Refund Policy</a>
   return (
     <div className="min-h-screen bg-gray-50">
       <NewHeader
@@ -144,7 +153,28 @@ const NewPaymentsTerms = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFa
         </motion.div>
       </div>
 
-      <NewFooter />
+      {onClose && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => {
+                  onClose();
+                  // ensure main content is visible and scroll to top
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              className="px-8 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors"
+              >
+                Back to Home
+              </button>
+            </div>
+          )}
+          {/* Footer with callbacks so links from within a legal page can open other legal pages */}
+          <NewFooter
+            onPrivacyOpen={() => { if (onClose) onClose(); if (onPrivacyOpen) onPrivacyOpen(); }}
+            onTermsOpen={() => { if (onClose) onClose(); if (onTermsOpen) onTermsOpen(); }}
+            onPaymentsTermsOpen={() => { if (onClose) onClose(); if (onPaymentsTermsOpen) onPaymentsTermsOpen(); }}
+            onPaymentsPrivacyOpen={() => { if (onClose) onClose(); if (onPaymentsPrivacyOpen) onPaymentsPrivacyOpen(); }}
+            onLegalNoticeOpen={() => { if (onClose) onClose(); if (onLegalNoticeOpen) onLegalNoticeOpen(); }}
+          />
     </div>
   );
 };

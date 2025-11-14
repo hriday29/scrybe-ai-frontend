@@ -132,21 +132,30 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen,
               </li>
               <li>
                 <button
-                  onClick={() => onPaymentsTermsOpen && onPaymentsTermsOpen()}
+                  onClick={() => {
+                    // If a legal page is already open, calling the callback will
+                    // use `openLegal` to close the previous overlay and open this one.
+                    // Here we just call the passed-in function.
+                    onPaymentsTermsOpen && onPaymentsTermsOpen();
+                  }}
                   className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
                   Payments Terms
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onPaymentsPrivacyOpen && onPaymentsPrivacyOpen()}
+                  onClick={() => {
+                    onPaymentsPrivacyOpen && onPaymentsPrivacyOpen();
+                  }}
                   className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
                   Payments Privacy
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onLegalNoticeOpen && onLegalNoticeOpen()}
+                  onClick={() => {
+                    onLegalNoticeOpen && onLegalNoticeOpen();
+                  }}
                   className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
                   Legal Notice
                 </button>

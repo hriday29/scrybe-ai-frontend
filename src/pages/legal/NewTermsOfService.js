@@ -140,7 +140,7 @@ const NewTermsOfService = ({ currentUser, onSignIn, onSignOut, onGetStarted, onF
               </p>
               <div className="mt-4 space-y-2 text-gray-700">
                 <p><strong>Email:</strong> legal@scrybeai.com</p>
-                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Phone:</strong> +91 95820 70505</p>
               </div>
             </section>
           </div>

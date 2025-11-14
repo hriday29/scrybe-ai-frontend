@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Lock } from 'lucide-react';
 import Modal from '../ui/Modal';
+import { isFirebaseConfigured, isFirebaseInitialized, initializationError } from '../../services/firebase';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true">
@@ -58,6 +59,7 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTe
           onClick={() => handleSignIn(onSignIn, 'Google')}
           className="w-full flex items-center justify-center gap-3 bg-white dark:bg-neutral-900 border-2 border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-200 font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
           aria-label="Sign in with Google"
+          disabled={!isFirebaseConfigured || !isFirebaseInitialized}
         >
           <GoogleIcon />
           Continue with Google
@@ -66,6 +68,7 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTe
           onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
           className="w-full flex items-center justify-center gap-3 bg-[#0078d4] border-2 border-[#0078d4] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-[#106ebe] hover:border-[#106ebe] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2 shadow-soft"
           aria-label="Sign in with Microsoft"
+          disabled={!isFirebaseConfigured || !isFirebaseInitialized}
         >
           <MicrosoftIcon />
           Continue with Microsoft
@@ -83,6 +86,16 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTe
       </div>
 
       {/* Footer */}
+      {!isFirebaseConfigured && (
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-2 rounded-lg text-sm mt-4">
+          Firebase is not configured for this environment. Sign-in is disabled locally. Check your <code>REACT_APP_FIREBASE_API_KEY</code> and other Firebase environment variables before running the app.
+        </div>
+      )}
+      {isFirebaseConfigured && !isFirebaseInitialized && (
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-2 rounded-lg text-sm mt-4">
+          Firebase configuration exists but initialization failed. Check keys and console for details. Error: {initializationError?.message || 'unknown error'}
+        </div>
+      )}
       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed text-center">
         By signing in, you agree to our{' '}
         <button

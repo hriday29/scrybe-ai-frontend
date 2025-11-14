@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import NewHeader from '../../components/layout/NewHeader';
 import NewFooter from '../../components/layout/NewFooter';
 
-const NewLegalNotice = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOpen, onContactOpen, onClose }) => {
+const NewLegalNotice = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOpen, onContactOpen, onClose, onPaymentsTermsOpen, onPaymentsPrivacyOpen, onPrivacyOpen, onTermsOpen }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <NewHeader
@@ -67,7 +67,7 @@ const NewLegalNotice = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqO
           {onClose && (
             <div className="mt-8 text-center">
               <button
-                onClick={onClose}
+                onClick={() => { onClose(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 className="px-8 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors"
               >
                 Back to Home
@@ -77,7 +77,12 @@ const NewLegalNotice = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqO
         </motion.div>
       </div>
 
-      <NewFooter />
+      <NewFooter
+        onPrivacyOpen={() => { if (onClose) onClose(); if (onPrivacyOpen) onPrivacyOpen(); }}
+        onTermsOpen={() => { if (onClose) onClose(); if (onTermsOpen) onTermsOpen(); }}
+        onPaymentsTermsOpen={() => { if (onClose) onClose(); if (onPaymentsTermsOpen) onPaymentsTermsOpen(); }}
+        onPaymentsPrivacyOpen={() => { if (onClose) onClose(); if (onPaymentsPrivacyOpen) onPaymentsPrivacyOpen(); }}
+      />
     </div>
   );
 };

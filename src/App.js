@@ -668,6 +668,10 @@ export default function App() {
   const handleSignIn = useCallback(async () => {
     const provider = new GoogleAuthProvider();
     try {
+      if (!auth) {
+        console.warn('Cannot sign in — Firebase auth is not initialized. Check env vars.');
+        return;
+      }
       await signInWithPopup(auth, provider);
       setIsSignInModalOpen(false);
     } catch (error) {
@@ -678,6 +682,10 @@ export default function App() {
   const handleMicrosoftSignIn = useCallback(async () => {
     const provider = new OAuthProvider("microsoft.com");
     try {
+      if (!auth) {
+        console.warn('Cannot sign in with Microsoft — Firebase auth is not initialized. Check env vars.');
+        return;
+      }
       await signInWithPopup(auth, provider);
       setIsSignInModalOpen(false);
     } catch (error) {
@@ -686,8 +694,59 @@ export default function App() {
   }, []);
 
   const handleSignOut = useCallback(() => {
+    if (!auth) return;
     signOut(auth).catch((error) => console.error("Error during sign out:", error));
   }, []);
+
+  // Close all legal / overlay pages in one place and optionally other pages
+  const closeAllLegalPages = useCallback(() => {
+    setShowPrivacy(false);
+    setShowTerms(false);
+    setShowDisclaimer(false);
+    setShowRefund(false);
+    setShowPaymentsTerms(false);
+    setShowPaymentsPrivacy(false);
+    setShowLegalNotice(false);
+  }, []);
+
+  const openLegal = useCallback((page) => {
+    // Ensure only one legal / help page is open at a time
+    // Close any FAQ/Contact pages that could be open
+    setShowFaq(false);
+    setShowContact(false);
+    // Close any existing legal page
+    closeAllLegalPages();
+
+    // Open the requested page
+    switch (page) {
+      case 'privacy':
+        setShowPrivacy(true);
+        break;
+      case 'terms':
+        setShowTerms(true);
+        break;
+      case 'disclaimer':
+        setShowDisclaimer(true);
+        break;
+      case 'refund':
+        setShowRefund(true);
+        break;
+      case 'paymentsTerms':
+        setShowPaymentsTerms(true);
+        break;
+      case 'paymentsPrivacy':
+        setShowPaymentsPrivacy(true);
+        break;
+      case 'legalNotice':
+        setShowLegalNotice(true);
+        break;
+      default:
+        break;
+    }
+
+    // Make sure the page is shown from the top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [closeAllLegalPages]);
 
   const handleResetAnalysis = useCallback(() => {
     setAnalysisState("selector");
@@ -837,8 +896,8 @@ export default function App() {
             onSignIn={handleSignIn}
             onMicrosoftSignIn={handleMicrosoftSignIn}
             onClose={() => setIsSignInModalOpen(false)}
-            onTermsOpen={() => setShowTerms(true)}
-            onPrivacyOpen={() => setShowPrivacy(true)}
+            onTermsOpen={() => openLegal('terms')}
+            onPrivacyOpen={() => openLegal('privacy')}
           />
         )}
       </AnimatePresence>
@@ -962,15 +1021,18 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onPrivacyOpen={() => setShowPrivacy(true)}
-          onTermsOpen={() => setShowTerms(true)}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
-          onRefundOpen={() => setShowRefund(true)}
-          onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
-          onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
-          onLegalNoticeOpen={() => setShowLegalNotice(true)}
+          onRefundOpen={() => openLegal('refund')}
+          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+          onLegalNoticeOpen={() => openLegal('legalNotice')}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
           onContactOpen={() => {
             setShowFaq(false);
+            closeAllLegalPages();
             setShowContact(true);
           }}
           onBack={() => setShowFaq(false)} 
@@ -982,15 +1044,18 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onPrivacyOpen={() => setShowPrivacy(true)}
-          onTermsOpen={() => setShowTerms(true)}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
-          onRefundOpen={() => setShowRefund(true)}
-          onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
-          onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
-          onLegalNoticeOpen={() => setShowLegalNotice(true)}
+          onRefundOpen={() => openLegal('refund')}
+          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+          onLegalNoticeOpen={() => openLegal('legalNotice')}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
           onFaqOpen={() => {
             setShowContact(false);
+            closeAllLegalPages();
             setShowFaq(true);
           }}
           onClose={() => setShowContact(false)}
@@ -1005,8 +1070,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
+          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
           onClose={() => setShowPrivacy(false)}
         />
       )}
@@ -1017,7 +1082,7 @@ export default function App() {
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
           onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
           onClose={() => setShowTerms(false)}
         />
       )}
@@ -1028,7 +1093,7 @@ export default function App() {
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
           onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
           onClose={() => setShowDisclaimer(false)}
         />
       )}
@@ -1038,8 +1103,8 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
+          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
           onClose={() => setShowRefund(false)}
         />
       )}
@@ -1049,9 +1114,15 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
-          onClose={() => setShowPaymentsTerms(false)}
+          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+          onRefundOpen={() => openLegal('refund')}
+          onClose={() => closeAllLegalPages()}
+          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+          onLegalNoticeOpen={() => openLegal('legalNotice')}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
         />
       )}
       {showPaymentsPrivacy && (
@@ -1060,9 +1131,14 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
-          onClose={() => setShowPaymentsPrivacy(false)}
+          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+          onClose={() => closeAllLegalPages()}
+          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+          onLegalNoticeOpen={() => openLegal('legalNotice')}
+          onPrivacyOpen={() => openLegal('privacy')}
+          onTermsOpen={() => openLegal('terms')}
         />
       )}
       {showLegalNotice && (
@@ -1071,14 +1147,16 @@ export default function App() {
           onSignIn={() => setIsSignInModalOpen(true)}
           onSignOut={handleSignOut}
           onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => setShowContact(true)}
-          onClose={() => setShowLegalNotice(false)}
+          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+          onClose={() => closeAllLegalPages()}
+          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
         />
       )}
 
       {/* Main app / landing */}
-      {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
+      {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && !showPaymentsTerms && !showPaymentsPrivacy && !showLegalNotice && (
         <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
           {view === "app" ? (
             <>
@@ -1099,15 +1177,15 @@ export default function App() {
                 onSignOut={handleSignOut}
                 onGetStarted={() => handleAuthAndNavigate(0)}
                 onWatchDemo={() => setIsDemoOpen(true)}
-                onPrivacyOpen={() => setShowPrivacy(true)}
-                onTermsOpen={() => setShowTerms(true)}
-                onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
-                onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
-                onLegalNoticeOpen={() => setShowLegalNotice(true)}
+                onPrivacyOpen={() => openLegal('privacy')}
+                onTermsOpen={() => openLegal('terms')}
+                onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+                onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+                onLegalNoticeOpen={() => openLegal('legalNotice')}
                 onDisclaimerOpen={() => setShowDisclaimer(true)}
-                onRefundOpen={() => setShowRefund(true)}
+                onRefundOpen={() => openLegal('refund')}
                 onFaqOpen={() => setShowFaq(true)}
-                onContactOpen={() => setShowContact(true)}
+                onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
               />
             </>
           )}

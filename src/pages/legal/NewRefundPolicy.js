@@ -56,7 +56,7 @@ const NewRefundPolicy = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaq
               </p>
               <div className="mt-4 space-y-2 text-gray-700">
                 <p><strong>Email:</strong> support@scrybeai.com</p>
-                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Phone:</strong> +91 95820 70505</p>
                 <p><strong>Support Hours:</strong> Monday-Friday, 9:00 AM - 6:00 PM IST</p>
               </div>
             </section>

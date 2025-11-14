@@ -189,7 +189,7 @@ const ContactPage = ({
                           value={form.phone}
                           onChange={handleChange}
                           className="w-full border-2 border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 rounded-xl pl-12 pr-4 py-3.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
-                          placeholder="+91 98765 43210"
+                          placeholder="+91 95820 70505"
                         />
                       </div>
                     </div>

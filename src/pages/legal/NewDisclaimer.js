@@ -147,7 +147,7 @@ const NewDisclaimer = ({ currentUser, onSignIn, onSignOut, onGetStarted, onFaqOp
               </p>
               <div className="mt-4 space-y-2 text-gray-700 dark:text-gray-300">
                 <p><strong>Email:</strong> support@scrybeai.com</p>
-                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Phone:</strong> +91 95820 70505</p>
               </div>
             </section>
           </div>

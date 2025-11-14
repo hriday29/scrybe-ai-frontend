@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../services/firebase';
+import { auth, isFirebaseConfigured, isFirebaseInitialized } from '../services/firebase';
 import authFetch from '../api/authFetch';
 
 const AuthContext = createContext();
@@ -16,6 +16,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isFirebaseConfigured || !isFirebaseInitialized || !auth) {
+      // If firebase isn't configured, expose the app with no user.
+      setLoading(false);
+      setCurrentUser(null);
+      return () => {};
+    }
+
     const unsubscribe = onAuthStateChanged(auth, user => {
       setCurrentUser(user);
       setLoading(false);
