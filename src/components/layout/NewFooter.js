@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Phone, CheckCircle, Shield } from 'lucide-react';
 
-const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen, onFaqOpen, onContactOpen, onPaymentsTermsOpen, onPaymentsPrivacyOpen }) => {
+const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen, onFaqOpen, onContactOpen, onPaymentsTermsOpen, onPaymentsPrivacyOpen, onLegalNoticeOpen }) => {
   return (
     <footer className="bg-gray-50 text-gray-700 border-t border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700">
       {/* Main Footer Content */}
