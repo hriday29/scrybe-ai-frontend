@@ -1,4 +1,4 @@
-// src/api/api.js (FINAL, AUTH-AWARE VERSION)
+// src/api/api.js
 import axios from 'axios';
 import { API_BASE_URL } from '../apiConfig';
 
@@ -153,6 +153,36 @@ export const logTrade = async (authFetch, currentUser, tradeData) => {
             method: 'POST',
             body: JSON.stringify(tradeData)
         });
+
+        // --- Push log_trade event to dataLayer on success ---
+        // Safe check for common success shapes: { success: true }, status 200/201, or ok === true
+        const isSuccess = response && (
+          response.success === true ||
+          response.status === 200 ||
+          response.status === 201 ||
+          response.ok === true
+        );
+
+        if (isSuccess) {
+          try {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: 'log_trade',
+              ticker: tradeData.ticker,
+              signal: tradeData.signal,
+              strategy: tradeData.strategy
+            });
+            // Helpful debug log (can be removed in production)
+            console.log('GTM event pushed: log_trade', {
+              ticker: tradeData.ticker,
+              signal: tradeData.signal,
+              strategy: tradeData.strategy
+            });
+          } catch (dlError) {
+            console.warn('Failed to push log_trade to dataLayer:', dlError);
+          }
+        }
+
         return response;
     } catch (error) {
         console.error('Error logging trade:', error);
