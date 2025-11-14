@@ -1,9 +1,9 @@
-// src/context/AuthContext.js (FINAL, CORRECTED VERSION)
+// src/context/AuthContext.js
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../services/firebase';
-import authFetch from '../api/authFetch'; // 1. Import authFetch
+import authFetch from '../api/authFetch';
 
 const AuthContext = createContext();
 
@@ -19,13 +19,35 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setCurrentUser(user);
       setLoading(false);
+
+      // --- 🔥 GA4 User-ID Tracking via GTM ---
+      window.dataLayer = window.dataLayer || [];
+
+      if (user) {
+        // User logged in → push UID to GTM
+        window.dataLayer.push({
+          user_id: user.uid
+        });
+
+        console.log("GA4 User ID pushed:", user.uid);
+
+      } else {
+        // User logged out → clear user_id
+        window.dataLayer.push({
+          user_id: null
+        });
+
+        console.log("GA4 User ID cleared");
+      }
+      // --- 🔥 End User-ID Tracking ---
     });
+
     return unsubscribe;
   }, []);
 
   const value = {
     currentUser,
-    authFetch // 2. Add authFetch to the context value
+    authFetch
   };
 
   return (
