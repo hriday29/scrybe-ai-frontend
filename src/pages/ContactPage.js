@@ -15,6 +15,9 @@ const ContactPage = ({
   onTermsOpen,
   onDisclaimerOpen,
   onRefundOpen,
+  onPaymentsTermsOpen,
+  onPaymentsPrivacyOpen,
+  onLegalNoticeOpen,
   onFaqOpen,
   onClose,
 }) => {
@@ -328,6 +331,9 @@ const ContactPage = ({
         onTermsOpen={onTermsOpen}
         onDisclaimerOpen={onDisclaimerOpen}
         onRefundOpen={onRefundOpen}
+        onPaymentsTermsOpen={onPaymentsTermsOpen}
+        onPaymentsPrivacyOpen={onPaymentsPrivacyOpen}
+        onLegalNoticeOpen={onLegalNoticeOpen}
       />
     </div>
   );

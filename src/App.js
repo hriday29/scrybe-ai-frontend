@@ -48,6 +48,9 @@ import NewPrivacyPolicy from './pages/legal/NewPrivacyPolicy.js';
 import NewTermsOfService from './pages/legal/NewTermsOfService.js';
 import NewDisclaimer from './pages/legal/NewDisclaimer.js';
 import NewRefundPolicy from './pages/legal/NewRefundPolicy.js';
+import NewPaymentsTerms from './pages/legal/NewPaymentsTerms.js';
+import NewPaymentsPrivacy from './pages/legal/NewPaymentsPrivacy.js';
+import NewLegalNotice from './pages/legal/NewLegalNotice.js';
 
 // Context, Services, and Config
 import { useAuth } from './context/AuthContext.js';
@@ -547,6 +550,9 @@ export default function App() {
   const [showTerms, setShowTerms] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showRefund, setShowRefund] = useState(false);
+  const [showPaymentsTerms, setShowPaymentsTerms] = useState(false);
+  const [showPaymentsPrivacy, setShowPaymentsPrivacy] = useState(false);
+  const [showLegalNotice, setShowLegalNotice] = useState(false);
   const [analysisState, setAnalysisState] = useState("selector");
   const [error, setError] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
@@ -960,6 +966,9 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
+          onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
+          onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
+          onLegalNoticeOpen={() => setShowLegalNotice(true)}
           onContactOpen={() => {
             setShowFaq(false);
             setShowContact(true);
@@ -977,6 +986,9 @@ export default function App() {
           onTermsOpen={() => setShowTerms(true)}
           onDisclaimerOpen={() => setShowDisclaimer(true)}
           onRefundOpen={() => setShowRefund(true)}
+          onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
+          onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
+          onLegalNoticeOpen={() => setShowLegalNotice(true)}
           onFaqOpen={() => {
             setShowContact(false);
             setShowFaq(true);
@@ -1031,6 +1043,39 @@ export default function App() {
           onClose={() => setShowRefund(false)}
         />
       )}
+      {showPaymentsTerms && (
+        <NewPaymentsTerms
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
+          onClose={() => setShowPaymentsTerms(false)}
+        />
+      )}
+      {showPaymentsPrivacy && (
+        <NewPaymentsPrivacy
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
+          onClose={() => setShowPaymentsPrivacy(false)}
+        />
+      )}
+      {showLegalNotice && (
+        <NewLegalNotice
+          currentUser={currentUser}
+          onSignIn={() => setIsSignInModalOpen(true)}
+          onSignOut={handleSignOut}
+          onGetStarted={() => handleAuthAndNavigate(0)}
+          onFaqOpen={() => setShowFaq(true)}
+          onContactOpen={() => setShowContact(true)}
+          onClose={() => setShowLegalNotice(false)}
+        />
+      )}
 
       {/* Main app / landing */}
       {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && (
@@ -1056,6 +1101,9 @@ export default function App() {
                 onWatchDemo={() => setIsDemoOpen(true)}
                 onPrivacyOpen={() => setShowPrivacy(true)}
                 onTermsOpen={() => setShowTerms(true)}
+                onPaymentsTermsOpen={() => setShowPaymentsTerms(true)}
+                onPaymentsPrivacyOpen={() => setShowPaymentsPrivacy(true)}
+                onLegalNoticeOpen={() => setShowLegalNotice(true)}
                 onDisclaimerOpen={() => setShowDisclaimer(true)}
                 onRefundOpen={() => setShowRefund(true)}
                 onFaqOpen={() => setShowFaq(true)}

@@ -67,6 +67,9 @@ const FaqPage = ({
   onTermsOpen,
   onDisclaimerOpen,
   onRefundOpen,
+  onPaymentsTermsOpen,
+  onPaymentsPrivacyOpen,
+  onLegalNoticeOpen,
   onContactOpen,
   onBack 
 }) => {
@@ -207,6 +210,9 @@ const FaqPage = ({
         onSignOut={onSignOut}
         onFaqOpen={onBack}
         onContactOpen={onContactOpen}
+        onPaymentsTermsOpen={onPaymentsTermsOpen}
+        onPaymentsPrivacyOpen={onPaymentsPrivacyOpen}
+        onLegalNoticeOpen={onLegalNoticeOpen}
       />
 
       {/* Hero Section */}
@@ -396,6 +402,8 @@ const FaqPage = ({
         onTermsOpen={onTermsOpen}
         onDisclaimerOpen={onDisclaimerOpen}
         onRefundOpen={onRefundOpen}
+        onPaymentsTermsOpen={onPaymentsTermsOpen}
+        onPaymentsPrivacyOpen={onPaymentsPrivacyOpen}
       />
     </div>
   );

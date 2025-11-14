@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Phone, CheckCircle, Shield } from 'lucide-react';
 
-const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen, onFaqOpen, onContactOpen }) => {
+const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen, onFaqOpen, onContactOpen, onPaymentsTermsOpen, onPaymentsPrivacyOpen }) => {
   return (
     <footer className="bg-gray-50 text-gray-700 border-t border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700">
       {/* Main Footer Content */}
@@ -128,6 +128,27 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen,
                   onClick={onRefundOpen}
                   className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
                   Refund Policy
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onPaymentsTermsOpen && onPaymentsTermsOpen()}
+                  className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
+                  Payments Terms
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onPaymentsPrivacyOpen && onPaymentsPrivacyOpen()}
+                  className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
+                  Payments Privacy
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onLegalNoticeOpen && onLegalNoticeOpen()}
+                  className="text-gray-600 hover:text-primary-600 transition-colors text-left dark:text-gray-300 dark:hover:text-primary-400">
+                  Legal Notice
                 </button>
               </li>
             </ul>

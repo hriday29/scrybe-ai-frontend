@@ -18,6 +18,9 @@ const NewLandingPage = ({
   onWatchDemo,
   onPrivacyOpen,
   onTermsOpen,
+  onPaymentsTermsOpen,
+  onPaymentsPrivacyOpen,
+  onLegalNoticeOpen,
   onDisclaimerOpen,
   onRefundOpen,
   onFaqOpen,
@@ -70,6 +73,9 @@ const NewLandingPage = ({
       <NewFooter
         onPrivacyOpen={onPrivacyOpen}
         onTermsOpen={onTermsOpen}
+        onPaymentsTermsOpen={onPaymentsTermsOpen}
+        onPaymentsPrivacyOpen={onPaymentsPrivacyOpen}
+        onLegalNoticeOpen={onLegalNoticeOpen}
         onDisclaimerOpen={onDisclaimerOpen}
         onRefundOpen={onRefundOpen}
         onFaqOpen={onFaqOpen}
