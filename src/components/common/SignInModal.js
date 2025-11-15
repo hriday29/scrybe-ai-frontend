@@ -12,16 +12,14 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const MicrosoftIcon = () => (
+
+const TwitterIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="#f35325" d="M1 1h10v10H1z"/>
-    <path fill="#81bc06" d="M13 1h10v10H13z"/>
-    <path fill="#05a6f0" d="M1 13h10v10H1z"/>
-    <path fill="#ffba08" d="M13 13h10v10H13z"/>
+    <path fill="#1DA1F2" d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.37c-.83.5-1.75.87-2.72 1.07A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.2 1.64 4.16c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.83 1.92 3.61-.71-.02-1.38-.22-1.97-.54v.05c0 2.09 1.49 3.83 3.47 4.23-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.68 2.11 2.9 3.97 2.93A8.6 8.6 0 0 1 2 19.54c-.29 0-.57-.02-.85-.05A12.13 12.13 0 0 0 8.29 21c7.55 0 11.69-6.26 11.69-11.69 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 5.1a8.2 8.2 0 0 1-2.54.7z"/>
   </svg>
 );
 
-export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTermsOpen, onPrivacyOpen }) {
+export default function SignInModal({ onSignIn, onTwitterSignIn, onClose, onTermsOpen, onPrivacyOpen }) {
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === 'Escape') {
@@ -65,13 +63,13 @@ export default function SignInModal({ onSignIn, onMicrosoftSignIn, onClose, onTe
           Continue with Google
         </button>
         <button
-          onClick={() => handleSignIn(onMicrosoftSignIn, 'Microsoft')}
-          className="w-full flex items-center justify-center gap-3 bg-[#0078d4] border-2 border-[#0078d4] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-[#106ebe] hover:border-[#106ebe] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2 shadow-soft"
-          aria-label="Sign in with Microsoft"
+          onClick={() => handleSignIn(onTwitterSignIn, 'Twitter')}
+          className="w-full flex items-center justify-center gap-3 bg-[#1DA1F2] border-2 border-[#1DA1F2] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-[#0d8ddb] hover:border-[#0d8ddb] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1DA1F2] focus:ring-offset-2 shadow-soft"
+          aria-label="Sign in with Twitter"
           disabled={!isFirebaseConfigured || !isFirebaseInitialized}
         >
-          <MicrosoftIcon />
-          Continue with Microsoft
+          <TwitterIcon />
+          Continue with Twitter
         </button>
       </div>
 

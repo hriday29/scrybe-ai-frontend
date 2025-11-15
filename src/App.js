@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BarChart3 } from 'lucide-react';
-import { GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { signInWithGoogle, signInWithTwitter, signOut } from './firebase';
 import { getAnalysis, getTrackRecord } from './api/api.js';
 
 // Styles
@@ -54,7 +54,6 @@ import NewLegalNotice from './pages/legal/NewLegalNotice.js';
 
 // Context, Services, and Config
 import { useAuth } from './context/AuthContext.js';
-import { auth } from './services/firebase.js';
 import { API_BASE_URL } from './apiConfig.js';
 import { apexDemoData } from './utils/demoData.js';
 
@@ -89,15 +88,14 @@ const SectionTitle = ({ title, subtitle }) => (
 
 const DemoModal = ({ onClose }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-    {/* Overlay */}
     <motion.div
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.95 }}
-    transition={{ duration: 0.25 }}
-    className="relative w-full max-w-5xl mx-auto max-h-[85vh] overflow-y-auto"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.25 }}
+      className="relative w-full max-w-5xl mx-auto max-h-[85vh] overflow-y-auto"
     >
-    <GlassCard className="relative p-8 mt-6 rounded-2xl shadow-2xl">
+      <GlassCard className="relative p-8 mt-6 rounded-2xl shadow-2xl">
         {/* Close Button */}
         <button
         onClick={onClose}
@@ -666,36 +664,25 @@ export default function App() {
   );
 
   const handleSignIn = useCallback(async () => {
-    const provider = new GoogleAuthProvider();
     try {
-      if (!auth) {
-        console.warn('Cannot sign in — Firebase auth is not initialized. Check env vars.');
-        return;
-      }
-      await signInWithPopup(auth, provider);
+      await signInWithGoogle();
       setIsSignInModalOpen(false);
     } catch (error) {
-      console.error("Error during sign in:", error);
+      console.error("Error during Google sign in:", error);
     }
   }, []);
 
-  const handleMicrosoftSignIn = useCallback(async () => {
-    const provider = new OAuthProvider("microsoft.com");
+  const handleTwitterSignIn = useCallback(async () => {
     try {
-      if (!auth) {
-        console.warn('Cannot sign in with Microsoft — Firebase auth is not initialized. Check env vars.');
-        return;
-      }
-      await signInWithPopup(auth, provider);
+      await signInWithTwitter();
       setIsSignInModalOpen(false);
     } catch (error) {
-      console.error("Error during Microsoft sign in:", error);
+      console.error("Error during Twitter sign in:", error);
     }
   }, []);
 
   const handleSignOut = useCallback(() => {
-    if (!auth) return;
-    signOut(auth).catch((error) => console.error("Error during sign out:", error));
+    signOut().catch((error) => console.error("Error during sign out:", error));
   }, []);
 
   // Close all legal / overlay pages in one place and optionally other pages
@@ -894,7 +881,7 @@ export default function App() {
         {isSignInModalOpen && (
           <SignInModal
             onSignIn={handleSignIn}
-            onMicrosoftSignIn={handleMicrosoftSignIn}
+            onTwitterSignIn={handleTwitterSignIn}
             onClose={() => setIsSignInModalOpen(false)}
             onTermsOpen={() => openLegal('terms')}
             onPrivacyOpen={() => openLegal('privacy')}
@@ -1028,8 +1015,6 @@ export default function App() {
           onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
           onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
           onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
           onContactOpen={() => {
             setShowFaq(false);
             closeAllLegalPages();
@@ -1051,8 +1036,6 @@ export default function App() {
           onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
           onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
           onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
           onFaqOpen={() => {
             setShowContact(false);
             closeAllLegalPages();

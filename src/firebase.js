@@ -1,6 +1,12 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  TwitterAuthProvider, 
+  signInWithPopup, 
+  signOut as firebaseSignOut 
+} from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,6 +19,64 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// Validate config - at minimum we need an API key to attempt initialization.
+const isFirebaseConfigured = Boolean(firebaseConfig.apiKey);
+
+let app = null;
+let auth = null;
+let googleProvider = null;
+let twitterProvider = null;
+let initializationError = null;
+
+if (isFirebaseConfigured) {
+  try {
+    // Initialize Firebase
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    
+    // Initialize providers
+    googleProvider = new GoogleAuthProvider();
+    twitterProvider = new TwitterAuthProvider();
+    
+    // Configure providers if needed
+    // twitterProvider.setCustomParameters({
+    //   lang: 'en'
+    // });
+    
+  } catch (err) {
+    initializationError = err;
+    console.error('Failed to initialize Firebase:', err);
+  }
+} else {
+  console.warn('Firebase not configured - missing REACT_APP_FIREBASE_API_KEY (or other firebase vars).');
+}
+
+const isFirebaseInitialized = Boolean(auth) && !initializationError;
+
+// Export auth functions
+export const signInWithGoogle = async () => {
+  if (!auth || !googleProvider) throw new Error('Firebase not initialized');
+  return signInWithPopup(auth, googleProvider);
+};
+
+export const signInWithTwitter = async () => {
+  if (!auth || !twitterProvider) throw new Error('Firebase not initialized');
+  return signInWithPopup(auth, twitterProvider);
+};
+
+export const signOut = () => {
+  if (!auth) throw new Error('Firebase not initialized');
+  return firebaseSignOut(auth);
+};
+
+export { 
+  app, 
+  auth, 
+  googleProvider, 
+  twitterProvider, 
+  isFirebaseConfigured, 
+  isFirebaseInitialized, 
+  initializationError,
+  GoogleAuthProvider,
+  TwitterAuthProvider
+};
