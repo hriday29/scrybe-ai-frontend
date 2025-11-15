@@ -12,12 +12,12 @@ module.exports = function(app) {
       },
       onProxyReq: (proxyReq) => {
         // Add any required headers here if needed
-        // proxyReq.setHeader('x-custom-header', 'value');
+        // proxyReq.setHeader('Authorization', `Bearer ${process.env.REACT_APP_API_KEY}`);
       },
       onError: (err, req, res) => {
-        console.error('Proxy Error:', err);
-        res.status(500).json({ error: 'Proxy Error' });
-      },
+        console.error('Proxy error:', err);
+        res.status(500).json({ error: 'Proxy Error', details: err.message });
+      }
     })
   );
 };
