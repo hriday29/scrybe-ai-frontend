@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://www.scrybeai.app',
+      target: 'http://localhost:8080',
       changeOrigin: true,
       secure: false,
       pathRewrite: {
