@@ -14,6 +14,7 @@ const ConversationalQa = ({ analysisContext }) => {
     const [conversation, setConversation] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [aiAvailable, setAiAvailable] = useState(true); // Assume available initially
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,7 +41,17 @@ const ConversationalQa = ({ analysisContext }) => {
             );
             setConversation(prev => [...prev, { type: 'ai', text: data.answer }]);
         } catch (err) {
-            setError(err.message);
+            // Handle specific AI analyzer unavailable error with a more user-friendly message
+            const errorMessage = err.message?.includes('AI Analyzer is not available') || err.message?.includes('AI analysis feature is temporarily unavailable')
+                ? 'AI analysis feature is temporarily unavailable. Please try again later or explore the detailed analysis above for insights.'
+                : err.message;
+            
+            // Mark AI as unavailable if we get the specific error
+            if (err.message?.includes('AI Analyzer is not available') || err.message?.includes('AI analysis feature is temporarily unavailable')) {
+                setAiAvailable(false);
+            }
+            
+            setError(errorMessage);
             setConversation(prev => prev.slice(0, -1));
             setQuestion(currentQuestion);
         } finally {
@@ -53,6 +64,19 @@ const ConversationalQa = ({ analysisContext }) => {
             <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-4">
                 Ask a Question About This Analysis
             </h3>
+
+            {!aiAvailable && (
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-4">
+                    <div className="flex items-center">
+                        <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <p className="text-sm text-amber-800 dark:text-amber-200">
+                            AI analysis feature is currently unavailable. You can still explore the detailed analysis above for insights.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             <div className="space-y-4 mb-4 max-h-64 overflow-y-auto pr-2">
                 {conversation.map((entry, index) => (
@@ -87,20 +111,28 @@ const ConversationalQa = ({ analysisContext }) => {
                         type="text"
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        placeholder="e.g., Why is the RSI considered bullish?"
-                        className="flex-grow bg-gray-50 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none focus:border-primary-500 dark:focus:border-primary-400"
-                        disabled={isLoading}
+                        placeholder={aiAvailable ? "e.g., Why is the RSI considered bullish?" : "AI feature temporarily unavailable"}
+                        className={`flex-grow bg-gray-50 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-sm rounded-lg py-2 px-3 transition-all focus:outline-none ${
+                            aiAvailable 
+                                ? 'focus:border-primary-500 dark:focus:border-primary-400' 
+                                : 'opacity-50 cursor-not-allowed'
+                        }`}
+                        disabled={isLoading || !aiAvailable}
                     />
                     <button
                         type="submit"
-                        disabled={isLoading || !question.trim()}
-                        className="bg-primary-600 text-white font-semibold text-sm px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled={isLoading || !question.trim() || !aiAvailable}
+                        className={`font-semibold text-sm px-4 py-2 rounded-lg transition-colors ${
+                            aiAvailable
+                                ? 'bg-primary-600 text-white hover:bg-primary-700 disabled:bg-gray-400'
+                                : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        } disabled:cursor-not-allowed`}
                     >
-                        Ask
+                        {aiAvailable ? 'Ask' : 'Unavailable'}
                     </button>
                 </div>
 
-                {error && (
+                {error && aiAvailable && (
                     <p className="text-center text-sm text-red-600 dark:text-red-400 mt-2">{error}</p>
                 )}
             </form>

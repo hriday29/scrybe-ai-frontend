@@ -67,7 +67,7 @@ const SectionTitle = ({ title, subtitle }) => (
 );
 
 // Loader and Error components - Professional design
-const SkeletonLoader = ({ isLongLoad }) => (
+export const SkeletonLoader = ({ isLongLoad }) => (
     <div className="w-full max-w-5xl mx-auto p-8">
       <SectionTitle title="Loading Analysis..." />
       {isLongLoad && (
@@ -99,7 +99,7 @@ const SkeletonLoader = ({ isLongLoad }) => (
     </div>
 );
 
-const ErrorDisplay = ({ error, onReset }) => (
+export const ErrorDisplay = ({ error, onReset }) => (
     <motion.div 
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -562,7 +562,9 @@ const StockAnalysis = ({ onAnalyzeRequest }) => {
 
                 <TradeChecklistCard checklistData={analysisData?.trade_checklist} />
                 <FuturesBasisCard basisData={analysisData?.futures_basis_analysis} />
-                <NewsSection newsData={analysisData?.news_context} />
+                {analysisData?.news_context && analysisData.news_context.articles && analysisData.news_context.articles.length > 0 && (
+                    <NewsSection newsData={analysisData?.news_context} />
+                )}
                 <ConversationalQa analysisContext={analysisData} />
                 <ConfidencePoll analysisId={analysisData?._id} />
                 <TradeJournalCard analysisData={analysisData} />

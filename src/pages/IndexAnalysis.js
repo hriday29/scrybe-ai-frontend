@@ -49,9 +49,9 @@ const IndexDashboard = ({ data, indexName }) => (
             <div className="h-1 w-24 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full"></div>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
             <InfoCard title="Market Pulse" icon={TrendingUp} gradient="from-emerald-500 to-green-500">
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <span className="text-gray-600 dark:text-gray-400">Overall Bias:</span>
                         <span className="font-bold text-gray-900 dark:text-white">{data.marketPulse.overallBias}</span>
@@ -76,7 +76,7 @@ const IndexDashboard = ({ data, indexName }) => (
             </InfoCard>
             
             <InfoCard title="Trend Analysis" icon={ArrowRight} gradient="from-blue-500 to-cyan-500">
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <span className="text-gray-600 dark:text-gray-400">Short-Term:</span>
                         <span className="font-bold text-gray-900 dark:text-white">{data.trendAnalysis.shortTermTrend}</span>
@@ -97,7 +97,7 @@ const IndexDashboard = ({ data, indexName }) => (
             {/* Technical Analysis Card - NEW */}
             {data.technicalAnalysis && (
                 <InfoCard title="Technical Analysis" icon={Activity} gradient="from-cyan-500 to-blue-500">
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-3 text-sm">
                         {data.technicalAnalysis.rsiAnalysis && (
                             <div>
                                 <span className="text-gray-600 dark:text-gray-400 font-semibold">RSI: </span>
@@ -172,7 +172,7 @@ const IndexDashboard = ({ data, indexName }) => (
             </InfoCard>
             
             <InfoCard title="Options Matrix" icon={Shield} gradient="from-indigo-500 to-purple-500">
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <div className="flex justify-between items-center">
                         <span className="text-gray-600 dark:text-gray-400">Max OI Call:</span>
                         <span className="font-mono font-bold text-gray-900 dark:text-white">{data.optionsMatrix.maxOpenInterestCall}</span>
@@ -187,7 +187,7 @@ const IndexDashboard = ({ data, indexName }) => (
                             <span className="font-mono font-bold text-gray-900 dark:text-white">{data.optionsMatrix.maxPainLevel}</span>
                         </div>
                     )}
-                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
                         <p className="text-sm text-gray-700 dark:text-gray-300">{data.optionsMatrix.putCallRatioAnalysis}</p>
                     </div>
                 </div>

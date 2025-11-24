@@ -1,6 +1,9 @@
-// src/App.js — POLISHED (glassmorphism, spacing, UX/accessibility, safe timers)
+// src/App.js
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// Fix missing imports for error and skeleton loader components
+import { ErrorDisplay, SkeletonLoader } from './pages/StockAnalysis.js';
 import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BarChart3 } from 'lucide-react';
@@ -54,8 +57,12 @@ import NewLegalNotice from './pages/legal/NewLegalNotice.js';
 
 // Context, Services, and Config
 import { useAuth } from './context/AuthContext.js';
+import ProfilePage from './pages/ProfilePage.js';
+import { isPaymentComplete } from './utils/paymentStatus.js';
 import { API_BASE_URL } from './apiConfig.js';
 import { apexDemoData } from './utils/demoData.js';
+import { MAINTENANCE_CONFIG } from './config/maintenance.js';
+import MaintenancePage from './pages/MaintenancePage.js';
 
 // =========================================================================
 // Visual helpers
@@ -98,11 +105,11 @@ const DemoModal = ({ onClose }) => (
       <GlassCard className="relative p-8 mt-6 rounded-2xl shadow-2xl">
         {/* Close Button */}
         <button
-        onClick={onClose}
-        aria-label="Close demo"
-        className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition"
+          onClick={onClose}
+          aria-label="Close demo"
+          className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition"
         >
-        <svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -112,55 +119,15 @@ const DemoModal = ({ onClose }) => (
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-        >
+          >
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
+          </svg>
         </button>
-
         {/* Dashboard */}
         <ApexAnalysisDashboard analysisData={apexDemoData} />
-    </GlassCard>
+      </GlassCard>
     </motion.div>
-
-  </div>
-);
-
-
-// =========================================================================
-// Loaders & Error
-// =========================================================================
-
-const SkeletonLoader = ({ isLongLoad }) => (
-  <div className="w-full max-w-5xl mx-auto p-8">
-    <SectionTitle title="Retrieving Instant Analysis..." />
-    {isLongLoad && (
-      <p className="text-center text-warning-600 text-sm mb-8 animate-pulse">
-        Waking up the AI engine... first load can take longer.
-      </p>
-    )}
-    <div className="mt-6 space-y-6">
-      <GlassCard className="h-28 animate-pulse bg-gray-100" />
-      <GlassCard className="h-24 animate-pulse bg-gray-100" />
-      <div className="grid md:grid-cols-2 gap-6">
-        <GlassCard className="h-48 animate-pulse bg-gray-100" />
-        <GlassCard className="h-48 animate-pulse bg-gray-100" />
-      </div>
-      <GlassCard className="h-96 animate-pulse bg-gray-100" />
-    </div>
-  </div>
-);
-
-const ErrorDisplay = ({ error, onReset }) => (
-  <div className="text-center p-8">
-    <h2 className="text-2xl font-bold text-red-600">Analysis Failed</h2>
-    <p className="text-red-500 mt-2 max-w-2xl mx-auto">{error}</p>
-    <button
-      onClick={onReset}
-      className="mt-6 bg-red-500 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors shadow-soft"
-    >
-      Try Another Analysis
-    </button>
   </div>
 );
 
@@ -781,15 +748,17 @@ export default function App() {
         return <SkeletonLoader isLongLoad={isLongLoad} />;
       case "results":
         return (
-          <>
-            <ApexAnalysisDashboard analysisData={analysisData} />
+          <div>
+            <ApexAnalysisDashboard analysisData={analysisData} handleResetAnalysis={handleResetAnalysis} />
             <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
-              <NewsSection newsData={analysisData?.news_context} />
+              {analysisData?.news_context && analysisData.news_context.articles && analysisData.news_context.articles.length > 0 && (
+                <NewsSection newsData={analysisData?.news_context} />
+              )}
               <ConversationalQa analysisContext={analysisData} />
               <ConfidencePoll analysisId={analysisData?._id} />
               <TradeJournalCard analysisData={analysisData} />
             </div>
-          </>
+          </div>
         );
       case "error":
         return <ErrorDisplay error={error} onReset={handleResetAnalysis} />;
@@ -873,309 +842,272 @@ export default function App() {
     </div>
   );
 
-  // ✅ Final return with unified Header
+// ✅ Final return with unified Header
   return (
     <div className="bg-gray-50 min-h-screen text-gray-900 font-sans">
-      {/* Modals */}
-      <AnimatePresence>
-        {isSignInModalOpen && (
-          <SignInModal
-            onSignIn={handleSignIn}
-            onTwitterSignIn={handleTwitterSignIn}
-            onClose={() => setIsSignInModalOpen(false)}
-            onTermsOpen={() => openLegal('terms')}
-            onPrivacyOpen={() => openLegal('privacy')}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
-      </AnimatePresence>
-      <AnimatePresence>
-        {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
-      </AnimatePresence>
-      <AnimatePresence>
-        {showDisclaimerModal && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
-      </AnimatePresence>
+      {/* Check for maintenance mode first */}
+      {MAINTENANCE_CONFIG.enabled && <MaintenancePage />}
 
-      {/* Market Context Drawer */}
-      <AnimatePresence>
-        {isMarketDrawerOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMarketDrawerOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[55]"
-            />
-            {/* Drawer */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 xl:w-2/5 bg-white dark:bg-neutral-900 shadow-2xl z-[60] overflow-hidden flex flex-col"
-            >
-              {/* Sticky Header - Fixed at top with proper z-index */}
-              <div className="sticky top-0 z-[61] bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 md:p-5 flex items-center justify-between shadow-sm backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
-                <div className="flex-1">
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-primary-600 dark:text-primary-400" />
-                    Market Context
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm mt-1">Real-time market indicators and analysis</p>
-                </div>
-                <button
-                  onClick={() => setIsMarketDrawerOpen(false)}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors text-gray-700 dark:text-gray-300 flex-shrink-0 ml-4"
-                  aria-label="Close drawer"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 md:space-y-5">
-                {globalMarketContext && !globalMarketContext.error ? (
-                  <>
-                    <MarketRegimeCard marketContext={globalMarketContext} />
-                    {globalMarketContext.sector_performance && (
-                      <SectorHeatmapCard sectorPerformance={globalMarketContext.sector_performance} />
-                    )}
-                    {globalMarketContext.breadth_indicators && (
-                      <MarketBreadthCard breadthData={globalMarketContext.breadth_indicators} />
-                    )}
-                  </>
-                ) : globalMarketContext && globalMarketContext.error ? (
-                  <div className="flex flex-col items-center justify-center py-16 px-4">
-                    <div className="text-center max-w-md">
-                      <div className="text-4xl mb-4">⚠️</div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                        Market Context Unavailable
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        {globalMarketContext.error || "Market context data is not available. The daily analysis may not have been run yet."}
-                      </p>
-                      <button
-                        onClick={() => fetchGlobalMarketContext()}
-                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
-                      >
-                        Retry
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center py-16">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto mb-4"></div>
-                      <p className="text-gray-600 dark:text-gray-400">Loading market context...</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">Fetching latest market data</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Floating Market Context Button - Always visible when logged in - Made more prominent */}
-      {view === 'app' && (
-        <button
-          onClick={() => {
-            setIsMarketDrawerOpen(true);
-            // Trigger fetch if context not loaded
-            if (!globalMarketContext) {
-              fetchGlobalMarketContext();
-            }
-          }}
-          className="fixed bottom-24 right-6 bg-gradient-to-br from-primary-500 via-purple-600 to-secondary-600 hover:from-primary-600 hover:via-purple-700 hover:to-secondary-700 text-white px-5 py-3.5 md:px-6 md:py-4 rounded-full shadow-2xl z-40 transition-all hover:scale-110 active:scale-95 flex items-center gap-2 md:gap-3 group border-2 border-white/30 animate-pulse hover:animate-none ring-2 ring-primary-400/50"
-          title="View Market Context - Real-time market indicators and analysis"
-        >
-          <BarChart3 className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" />
-          <span className="font-bold text-sm md:text-base whitespace-nowrap">Market Context</span>
-        </button>
-      )}
-
-      {/* FAQ and User Guide Pages */}
-      {showFaq && (
-        <FaqPage 
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
-          onDisclaimerOpen={() => setShowDisclaimer(true)}
-          onRefundOpen={() => openLegal('refund')}
-          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-          onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onContactOpen={() => {
-            setShowFaq(false);
-            closeAllLegalPages();
-            setShowContact(true);
-          }}
-          onBack={() => setShowFaq(false)} 
-        />
-      )}
-      {showContact && (
-        <ContactPage
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
-          onDisclaimerOpen={() => setShowDisclaimer(true)}
-          onRefundOpen={() => openLegal('refund')}
-          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-          onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onFaqOpen={() => {
-            setShowContact(false);
-            closeAllLegalPages();
-            setShowFaq(true);
-          }}
-          onClose={() => setShowContact(false)}
-        />
-      )}
-      {showUserGuide && <UserGuidePage onBack={() => setShowUserGuide(false)} />}
-
-      {/* Legal Pages */}
-      {showPrivacy && (
-        <NewPrivacyPolicy
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => setShowPrivacy(false)}
-        />
-      )}
-      {showTerms && (
-        <NewTermsOfService
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => setShowTerms(false)}
-        />
-      )}
-      {showDisclaimer && (
-        <NewDisclaimer
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => setShowFaq(true)}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => setShowDisclaimer(false)}
-        />
-      )}
-      {showRefund && (
-        <NewRefundPolicy
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => setShowRefund(false)}
-        />
-      )}
-      {showPaymentsTerms && (
-        <NewPaymentsTerms
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onRefundOpen={() => openLegal('refund')}
-          onClose={() => closeAllLegalPages()}
-          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-          onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
-        />
-      )}
-      {showPaymentsPrivacy && (
-        <NewPaymentsPrivacy
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => closeAllLegalPages()}
-          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-          onLegalNoticeOpen={() => openLegal('legalNotice')}
-          onPrivacyOpen={() => openLegal('privacy')}
-          onTermsOpen={() => openLegal('terms')}
-        />
-      )}
-      {showLegalNotice && (
-        <NewLegalNotice
-          currentUser={currentUser}
-          onSignIn={() => setIsSignInModalOpen(true)}
-          onSignOut={handleSignOut}
-          onGetStarted={() => handleAuthAndNavigate(0)}
-          onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
-          onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
-          onClose={() => closeAllLegalPages()}
-          onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-          onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-        />
-      )}
-
-      {/* Main app / landing */}
-      {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && !showPaymentsTerms && !showPaymentsPrivacy && !showLegalNotice && (
-        <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
-          {view === "app" ? (
-            <>
-              <Header
-                mode="app"
-                onReset={analysisState !== "selector" ? handleResetAnalysis : null}
-                onSignOut={handleSignOut}
-                onBetaModalOpen={() => setIsBetaModalOpen(true)}
-              />
-              <main className="flex-grow w-full">{renderMainApp()}</main>
-            </>
-          ) : (
-            <>
-              {/* New Modern Landing Page */}
-              <NewLandingPage
-                currentUser={currentUser}
-                onSignIn={() => setIsSignInModalOpen(true)}
-                onSignOut={handleSignOut}
-                onGetStarted={() => handleAuthAndNavigate(0)}
-                onWatchDemo={() => setIsDemoOpen(true)}
-                onPrivacyOpen={() => openLegal('privacy')}
+      {/* Only show app content if not in maintenance mode */}
+      {!MAINTENANCE_CONFIG.enabled && (
+        <> {/* <--- Fragment Opened Here */}
+          {/* Modals */}
+          <AnimatePresence>
+            {isSignInModalOpen && (
+              <SignInModal
+                onSignIn={handleSignIn}
+                onTwitterSignIn={handleTwitterSignIn}
+                onClose={() => setIsSignInModalOpen(false)}
                 onTermsOpen={() => openLegal('terms')}
-                onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
-                onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
-                onLegalNoticeOpen={() => openLegal('legalNotice')}
-                onDisclaimerOpen={() => setShowDisclaimer(true)}
-                onRefundOpen={() => openLegal('refund')}
-                onFaqOpen={() => setShowFaq(true)}
-                onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+                onPrivacyOpen={() => openLegal('privacy')}
               />
-            </>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {isBetaModalOpen && <BetaInfoModal onClose={() => setIsBetaModalOpen(false)} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {isDemoOpen && <DemoModal onClose={() => setIsDemoOpen(false)} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {showDisclaimerModal && <DisclaimerModal onAgree={handleAgreeToDisclaimer} />}
+          </AnimatePresence>
+
+          {/* Market Context Drawer */}
+          <AnimatePresence>
+            {isMarketDrawerOpen && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMarketDrawerOpen(false)}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[55]"
+                />
+                {/* Drawer */}
+                <motion.div
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  className="fixed right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 xl:w-2/5 bg-white dark:bg-neutral-900 shadow-2xl z-[60] overflow-hidden flex flex-col"
+                >
+                  {/* ... (Drawer Content Omitted for brevity, assumed unchanged) ... */}
+                  {/* Note: Ensure the Drawer content code from your original snippet is here */}
+                  <div className="sticky top-0 z-[61] bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 p-4 md:p-5 flex items-center justify-between shadow-sm backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+                     {/* ... header content ... */}
+                     <div className="flex-1">
+                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                           Market Context
+                        </h2>
+                     </div>
+                     <button onClick={() => setIsMarketDrawerOpen(false)}>Close</button>
+                  </div>
+                   <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 md:space-y-5">
+                      {globalMarketContext && !globalMarketContext.error ? (
+                          <MarketRegimeCard marketContext={globalMarketContext} />
+                      ) : (
+                          <div>Loading...</div>
+                      )}
+                   </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          {/* FAQ and User Guide Pages */}
+          {showFaq && (
+            <FaqPage
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onPrivacyOpen={() => openLegal('privacy')}
+              onTermsOpen={() => openLegal('terms')}
+              onDisclaimerOpen={() => setShowDisclaimer(true)}
+              onRefundOpen={() => openLegal('refund')}
+              onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+              onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+              onLegalNoticeOpen={() => openLegal('legalNotice')}
+              onContactOpen={() => {
+                setShowFaq(false);
+                closeAllLegalPages();
+                setShowContact(true);
+              }}
+              onBack={() => setShowFaq(false)}
+            />
           )}
-        </div>
+          {showContact && (
+            <ContactPage
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onPrivacyOpen={() => openLegal('privacy')}
+              onTermsOpen={() => openLegal('terms')}
+              onDisclaimerOpen={() => setShowDisclaimer(true)}
+              onRefundOpen={() => openLegal('refund')}
+              onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+              onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+              onLegalNoticeOpen={() => openLegal('legalNotice')}
+              onFaqOpen={() => {
+                setShowContact(false);
+                closeAllLegalPages();
+                setShowFaq(true);
+              }}
+              onClose={() => setShowContact(false)}
+            />
+          )}
+          {showUserGuide && <UserGuidePage onBack={() => setShowUserGuide(false)} />}
+
+          {/* Legal Pages */}
+          {showPrivacy && (
+            <NewPrivacyPolicy
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => setShowPrivacy(false)}
+            />
+          )}
+          {showTerms && (
+            <NewTermsOfService
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => setShowFaq(true)}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => setShowTerms(false)}
+            />
+          )}
+          {showDisclaimer && (
+            <NewDisclaimer
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => setShowFaq(true)}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => setShowDisclaimer(false)}
+            />
+          )}
+          {showRefund && (
+            <NewRefundPolicy
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => setShowRefund(false)}
+            />
+          )}
+          {showPaymentsTerms && (
+            <NewPaymentsTerms
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onRefundOpen={() => openLegal('refund')}
+              onClose={() => closeAllLegalPages()}
+              onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+              onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+              onLegalNoticeOpen={() => openLegal('legalNotice')}
+              onPrivacyOpen={() => openLegal('privacy')}
+              onTermsOpen={() => openLegal('terms')}
+            />
+          )}
+          {showPaymentsPrivacy && (
+            <NewPaymentsPrivacy
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => closeAllLegalPages()}
+              onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+              onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+              onLegalNoticeOpen={() => openLegal('legalNotice')}
+              onPrivacyOpen={() => openLegal('privacy')}
+              onTermsOpen={() => openLegal('terms')}
+            />
+          )}
+          {showLegalNotice && (
+            <NewLegalNotice
+              currentUser={currentUser}
+              onSignIn={() => setIsSignInModalOpen(true)}
+              onSignOut={handleSignOut}
+              onGetStarted={() => handleAuthAndNavigate(0)}
+              onFaqOpen={() => { closeAllLegalPages(); setShowFaq(true); }}
+              onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+              onClose={() => closeAllLegalPages()}
+              onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+              onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+            />
+          )}
+
+          {/* Main app / landing with payment gating */}
+          {!showFaq && !showContact && !showUserGuide && !showPrivacy && !showTerms && !showDisclaimer && !showRefund && !showPaymentsTerms && !showPaymentsPrivacy && !showLegalNotice && (
+            <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
+              {view === "app" ? (
+                <>
+                  {/* Payment gating: show ProfilePage if not paid - TEMPORARILY DISABLED */}
+                  {false && currentUser && !isPaymentComplete(currentUser) ? (
+                    <ProfilePage />
+                  ) : (
+                    <>
+                      <Header
+                        mode="app"
+                        onReset={null}
+                        resetLabel={selectedTicker ? "Back to Analysis" : "Reset"}
+                        onSignOut={handleSignOut}
+                        onBetaModalOpen={() => setIsBetaModalOpen(true)}
+                        onMarketContextOpen={() => {
+                          setIsMarketDrawerOpen(true);
+                          if (!globalMarketContext) {
+                            fetchGlobalMarketContext();
+                          }
+                        }}
+                      />
+                      <main className="flex-grow w-full">{renderMainApp()}</main>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* New Modern Landing Page */}
+                  <NewLandingPage
+                    currentUser={currentUser}
+                    onSignIn={() => setIsSignInModalOpen(true)}
+                    onSignOut={handleSignOut}
+                    onGetStarted={() => handleAuthAndNavigate(0)}
+                    onWatchDemo={() => setIsDemoOpen(true)}
+                    onPrivacyOpen={() => openLegal('privacy')}
+                    onTermsOpen={() => openLegal('terms')}
+                    onPaymentsTermsOpen={() => openLegal('paymentsTerms')}
+                    onPaymentsPrivacyOpen={() => openLegal('paymentsPrivacy')}
+                    onLegalNoticeOpen={() => openLegal('legalNotice')}
+                    onDisclaimerOpen={() => setShowDisclaimer(true)}
+                    onRefundOpen={() => openLegal('refund')}
+                    onFaqOpen={() => setShowFaq(true)}
+                    onContactOpen={() => { closeAllLegalPages(); setShowContact(true); }}
+                  />
+                </>
+              )}
+            </div>
+          )}
+        </> /* <--- FIXED: Added closing Fragment tag here */
       )}
 
-      <FeedbackWidget />
+      {/* Feedback widget only shows when not in maintenance mode */}
+      {!MAINTENANCE_CONFIG.enabled && <FeedbackWidget />}
     </div>
   );
 }

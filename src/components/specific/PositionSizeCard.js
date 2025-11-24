@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, TrendingUp, AlertTriangle, DollarSign, Percent } from 'lucide-react';
+import { Calculator, TrendingUp, AlertTriangle, Percent } from 'lucide-react';
 
 const PositionSizeCard = ({ tradePlan, analysisData }) => {
   // Interactive calculator state - MUST be called before any early returns
@@ -66,7 +66,7 @@ const PositionSizeCard = ({ tradePlan, analysisData }) => {
           <div>
             <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Your Account Equity</label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400 font-semibold">₹</span>
               <input
                 type="number"
                 value={accountEquity}

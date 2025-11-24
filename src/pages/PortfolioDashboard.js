@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertTriangle, CheckCircle, 
   XCircle, Filter, Search, ArrowUpCircle, ArrowDownCircle,
-  PieChart, BarChart3, Activity, Eye, Target, Shield
+  PieChart, BarChart3, Activity, Eye, Target, Shield, X, BookOpen
 } from 'lucide-react';
 import { API_BASE_URL } from '../apiConfig';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
+import PaymentManager from '../components/specific/PaymentManager';
+import { useAuth } from '../context/AuthContext';
 
 const GlassCard = ({ className = '', children, onClick, variant = 'default' }) => {
   const variants = {
@@ -206,6 +208,45 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
     return 'text-gray-600 dark:text-gray-300';
   };
 
+  const getSimplifiedReason = (reason) => {
+    if (!reason) return 'No reason provided';
+    
+    // Selected trades
+    if (reason.includes('SELECTED')) {
+      const rankMatch = reason.match(/Rank #(\d+)/);
+      const rank = rankMatch ? rankMatch[1] : 'N/A';
+      return `Selected for execution (Rank #${rank})`;
+    }
+    
+    // Portfolio full
+    if (reason.includes('Portfolio full')) {
+      return 'Portfolio at maximum capacity';
+    }
+    
+    // Sector limits
+    if (reason.includes('Sector concentration')) {
+      const sectorMatch = reason.match(/(\w+) already at (\d+) positions/);
+      if (sectorMatch) {
+        const [, sector, count] = sectorMatch;
+        return `${sector} sector limit reached (${count}/4 positions)`;
+      }
+      return 'Sector concentration limit exceeded';
+    }
+    
+    // Top N filled
+    if (reason.includes('Top') && reason.includes('filled')) {
+      return 'High conviction but top positions filled';
+    }
+    
+    // Single stock risk
+    if (reason.includes('Single-stock risk')) {
+      return 'Stock already at risk limit';
+    }
+    
+    // Default fallback
+    return reason.length > 60 ? reason.substring(0, 57) + '...' : reason;
+  };
+
   return (
     <motion.tr
       initial={{ opacity: 0, y: 10 }}
@@ -243,26 +284,201 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
       <td className="px-6 py-4">
         <div className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
           <span className="text-gray-900 dark:text-gray-100 font-bold text-sm">
-            #{analysis.portfolio_rank || 'N/A'}
+            {analysis.portfolio_rank ? `#${analysis.portfolio_rank}` : 'N/A'}
           </span>
         </div>
       </td>
       <td className="px-6 py-4 max-w-md">
         <p className={`text-sm leading-relaxed ${getReasonColor()}`}>
-          {analysis.selection_reason || 'No reason provided'}
+          {getSimplifiedReason(analysis.selection_reason)}
         </p>
       </td>
     </motion.tr>
   );
 };
 
+const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+          />
+          
+          {/* Drawer */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed right-0 top-0 bottom-0 w-full md:w-[800px] bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto"
+          >
+            <div className="sticky top-0 bg-gradient-to-r from-primary-600 to-secondary-600 p-6 flex items-center justify-between z-10 shadow-lg">
+              <div>
+                <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+                  <Shield className="w-8 h-8" />
+                  Institutional Portfolio Management
+                </h2>
+                <p className="text-sm text-white/90 mt-1">Professional-grade process & risk controls</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                aria-label="Close education drawer"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Introduction */}
+              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  How Scrybe AI Works as Your Portfolio Manager
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
+                  Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">all 250 Nifty Smallcap stocks</span>, 
+                  but only executes the <span className="text-green-600 dark:text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
+                  pass strict risk controls.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  This isn't swing trading—it's <span className="text-primary-600 dark:text-primary-400 font-semibold">institutional positioning</span> with 
+                  multi-layer AI analysis, quantitative screening, and professional risk management built into every decision.
+                </p>
+              </div>
+
+              {/* Daily Process */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">📊 Step 1: Daily Analysis</h4>
+                  <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">250 stocks screened</span> daily using quantitative filters</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">~{totalAnalyzed} candidates</span> pass initial momentum/trend screens</li>
+                    <li>• Each candidate analyzed by AI "Committee of Experts":</li>
+                    <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
+                    <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
+                    <li className="ml-4">→ Risk Analyst (volatility, futures basis, options)</li>
+                    <li className="ml-4">→ Head of Strategy (final synthesis, conviction score)</li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">🎯 Step 2: Portfolio Selection</h4>
+                  <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    <li>• Only <span className="text-green-600 dark:text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
+                    <li>• Ranked by conviction (highest score = highest priority)</li>
+                    <li>• Portfolio Manager applies <span className="text-gray-900 dark:text-gray-100 font-semibold">3 risk gates:</span></li>
+                    <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 10 concurrent positions</span></li>
+                    <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
+                    <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 2% risk per position</span></li>
+                    <li>• Top 10 that pass all gates = <span className="text-green-600 dark:text-green-400 font-semibold">EXECUTED</span></li>
+                    <li>• Others = <span className="text-gray-600 dark:text-gray-400">Available for review</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Position Sizing */}
+              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
+                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">💰 Position Sizing & Risk Management</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Risk Per Trade</p>
+                    <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">1.5%</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Of total capital at risk per position</p>
+                  </div>
+                  <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Stop-Loss Method</p>
+                    <p className="text-2xl font-bold text-red-600 dark:text-red-400">2× ATR</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Dynamic stop based on volatility</p>
+                  </div>
+                  <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Risk/Reward Target</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">3:1</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Target = 6× ATR above entry</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <span className="text-gray-900 dark:text-gray-100 font-semibold">Position Size Calculation:</span> If you have ₹1,00,000 capital 
+                  and risk 1.5% per trade (₹1,500), with a stop-loss 5% below entry, you'd invest 
+                  <span className="text-green-600 dark:text-green-400 font-semibold"> ₹30,000</span> (₹1,500 ÷ 5% = ₹30,000). 
+                  This ensures controlled risk regardless of stock price or volatility.
+                </p>
+              </div>
+
+              {/* Trade Execution */}
+              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
+                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">⚡ Trade Execution & Monitoring</h4>
+                <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-gray-100">Entry Price:</p>
+                      <p>System uses <span className="text-green-600 dark:text-green-400">live market price (LTP)</span> from Angel One for precise entry calculation</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Target className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-gray-100">Stop-Loss & Target:</p>
+                      <p>Automatically calculated using ATR (Average True Range) for volatility-adjusted exits</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Activity className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-gray-100">Holding Period:</p>
+                      <p>Typically 7 days, adjusted based on market conditions and momentum</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-gray-100">Exit Triggers:</p>
+                      <p>Position closes on: Target hit, Stop-loss hit, Holding period expiry, or AI reversal signal</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transparency */}
+              <div className="bg-gradient-to-r from-primary-100/50 to-secondary-100/50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-6 border border-primary-300 dark:border-primary-700">
+                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  Complete Transparency
+                </h4>
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-gray-900 dark:text-gray-100 font-semibold">every analysis, 
+                  every decision, and every rejection reason</span>. Browse all 250 analyses in the 
+                  <span className="text-primary-600 dark:text-primary-400 font-semibold"> Complete Analysis</span> page, understand why stocks were 
+                  selected or rejected, and see the exact trade plan for every position. You're not following blind 
+                  signals—you're learning institutional portfolio management.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
 const PortfolioDashboard = ({ onStockSelect }) => {
+  const { currentUser } = useAuth();
   const [portfolioData, setPortfolioData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('executed'); // executed, not-selected, all
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSignal, setFilterSignal] = useState('all'); // all, BUY, SHORT, HOLD
+  const [educationDrawerOpen, setEducationDrawerOpen] = useState(false);
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
@@ -338,6 +554,12 @@ const PortfolioDashboard = ({ onStockSelect }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 py-8 px-4 sm:px-6 lg:px-8">
+      {/* Payment & Subscription Manager */}
+      {/* {currentUser && (
+        <div className="mt-12">
+          <PaymentManager user={currentUser} />
+        </div>
+      )} */}
       <div className="max-w-7xl mx-auto">
         {/* Header Section - Institutional Grade */}
         <div className="mb-10">
@@ -353,7 +575,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                 Institutional-grade AI portfolio construction and risk management
               </p>
             </div>
-            <div className="hidden lg:flex items-center gap-4">
+            {/* <div className="hidden lg:flex items-center gap-4">
               <div className="text-right">
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Last Updated</p>
                 <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -372,7 +594,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                   <span className="text-primary-700 dark:text-primary-300 text-sm font-semibold">📅 {prediction_for_date_short || prediction_for_date}</span>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Key Stats Summary Bar */}
@@ -410,146 +632,34 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           </div>
         )}
 
-        {/* Portfolio Management Education Section */}
-        <GlassCard variant="accent" className="p-8 mb-12 border-l-4 border-l-primary-500">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center">
-              <Shield className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+        {/* Institutional Portfolio Management - Now in Drawer */}
+        <motion.button
+          onClick={() => setEducationDrawerOpen(true)}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full mb-12 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-xl border-2 border-primary-200 dark:border-primary-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all group overflow-hidden"
+        >
+          <div className="p-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <BookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Learn how Scrybe AI manages portfolios like an institutional fund manager</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management</h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Professional-grade process & risk controls</p>
+            <div className="flex items-center gap-2 text-primary-600 dark:text-primary-400 font-semibold">
+              <span>Learn More</span>
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                →
+              </motion.span>
             </div>
           </div>
-          
-          <div className="space-y-6 text-gray-700 dark:text-gray-300">
-            {/* Introduction */}
-            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                How Scrybe AI Works as Your Portfolio Manager
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
-                Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">all 250 Nifty Smallcap stocks</span>, 
-                but only executes the <span className="text-green-600 dark:text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
-                pass strict risk controls.
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                This isn't swing trading—it's <span className="text-primary-600 dark:text-primary-400 font-semibold">institutional positioning</span> with 
-                multi-layer AI analysis, quantitative screening, and professional risk management built into every decision.
-              </p>
-            </div>
-
-            {/* Daily Process */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
-                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">📊 Step 1: Daily Analysis</h4>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                  <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">250 stocks screened</span> daily using quantitative filters</li>
-                  <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">~{total_analyzed} candidates</span> pass initial momentum/trend screens</li>
-                  <li>• Each candidate analyzed by AI "Committee of Experts":</li>
-                  <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
-                  <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
-                  <li className="ml-4">→ Risk Analyst (volatility, futures basis, options)</li>
-                  <li className="ml-4">→ Head of Strategy (final synthesis, conviction score)</li>
-                </ul>
-              </div>
-
-              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
-                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">🎯 Step 2: Portfolio Selection</h4>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                  <li>• Only <span className="text-green-600 dark:text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
-                  <li>• Ranked by conviction (highest score = highest priority)</li>
-                  <li>• Portfolio Manager applies <span className="text-gray-900 dark:text-gray-100 font-semibold">3 risk gates:</span></li>
-                  <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 10 concurrent positions</span></li>
-                  <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
-                  <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 2% risk per position</span></li>
-                  <li>• Top 10 that pass all gates = <span className="text-green-600 dark:text-green-400 font-semibold">EXECUTED</span></li>
-                  <li>• Others = <span className="text-gray-600 dark:text-gray-400">Available for review</span></li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Position Sizing */}
-            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
-              <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">💰 Position Sizing & Risk Management</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Risk Per Trade</p>
-                  <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">1.5%</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Of total capital at risk per position</p>
-                </div>
-                <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Stop-Loss Method</p>
-                  <p className="text-2xl font-bold text-red-600 dark:text-red-400">2× ATR</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Dynamic stop based on volatility</p>
-                </div>
-                <div className="bg-white dark:bg-neutral-900 rounded p-4 border border-gray-200 dark:border-neutral-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Risk/Reward Target</p>
-                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">3:1</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Target = 6× ATR above entry</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                <span className="text-gray-900 dark:text-gray-100 font-semibold">Position Size Calculation:</span> If you have ₹1,00,000 capital 
-                and risk 1.5% per trade (₹1,500), with a stop-loss 5% below entry, you'd invest 
-                <span className="text-green-600 dark:text-green-400 font-semibold"> ₹30,000</span> (₹1,500 ÷ 5% = ₹30,000). 
-                This ensures controlled risk regardless of stock price or volatility.
-              </p>
-            </div>
-
-            {/* Trade Execution */}
-            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 border border-gray-200 dark:border-neutral-700">
-              <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">⚡ Trade Execution & Monitoring</h4>
-              <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">Entry Price:</p>
-                    <p>System uses <span className="text-green-600 dark:text-green-400">live market price (LTP)</span> from Angel One for precise entry calculation</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Target className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">Stop-Loss & Target:</p>
-                    <p>Automatically calculated using ATR (Average True Range) for volatility-adjusted exits</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Activity className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">Holding Period:</p>
-                    <p>Typically 7 days, adjusted based on market conditions and momentum</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">Exit Triggers:</p>
-                    <p>Position closes on: Target hit, Stop-loss hit, Holding period expiry, or AI reversal signal</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Transparency */}
-            <div className="bg-gradient-to-r from-primary-100/50 to-secondary-100/50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-6 border border-primary-300 dark:border-primary-700">
-              <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                Complete Transparency
-              </h4>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-gray-900 dark:text-gray-100 font-semibold">every analysis, 
-                every decision, and every rejection reason</span>. Browse all 250 analyses in the 
-                <span className="text-primary-600 dark:text-primary-400 font-semibold"> Complete Analysis</span> page, understand why stocks were 
-                selected or rejected, and see the exact trade plan for every position. You're not following blind 
-                signals—you're learning institutional portfolio management.
-              </p>
-            </div>
-          </div>
-        </GlassCard>
+        </motion.button>
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -798,6 +908,13 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           </GlassCard>
         </div>
       </div>
+
+      {/* Institutional Education Drawer */}
+      <InstitutionalEducationDrawer 
+        isOpen={educationDrawerOpen} 
+        onClose={() => setEducationDrawerOpen(false)}
+        totalAnalyzed={total_analyzed}
+      />
     </div>
   );
 };
