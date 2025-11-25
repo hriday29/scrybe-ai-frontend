@@ -209,38 +209,45 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
   };
 
   const getSimplifiedReason = (reason) => {
-    if (!reason) return 'No reason provided';
+    if (!reason) return 'Analysis pending';
     
     // Selected trades
     if (reason.includes('SELECTED')) {
       const rankMatch = reason.match(/Rank #(\d+)/);
       const rank = rankMatch ? rankMatch[1] : 'N/A';
-      return `Selected for execution (Rank #${rank})`;
+      return `✅ Selected for trading (Rank #${rank})`;
     }
     
-    // Portfolio full
+    // High conviction but not selected
+    if (reason.includes('High conviction') && reason.includes('available for review')) {
+      const rankMatch = reason.match(/Global Rank #(\d+)/);
+      const rank = rankMatch ? rankMatch[1] : 'N/A';
+      return `⭐ Strong buy signal (Rank #${rank}) - Available for manual review`;
+    }
+    
+    // Portfolio constraints
     if (reason.includes('Portfolio full')) {
-      return 'Portfolio at maximum capacity';
+      return '📊 Portfolio is full (10 positions maximum)';
     }
     
     // Sector limits
-    if (reason.includes('Sector concentration')) {
-      const sectorMatch = reason.match(/(\w+) already at (\d+) positions/);
-      if (sectorMatch) {
-        const [, sector, count] = sectorMatch;
-        return `${sector} sector limit reached (${count}/4 positions)`;
-      }
-      return 'Sector concentration limit exceeded';
+    if (reason.includes('Sector concentration') || reason.includes('sector limit')) {
+      return '📈 Too many stocks from same industry sector';
     }
     
-    // Top N filled
-    if (reason.includes('Top') && reason.includes('filled')) {
-      return 'High conviction but top positions filled';
+    // Single stock risk limit
+    if (reason.includes('Single-stock risk limit')) {
+      return '⚠️ Too much money already invested in this stock';
     }
     
-    // Single stock risk
-    if (reason.includes('Single-stock risk')) {
-      return 'Stock already at risk limit';
+    // Conviction threshold
+    if (reason.includes('below 45 threshold') || reason.includes('Conviction score')) {
+      return '📉 Signal strength too weak for automatic trading';
+    }
+    
+    // HOLD signals
+    if (reason.includes('HOLD signal') || reason.includes('No trading opportunity')) {
+      return '⏸️ No clear buy or sell signal detected';
     }
     
     // Default fallback
@@ -284,7 +291,7 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
       <td className="px-6 py-4">
         <div className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
           <span className="text-gray-900 dark:text-gray-100 font-bold text-sm">
-            {analysis.portfolio_rank ? `#${analysis.portfolio_rank}` : 'N/A'}
+            #{analysis.global_rank || 'N/A'}
           </span>
         </div>
       </td>
@@ -321,10 +328,10 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
           >
             <div className="sticky top-0 bg-gradient-to-r from-primary-600 to-secondary-600 p-6 flex items-center justify-between z-10 shadow-lg">
               <div>
-                <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-                  <Shield className="w-8 h-8" />
-                  Institutional Portfolio Management
-                </h2>
+                  <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+                    <Shield className="w-8 h-8" />
+                    Scrybe Portfolio Management
+                  </h2>
                 <p className="text-sm text-white/90 mt-1">Professional-grade process & risk controls</p>
               </div>
               <button
@@ -374,7 +381,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                   <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">🎯 Step 2: Portfolio Selection</h4>
                   <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                     <li>• Only <span className="text-green-600 dark:text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
-                    <li>• Ranked by conviction (highest score = highest priority)</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">Global ranking</span> by conviction across all 250 stocks</li>
                     <li>• Portfolio Manager applies <span className="text-gray-900 dark:text-gray-100 font-semibold">3 risk gates:</span></li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 10 concurrent positions</span></li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
@@ -506,7 +513,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
     if (activeTab === 'executed') {
       filtered = filtered.filter(a => a.is_executed);
     } else if (activeTab === 'not-selected') {
-      filtered = filtered.filter(a => !a.portfolio_selected && a.signal !== 'HOLD');
+      filtered = filtered.filter(a => !a.is_executed && a.signal !== 'HOLD');
     }
 
     // Search filtering
@@ -568,11 +575,11 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-2 h-8 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                  Portfolio Management
+                  Scrybe Portfolio Manager
                 </h1>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-base ml-5">
-                Institutional-grade AI portfolio construction and risk management
+                AI-powered institutional-grade portfolio construction and risk management
               </p>
             </div>
             {/* <div className="hidden lg:flex items-center gap-4">
@@ -644,7 +651,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               <div className="w-12 h-12 rounded-xl bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <BookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
               </div>
-              <div>
+              <div className="flex flex-col">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management</h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">Learn how Scrybe AI manages portfolios like an institutional fund manager</p>
               </div>
@@ -681,14 +688,14 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             icon={AlertTriangle}
             label="High Conviction Pending"
             value={portfolio_summary.high_conviction_not_selected}
-            subtitle="Not selected (portfolio full)"
+            subtitle="Top 10 ranked stocks available for review"
             color="yellow"
           />
           <StatCard
             icon={Shield}
-            label="Risk Protected"
-            value={`${portfolio_summary.sector_limits_reached}`}
-            subtitle="Blocked by sector limits"
+            label="Risk Limits Applied"
+            value={`${portfolio_summary.sector_limits_reached + (portfolio_summary.single_stock_limit || 0)}`}
+            subtitle="Sector & single-stock constraints"
             color="purple"
           />
         </div>
@@ -758,7 +765,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {executed_trades.map((trade) => (
-                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank} onStockSelect={onStockSelect} />
+                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank || trade.global_rank} onStockSelect={onStockSelect} />
               ))}
             </div>
           </div>
@@ -782,7 +789,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           <div className="flex gap-3 mb-8 flex-wrap">
             {[
               { id: 'executed', label: 'Executed', count: executed_trades.length, color: 'emerald' },
-              { id: 'not-selected', label: 'Not Selected', count: portfolio_summary.high_conviction_not_selected + portfolio_summary.sector_limits_reached, color: 'amber' },
+              { id: 'not-selected', label: 'Not Selected', count: portfolioData.all_analyses.filter(a => !a.is_executed && a.signal !== 'HOLD').length, color: 'amber' },
               { id: 'all', label: 'All Analyses', count: total_analyzed, color: 'blue' }
             ].map(tab => (
               <button
@@ -894,8 +901,8 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                 <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center mb-1">
                   <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                 </div>
-                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached}</span>
-                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Sector Limited</span>
+                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached + (portfolio_summary.single_stock_limit || 0)}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Risk Limited</span>
               </div>
               <div className="flex flex-col items-center gap-2 border-l border-gray-200 dark:border-neutral-700">
                 <div className="w-10 h-10 rounded-lg bg-gray-500/10 dark:bg-gray-500/20 flex items-center justify-center mb-1">

@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ErrorDisplay, SkeletonLoader } from './pages/StockAnalysis.js';
 import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BarChart3 } from 'lucide-react';
+import { Search, BarChart3, Filter, Download, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { signInWithGoogle, signInWithTwitter, signOut } from './firebase';
 import { getAnalysis, getTrackRecord } from './api/api.js';
 
@@ -282,16 +282,24 @@ const StockSelector = ({ onAnalyze }) => {
 
 const AITrackRecord = () => {
   const [trackRecordData, setTrackRecordData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [signalFilter, setSignalFilter] = useState('all');
+  const [reasonFilter, setReasonFilter] = useState('all');
+  const [dateRange, setDateRange] = useState('all');
+  const [sortBy, setSortBy] = useState('close_date');
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [showFilters, setShowFilters] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const itemsPerPage = 25;
 
   useEffect(() => {
     let isMounted = true;
     const fetchTrackRecord = async () => {
       try {
-        // 1. Call our standardized function. It returns the final data directly.
         const data = await getTrackRecord();
-
-        // 2. Process the data as before.
         const processedData = data.map((trade) => {
           const openDate = new Date(trade.open_date);
           const closeDate = new Date(trade.close_date);
@@ -300,7 +308,10 @@ const AITrackRecord = () => {
           return { ...trade, days_held: daysHeld };
         });
 
-        if (isMounted) setTrackRecordData(processedData);
+        if (isMounted) {
+          setTrackRecordData(processedData);
+          setFilteredData(processedData);
+        }
       } catch (err) {
         if (isMounted) setError(err.message);
       }
@@ -311,33 +322,205 @@ const AITrackRecord = () => {
     };
   }, []);
 
+  // Filter and sort data
+  useEffect(() => {
+    if (!trackRecordData) return;
+
+    let filtered = [...trackRecordData];
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(trade =>
+        trade.ticker.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (trade.companyName && trade.companyName.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    // Signal filter
+    if (signalFilter !== 'all') {
+      filtered = filtered.filter(trade => trade.signal === signalFilter);
+    }
+
+    // Reason filter
+    if (reasonFilter !== 'all') {
+      const reasonMap = {
+        'target_hit': 'target hit',
+        'stop_loss_hit': 'stop-loss hit',
+        'time_exit': 'time exit'
+      };
+      filtered = filtered.filter(trade =>
+        trade.closing_reason && trade.closing_reason.toLowerCase().includes(reasonMap[reasonFilter] || reasonFilter)
+      );
+    }
+
+    // Date range filter
+    if (dateRange !== 'all') {
+      const now = new Date();
+      const filterDate = new Date();
+      switch (dateRange) {
+        case 'last_30_days':
+          filterDate.setDate(now.getDate() - 30);
+          break;
+        case 'last_90_days':
+          filterDate.setDate(now.getDate() - 90);
+          break;
+        case 'last_6_months':
+          filterDate.setMonth(now.getMonth() - 6);
+          break;
+        case 'last_year':
+          filterDate.setFullYear(now.getFullYear() - 1);
+          break;
+      }
+      filtered = filtered.filter(trade => new Date(trade.close_date) >= filterDate);
+    }
+
+    // Sort data
+    filtered.sort((a, b) => {
+      let aVal, bVal;
+      switch (sortBy) {
+        case 'ticker':
+          aVal = a.ticker;
+          bVal = b.ticker;
+          break;
+        case 'signal':
+          aVal = a.signal;
+          bVal = b.signal;
+          break;
+        case 'open_date':
+          aVal = new Date(a.open_date);
+          bVal = new Date(b.open_date);
+          break;
+        case 'close_date':
+          aVal = new Date(a.close_date);
+          bVal = new Date(b.close_date);
+          break;
+        case 'days_held':
+          aVal = a.days_held;
+          bVal = b.days_held;
+          break;
+        case 'net_return_pct':
+          aVal = a.net_return_pct;
+          bVal = b.net_return_pct;
+          break;
+        default:
+          aVal = new Date(a.close_date);
+          bVal = new Date(b.close_date);
+      }
+
+      if (sortOrder === 'asc') {
+        return aVal > bVal ? 1 : -1;
+      } else {
+        return aVal < bVal ? 1 : -1;
+      }
+    });
+
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [trackRecordData, searchTerm, signalFilter, reasonFilter, dateRange, sortBy, sortOrder]);
+
   const getReasonDisplay = (reason) => {
-    if (!reason) return { 
-      text: 'Closed', 
+    if (!reason) return {
+      text: 'Closed',
       color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
       icon: '⚪'
     };
     const lower = reason.toLowerCase();
-    if (lower.includes('target hit')) return { 
-      text: 'Target Hit', 
+    if (lower.includes('target hit')) return {
+      text: 'Target Hit',
       color: 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-300 border border-green-300 dark:border-green-700',
       icon: '🎯'
     };
-    if (lower.includes('stop-loss hit')) return { 
-      text: 'Stop-Loss Hit', 
+    if (lower.includes('stop-loss hit')) return {
+      text: 'Stop-Loss Hit',
       color: 'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 dark:from-red-900/30 dark:to-rose-900/30 dark:text-red-300 border border-red-300 dark:border-red-700',
       icon: '🛑'
     };
-    if (lower.includes('time exit')) return { 
-      text: 'Time Exit', 
+    if (lower.includes('time exit')) return {
+      text: 'Time Exit',
       color: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 dark:from-amber-900/30 dark:to-yellow-900/30 dark:text-amber-300 border border-amber-300 dark:border-amber-700',
       icon: '⏰'
     };
-    return { 
-      text: 'Closed', 
+    return {
+      text: 'Closed',
       color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
       icon: '⚪'
     };
+  };
+
+  // Calculate performance metrics
+  const performanceMetrics = useMemo(() => {
+    if (!trackRecordData || trackRecordData.length === 0) return null;
+
+    const totalTrades = trackRecordData.length;
+    const winningTrades = trackRecordData.filter(t => t.net_return_pct > 0).length;
+    const losingTrades = trackRecordData.filter(t => t.net_return_pct < 0).length;
+    const winRate = (winningTrades / totalTrades) * 100;
+
+    const totalReturn = trackRecordData.reduce((sum, t) => sum + t.net_return_pct, 0);
+    const avgReturn = totalReturn / totalTrades;
+
+    const bestTrade = trackRecordData.reduce((best, t) =>
+      t.net_return_pct > best.net_return_pct ? t : best
+    );
+    const worstTrade = trackRecordData.reduce((worst, t) =>
+      t.net_return_pct < worst.net_return_pct ? t : worst
+    );
+
+    const avgDaysHeld = trackRecordData.reduce((sum, t) => sum + t.days_held, 0) / totalTrades;
+
+    // Calculate returns by signal
+    const buyTrades = trackRecordData.filter(t => t.signal === 'BUY');
+    const shortTrades = trackRecordData.filter(t => t.signal === 'SHORT');
+
+    const buyWinRate = buyTrades.length > 0 ? (buyTrades.filter(t => t.net_return_pct > 0).length / buyTrades.length) * 100 : 0;
+    const shortWinRate = shortTrades.length > 0 ? (shortTrades.filter(t => t.net_return_pct > 0).length / shortTrades.length) * 100 : 0;
+
+    return {
+      totalTrades,
+      winningTrades,
+      losingTrades,
+      winRate,
+      avgReturn,
+      bestTrade,
+      worstTrade,
+      avgDaysHeld,
+      buyTrades: buyTrades.length,
+      shortTrades: shortTrades.length,
+      buyWinRate,
+      shortWinRate
+    };
+  }, [trackRecordData]);
+
+  // Pagination
+  const totalPages = Math.ceil((filteredData?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentTrades = filteredData?.slice(startIndex, endIndex) || [];
+
+  const exportToCSV = () => {
+    if (!filteredData || filteredData.length === 0) return;
+
+    const headers = ['Ticker', 'Signal', 'Open Date', 'Close Date', 'Days Held', 'Closing Reason', 'Net Return %'];
+    const csvData = filteredData.map(trade => [
+      trade.ticker,
+      trade.signal,
+      new Date(trade.open_date).toLocaleDateString('en-IN'),
+      new Date(trade.close_date).toLocaleDateString('en-IN'),
+      trade.days_held,
+      getReasonDisplay(trade.closing_reason).text,
+      trade.net_return_pct.toFixed(2)
+    ]);
+
+    const csvContent = [headers, ...csvData].map(row => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `scrybe_track_record_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (error) return (
@@ -348,7 +531,7 @@ const AITrackRecord = () => {
       </div>
     </div>
   );
-  
+
   if (!trackRecordData) return (
     <div className="text-center p-12">
       <div className="relative inline-block mb-4">
@@ -360,75 +543,259 @@ const AITrackRecord = () => {
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8">
+    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <SectionTitle 
-          title="AI Performance Record" 
-          subtitle="A transparent log of all closed trades from the live engine." 
+        <SectionTitle
+          title="AI Performance Analytics"
+          subtitle="Comprehensive analysis of Scrybe AI's trading performance with advanced filtering and insights."
         />
       </motion.div>
 
-      <GlassCard className="mt-8 overflow-hidden">
+      {/* Performance Summary Cards */}
+      {performanceMetrics && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+        >
+          <GlassCard className="p-4 text-center">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{performanceMetrics.totalTrades}</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Trades</div>
+          </GlassCard>
+          <GlassCard className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{performanceMetrics.winRate.toFixed(1)}%</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Win Rate</div>
+          </GlassCard>
+          <GlassCard className="p-4 text-center">
+            <div className={`text-2xl font-bold ${performanceMetrics.avgReturn >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+              {performanceMetrics.avgReturn >= 0 ? '+' : ''}{performanceMetrics.avgReturn.toFixed(2)}%
+            </div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Avg Return</div>
+          </GlassCard>
+          <GlassCard className="p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{performanceMetrics.avgDaysHeld.toFixed(0)}</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Avg Days Held</div>
+          </GlassCard>
+          <GlassCard className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{performanceMetrics.bestTrade.net_return_pct.toFixed(2)}%</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Best Trade</div>
+          </GlassCard>
+          <GlassCard className="p-4 text-center">
+            <div className="text-2xl font-bold text-red-600 dark:text-red-400">{performanceMetrics.worstTrade.net_return_pct.toFixed(2)}%</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Worst Trade</div>
+          </GlassCard>
+        </motion.div>
+      )}
+
+      {/* Controls */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between"
+      >
+        <div className="flex flex-col sm:flex-row gap-4 flex-1">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search by ticker or company..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Filter Toggle */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <Filter className="w-4 h-4" />
+            Filters
+            {(searchTerm || signalFilter !== 'all' || reasonFilter !== 'all' || dateRange !== 'all') && (
+              <span className="bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full">
+                {[searchTerm, signalFilter !== 'all', reasonFilter !== 'all', dateRange !== 'all'].filter(Boolean).length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowExportModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Export
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Advanced Filters */}
+      {showFilters && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal</label>
+              <select
+                value={signalFilter}
+                onChange={(e) => setSignalFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              >
+                <option value="all">All Signals</option>
+                <option value="BUY">BUY</option>
+                <option value="SHORT">SHORT</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Exit Reason</label>
+              <select
+                value={reasonFilter}
+                onChange={(e) => setReasonFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              >
+                <option value="all">All Reasons</option>
+                <option value="target_hit">Target Hit</option>
+                <option value="stop_loss_hit">Stop-Loss Hit</option>
+                <option value="time_exit">Time Exit</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</label>
+              <select
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              >
+                <option value="all">All Time</option>
+                <option value="last_30_days">Last 30 Days</option>
+                <option value="last_90_days">Last 90 Days</option>
+                <option value="last_6_months">Last 6 Months</option>
+                <option value="last_year">Last Year</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</label>
+              <div className="flex gap-2">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                >
+                  <option value="close_date">Close Date</option>
+                  <option value="ticker">Ticker</option>
+                  <option value="signal">Signal</option>
+                  <option value="net_return_pct">Return %</option>
+                  <option value="days_held">Days Held</option>
+                </select>
+                <button
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  {sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Results Summary */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div>
+          Showing {startIndex + 1}-{Math.min(endIndex, filteredData?.length || 0)} of {filteredData?.length || 0} trades
+        </div>
+        {(searchTerm || signalFilter !== 'all' || reasonFilter !== 'all' || dateRange !== 'all') && (
+          <button
+            onClick={() => {
+              setSearchTerm('');
+              setSignalFilter('all');
+              setReasonFilter('all');
+              setDateRange('all');
+            }}
+            className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline"
+          >
+            Clear all filters
+          </button>
+        )}
+      </div>
+
+      <GlassCard className="overflow-hidden">
         {/* Mobile cards */}
-        <div className="md:hidden">
-          {trackRecordData.length > 0 ? (
-            trackRecordData.map((trade, index) => {
+        <div className="md:hidden space-y-4 p-4">
+          {currentTrades.length > 0 ? (
+            currentTrades.map((trade, index) => {
               const reasonDisplay = getReasonDisplay(trade.closing_reason);
-              const returnColor = trade.net_return_pct >= 0 
-                ? 'text-green-600 dark:text-green-400' 
+              const returnColor = trade.net_return_pct >= 0
+                ? 'text-green-600 dark:text-green-400'
                 : 'text-red-600 dark:text-red-400';
-              const signalColor = trade.signal === 'BUY' 
-                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+              const signalColor = trade.signal === 'BUY'
+                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                 : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300';
-              
+
               return (
-                <motion.div 
+                <motion.div
                   key={trade._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="p-5 border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors"
+                  className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow"
                 >
-                  <div className="flex justify-between items-center mb-4">
+                  <div className="flex justify-between items-start mb-3">
                     <div>
                       <div className="font-bold text-lg text-gray-900 dark:text-white">{trade.ticker}</div>
-                      <span className={`inline-block mt-1 px-3 py-1 rounded-lg text-xs font-semibold ${signalColor}`}>
-                        {trade.signal}
-                      </span>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">{trade.companyName}</div>
                     </div>
-                    <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} flex items-center gap-1.5`}>
-                      <span>{reasonDisplay.icon}</span>
-                      {reasonDisplay.text}
+                    <span className={`inline-block px-3 py-1 rounded-lg text-xs font-semibold ${signalColor}`}>
+                      {trade.signal}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
                       <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Net Return</div>
                       <div className={`font-mono font-bold text-lg ${returnColor}`}>
                         {trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%
                       </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
                       <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Days Held</div>
                       <div className="text-gray-900 dark:text-white font-bold text-lg">{trade.days_held}</div>
                     </div>
-                    <div className="col-span-2 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
-                      <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Closed On</div>
-                      <div className="text-gray-900 dark:text-white font-semibold">{new Date(trade.close_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                  </div>
+
+                  <div className="flex justify-between items-center text-sm">
+                    <div>
+                      <div className="text-gray-500 dark:text-gray-400">Closed</div>
+                      <div className="text-gray-900 dark:text-white font-medium">
+                        {new Date(trade.close_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                      </div>
                     </div>
+                    <span className={`px-3 py-1 rounded-lg text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5`}>
+                      <span>{reasonDisplay.icon}</span>
+                      {reasonDisplay.text}
+                    </span>
                   </div>
                 </motion.div>
               );
             })
           ) : (
             <div className="text-center text-gray-500 dark:text-gray-400 py-20">
-              <div className="text-6xl mb-4">📊</div>
-              <div className="text-lg font-semibold mb-2">No performance data yet</div>
-              <p className="text-sm">Track record will appear here once trades are closed</p>
+              <div className="text-6xl mb-4">🔍</div>
+              <div className="text-lg font-semibold mb-2">No trades match your filters</div>
+              <p className="text-sm">Try adjusting your search criteria</p>
             </div>
           )}
         </div>
@@ -439,38 +806,71 @@ const AITrackRecord = () => {
             <table className="w-full text-left">
               <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-800 dark:to-neutral-900">
                 <tr>
-                  {['Ticker', 'Signal', 'Open Date', 'Close Date', 'Days Held', 'Closing Reason', 'Net Return'].map((h) => (
-                    <th key={h} className="p-4 text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wider uppercase">
-                      {h}
+                  {[
+                    { key: 'ticker', label: 'Ticker' },
+                    { key: 'signal', label: 'Signal' },
+                    { key: 'open_date', label: 'Open Date' },
+                    { key: 'close_date', label: 'Close Date' },
+                    { key: 'days_held', label: 'Days Held' },
+                    { key: 'closing_reason', label: 'Exit Reason' },
+                    { key: 'net_return_pct', label: 'Net Return' }
+                  ].map(({ key, label }) => (
+                    <th
+                      key={key}
+                      className="p-4 text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wider uppercase cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors"
+                      onClick={() => {
+                        if (sortBy === key) {
+                          setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                        } else {
+                          setSortBy(key);
+                          setSortOrder('desc');
+                        }
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        {label}
+                        {sortBy === key && (
+                          sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                        )}
+                      </div>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {trackRecordData.length > 0 ? (
-                  trackRecordData.map((trade, index) => {
+                {currentTrades.length > 0 ? (
+                  currentTrades.map((trade, index) => {
                     const reasonDisplay = getReasonDisplay(trade.closing_reason);
                     const returnColor = trade.net_return_pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
-                    const signalColor = trade.signal === 'BUY' 
-                      ? 'text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/30' 
+                    const signalColor = trade.signal === 'BUY'
+                      ? 'text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/30'
                       : 'text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30';
                     return (
-                      <motion.tr 
+                      <motion.tr
                         key={trade._id}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.03 }}
+                        transition={{ delay: index * 0.02 }}
                         className="border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-300"
                       >
-                        <td className="p-4 text-gray-900 dark:text-white font-bold">{trade.ticker}</td>
+                        <td className="p-4">
+                          <div>
+                            <div className="text-gray-900 dark:text-white font-bold">{trade.ticker}</div>
+                            <div className="text-gray-600 dark:text-gray-400 text-sm">{trade.companyName}</div>
+                          </div>
+                        </td>
                         <td className="p-4">
                           <span className={`px-3 py-1 rounded-lg text-sm font-bold ${signalColor}`}>
                             {trade.signal}
                           </span>
                         </td>
-                        <td className="p-4 text-gray-600 dark:text-gray-400">{new Date(trade.open_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-400">{new Date(trade.close_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-400 font-semibold">{trade.days_held}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400 text-sm">
+                          {new Date(trade.open_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+                        </td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400 text-sm">
+                          {new Date(trade.close_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+                        </td>
+                        <td className="p-4 text-gray-600 dark:text-gray-400 font-semibold text-sm">{trade.days_held}</td>
                         <td className="p-4">
                           <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5`}>
                             <span>{reasonDisplay.icon}</span>
@@ -486,9 +886,9 @@ const AITrackRecord = () => {
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center py-20">
-                      <div className="text-6xl mb-4">📊</div>
-                      <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No performance data yet</div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Track record will appear here once trades are closed</p>
+                      <div className="text-6xl mb-4">🔍</div>
+                      <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No trades match your filters</div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Try adjusting your search criteria</p>
                     </td>
                   </tr>
                 )}
@@ -497,6 +897,76 @@ const AITrackRecord = () => {
           </div>
         </div>
       </GlassCard>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <button
+            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="flex gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+              if (pageNum > totalPages) return null;
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`px-3 py-2 border rounded-lg transition-colors ${
+                    currentPage === pageNum
+                      ? 'bg-primary-500 text-white border-primary-500'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Export Modal */}
+      {showExportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Export Track Record</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Export {filteredData?.length || 0} trades to CSV file. This includes all filtered results.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  exportToCSV();
+                  setShowExportModal(false);
+                }}
+                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg transition-colors"
+              >
+                Export CSV
+              </button>
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

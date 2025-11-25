@@ -28,6 +28,36 @@ const GlassCard = ({ className = '', children, variant = 'default' }) => {
   );
 };
 
+const SignalBadge = ({ signal, size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'px-2 py-0.5 text-xs',
+    md: 'px-3 py-1 text-xs',
+    lg: 'px-4 py-1.5 text-sm'
+  };
+
+  if (signal === 'BUY') {
+    return (
+      <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gradient-to-r from-emerald-500/20 to-green-500/20 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-500/40 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 font-bold shadow-sm`}>
+        <TrendingUp className="w-3.5 h-3.5" />
+        BUY
+      </span>
+    );
+  }
+  if (signal === 'SHORT') {
+    return (
+      <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gradient-to-r from-rose-500/20 to-red-500/20 dark:from-rose-900/30 dark:to-red-900/30 border border-rose-500/40 dark:border-rose-700 text-rose-700 dark:text-rose-300 font-bold shadow-sm`}>
+        <TrendingDown className="w-3.5 h-3.5" />
+        SHORT
+      </span>
+    );
+  }
+  return (
+    <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold shadow-sm`}>
+      HOLD
+    </span>
+  );
+};
+
 const StatCard = ({ icon: Icon, label, value, color = 'blue' }) => {
   const colorClasses = {
     blue: 'from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 bg-blue-500/10 dark:bg-blue-500/20',
@@ -165,8 +195,11 @@ const OpenPositions = ({ onAnalyze }) => {
                         <thead>
                             <tr className="bg-gray-50 dark:bg-neutral-800/50 border-b-2 border-gray-200 dark:border-neutral-700">
                                 <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Stock</th>
+                                <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Signal</th>
+                                <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Strategy</th>
+                                <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Entry Date</th>
+                                <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Days Held</th>
                                 <th className="px-6 py-4 text-left text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">P&L</th>
-                                <th className="px-6 py-4 text-center text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Days Held</th>
                                 <th className="px-6 py-4 text-right text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Entry</th>
                                 <th className="px-6 py-4 text-right text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Current</th>
                                 <th className="px-6 py-4 text-right text-gray-700 dark:text-gray-300 text-xs font-bold uppercase tracking-wider">Target</th>
@@ -178,6 +211,10 @@ const OpenPositions = ({ onAnalyze }) => {
                         <tbody>
                             {openTrades.map((trade, index) => {
                                 const isProfit = trade.pnl_percent >= 0;
+                                const entryDate = new Date(trade.entry_date);
+                                const expiryDate = trade.expiry_date ? new Date(trade.expiry_date) : null;
+                                const daysToExpiry = expiryDate ? Math.max(0, Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24))) : null;
+                                
                                 return (
                                     <motion.tr 
                                         key={trade.ticker}
@@ -192,6 +229,44 @@ const OpenPositions = ({ onAnalyze }) => {
                                                     {trade.ticker}
                                                 </p>
                                                 <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{trade.companyName}</p>
+                                                {trade.price_is_stale && (
+                                                    <p className="text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1">
+                                                        <AlertCircle className="w-3 h-3" />
+                                                        Price may be stale
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <SignalBadge signal={trade.signal} />
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800">
+                                                <BarChart2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                                                <span className="text-purple-700 dark:text-purple-300 font-semibold text-sm">{trade.strategy || 'VST'}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm">
+                                                <p className="text-gray-900 dark:text-gray-100 font-medium">
+                                                    {entryDate.toLocaleDateString('en-IN')}
+                                                </p>
+                                                <p className="text-gray-600 dark:text-gray-400 text-xs">
+                                                    {entryDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex flex-col items-center gap-1">
+                                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+                                                    <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                                                    <span className="text-blue-700 dark:text-blue-300 font-semibold text-sm">{trade.days_held}d</span>
+                                                </div>
+                                                {daysToExpiry !== null && (
+                                                    <span className={`text-xs font-medium ${daysToExpiry <= 2 ? 'text-red-600 dark:text-red-400' : daysToExpiry <= 5 ? 'text-amber-600 dark:text-amber-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                                        {daysToExpiry}d left
+                                                    </span>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 w-48">
@@ -205,13 +280,10 @@ const OpenPositions = ({ onAnalyze }) => {
                                                     {trade.pnl_percent >= 0 ? '+' : ''}{trade.pnl_percent.toFixed(2)}%
                                                 </span>
                                             </div>
-                                            <PnlProgressBar trade={trade} />
-                                        </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
-                                                <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                                                <span className="text-blue-700 dark:text-blue-300 font-semibold text-sm">{trade.days_held}d</span>
+                                            <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                                                Gross: {trade.gross_pnl_percent >= 0 ? '+' : ''}{trade.gross_pnl_percent?.toFixed(2) || 'N/A'}%
                                             </div>
+                                            <PnlProgressBar trade={trade} />
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-2 border border-gray-200 dark:border-neutral-700">
@@ -270,11 +342,43 @@ const OpenPositions = ({ onAnalyze }) => {
                             <div className="w-2 h-8 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
                             <div>
                                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                                    Fund Dashboard
+                                    Scrybe Fund Dashboard
                                 </h1>
                                 <p className="text-gray-600 dark:text-gray-400 text-base mt-1">
                                     Real-time monitoring of active positions & trade execution
                                 </p>
+                            </div>
+                        </div>
+
+                        {/* Current Date & Time */}
+                        <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
+                                        <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">Current Date & Time</p>
+                                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                            {new Date().toLocaleDateString('en-IN', { 
+                                                weekday: 'long', 
+                                                year: 'numeric', 
+                                                month: 'long', 
+                                                day: 'numeric',
+                                                timeZone: 'Asia/Kolkata'
+                                            })}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">IST Time</p>
+                                    <p className="text-xl font-mono font-bold text-gray-900 dark:text-gray-100">
+                                        {new Date().toLocaleTimeString('en-IN', { 
+                                            hour12: false,
+                                            timeZone: 'Asia/Kolkata'
+                                        })}
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
