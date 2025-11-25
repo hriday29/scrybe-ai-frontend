@@ -2,7 +2,7 @@
 // Market Regime Display - Shows current market regime, volatility, and active strategy
 
 import React from 'react';
-import { TrendingUp, TrendingDown, Activity, Shield, Info } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Shield, Info, Zap, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const MarketRegimeCard = ({ marketContext }) => {
@@ -15,10 +15,12 @@ const MarketRegimeCard = ({ marketContext }) => {
         regime_explanation,
         active_strategy,
         vix_level,
+        current_vix_level,
         volatility_status,
         nifty_regime,
         smallcap_regime,
-        market_breadth
+        market_breadth,
+        live_market_data
     } = marketContext;
 
     // Determine regime icon and color
@@ -124,6 +126,51 @@ const MarketRegimeCard = ({ marketContext }) => {
                     </div>
                 </div>
 
+                {/* Live Market Conditions */}
+                {live_market_data && (
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <span className="text-sm font-semibold text-blue-900 dark:text-blue-100">Live Market Conditions</span>
+                            <span className="text-xs text-blue-600 dark:text-blue-400 ml-auto">
+                                Updated: {new Date(live_market_data.last_updated).toLocaleTimeString()}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div className="text-center">
+                                <div className={`text-lg font-bold ${live_market_data.performance_1_day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    {live_market_data.performance_1_day >= 0 ? '+' : ''}{live_market_data.performance_1_day.toFixed(2)}%
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400">1 Day</div>
+                            </div>
+                            <div className="text-center">
+                                <div className={`text-lg font-bold ${live_market_data.performance_5_day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    {live_market_data.performance_5_day >= 0 ? '+' : ''}{live_market_data.performance_5_day.toFixed(2)}%
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400">5 Days</div>
+                            </div>
+                            <div className="text-center">
+                                <div className={`text-lg font-bold ${live_market_data.performance_1_month >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    {live_market_data.performance_1_month >= 0 ? '+' : ''}{live_market_data.performance_1_month.toFixed(2)}%
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400">1 Month</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="flex items-center justify-center gap-1">
+                                    <BarChart3 className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                                    <span className="text-sm font-bold text-gray-900 dark:text-white">
+                                        {live_market_data.advancing_stocks}:{live_market_data.declining_stocks}
+                                    </span>
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400">Adv:Dec</div>
+                            </div>
+                        </div>
+                        <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">
+                            Current Nifty 50 performance and market breadth (live data)
+                        </p>
+                    </div>
+                )}
+
                 {/* Volatility & Market Health */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Volatility */}
@@ -132,22 +179,41 @@ const MarketRegimeCard = ({ marketContext }) => {
                             <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             <span className="text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300">Volatility</span>
                         </div>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                                {vix_level !== null && vix_level !== undefined && vix_level > 0 ? vix_level.toFixed(1) : 'N/A'}
-                            </span>
-                            {volatility_status && volatility_status !== 'Unknown' && volatility_status !== 'Normal' && (
-                                <span className={`text-xs md:text-sm font-semibold ${getVolatilityColor(volatility_status)}`}>
-                                    ({volatility_status})
+                        <div className="space-y-2">
+                            {/* Analysis VIX Level */}
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
+                                    {vix_level !== null && vix_level !== undefined && vix_level > 0 ? vix_level.toFixed(1) : 'N/A'}
                                 </span>
-                            )}
-                            {volatility_status === 'Normal' && vix_level && (
-                                <span className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">
-                                    (Normal)
+                                {volatility_status && volatility_status !== 'Unknown' && volatility_status !== 'Normal' && (
+                                    <span className={`text-xs md:text-sm font-semibold ${getVolatilityColor(volatility_status)}`}>
+                                        ({volatility_status})
+                                    </span>
+                                )}
+                                {volatility_status === 'Normal' && vix_level && (
+                                    <span className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">
+                                        (Normal)
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">Analysis VIX:</span>
+                                <span className="font-medium text-gray-900 dark:text-white">
+                                    {vix_level !== null && vix_level !== undefined && vix_level > 0 ? vix_level.toFixed(1) : 'N/A'}
                                 </span>
+                            </div>
+                            {current_vix_level !== null && current_vix_level !== undefined && (
+                                <div className="flex items-center gap-2 text-xs">
+                                    <span className="text-gray-600 dark:text-gray-400">Current VIX:</span>
+                                    <span className={`font-medium ${current_vix_level > (vix_level || 0) ? 'text-red-600 dark:text-red-400' : current_vix_level < (vix_level || 0) ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
+                                        {current_vix_level.toFixed(1)}
+                                    </span>
+                                </div>
                             )}
                         </div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">India VIX level</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                            India VIX levels (Analysis: used for signals, Current: live market)
+                        </p>
                     </div>
 
                     {/* Market Breadth */}
@@ -179,8 +245,9 @@ const MarketRegimeCard = ({ marketContext }) => {
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-700 flex items-start gap-2">
                     <Info className="w-3 h-3 md:w-4 md:h-4 text-primary-500 dark:text-primary-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                        The market regime is recalculated daily at 10:00 PM IST. It determines which signal types are allowed 
-                        (BUY only in bull markets, BUY+SHORT in other conditions) to align with overall market momentum.
+                        <strong>Analysis Data:</strong> Market regime and signals are calculated daily at 10:00 PM IST using previous business day's data to generate next-day predictions.
+                        <strong>Live Data:</strong> Current market conditions and VIX levels show real-time information for immediate awareness.
+                        BUY only in bull markets, BUY+SHORT in other conditions to align with overall market momentum.
                     </p>
                 </div>
             </div>

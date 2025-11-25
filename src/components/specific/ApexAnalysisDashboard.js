@@ -106,7 +106,6 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
         keyRisks_and_Mitigants = {}, thesisInvalidationPoint = 'N/A',
         keyObservations = { confluencePoints: [], contradictionPoints: [] },
         strategy_signal = null,
-        prediction_for_date, prediction_for_date_short,
         technical_analysis,
         options_sentiment_analysis,
         fundamental_proxy_analysis,
@@ -214,18 +213,11 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{ticker?.replace('.NS', '')}</h1>
                 <p className="text-lg text-slate-600 dark:text-slate-400">{companyName || 'N/A'}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">
-                    Last Updated: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+                    Prediction date and time: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
                 </p>
-                {prediction_for_date && (
-                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700">
-                        <span className="text-blue-600 dark:text-blue-400 text-xs font-semibold">
-                            📅 Prediction for: {prediction_for_date_short || prediction_for_date}
-                        </span>
-                        <span className="text-xs text-blue-600/70 dark:text-blue-400/70 italic ml-1">
-                            (Next trading day)
-                        </span>
-                    </div>
-                )}
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Prediction For - The next trading day
+                </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
