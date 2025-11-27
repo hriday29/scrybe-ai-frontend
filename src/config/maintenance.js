@@ -1,6 +1,6 @@
 // Maintenance mode configuration
 // Set to true to enable maintenance mode, false to disable
-export const MAINTENANCE_MODE = false;
+export const MAINTENANCE_MODE = true;
 
 // Maintenance configuration
 export const MAINTENANCE_CONFIG = {

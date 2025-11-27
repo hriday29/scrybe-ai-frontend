@@ -1,7 +1,14 @@
 // Payment status utility
 // Checks if a user has completed payment
 
+import { PAYMENT_GATING_ENABLED } from '../config/payment.js';
+
 export function isPaymentComplete(user) {
+  // If payment gating is disabled, always allow access
+  if (!PAYMENT_GATING_ENABLED) {
+    return true;
+  }
+
   if (!user) return false;
   
   // Check custom claims from Firebase token for payment status
