@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
-import { motion } from "framer-motion";
-import { Menu, LogOut, BarChart3 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, LogOut, BarChart3, User, Mail, Clock, Check } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { isPaymentComplete } from "../../utils/paymentStatus";
 
 // --- Subcomponents for Buttons ---
 const baseClasses =
@@ -49,7 +51,9 @@ export default function Header({
   onDemoClick,
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { currentUser } = useAuth();
 
   // Landing header (rarely used now since NewLandingPage has its own)
   const landingNavButtons = (
@@ -113,6 +117,120 @@ export default function Header({
             <nav className="hidden md:flex gap-3">
               {mode === "landing" ? landingNavButtons : appNavButtons}
             </nav>
+
+            {/* Profile Dropdown (App Mode) */}
+            {mode === "app" && currentUser && (
+              <div className="relative">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors"
+                >
+                  <img
+                    src={currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || 'User')}&size=32`}
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full"
+                  />
+                  <span className="hidden sm:inline text-sm font-semibold text-slate-900 truncate max-w-[120px]">
+                    {currentUser.displayName?.split(' ')[0] || 'User'}
+                  </span>
+                </motion.button>
+
+                <AnimatePresence>
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-50"
+                    >
+                      {/* Header */}
+                      <div className="bg-slate-50 px-4 py-4 border-b border-slate-200">
+                        <div className="flex items-center gap-3 mb-3">
+                          <img
+                            src={currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || 'User')}&size=48`}
+                            alt="Profile"
+                            className="w-12 h-12 rounded-lg"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-slate-900 truncate">{currentUser.displayName || 'User'}</p>
+                            <p className="text-xs text-slate-600 truncate">{currentUser.email}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Profile Details */}
+                      <div className="px-4 py-3 space-y-3 border-b border-slate-200">
+                        {/* Subscription Status */}
+                        <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                          <div className="flex-shrink-0 mt-0.5">
+                            {isPaymentComplete(currentUser) ? (
+                              <Check className="w-4 h-4 text-green-600" />
+                            ) : (
+                              <Clock className="w-4 h-4 text-amber-600" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-slate-600 uppercase">Subscription Status</p>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {isPaymentComplete(currentUser) ? '✓ Active' : 'Pending'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* User ID */}
+                        <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                          <User className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-slate-600 uppercase">User ID</p>
+                            <p className="text-xs font-mono text-slate-700 truncate">{currentUser.uid}</p>
+                          </div>
+                        </div>
+
+                        {/* Email */}
+                        <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                          <Mail className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-slate-600 uppercase">Email</p>
+                            <p className="text-xs text-slate-700 truncate">{currentUser.email}</p>
+                          </div>
+                        </div>
+
+                        {/* Member Since */}
+                        <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                          <Clock className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-slate-600 uppercase">Member Since</p>
+                            <p className="text-xs text-slate-700">
+                              {currentUser.metadata?.creationTime 
+                                ? new Date(currentUser.metadata.creationTime).toLocaleDateString()
+                                : 'N/A'
+                              }
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action */}
+                      <div className="px-4 py-3">
+                        <button
+                          onClick={() => {
+                            setProfileOpen(false);
+                            onSignOut();
+                          }}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition-colors text-sm"
+                        >
+                          <LogOut size={16} />
+                          Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button

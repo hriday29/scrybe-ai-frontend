@@ -44,6 +44,7 @@ import StockDetailPage from './pages/StockDetailPage.js';
 import UserGuidePage from './pages/UserGuidePage.js';
 import IndexAnalysis from './pages/IndexAnalysis.js';
 import PortfolioDashboard from './pages/PortfolioDashboard.js';
+import PaymentStatusPage from './pages/payment/PaymentStatusPage.js';
 
 // New Landing and Legal Pages
 import NewLandingPage from './pages/NewLandingPage.js';
@@ -1316,9 +1317,16 @@ export default function App() {
     </div>
   );
 
-// ✅ Final return with unified Header
+// ✅ Final return with unified Header and Routes
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-900 font-sans">
+    <Routes>
+      {/* Payment Status Routes */}
+      <Route path="/payment-success" element={<PaymentStatusPage />} />
+      <Route path="/payment-failure" element={<PaymentStatusPage />} />
+      
+      {/* Main App Route */}
+      <Route path="*" element={
+        <div className="bg-gray-50 min-h-screen text-gray-900 font-sans">
       {/* Check for maintenance mode first */}
       {MAINTENANCE_CONFIG.enabled && <MaintenancePage />}
 
@@ -1532,8 +1540,8 @@ export default function App() {
             <div className={`relative w-full flex flex-col min-h-screen ${view === "app" ? "" : ""}`}>
               {view === "app" ? (
                 <>
-                  {/* Payment gating: show ProfilePage if not paid - TEMPORARILY DISABLED */}
-                  {false && currentUser && !isPaymentComplete(currentUser) ? (
+                  {/* Payment gating: show ProfilePage if not paid */}
+                  {currentUser && !isPaymentComplete(currentUser) ? (
                     <ProfilePage />
                   ) : (
                     <>
@@ -1582,6 +1590,8 @@ export default function App() {
 
       {/* Feedback widget only shows when not in maintenance mode */}
       {!MAINTENANCE_CONFIG.enabled && <FeedbackWidget />}
-    </div>
+        </div>
+      } />
+    </Routes>
   );
 }

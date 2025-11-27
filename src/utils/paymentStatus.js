@@ -1,8 +1,30 @@
-// Mock payment status utility
-// Replace with real API call to backend/payment provider in production
+// Payment status utility
+// Checks if a user has completed payment
 
 export function isPaymentComplete(user) {
-  // For demo, always return false (user needs to pay)
-  // In production, check backend for user's payment status
+  if (!user) return false;
+  
+  // Check custom claims from Firebase token for payment status
+  // This gets set by backend after successful payment
+  if (user.customClaims && user.customClaims.payment_complete === true) {
+    return true;
+  }
+  
+  // Check for payment_complete custom attribute on user object
+  if (user.payment_complete === true) {
+    return true;
+  }
+  
+  // Check in localStorage as fallback (gets set after successful payment)
+  try {
+    const paymentData = localStorage.getItem(`payment_complete_${user.uid}`);
+    if (paymentData === 'true') {
+      return true;
+    }
+  } catch (e) {
+    console.error('Error checking localStorage payment status:', e);
+  }
+  
+  // Default: user needs to pay
   return false;
 }

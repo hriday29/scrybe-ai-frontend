@@ -199,3 +199,49 @@ export const getMyTrades = async (authFetch, currentUser) => {
         throw error;
     }
 };
+
+/**
+ * --- PAYMENT API FUNCTIONS ---
+ */
+
+export const initiatePayuPayment = async (paymentData, currentUser) => {
+  try {
+    // Get Firebase ID token for authentication
+    const token = await currentUser.getIdToken();
+    
+    const response = await axios.post(
+      `${API_BASE_URL}/api/payu/initiate`,
+      paymentData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error initiating PayU payment:', error);
+    throw error.response?.data || { error: error.message };
+  }
+};
+
+export const getPaymentStatus = async (transactionId) => {
+  try {
+    const response = await api.get(`/payu/status/${transactionId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching payment status:', error);
+    throw error;
+  }
+};
+
+export const getUserPayments = async (authFetch, currentUser) => {
+  try {
+    const response = await authFetch(`${API_BASE_URL}/api/payu/payments`, currentUser);
+    return response;
+  } catch (error) {
+    console.error('Error fetching user payments:', error);
+    throw error;
+  }
+};
