@@ -356,7 +356,7 @@ const StockSelector = ({ onAnalyze }) => {
           <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
             <SectionTitle
               title="Ranked Analysis Universe"
-              subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
+              subtitle="Daily ranked analysis for all NSE stocks, powered by Scrybe Score."
             />
 
             {/* Stock Search and List */}

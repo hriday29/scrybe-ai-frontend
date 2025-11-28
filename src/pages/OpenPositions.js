@@ -167,7 +167,7 @@ const OpenPositions = ({ onAnalyze }) => {
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">No Active Positions</h3>
                     <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
                         The AI is not currently tracking any active trades. Check the Portfolio Manager
-                        to see all 250 analyzed stocks and understand why no positions meet the execution criteria today.
+                        to see all analyzed stocks and understand why no positions meet the execution criteria today.
                     </p>
                 </GlassCard>
             );

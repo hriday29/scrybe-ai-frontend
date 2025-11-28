@@ -23,7 +23,7 @@ const AppGuide = ({ navigateToTab }) => {
     {
       title: "Stock Analysis",
       description:
-        "Select any stock from our Nifty Smallcap 250 universe to receive an instant, institutional-grade AI report. Deep dive into technical indicators, sentiment analysis, and fundamental metrics.",
+        "Select any stock from our NSE universe to receive an instant, institutional-grade AI report. Deep dive into technical indicators, sentiment analysis, and fundamental metrics.",
       benefit:
         "Saves hours of research with data-driven analysis covering 15+ technical indicators, AI sentiment, and market regime detection.",
       targetIndex: 1,
@@ -40,12 +40,12 @@ const AppGuide = ({ navigateToTab }) => {
     {
       title: "Portfolio Manager",
       description:
-        "Institutional-grade portfolio construction and management. View all 250 daily analyzed stocks with the AI's top 10 highest-conviction trades selected for execution. Complete transparency into portfolio decisions, sector allocation, and risk controls.",
+        "Institutional-grade portfolio construction and management. View all daily analyzed stocks with the AI's top 10 highest-conviction trades selected for execution. Complete transparency into portfolio decisions, sector allocation, and risk controls.",
       benefit:
         "Professional portfolio management with clear visibility into why stocks are selected or rejected, sector diversification limits, and institutional risk management.",
       targetIndex: 2,
       icon: <Layers className="w-7 h-7" />,
-      features: ["250 Stocks Daily Analysis", "Top 10 Trade Selection", "Risk-Controlled Portfolio Construction"],
+      features: ["NSE Stocks Daily Analysis", "Top 10 Trade Selection", "Risk-Controlled Portfolio Construction"],
       colorScheme: {
         iconBg: "bg-emerald-50 dark:bg-emerald-900/20",
         iconText: "text-emerald-600 dark:text-emerald-400",
@@ -74,9 +74,9 @@ const AppGuide = ({ navigateToTab }) => {
     {
       title: "Index Analysis",
       description:
-        "Strategic overview of the entire market. AI analyzes Nifty 50, Nifty Smallcap 250, and sectoral indices to determine overall market regime and momentum.",
+        "Strategic overview of the entire market. AI analyzes Nifty 50 and sectoral indices to determine overall market regime and momentum.",
       benefit:
-        "Align your trading decisions with broader market trends and smallcap universe momentum for better timing.",
+        "Align your trading decisions with broader market trends for better timing.",
       targetIndex: 4,
       icon: <LineChart className="w-7 h-7" />,
       features: ["Market Regime Detection", "Sectoral Analysis", "Index Momentum Tracking"],
@@ -127,7 +127,7 @@ const AppGuide = ({ navigateToTab }) => {
   const quickStats = [
     { 
       icon: Target, 
-      label: "250 Stocks", 
+      label: "NSE Stocks", 
       sublabel: "Analyzed Daily",
       color: "text-blue-600 dark:text-blue-400"
     },

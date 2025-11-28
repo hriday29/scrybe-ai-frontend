@@ -48,7 +48,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-purple-500/30 to-purple-700/30",
       title: "Institutional-Grade Analysis",
       description:
-        "Every trading day, Scrybe AI analyzes all 250 stocks in the Nifty Smallcap 250 universe. Using our proprietary 'Scrybe Score' system (-100 to +100), the AI evaluates each stock's technical setup, fundamentals, and market context to identify the best opportunities in India's emerging growth segment.",
+        "Every trading day, Scrybe AI analyzes all stocks in the NSE universe. Using our proprietary 'Scrybe Score' system (-100 to +100), the AI evaluates each stock's technical setup, fundamentals, and market context to identify the best opportunities in the Indian equity market.",
       links: [
         { text: "Launch Portfolio Manager", action: () => handleLaunchAndNavigate(2) },
         { text: "Read the Full Strategy", action: onUserGuideOpen },
@@ -59,7 +59,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-blue-500/30 to-blue-700/30",
       title: "Top 10 Selection Process",
       description:
-        "Out of 250 daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 40% sector concentration limit, and 2% max risk per stock—just like professional fund managers.",
+        "Out of all daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 40% sector concentration limit, and 2% max risk per stock\u2014just like professional fund managers.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
         { text: "View Fund Dashboard", action: () => handleLaunchAndNavigate(3) },
@@ -70,7 +70,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-green-500/30 to-green-700/30",
       title: "Complete Transparency",
       description:
-        "Unlike black-box systems, we show you everything. Browse all 250 analyses in the Portfolio Manager with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",
+        "Unlike black-box systems, we show you everything. Browse all analyses in the Portfolio Manager with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",,
       links: [
         { text: "View AI Track Record", action: () => handleLaunchAndNavigate(5) },
         { text: "Read the Rulebook", action: () => handleLaunchAndNavigate(6) },
@@ -95,10 +95,10 @@ const LandingWalkthrough = ({
       {/* Heading */}
       <div className="text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-          Institutional-Grade Analysis for Nifty Smallcap 250
+          Institutional-Grade Analysis for NSE
         </h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-slate-400 leading-relaxed">
-          Scrybe AI analyzes all 250 smallcap stocks daily and selects the top 10 highest-conviction 
+          Scrybe AI analyzes all stocks in the NSE daily and selects the top 10 highest-conviction 
           trades using professional fund manager principles. Complete transparency, strict risk controls, 
           and systematic discipline.
         </p>

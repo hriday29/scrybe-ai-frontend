@@ -22,7 +22,7 @@ const NewFooter = ({ onPrivacyOpen, onTermsOpen, onDisclaimerOpen, onRefundOpen,
             </div>
             
             <p className="text-gray-400 leading-relaxed mb-6 dark:text-gray-400">
-              AI-powered Nifty Smallcap 250 analysis with
+              AI-powered NSE analysis with
               built-in risk intelligence for systematic trading.
             </p>
 

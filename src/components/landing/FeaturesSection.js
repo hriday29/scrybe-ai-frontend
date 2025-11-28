@@ -7,7 +7,7 @@ const features = [
   {
     icon: Brain,
     title: 'Scrybe Score AI Engine',
-    description: 'Proprietary AI scoring system (-100 to +100) evaluates technical setup, fundamentals, and market context for each of 250 smallcap stocks daily.',
+    description: 'Proprietary AI scoring system (-100 to +100) evaluates technical setup, fundamentals, and market context for each stock daily.',
     color: 'text-violet-600',
     bgColor: 'bg-violet-50',
   },
@@ -35,7 +35,7 @@ const features = [
   {
     icon: Target,
     title: 'Top 10 Daily Selection',
-    description: 'From 250 analyzed stocks, only the top 10 highest-conviction trades that pass all risk controls are selected for execution each day.',
+    description: 'From all analyzed stocks, only the top 10 highest-conviction trades that pass all risk controls are selected for execution each day.',
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
   },
@@ -73,7 +73,7 @@ const FeaturesSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Institutional-grade analysis and risk management designed specifically for India's Nifty Smallcap 250 universe.
+            Institutional-grade analysis and risk management designed for the NSE universe.
           </motion.p>
         </div>
 

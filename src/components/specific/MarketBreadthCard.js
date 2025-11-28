@@ -65,7 +65,7 @@ const MarketBreadthCard = ({ breadthData }) => {
           <div>
             <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Market Breadth Indicators</h3>
             <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
-              Analyzing {total_stocks_analyzed || 0} stocks in the Smallcap 250 universe
+              Analyzing {total_stocks_analyzed || 0} stocks in the NSE universe
             </p>
           </div>
         </div>

@@ -279,7 +279,7 @@ const IndexAnalysis = () => {
                 </h2>
                 <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
                     A high-level strategic overview of the Indian market. The AI analyzes key indices including
-                    Nifty 50, Nifty Smallcap 250, and sectoral indices to determine overall market 'weather' and
+                    Nifty 50 and sectoral indices to determine overall market 'weather' and
                     smallcap momentum.
                 </p>
             </motion.div>

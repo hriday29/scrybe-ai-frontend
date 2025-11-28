@@ -101,15 +101,15 @@ const FaqPage = ({
   const generalFaqs = [
     {
       q: "What is Scrybe AI?",
-      a: "Scrybe AI is an institutional-grade research tool that analyzes all 250 stocks in the Nifty Smallcap 250 universe daily. Using advanced AI and professional fund manager principles, it selects the top 10 highest-conviction trades based on strict risk controls. It provides complete transparency into the analysis and selection process.",
+      a: "Scrybe AI is an institutional-grade research tool that analyzes all stocks in the NSE universe daily. Using advanced AI and professional fund manager principles, it selects the top 10 highest-conviction trades based on strict risk controls. It provides complete transparency into the analysis and selection process.",
     },
     {
-      q: "Why focus on Nifty Smallcap 250?",
-      a: "The Nifty Smallcap 250 represents India's emerging growth segment with higher volatility and opportunity. These companies often deliver outsized returns during bull markets but require disciplined analysis and risk management. Our AI analyzes this complex universe daily to identify the best opportunities while managing smallcap-specific risks.",
+      q: "Why NSE universe?",
+      a: "The NSE universe represents the broadest spectrum of Indian equity market opportunities. These stocks often deliver varied returns depending on market conditions but require disciplined analysis and risk management. Our AI analyzes this complex universe daily to identify the best opportunities while managing market-specific risks.",
     },
     {
       q: "How many stocks do you analyze?",
-      a: "We analyze all 250 stocks in the Nifty Smallcap 250 index every trading day. Out of these 250 analyses, our Portfolio Manager selects only the top 10 highest-conviction trades that pass institutional risk controls. You can see all 250 analyses in the Portfolio Dashboard with complete transparency on selection reasons.",
+      a: "We analyze all stocks in the NSE universe every trading day. Out of these analyses, our Portfolio Manager selects only the top 10 highest-conviction trades that pass institutional risk controls. You can see all analyses in the Portfolio Dashboard with complete transparency on selection reasons.",
     },
     {
       q: "What are the portfolio risk controls?",
@@ -121,15 +121,15 @@ const FaqPage = ({
     },
     {
       q: "Who is this tool for?",
-      a: "Scrybe AI is designed for active traders and investors interested in the Nifty Smallcap 250 universe who want institutional-grade analysis and portfolio management discipline. It's ideal for those who understand smallcap volatility and want a systematic, data-driven approach to identifying opportunities.",
+      a: "Scrybe AI is designed for active traders and investors who want institutional-grade analysis and portfolio management discipline. It's ideal for those who understand market volatility and want a systematic, data-driven approach to identifying opportunities.",
     },
     {
       q: "How often is the analysis updated?",
-      a: "The complete 250-stock analysis runs once daily after market close (typically around 10 PM IST). The Portfolio Manager then selects the top 10 trades immediately after. You always see the latest daily snapshot with all analyses and selection reasons visible in the Portfolio Dashboard.",
+      a: "The complete NSE universe analysis runs once daily after market close (typically around 10 PM IST). The Portfolio Manager then selects the top 10 trades immediately after. You always see the latest daily snapshot with all analyses and selection reasons visible in the Portfolio Dashboard.",
     },
     {
       q: "What markets/exchanges do you cover?",
-      a: "Currently, we focus exclusively on the Indian equity market, specifically the Nifty Smallcap 250 index traded on the NSE (National Stock Exchange). We may expand to other indices or markets based on user feedback and demand.",
+      a: "Currently, we focus exclusively on the Indian equity market, specifically the NSE (National Stock Exchange) universe. We may expand to other markets based on user feedback and demand.",
     },
     {
       q: "Do you offer mobile access?",
@@ -137,7 +137,7 @@ const FaqPage = ({
     },
     {
       q: "How accurate are the predictions?",
-      a: "Our AI model uses historical data and probability-based analysis. Past performance does not guarantee future results. Smallcap stocks are inherently volatile. View the AI Track Record for complete transparency on historical performance. Always conduct your own research and risk management.",
+      a: "Our AI model uses historical data and probability-based analysis. Past performance does not guarantee future results. NSE stocks can be volatile. View the AI Track Record for complete transparency on historical performance. Always conduct your own research and risk management.",
     },
     {
       q: "Why was a high-score stock not selected?",
@@ -145,7 +145,7 @@ const FaqPage = ({
     },
     {
       q: "Can I see stocks that weren't selected?",
-      a: "Yes! The Portfolio Dashboard shows all 250 analyses with complete transparency. Use the 'Not Selected' tab to see high-conviction signals that didn't make the top 10, along with clear reasons why (e.g., 'High conviction, sector limit reached'). This transparency helps you understand the risk management process.",
+      a: "Yes! The Portfolio Dashboard shows all analyses with complete transparency. Use the 'Not Selected' tab to see high-conviction signals that didn't make the top 10, along with clear reasons why (e.g., 'High conviction, sector limit reached'). This transparency helps you understand the risk management process.",
     },
   ];
 

@@ -12,7 +12,7 @@ const AboutSection = () => {
             About <span className="bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent">Scrybe AI</span>
           </h2>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            We analyze the entire Nifty Smallcap 250 universe every day and apply institutional-grade
+            We analyze the entire NSE universe every day and apply institutional-grade
             portfolio rules to surface only the highest‑conviction opportunities.
           </p>
         </div>

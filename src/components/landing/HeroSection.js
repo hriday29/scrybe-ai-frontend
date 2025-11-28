@@ -32,19 +32,19 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
               AI-Powered Analysis for{' '}
               <span className="bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent">
-                Nifty Smallcap 250
+                NSE Universe
               </span>
             </h1>
             
             <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-              Scrybe AI analyzes all 250 smallcap stocks daily using our proprietary Scrybe Score system, 
+              Scrybe AI analyzes all stocks in the NSE daily using our proprietary Scrybe Score system, 
               selecting only the top 10 highest-conviction trades with institutional risk controls.
             </p>
 
             {/* Key Points */}
             <div className="mt-8 space-y-3">
               {[
-                { icon: Brain, text: 'Daily analysis of 250 stocks with AI-powered scoring' },
+                { icon: Brain, text: 'Daily analysis of NSE stocks with AI-powered scoring' },
                 { icon: TrendingUp, text: 'Top 10 selection based on technical + fundamental analysis' },
                 { icon: Shield, text: 'Professional risk management: 2% max risk per trade' },
               ].map((item, idx) => (

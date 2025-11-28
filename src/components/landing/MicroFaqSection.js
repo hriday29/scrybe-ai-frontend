@@ -9,8 +9,8 @@ const faqs = [
     icon: Brain,
     color: 'blue',
     q: 'What does Scrybe AI actually do?',
-    a: 'Scrybe AI acts as your personal institutional-grade research team. Every day, it analyzes ~250 stocks across technical charts, fundamental metrics, volatility patterns, and market sentiment. It then ranks every opportunity by conviction level and executes only the highest-quality trade plans—like a professional fund manager would.',
-    highlight: '~250 stocks analyzed daily'
+    a: 'Scrybe AI acts as your personal institutional-grade research team. Every day, it analyzes all stocks in the NSE across technical charts, fundamental metrics, volatility patterns, and market sentiment. It then ranks every opportunity by conviction level and executes only the highest-quality trade plans\u2014like a professional fund manager would.',
+    highlight: 'all NSE stocks analyzed daily'
   },
   {
     icon: Shield,

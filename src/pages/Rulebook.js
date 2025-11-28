@@ -74,7 +74,7 @@ const Rulebook = () => {
         </h2>
         <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full mb-4"></div>
         <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-          Understanding our institutional-grade portfolio management system for the Nifty Smallcap 250 universe.
+          Understanding our institutional-grade portfolio management system for the NSE universe.
         </p>
       </motion.div>
 
@@ -115,44 +115,44 @@ const Rulebook = () => {
       {/* ANALYSIS PROTOCOL */}
       <Section title="The Analysis Protocol: Data Funnel" delay={0.2}>
         <p className="mb-6">
-          Every trading day, Scrybe AI analyzes the complete <strong>Nifty Smallcap 250 universe</strong> through a 
-          disciplined, institutional-grade pipeline. Out of 250 stocks analyzed daily, only the <strong>top 10 
+          Every trading day, Scrybe AI analyzes the complete <strong>NSE universe</strong> through a 
+          disciplined, institutional-grade pipeline. Out of all stocks analyzed daily, only the <strong>top 10 
           highest-conviction setups</strong> are selected for execution based on strict risk management rules:
         </p>
 
         <div className="space-y-5 mt-6">
           <ProcessStep 
             icon={ZapIcon}
-            title="Universe Analysis (250 Stocks)"
-            description="Each trading day begins with comprehensive analysis of all 250 stocks in the Nifty Smallcap 250 index, ensuring no opportunity is missed in this high-growth segment."
+            title="Universe Analysis (NSE Stocks)"
+            description="Each trading day begins with comprehensive analysis of all stocks in the NSE, ensuring no opportunity is missed in the Indian equity market."
             color="blue"
           />
 
           <ProcessStep 
             icon={BarChart3Icon}
             title="Market Regime Analysis"
-            description="Both Nifty 50 and Nifty Smallcap 250 index trends are analyzed to define the overall market regime (Bullish, Bearish, or Neutral) and smallcap-specific momentum. This acts as the foundation for all trades."
+            description="Nifty 50 and sector index trends are analyzed to define the overall market regime (Bullish, Bearish, or Neutral) and market momentum. This acts as the foundation for all trades."
             color="cyan"
           />
 
           <ProcessStep 
             icon={TargetIcon}
             title="Sector Analysis & Rotation Detection"
-            description="Top-performing sectors within the smallcap universe are identified. Sector rotation patterns are tracked to identify emerging themes and avoid concentrated exposure."
+            description="Top-performing sectors are identified. Sector rotation patterns are tracked to identify emerging themes and avoid concentrated exposure."
             color="purple"
           />
 
           <ProcessStep 
             icon={FilterIcon}
             title="Quantitative Screening"
-            description="A regime-adaptive screener filters 250 stocks into Momentum, Pullback, or Mean Reversion setups, with fundamental health checks to ensure quality."
+            description="A regime-adaptive screener filters all NSE stocks into Momentum, Pullback, or Mean Reversion setups, with fundamental health checks to ensure quality."
             color="pink"
           />
 
           <ProcessStep 
             icon={LightbulbIcon}
             title="AI Deep-Dive Analysis"
-            description="All 250 stocks undergo 'Apex Analysis' by Scrybe (powered by advanced AI). Each receives a comprehensive trade plan, structured insights, and a proprietary Scrybe Score from -100 to +100."
+            description="All analyzed stocks undergo 'Apex Analysis' by Scrybe (powered by advanced AI). Each receives a comprehensive trade plan, structured insights, and a proprietary Scrybe Score from -100 to +100."
             color="amber"
           />
 
@@ -166,7 +166,7 @@ const Rulebook = () => {
           <ProcessStep 
             icon={DatabaseIcon}
             title="Complete Transparency"
-            description="All 250 analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each stock was selected or rejected, with clear reasons like 'High conviction, sector limit reached' or 'Below conviction threshold'. No black boxes."
+            description="All analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each stock was selected or rejected, with clear reasons like 'High conviction, sector limit reached' or 'Below conviction threshold'. No black boxes."
             color="emerald"
           />
         </div>
@@ -175,7 +175,7 @@ const Rulebook = () => {
       {/* HIGH SCORE */}
       <Section title="Anatomy of a High Scrybe Score" delay={0.3}>
         <p className="mb-4">
-          A top-grade score (e.g., +85) in the <strong>Nifty Smallcap 250 universe</strong> isn't just about price 
+          A top-grade score (e.g., +85) in the <strong>NSE universe</strong> isn't just about price 
           movement. It represents a powerful confluence of factors specific to emerging growth opportunities:
         </p>
         <ul className="list-none mt-6 space-y-3">
@@ -186,7 +186,7 @@ const Rulebook = () => {
             className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
           >
             <span className="text-green-500 text-xl">✅</span>
-            <span><strong>Favorable Market:</strong> Both broad market and smallcap indices show bullish momentum.</span>
+            <span><strong>Favorable Market:</strong> Both broad market and sector indices show bullish momentum.</span>
           </motion.li>
           <motion.li 
             initial={{ opacity: 0, x: -20 }}
@@ -196,7 +196,7 @@ const Rulebook = () => {
             className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
           >
             <span className="text-green-500 text-xl">✅</span>
-            <span><strong>Strong Sector:</strong> The stock's sector is outperforming within the smallcap universe.</span>
+            <span><strong>Strong Sector:</strong> The stock's sector is outperforming within the NSE universe.</span>
           </motion.li>
           <motion.li 
             initial={{ opacity: 0, x: -20 }}
@@ -216,7 +216,7 @@ const Rulebook = () => {
             className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
           >
             <span className="text-green-500 text-xl">✅</span>
-            <span><strong>Quality Fundamentals:</strong> Company shows solid business fundamentals despite smallcap classification.</span>
+            <span><strong>Quality Fundamentals:</strong> Company shows solid business fundamentals and financial health.</span>
           </motion.li>
           <motion.li 
             initial={{ opacity: 0, x: -20 }}

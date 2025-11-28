@@ -92,8 +92,8 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="1. Welcome to Scrybe AI" id="welcome">
             <p>
               <strong>Scrybe AI</strong> is your institutional-grade AI analyst for the 
-              <strong> Nifty Smallcap 250</strong> universe. Every trading day, our AI analyzes 
-              all 250 smallcap stocks and applies professional fund manager principles to identify 
+              <strong> NSE universe</strong> (~2000 stocks). Every trading day, our AI analyzes 
+              all stocks in the NSE and applies professional fund manager principles to identify 
               the <strong>top 10 highest-conviction trades</strong>. We cut through market noise 
               with disciplined portfolio management, strict risk controls, and complete transparency.
             </p>
@@ -102,12 +102,12 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="2. Quickstart: Your First Analysis" id="quickstart">
             <ol className="list-decimal list-inside space-y-2">
               <li>
-                <strong>Open the Portfolio Dashboard:</strong> See all 250 analyzed stocks 
+                <strong>Open the Portfolio Dashboard:</strong> See all analyzed stocks 
                 with the top 10 selected for execution.
               </li>
               <li>
                 <strong>Browse the Universe:</strong> Use tabs to view Executed trades, 
-                High-conviction stocks not selected, or All 250 analyses.
+                High-conviction stocks not selected, or All analyses.
               </li>
               <li>
                 <strong>Click Any Stock:</strong> View complete Apex Analysis with Scrybe Score, 
@@ -124,7 +124,7 @@ const UserGuidePage = ({ onBack }) => {
             <ul className="list-disc pl-6 space-y-2">
               <li>
                 <strong>Scrybe Score:</strong> A conviction metric from -100 (strong short) 
-                to +100 (strong long) for each of the 250 analyzed stocks.
+                to +100 (strong long) for each analyzed stock.
               </li>
               <li>
                 <strong>Portfolio Selection:</strong> Only top 10 highest-conviction trades 
@@ -148,14 +148,14 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="4. Feature Guide: Market & Index Analysis" id="market">
             <p>
               Beyond individual stocks, Scrybe AI tracks key market indices including 
-              <strong> Nifty 50, Nifty Smallcap 250</strong>, and sectoral indices. This allows you to:
+              <strong> Nifty 50</strong> and sectoral indices. This allows you to:
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Understand overall market regime (Bullish, Bearish, Neutral).</li>
-              <li>Track smallcap-specific momentum versus broader market.</li>
-              <li>Spot trending sectors within the smallcap universe and sector rotations.</li>
+              <li>Track market-specific momentum and broader market trends.</li>
+              <li>Spot trending sectors and sector rotations.</li>
               <li>Align trades with broader market conditions for higher probability setups.</li>
-              <li>Identify when smallcaps are outperforming or underperforming large caps.</li>
+              <li>Identify market leader and laggard sectors.</li>
             </ul>
           </Section>
 
@@ -174,10 +174,10 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="6. Our AI's Philosophy" id="philosophy">
             <p>
               Scrybe AI follows institutional fund manager principles applied to the 
-              Nifty Smallcap 250 universe. Our philosophy is:
+              NSE universe. Our philosophy is:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Analyze Everything:</strong> Daily analysis of all 250 smallcap stocks, 
+              <li><strong>Analyze Everything:</strong> Daily analysis of all NSE stocks, 
               no cherry-picking or survivorship bias.</li>
               <li><strong>Select the Best:</strong> Only top 10 highest-conviction trades that 
               pass strict risk controls are executed.</li>
@@ -200,18 +200,18 @@ const UserGuidePage = ({ onBack }) => {
               <li>Respect the Portfolio Dashboard's risk limits—they exist to protect capital.</li>
               <li>Monitor the "High conviction not selected" tab to understand portfolio constraints in action.</li>
               <li>Always apply your own risk management and position sizing appropriate to your capital.</li>
-              <li>Remember: Smallcaps are volatile—the AI uses tight stops for a reason.</li>
+              <li>Remember: NSE stocks can be volatile—the AI uses strict risk management for a reason.</li>
             </ul>
           </Section>
 
           <Section title="8. Data & Updates" id="data">
             <p>
-              Analysis is refreshed <strong>once daily after market close</strong> for all 250 stocks 
-              in the Nifty Smallcap 250 universe. Our backend integrates:
+              Analysis is refreshed <strong>once daily after market close</strong> for all stocks 
+              in the NSE universe. Our backend integrates:
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Live Market Data:</strong> Real-time price feeds and technical indicators.</li>
-              <li><strong>Index Tracking:</strong> Nifty 50, Nifty Smallcap 250, and sectoral indices.</li>
+              <li><strong>Index Tracking:</strong> Nifty 50 and sectoral indices.</li>
               <li><strong>Fundamental Data:</strong> Company fundamentals for quality assessment.</li>
               <li><strong>News & Events:</strong> Market-moving news and corporate announcements.</li>
               <li><strong>Historical Performance:</strong> Complete track record of past signals.</li>
@@ -229,11 +229,11 @@ const UserGuidePage = ({ onBack }) => {
                 to +100 (strong long) for each stock.
               </li>
               <li>
-                <strong>Nifty Smallcap 250:</strong> The complete universe of 250 stocks we analyze 
-                daily, representing India's emerging growth segment.
+                <strong>NSE Universe:</strong> The complete universe of stocks traded on the National Stock Exchange that we analyze 
+                daily.
               </li>
               <li>
-                <strong>Portfolio Dashboard:</strong> Complete view of all 250 analyses with 
+                <strong>Portfolio Dashboard:</strong> Complete view of all analyses with 
                 top 10 selections and rejection reasons.
               </li>
               <li>

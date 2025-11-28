@@ -128,7 +128,7 @@ const TrustMetricsDrawer = ({ isOpen, onClose }) => {
                     icon={BarChart3}
                     value="250"
                     label="Daily Coverage"
-                    description="NSE Smallcap 250 stocks analyzed daily"
+                    description="NSE stocks analyzed daily"
                     color="indigo"
                     delay={0.15}
                   />

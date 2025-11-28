@@ -112,10 +112,10 @@ const MarketRegimeCard = ({ marketContext }) => {
                         <p className="text-xs text-gray-600 dark:text-gray-400">Broad market trend</p>
                     </div>
 
-                    {/* Smallcap 250 */}
+                    {/* Trading Universe */}
                     <div className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg p-3">
                         <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300">Smallcap 250</span>
+                            <span className="text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300">Trading Universe</span>
                             <span className={`text-xs md:text-sm font-bold ${getRegimeDisplay(smallcap_regime || nifty_regime || 'Sideways').color} dark:text-opacity-90`}>
                                 {smallcap_regime || nifty_regime || 'N/A'}
                             </span>

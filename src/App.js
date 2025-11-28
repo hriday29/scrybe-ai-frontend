@@ -218,7 +218,7 @@ const StockSelector = ({ onAnalyze }) => {
       <GlassCard className="px-6 py-10 w-full max-w-4xl text-center shadow-2xl">
         <SectionTitle
           title="Ranked Analysis Universe"
-          subtitle="Daily ranked analysis for all 250 stocks in the Nifty Smallcap 250 universe, powered by Scrybe Score."
+          subtitle="Daily ranked analysis for all NSE stocks, powered by Scrybe Score."
         />
       </GlassCard>
 

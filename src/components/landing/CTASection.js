@@ -36,7 +36,7 @@ const CTASection = ({ onStartJourney, onSignIn }) => {
           </h2>
           
           <p className="text-xl text-violet-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Get daily AI-powered analysis of 250 stocks with professional risk management and complete transparency
+            Get daily AI-powered analysis of NSE stocks with professional risk management and complete transparency
           </p>
 
           {/* CTA Buttons */}

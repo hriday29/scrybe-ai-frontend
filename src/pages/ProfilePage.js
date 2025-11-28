@@ -163,7 +163,7 @@ const ProfilePage = () => {
                       <div className="p-4 border-x border-b border-slate-200 rounded-b-lg bg-white">
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                           {[
-                            { label: '250-Stock Universe' },
+                            { label: 'NSE Universe' },
                             { label: 'Scrybe Scores' },
                             { label: 'Daily Analysis' },
                             { label: 'Trade Signals' },
@@ -208,7 +208,7 @@ const ProfilePage = () => {
               {[
                 {
                   title: 'Comprehensive Analysis',
-                  desc: 'Daily analysis of 250 Nifty Smallcap stocks with objective Scrybe Scores'
+                  desc: 'Daily analysis of all NSE stocks with objective Scrybe Scores'
                 },
                 {
                   title: 'Trade Execution Plans',

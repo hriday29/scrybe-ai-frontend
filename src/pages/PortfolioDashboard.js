@@ -352,7 +352,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                   Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
-                  Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">all 250 Nifty Smallcap stocks</span>, 
+                  Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">all NSE stocks</span>, 
                   but only executes the <span className="text-green-600 dark:text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
                   pass strict risk controls.
                 </p>
@@ -367,7 +367,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                 <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
                   <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">📊 Step 1: Daily Analysis</h4>
                   <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">250 stocks screened</span> daily using quantitative filters</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">NSE stocks screened</span> daily using quantitative filters</li>
                     <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">~{totalAnalyzed} candidates</span> pass initial momentum/trend screens</li>
                     <li>• Each candidate analyzed by AI "Committee of Experts":</li>
                     <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
@@ -381,7 +381,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                   <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">🎯 Step 2: Portfolio Selection</h4>
                   <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                     <li>• Only <span className="text-green-600 dark:text-green-400 font-semibold">BUY signals with Scrybe Score ≥ 45</span> considered</li>
-                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">Global ranking</span> by conviction across all 250 stocks</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">Global ranking</span> by conviction across all analyzed stocks</li>
                     <li>• Portfolio Manager applies <span className="text-gray-900 dark:text-gray-100 font-semibold">3 risk gates:</span></li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 10 concurrent positions</span></li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
