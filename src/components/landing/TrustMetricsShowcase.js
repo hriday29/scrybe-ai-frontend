@@ -126,7 +126,7 @@ const TrustMetricsDrawer = ({ isOpen, onClose }) => {
                   />
                   <MetricCard
                     icon={BarChart3}
-                    value="250"
+                    value="~2000"
                     label="Daily Coverage"
                     description="NSE stocks analyzed daily"
                     color="indigo"
@@ -294,7 +294,7 @@ export default function TrustMetricsShowcase() {
               <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
                 <BarChart3 className="w-4 h-4 text-purple-400" />
                 <div>
-                  <div className="text-lg font-bold">250</div>
+                  <div className="text-lg font-bold">~2000</div>
                   <div className="text-xs opacity-60">Stocks/Day</div>
                 </div>
               </div>
@@ -394,7 +394,7 @@ export default function TrustMetricsShowcase() {
                         <div className="text-xs font-bold text-gray-600 tracking-wider">COVERAGE</div>
                       </div>
                       <div className="text-4xl font-extrabold text-gray-900 mb-1">
-                        250
+                        ~2000
                       </div>
                       <div className="text-xs text-gray-600 font-medium">Stocks Daily Analysis</div>
                     </motion.div>

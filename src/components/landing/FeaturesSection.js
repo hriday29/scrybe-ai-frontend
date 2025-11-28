@@ -42,7 +42,7 @@ const features = [
   {
     icon: TrendingUp,
     title: 'Complete Transparency',
-    description: 'View all 250 daily analyses with clear selection reasons. Access AI Track Record for honest historical performance—no black-box promises.',
+    description: 'View all ~2000 NSE stock analyses with clear selection reasons. Access AI Track Record for honest historical performance—no black-box promises.',
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-50',
   },

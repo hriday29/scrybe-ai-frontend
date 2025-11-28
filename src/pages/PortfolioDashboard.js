@@ -463,7 +463,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                 </h4>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Unlike black-box trading algorithms, Scrybe AI shows you <span className="text-gray-900 dark:text-gray-100 font-semibold">every analysis, 
-                  every decision, and every rejection reason</span>. Browse all 250 analyses in the 
+                  every decision, and every rejection reason</span>. Browse all analyzed stocks in the NSE universe in the 
                   <span className="text-primary-600 dark:text-primary-400 font-semibold"> Complete Analysis</span> page, understand why stocks were 
                   selected or rejected, and see the exact trade plan for every position. You're not following blind 
                   signals—you're learning institutional portfolio management.

@@ -58,7 +58,7 @@ const CTASection = ({ onStartJourney, onSignIn }) => {
           {/* Trust Indicators */}
           <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/90">
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">250</div>
+              <div className="text-2xl font-bold text-white">~2000</div>
               <div className="text-sm text-violet-200">Stocks Analyzed Daily</div>
             </div>
             <div className="hidden sm:block w-px h-12 bg-white/30" />

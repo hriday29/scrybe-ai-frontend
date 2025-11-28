@@ -36,7 +36,7 @@ const AboutSection = () => {
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Top‑10 Selection</h3>
             <p className="text-gray-700 dark:text-gray-300">
-              From 250 daily analyses, only the top 10 highest‑conviction trades that pass
+              From ~2000 NSE stock daily analyses, only the top 10 highest‑conviction trades that pass
               strict portfolio rules are shortlisted.
             </p>
           </div>

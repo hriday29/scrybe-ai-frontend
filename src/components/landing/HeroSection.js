@@ -153,7 +153,7 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
               {/* Stats - Compact */}
               <div className="grid grid-cols-3 gap-3 text-center mb-3">
                 <div className="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-3 border border-violet-200 dark:border-violet-700">
-                  <div className="text-2xl font-extrabold text-violet-600 dark:text-violet-400">250</div>
+                  <div className="text-2xl font-extrabold text-violet-600 dark:text-violet-400">~2000</div>
                   <div className="text-xs font-bold text-violet-900 dark:text-violet-300">Analyzed</div>
                 </div>
                 <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3 border border-teal-200 dark:border-teal-700">
