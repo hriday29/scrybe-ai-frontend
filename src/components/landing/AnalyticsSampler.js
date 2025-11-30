@@ -1,7 +1,7 @@
 // components/landing/AnalyticsSampler.js
 // Eye-catching live metrics preview with gradient background and animations
 import React, { useEffect, useState } from 'react';
-import { Activity, TrendingUp, Clock, BarChart3, Zap, AlertCircle } from 'lucide-react';
+import { Activity, Clock, Zap, AlertCircle, Radio, Server } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from '../../apiConfig';
 
@@ -61,12 +61,13 @@ export default function AnalyticsSampler() {
             See It In <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600">Real-Time</span>
           </h2>
           <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-            Live portfolio intelligence updating every minute. This is what institutional traders see—now available to you.
+            Live portfolio intelligence updating every minute. This is what institutional traders see, now available to you.
           </p>
         </motion.div>
 
-        {/* Enhanced metric cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Metric cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Card 1: Market Status (Real Data or Fallback) */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -95,57 +96,51 @@ export default function AnalyticsSampler() {
             </div>
           </motion.div>
 
+          {/* Card 2: Active Surveillance (Static but Accurate Capability Showcase) */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="group relative bg-white dark:bg-neutral-800 border-2 border-green-200 dark:border-green-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+            className="group relative bg-white dark:bg-neutral-800 border-2 border-indigo-200 dark:border-indigo-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-green-100 dark:bg-green-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                  <TrendingUp className="w-7 h-7 text-green-600 dark:text-green-400" />
+                <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
+                  <Radio className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
                 </div>
-                <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Active Positions</span>
+                <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Active Surveillance</span>
               </div>
-              <div className="flex items-baseline gap-2 mb-2">
-                <p className="text-5xl font-extrabold text-green-600 dark:text-green-400">
-                  {portfolio?.portfolio_summary?.selected_for_execution ?? '4'}
-                </p>
-                <span className="text-2xl text-gray-500 dark:text-gray-400">/</span>
-                <span className="text-2xl text-gray-600 dark:text-gray-300">
-                  {portfolio?.portfolio_summary?.max_positions ?? '10'}
-                </span>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Live executions • <span className="text-green-600 dark:text-green-400 font-semibold">6 slots available</span>
-              </p>
-            </div>
-          </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="group relative bg-white dark:bg-neutral-800 border-2 border-purple-200 dark:border-purple-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-100 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
-                  <BarChart3 className="w-7 h-7 text-purple-600 dark:text-purple-400" />
-                </div>
-                <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Analyzed Today</span>
+              {/* Big metric is "Market Coverage", which is a static fact about your app */}
+              <div className="mb-4">
+                 <p className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">
+                    NSE Equity
+                 </p>
+                 <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Monitoring NSE Universe & Major Indices
+                 </p>
               </div>
-              <p className="text-5xl font-extrabold text-purple-600 dark:text-purple-400 mb-2">
-                {portfolio?.total_analyzed ?? '250'}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Stocks screened • <span className="text-purple-600 dark:text-purple-400 font-semibold">Top 10 executed</span>
-              </p>
+
+              {/* Techy "System Online" indicators */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-bold border border-green-200 dark:border-green-800">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    SYSTEM ONLINE
+                 </span>
+                 {/* <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium">
+                    <Server className="w-3 h-3" />
+                    NIFTY 50
+                 </span>
+                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium">
+                    <Server className="w-3 h-3" />
+                    BANKNIFTY
+                 </span> */}
+              </div>
             </div>
           </motion.div>
         </div>
