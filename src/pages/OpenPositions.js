@@ -457,8 +457,7 @@ const OpenPositions = ({ onAnalyze }) => {
                           </p>
                         </div>
                       </div>
-                            </div>
-                        )}
+                    </GlassCard>
 
                         {/* Current Date & Time */}
                         <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200 dark:border-blue-800">
