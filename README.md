@@ -43,9 +43,9 @@
 
 ## 🚀 About Scrybe AI
 
-In today's complex financial markets, traders face overwhelming data and noise when analyzing emerging growth opportunities. **Scrybe AI** brings institutional-grade discipline to the **Nifty Smallcap 250 universe** through systematic AI analysis and professional portfolio management.
+In today's complex financial markets, traders face overwhelming data and noise when analyzing emerging growth opportunities. **Scrybe AI** brings institutional-grade discipline to the **NSE universe** through systematic AI analysis and professional portfolio management.
 
-Every trading day, our platform analyzes **all 250 smallcap stocks** using advanced AI, ranking them with our proprietary **"Scrybe Score"** from -100 to +100. An institutional Portfolio Manager then selects only the **top 10 highest-conviction trades** that pass strict risk controls:
+Every trading day, our platform analyzes **all NSE-listed stocks (~2000+)** using advanced AI, ranking them with our proprietary **"Scrybe Score"** from -100 to +100. An institutional Portfolio Manager then selects only the **top 10 highest-conviction trades** that pass strict risk controls:
 
 - ✅ Maximum 10 concurrent positions
 - ✅ 40% sector concentration limit  
@@ -54,26 +54,26 @@ Every trading day, our platform analyzes **all 250 smallcap stocks** using advan
 This provides users complete transparency into both the analysis process and portfolio selection reasoning.
 
 ### 🎯 **Our Mission**
-Transform smallcap trading by combining comprehensive AI analysis with institutional fund manager discipline. Analyze everything, execute only the best.
+Transform NSE trading by combining comprehensive AI analysis with institutional fund manager discipline. Analyze everything, execute only the best.
 
 ---
 
 ## ✨ Key Features
 
 ### 🤖 **Complete Universe Analysis**
-Every trading day, analyze all **250 stocks in the Nifty Smallcap 250** universe with comprehensive AI-driven reports featuring objective **"Scrybe Scores"** from -100 to +100.
+Every trading day, analyze all **NSE-listed stocks (~2000+)** with comprehensive AI-driven reports featuring objective **"Scrybe Scores"** from -100 to +100.
 
 ### 🎯 **Top 10 Portfolio Selection**
-Out of 250 analyses, only the **top 10 highest-conviction trades** that pass institutional risk controls are selected for execution. Maximum 10 positions, 40% sector limit, 2% per-stock risk.
+Out of all analyzed stocks, only the **top 10 highest-conviction trades** that pass institutional risk controls are selected for execution. Maximum 10 positions, 40% sector limit, 2% per-stock risk.
 
 ### 📊 **Portfolio Dashboard**
-Browse all 250 daily analyses with complete transparency. See exactly why each stock was selected or rejected: "Top conviction", "Sector limit reached", "Portfolio full", etc.
+Browse all daily analyses with complete transparency. See exactly why each stock was selected or rejected: "Top conviction", "Sector limit reached", "Portfolio full", etc.
 
 ### 📈 **Actionable Trade Plans**
 Every selected trade includes detailed plans with precise entry points, profit targets, and stop-loss levels - institutional-grade precision.
 
 ### 🌍 **Market & Index Analysis**
-Track Nifty 50, Nifty Smallcap 250, and sectoral indices to understand broad market context and smallcap-specific momentum.
+Track Nifty 50 and sectoral indices to understand broad market context and NSE-wide momentum across all sectors.
 
 ### 📊 **Transparent Track Record**
 Complete performance log of every closed trade with full transparency on wins, losses, and overall strategy effectiveness.

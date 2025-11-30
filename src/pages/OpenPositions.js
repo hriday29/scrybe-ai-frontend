@@ -109,14 +109,27 @@ const OpenPositions = ({ onAnalyze }) => {
         fetchOpenTrades();
     }, [currentUser, authFetch]);
 
-    // Calculate portfolio metrics
+    // Calculate portfolio metrics - NSE ENHANCED
     const portfolioMetrics = {
         totalPositions: openTrades.length,
         profitablePositions: openTrades.filter(t => t.pnl_percent > 0).length,
         losingPositions: openTrades.filter(t => t.pnl_percent < 0).length,
         avgPnl: openTrades.length > 0 
             ? (openTrades.reduce((sum, t) => sum + t.pnl_percent, 0) / openTrades.length).toFixed(2)
-            : 0
+            : 0,
+        // NSE Risk Metrics
+        portfolioHeat: openTrades.length > 0 
+            ? (openTrades.reduce((sum, t) => sum + (t.risk_pct || 1.5), 0)).toFixed(1)
+            : 0,
+        totalCapitalDeployed: openTrades.length > 0
+            ? openTrades.reduce((sum, t) => sum + (t.capital_deployed || (t.entry_price * 100)), 0)
+            : 0,
+        expiringPositions: openTrades.filter(t => {
+            if (!t.expiry_date) return false;
+            const expiryDate = new Date(t.expiry_date);
+            const daysToExpiry = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+            return daysToExpiry <= 3 && daysToExpiry > 0;
+        }).length
     };
 
     const renderTradeCockpit = () => {
@@ -190,7 +203,32 @@ const OpenPositions = ({ onAnalyze }) => {
 
         return (
             <GlassCard variant="elevated">
-                <div className="overflow-x-auto">
+                <div className="p-6 mb-6 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                    <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-indigo-500/20 dark:bg-indigo-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span className="text-base">📊</span>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-indigo-900 dark:text-indigo-100 font-semibold mb-2">Understanding This Table</p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">📍 Entry → Current → Target</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Shows where we entered, where price is now, and where profit target is</p>
+                                </div>
+                                <div>
+                                    <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">⏱️ Days Held</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">How long this position has been open. Days left shows when it expires</p>
+                                </div>
+                                <div>
+                                    <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">🎯 R/R Ratio</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Risk-to-Reward: How much we make vs what we could lose (1:3 = ₹1 risk for ₹3 profit)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-neutral-800">
                     <table className="w-full">
                         <thead>
                             <tr className="bg-gray-50 dark:bg-neutral-800/50 border-b-2 border-gray-200 dark:border-neutral-700">
@@ -350,6 +388,78 @@ const OpenPositions = ({ onAnalyze }) => {
                             </div>
                         </div>
 
+                        {/* Fund Manager Overview - What's Happening */}
+                        <div className="mb-8 p-5 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-xl border border-green-200 dark:border-green-800">
+                            <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-green-500/20 dark:bg-green-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span className="text-base">📈</span>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-green-900 dark:text-green-100 font-semibold mb-1">Fund Manager's Live Execution</p>
+                                    <p className="text-green-800 dark:text-green-200 text-sm leading-relaxed">
+                                        This is your live fund dashboard where the AI Fund Manager executes trades approved by the Portfolio Manager. Each position shows current P&L, how close we are to profit targets, and when positions expire. The manager monitors all metrics below to ensure optimal execution and risk management.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Portfolio Risk Dashboard - NSE ENHANCED */}
+                        {openTrades.length > 0 && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    {/* Total Capital at Risk - With Explanation */}
+                    <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-red-50 to-rose-100/50 dark:from-red-950/30 dark:to-rose-900/20 border-red-200 dark:border-red-800">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="w-12 h-12 rounded-xl bg-red-500/10 dark:bg-red-500/20 flex items-center justify-center mb-3">
+                            <Shield className="w-6 h-6 text-red-600 dark:text-red-400" />
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Portfolio Heat (Risk Level)</p>
+                          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{portfolioMetrics.portfolioHeat?.toFixed(1)}%</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                            {portfolioMetrics.portfolioHeat < 6 ? '✓ Safe - Low risk' : portfolioMetrics.portfolioHeat < 10 ? '⚠️ Moderate - Balanced risk' : '🔴 High - Aggressive risk'}
+                          </p>
+                          <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <strong>What this means:</strong> This is the total percentage of your portfolio at risk if all stop-loss levels are hit. Lower is safer, higher means more aggressive positions.
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+
+                    {/* Total Capital Deployed - With Explanation */}
+                    <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="w-12 h-12 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center mb-3">
+                            <BarChart2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Capital Deployed</p>
+                          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">₹{(portfolioMetrics.totalCapitalDeployed / 100000).toFixed(1)}L</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{openTrades.length} active positions</p>
+                          <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <strong>What this means:</strong> Total money currently invested across all open trades. Shows your fund's active exposure and working capital.
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+
+                    {/* Expiry Timeline Alert - With Explanation */}
+                    <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-amber-50 to-orange-100/50 dark:from-amber-950/30 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center mb-3">
+                            <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Positions Expiring Soon</p>
+                          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{portfolioMetrics.expiringPositions || 0}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">In next 3 days</p>
+                          <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <strong>What this means:</strong> These trades are close to expiry. Review them to decide whether to exit for profit/loss or roll to next month.
+                          </p>
+                        </div>
+                      </div>
+                            </div>
+                        )}
+
                         {/* Current Date & Time */}
                         <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200 dark:border-blue-800">
                             <div className="flex items-center justify-between">
@@ -410,6 +520,54 @@ const OpenPositions = ({ onAnalyze }) => {
                                     color={portfolioMetrics.avgPnl >= 0 ? 'green' : 'red'}
                                 />
                             </div>
+                        )}
+
+                        {/* Sector Exposure Breakdown (Phase 2) */}
+                        {openTrades.length > 0 && (
+                            <GlassCard variant="elevated" className="p-6 mb-8 bg-gradient-to-br from-purple-50 to-indigo-50/50 dark:from-purple-950/30 dark:to-indigo-950/20 border-purple-200 dark:border-purple-800">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                        <BarChart2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Sector Exposure</h3>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                                    {(() => {
+                                        const sectorExposure = {};
+                                        let totalCapital = 0;
+                                        
+                                        openTrades.forEach(trade => {
+                                            const sector = trade.sector || 'Unknown';
+                                            const capital = trade.capital_deployed || 0;
+                                            sectorExposure[sector] = (sectorExposure[sector] || 0) + 1;
+                                            totalCapital += capital;
+                                        });
+                                        
+                                        return Object.entries(sectorExposure)
+                                            .sort(([,a], [,b]) => b - a)
+                                            .map(([sector, count]) => {
+                                                const percentage = ((count / openTrades.length) * 100).toFixed(0);
+                                                return (
+                                                    <motion.div 
+                                                        key={sector}
+                                                        whileHover={{ y: -2 }}
+                                                        className="p-3 bg-white dark:bg-neutral-900 rounded-lg border border-purple-200 dark:border-purple-700"
+                                                    >
+                                                        <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase mb-2 truncate">{sector}</p>
+                                                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{count}</p>
+                                                        <div className="w-full h-1.5 bg-gray-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                                                            <div 
+                                                                className="h-full bg-purple-500"
+                                                                style={{ width: `${Math.min(percentage, 100)}%` }}
+                                                            ></div>
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{percentage}% of portfolio</p>
+                                                    </motion.div>
+                                                );
+                                            });
+                                    })()}
+                                </div>
+                            </GlassCard>
                         )}
                     </div>
 

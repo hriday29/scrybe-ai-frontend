@@ -172,14 +172,96 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
           <span className="text-blue-900 dark:text-blue-100 font-bold">1:{riskReward}</span>
         </div>
       )}
+
+      {/* Position Sizing Transparency - AI Manager Reasoning (Phase 2) */}
+      {trade.position_sizing && (
+        <div className="mb-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 rounded-lg border border-indigo-200 dark:border-indigo-800">
+          <div className="flex items-start gap-2 mb-3">
+            <div className="w-5 h-5 rounded-full bg-indigo-600 dark:bg-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-white text-xs font-bold">📊</span>
+            </div>
+            <div>
+              <p className="text-indigo-700 dark:text-indigo-300 text-xs font-semibold uppercase tracking-wider">Position Sizing Logic</p>
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">
+                Our AI manager sized this position based on market-cap tier, liquidity, and quality factors. Each metric tells you how we protect your capital.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">📈 Shares to Buy</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing.shares || 'N/A'}</p>
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">@ ₹{trade.entry_price?.toFixed(2)} each</p>
+            </div>
+            <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">💰 Capital Required</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">₹{trade.position_sizing.capital_deployed?.toLocaleString('en-IN') || 'N/A'}</p>
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">From your fund</p>
+            </div>
+            <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">📊 Portfolio Weight</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing.portfolio_percentage?.toFixed(2)}%</p>
+              <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">Of total portfolio</p>
+            </div>
+            <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-rose-100 dark:border-rose-800">
+              <p className="text-rose-600 dark:text-rose-400 text-xs font-semibold mb-1">⚠️ Maximum Risk</p>
+              <p className="text-rose-700 dark:text-rose-300 font-bold text-base">₹{trade.position_sizing.risk_amount?.toLocaleString('en-IN') || 'N/A'}</p>
+              <p className="text-rose-600 dark:text-rose-400 text-xs mt-1">If stop loss hit</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quality & Liquidity Indicators - Why These Matter (Phase 2-3) */}
+      <div className="mb-4 space-y-2">
+        {trade.quality_score !== undefined && (
+          <div className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-start gap-2.5 ${
+            trade.quality_score >= 75 ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700' :
+            trade.quality_score >= 60 ? 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-700' :
+            'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+          }`}>
+            <span className="text-base mt-0.5">⭐</span>
+            <div>
+              <p className="font-bold">Quality: {trade.quality_score >= 75 ? 'Excellent Fundamentals' : trade.quality_score >= 60 ? 'Good Fundamentals' : 'Average Fundamentals'} ({trade.quality_score}%)</p>
+              <p className="text-xs opacity-90 mt-0.5">
+                {trade.quality_score >= 75 ? 'Strong balance sheet, good profitability - manager allocated more capital for higher potential returns' :
+                 trade.quality_score >= 60 ? 'Solid business metrics - manager sized conservatively to manage risk' :
+                 'Weaker metrics - manager sized smaller position to limit downside exposure'}
+              </p>
+            </div>
+          </div>
+        )}
+        {trade.liquidity_tier && (
+          <div className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-start gap-2.5 ${
+            trade.liquidity_tier === 'very_high' ? 'bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700' :
+            trade.liquidity_tier === 'high' ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700' :
+            trade.liquidity_tier === 'medium' ? 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-700' :
+            'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700'
+          }`}>
+            <span className="text-base mt-0.5">💧</span>
+            <div>
+              <p className="font-bold">Liquidity: {trade.liquidity_tier === 'very_high' ? 'Very High Volume' : trade.liquidity_tier === 'high' ? 'High Volume' : trade.liquidity_tier === 'medium' ? 'Medium Volume' : 'Low Volume'}</p>
+              <p className="text-xs opacity-90 mt-0.5">
+                {trade.liquidity_tier === 'very_high' ? 'Easy to buy & sell - no slippage concerns, optimal for quick exit' :
+                 trade.liquidity_tier === 'high' ? 'Good volume - can enter/exit without major impact on price' :
+                 trade.liquidity_tier === 'medium' ? 'Moderate volume - can trade but requires careful execution' :
+                 'Limited volume - higher risk of price impact, smaller position recommended'}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
       
-      {/* Selection Reason */}
+      {/* Why This Trade Was Selected */}
       {trade.selection_reason && (
         <div className="pt-4 border-t border-gray-200 dark:border-neutral-700">
-          <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <span>{trade.selection_reason}</span>
-          </p>
+          <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-green-700 dark:text-green-300 text-xs font-semibold uppercase mb-1">Manager's Decision</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{trade.selection_reason}</p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -509,11 +591,16 @@ const PortfolioDashboard = ({ onStockSelect }) => {
 
     let filtered = portfolioData.all_analyses;
 
-    // Tab filtering
+    // Tab filtering - FIXED for NSE scale
     if (activeTab === 'executed') {
       filtered = filtered.filter(a => a.is_executed);
     } else if (activeTab === 'not-selected') {
-      filtered = filtered.filter(a => !a.is_executed && a.signal !== 'HOLD');
+      // Show top 50-100 high-conviction NOT executed trades
+      // Filter for high conviction (score >= 45) and not executed
+      filtered = filtered
+        .filter(a => !a.is_executed && (a.scrybeScore >= 45 || a.scrybeScore <= -45))
+        .sort((a, b) => Math.abs(b.scrybeScore) - Math.abs(a.scrybeScore))
+        .slice(0, 100);  // Show top 100 opportunities
     }
 
     // Search filtering
@@ -582,46 +669,69 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                 AI-powered institutional-grade portfolio construction and risk management
               </p>
             </div>
-            {/* <div className="hidden lg:flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Last Updated</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                  {display_timestamp || new Date().toLocaleString('en-IN', { 
-                    day: '2-digit', 
-                    month: 'short', 
-                    year: 'numeric', 
-                    hour: '2-digit', 
-                    minute: '2-digit',
-                    hour12: true 
-                  })}
-                </p>
-              </div>
-              {prediction_for_date && (
-                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-500/10 to-secondary-500/10 dark:from-primary-500/20 dark:to-secondary-500/20 border border-primary-300 dark:border-primary-700">
-                  <span className="text-primary-700 dark:text-primary-300 text-sm font-semibold">📅 {prediction_for_date_short || prediction_for_date}</span>
-                </div>
-              )}
-            </div> */}
           </div>
 
-          {/* Key Stats Summary Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gradient-to-r from-white to-gray-50 dark:from-neutral-900 dark:to-neutral-800 rounded-xl border border-gray-200 dark:border-neutral-800 shadow-sm">
-            <div className="text-center">
-              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Analyzed Today</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">~{total_analyzed}</p>
+          {/* Manager Overview - What's Happening */}
+          <div className="mb-8 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-blue-200 dark:border-blue-800">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/20 dark:bg-blue-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-base">🤖</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-blue-900 dark:text-blue-100 font-semibold mb-1">How Our Manager Works</p>
+                <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
+                  Our AI analyzes ~2,000 NSE stocks daily to find the best trading opportunities. It ranks them by conviction strength and selects the top performers based on your risk tolerance. 
+                  Each trade shown below has been automatically sized based on market-cap, quality, and liquidity to maximize returns while protecting your capital. You can review every decision we made.
+                </p>
+              </div>
             </div>
-            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
-              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Executing</p>
-              <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{portfolio_summary.selected_for_execution}</p>
-            </div>
-            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
-              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">High Conviction</p>
-              <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{portfolio_summary.high_conviction_not_selected}</p>
-            </div>
-            <div className="text-center border-l border-gray-200 dark:border-neutral-700">
-              <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">Sectors Active</p>
-              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{Object.keys(sector_breakdown).length}</p>
-            </div>
+          </div>
+
+          {/* Key Stats Summary Bar - Manager's Daily Work */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">📊</div>
+                <div className="flex-1">
+                  <p className="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold mb-1">Daily Analysis</p>
+                  <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">~{total_analyzed}</p>
+                  <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">Stocks screened</p>
+                </div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/30 dark:to-emerald-900/20 border-emerald-200 dark:border-emerald-800">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">✅</div>
+                <div className="flex-1">
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold mb-1">Executing Now</p>
+                  <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">{portfolio_summary.selected_for_execution}</p>
+                  <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-1">Active positions</p>
+                </div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/30 dark:to-amber-900/20 border-amber-200 dark:border-amber-800">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">⭐</div>
+                <div className="flex-1">
+                  <p className="text-xs text-amber-600 dark:text-amber-400 uppercase tracking-wider font-semibold mb-1">High Conviction</p>
+                  <p className="text-2xl font-bold text-amber-900 dark:text-amber-100">{portfolio_summary.high_conviction_not_selected}</p>
+                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">Strong buy signals</p>
+                </div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 border-purple-200 dark:border-purple-800">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">🎯</div>
+                <div className="flex-1">
+                  <p className="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider font-semibold mb-1">Sectors</p>
+                  <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">{Object.keys(sector_breakdown).length}</p>
+                  <p className="text-xs text-purple-700 dark:text-purple-300 mt-1">Diversified</p>
+                </div>
+              </div>
+            </GlassCard>
           </div>
         </div>
 
@@ -709,39 +819,68 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sector Diversification</h2>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Risk distribution across market sectors</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">NSE allocation vs portfolio allocation strategy</p>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(sector_breakdown).map(([sector, count]) => {
+                // NSE sector context (approximate NSE universe proportions)
+                const nseContext = {
+                  'Financials': { nse_count: 400, nse_pct: 25, max_positions: 5 },
+                  'IT': { nse_count: 85, nse_pct: 5, max_positions: 2 },
+                  'Energy': { nse_count: 65, nse_pct: 4, max_positions: 2 },
+                  'Healthcare': { nse_count: 95, nse_pct: 6, max_positions: 3 },
+                  'Telecom': { nse_count: 35, nse_pct: 2, max_positions: 1 },
+                  'Consumer': { nse_count: 120, nse_pct: 7, max_positions: 3 },
+                  'Infrastructure': { nse_count: 75, nse_pct: 5, max_positions: 2 },
+                  'Materials': { nse_count: 110, nse_pct: 7, max_positions: 3 },
+                  'Utilities': { nse_count: 45, nse_pct: 3, max_positions: 1 },
+                  'Other': { nse_count: 270, nse_pct: 17, max_positions: 5 }
+                };
+                
+                const sectorData = nseContext[sector] || { nse_count: 100, nse_pct: 6, max_positions: 2 };
                 const percentage = ((count / portfolio_summary.selected_for_execution) * 100).toFixed(0);
                 const isHighAllocation = percentage >= 30;
+                const isOptimal = count <= sectorData.max_positions && count > 0;
+                
                 return (
                   <motion.div 
                     key={sector}
                     whileHover={{ y: -4 }}
-                    className={`text-center p-5 rounded-xl border-2 transition-all ${
+                    className={`p-5 rounded-xl border-2 transition-all cursor-default ${
                       isHighAllocation 
                         ? 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-300 dark:border-amber-700'
+                        : isOptimal
+                        ? 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-300 dark:border-emerald-700'
                         : 'bg-white dark:bg-neutral-900 border-gray-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700'
                     }`}
                   >
-                    <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">{sector}</p>
-                    <p className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">{count}</p>
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-start justify-between mb-2">
+                      <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">{sector}</p>
+                      {isOptimal && <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold">✓ Optimal</span>}
+                    </div>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{count}/{sectorData.max_positions}</p>
+                    <div className="flex items-center justify-between mb-2 text-xs text-gray-600 dark:text-gray-400">
+                      <span>{percentage}% of portfolio</span>
+                      <span>({sectorData.nse_pct}% of NSE)</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex-1 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                         <div 
-                          className={`h-full rounded-full ${isHighAllocation ? 'bg-amber-500' : 'bg-primary-500'}`}
-                          style={{ width: `${percentage}%` }}
+                          className={`h-full rounded-full ${isHighAllocation ? 'bg-amber-500' : isOptimal ? 'bg-emerald-500' : 'bg-primary-500'}`}
+                          style={{ width: `${Math.min(percentage, 100)}%` }}
                         ></div>
                       </div>
-                      <span className={`text-sm font-bold ${isHighAllocation ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 dark:text-gray-300'}`}>
-                        {percentage}%
-                      </span>
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight">NSE: ~{sectorData.nse_count} stocks, Cap: {sectorData.max_positions} pos</p>
                   </motion.div>
                 );
               })}
+            </div>
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
+                <span className="font-semibold">📊 NSE Scale Context:</span> Portfolio adapts position count limits based on sector size in the NSE universe (~1900 stocks analyzed daily). Financials (~400 stocks, 25% of NSE) gets max 5 positions; Telecom (~35 stocks, 2% of NSE) gets max 1. This maintains proportional exposure while protecting capital.
+              </p>
             </div>
           </GlassCard>
         )}
@@ -786,33 +925,54 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-3 mb-8 flex-wrap">
-            {[
-              { id: 'executed', label: 'Executed', count: executed_trades.length, color: 'emerald' },
-              { id: 'not-selected', label: 'Not Selected', count: portfolioData.all_analyses.filter(a => !a.is_executed && a.signal !== 'HOLD').length, color: 'amber' },
-              { id: 'all', label: 'All Analyses', count: total_analyzed, color: 'blue' }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all border-2 ${
-                  activeTab === tab.id
-                    ? `bg-${tab.color}-500 border-${tab.color}-500 text-white shadow-lg shadow-${tab.color}-500/20`
-                    : 'bg-white dark:bg-neutral-800 border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-neutral-600'
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  {tab.label}
-                  <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
+          <div className="mb-8">
+            <div className="flex gap-3 mb-6 flex-wrap">
+              {[
+                { id: 'executed', label: 'Executed', count: executed_trades.length, color: 'emerald' },
+                { id: 'not-selected', label: 'Not Selected', count: portfolioData.all_analyses.filter(a => !a.is_executed && a.signal !== 'HOLD').length, color: 'amber' },
+                { id: 'all', label: 'All Analyses', count: total_analyzed, color: 'blue' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all border-2 ${
                     activeTab === tab.id
-                      ? 'bg-white/20'
-                      : 'bg-gray-100 dark:bg-neutral-700'
-                  }`}>
-                    {tab.count}
+                      ? `bg-${tab.color}-500 border-${tab.color}-500 text-white shadow-lg shadow-${tab.color}-500/20`
+                      : 'bg-white dark:bg-neutral-800 border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-neutral-600'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {tab.label}
+                    <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
+                      activeTab === tab.id
+                        ? 'bg-white/20'
+                        : 'bg-gray-100 dark:bg-neutral-700'
+                    }`}>
+                      {tab.count}
+                    </span>
                   </span>
-                </span>
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
+            
+            {/* Tab Explanations */}
+            <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-800 dark:to-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-700">
+              {activeTab === 'executed' && (
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">✅ Executed Trades:</span> These are trades the AI manager decided to execute based on conviction. All have been sized for optimal risk/reward and meet your portfolio constraints.
+                </p>
+              )}
+              {activeTab === 'not-selected' && (
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">⭐ Not Selected (High Conviction):</span> These are strong buy/sell signals but weren't executed due to portfolio being full or sector limits. They're here for your review - you can decide to act on them manually.
+                </p>
+              )}
+              {activeTab === 'all' && (
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">📊 All Analyses:</span> Complete list of all ~2,000 stocks analyzed today. Shows every decision made by the AI - which stocks have signals, which don't, and why. Full transparency into manager's work.
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Filters */}

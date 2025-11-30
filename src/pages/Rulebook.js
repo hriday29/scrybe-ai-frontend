@@ -158,8 +158,8 @@ const Rulebook = () => {
 
           <ProcessStep 
             icon={ShieldCheckIcon}
-            title="Portfolio Selection (Top 10)"
-            description="An institutional-grade Portfolio Manager ranks all signals by conviction and applies strict risk controls: max 10 concurrent positions, 40% sector concentration limit, and 2% max risk per stock. Only the highest-conviction trades that pass all constraints are executed."
+            title="Portfolio Selection (Adaptive Tiers)"
+            description="Portfolio Manager ranks all signals by conviction and applies strict risk controls. For the NSE universe (~2000 daily analyses): Tier 1 (Execute) = Top 10 positions, Tier 2 (Watchlist) = Top 50 opportunities, Tier 3 (Research) = All quality setups. Risk constraints: Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), NSE-aware sector limits (Financials: 5 max, IT: 2 max, etc), liquidity checks, quality score adjustments. This ensures diversification while maintaining capital protection."
             color="green"
           />
 

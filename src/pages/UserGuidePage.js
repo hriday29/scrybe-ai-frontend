@@ -127,16 +127,14 @@ const UserGuidePage = ({ onBack }) => {
                 to +100 (strong long) for each analyzed stock.
               </li>
               <li>
-                <strong>Portfolio Selection:</strong> Only top 10 highest-conviction trades 
-                that pass institutional risk controls are executed.
+                <strong>Portfolio Selection:</strong> Adaptive tier system for NSE universe: Tier 1 (Execute) = Top 10 highest-conviction trades, Tier 2 (Watchlist) = Top 50 opportunities for further review, Tier 3 (Research) = All quality setups analyzed. Each tier passes institutional risk controls adapted to market-cap and sector characteristics.
               </li>
               <li>
                 <strong>Selection Reasons:</strong> Complete transparency on why stocks were 
-                selected or rejected (sector limits, portfolio capacity, conviction threshold).
+                selected or rejected (sector limits, portfolio capacity, conviction threshold, market-cap tier).
               </li>
               <li>
-                <strong>Risk Controls:</strong> Max 10 concurrent positions, 40% sector 
-                concentration limit, 2% max risk per stock.
+                <strong>Risk Controls:</strong> Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), NSE-aware sector concentration limits (Financials max 5, IT max 2, etc.), quality score adjustments, liquidity checks.
               </li>
               <li>
                 <strong>Analyst Verdict:</strong> AI-generated human-readable summary of 
@@ -174,19 +172,16 @@ const UserGuidePage = ({ onBack }) => {
           <Section title="6. Our AI's Philosophy" id="philosophy">
             <p>
               Scrybe AI follows institutional fund manager principles applied to the 
-              NSE universe. Our philosophy is:
+              NSE universe (~2000 daily analyses). Our philosophy is:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Analyze Everything:</strong> Daily analysis of all NSE stocks, 
-              no cherry-picking or survivorship bias.</li>
-              <li><strong>Select the Best:</strong> Only top 10 highest-conviction trades that 
-              pass strict risk controls are executed.</li>
-              <li><strong>Risk Management First:</strong> Portfolio-level constraints (sector limits, 
-              position sizing) protect capital like a professional fund.</li>
+              <li><strong>Analyze Everything:</strong> Daily comprehensive analysis of all NSE stocks across all market caps and sectors, no cherry-picking or survivorship bias.</li>
+              <li><strong>Select the Best:</strong> Adaptive tier system: Execute top 10, Watchlist top 50, Research all quality setups that pass strict risk controls.</li>
+              <li><strong>Risk Management First:</strong> Portfolio-level constraints (NSE-aware sector limits, market-cap adaptive position sizing, liquidity checks) protect capital like a professional fund.</li>
               <li><strong>Complete Transparency:</strong> Every decision is visible—you see why 
-              stocks are selected or rejected.</li>
+              stocks are selected or rejected, including tier assignment and quality factors.</li>
               <li><strong>Data-Driven Decisions:</strong> No emotions, no biases, only systematic 
-              analysis and quantifiable rules.</li>
+              analysis and quantifiable rules with quality score and liquidity adjustments.</li>
               <li><strong>Consistency Over Luck:</strong> Focus on repeatable process, not one-off wins.</li>
             </ul>
           </Section>
