@@ -59,7 +59,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-blue-500/30 to-blue-700/30",
       title: "Top 10 Selection Process",
       description:
-        "Out of all daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 40% sector concentration limit, and 2% max risk per stock\u2014just like professional fund managers.",
+        "Out of all daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 2% max risk per stock, and conviction-driven diversification—just like professional fund managers.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
         { text: "View Fund Dashboard", action: () => handleLaunchAndNavigate(3) },
@@ -70,7 +70,7 @@ const LandingWalkthrough = ({
       badge: "bg-gradient-to-br from-green-500/30 to-green-700/30",
       title: "Complete Transparency",
       description:
-        "Unlike black-box systems, we show you everything. Browse all analyses in the Portfolio Manager with clear selection reasons for each stock: 'Top conviction signal', 'High conviction, sector limit reached', 'Portfolio full', etc. See the AI Track Record for honest historical performance.",,
+        "Unlike black-box systems, we show you everything. Browse all analyses in the Portfolio Manager with clear selection reasons for each stock: 'Top conviction signal', 'Portfolio full', 'Below threshold', etc. See the AI Track Record for honest historical performance.",
       links: [
         { text: "View AI Track Record", action: () => handleLaunchAndNavigate(5) },
         { text: "Read the Rulebook", action: () => handleLaunchAndNavigate(6) },

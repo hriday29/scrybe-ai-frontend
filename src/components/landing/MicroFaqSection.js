@@ -23,7 +23,7 @@ const faqs = [
     icon: Target,
     color: 'purple',
     q: 'How are signals generated?',
-    a: 'We use a multi-layer AI committee approach: (1) Technical Analyst examines charts, momentum, and indicators. (2) Fundamental Analyst evaluates valuation and growth. (3) Risk Analyst reviews volatility and options data. (4) Head of Strategy synthesizes everything into a final conviction score. Only trades passing strict risk gates (sector limits, position sizing, stop-loss rules) get executed.',
+    a: 'We use a multi-layer AI committee approach: (1) Technical Analyst examines charts, momentum, and indicators. (2) Fundamental Analyst evaluates valuation and growth. (3) Risk Analyst reviews volatility and options data. (4) Head of Strategy synthesizes everything into a final conviction score. Only trades passing strict risk gates (position sizing, single-stock limits, stop-loss rules) get executed.',
     highlight: '4-layer AI committee'
   },
   {

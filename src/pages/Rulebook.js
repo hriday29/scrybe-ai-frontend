@@ -159,14 +159,14 @@ const Rulebook = () => {
           <ProcessStep 
             icon={ShieldCheckIcon}
             title="Portfolio Selection (Adaptive Tiers)"
-            description="Portfolio Manager ranks all signals by conviction and applies strict risk controls. For the NSE universe (~2000 daily analyses): Tier 1 (Execute) = Top 10 positions, Tier 2 (Watchlist) = Top 50 opportunities, Tier 3 (Research) = All quality setups. Risk constraints: Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), NSE-aware sector limits (Financials: 5 max, IT: 2 max, etc), liquidity checks, quality score adjustments. This ensures diversification while maintaining capital protection."
+            description="Portfolio Manager ranks all signals by conviction and applies strict risk controls. For the NSE universe (~2000 daily analyses): Tier 1 (Execute) = Top 10 positions, Tier 2 (Watchlist) = Top 50 opportunities, Tier 3 (Research) = All quality setups. Risk constraints: Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), single-stock risk limits, liquidity checks, quality score adjustments. This ensures diversification while maintaining capital protection."
             color="green"
           />
 
           <ProcessStep 
             icon={DatabaseIcon}
             title="Complete Transparency"
-            description="All analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each stock was selected or rejected, with clear reasons like 'High conviction, sector limit reached' or 'Below conviction threshold'. No black boxes."
+            description="All analyses are stored and visible to users in the Portfolio Dashboard. You see exactly why each stock was selected or rejected, with clear reasons like 'Top conviction', 'Portfolio full', or 'Below threshold'. No black boxes."
             color="emerald"
           />
         </div>
@@ -226,7 +226,7 @@ const Rulebook = () => {
             className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg"
           >
             <span className="text-green-500 text-xl">✅</span>
-            <span><strong>Portfolio Fit:</strong> Trade passes institutional risk controls (sector limits, position sizing).</span>
+            <span><strong>Portfolio Fit:</strong> Trade passes institutional risk controls (single-stock limits, position sizing).</span>
           </motion.li>
           <motion.li 
             initial={{ opacity: 0, x: -20 }}

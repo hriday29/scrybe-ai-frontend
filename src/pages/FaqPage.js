@@ -141,11 +141,11 @@ const FaqPage = ({
     },
     {
       q: "Why was a high-score stock not selected?",
-      a: "Even high Scrybe Score stocks may not be selected if they violate portfolio risk controls. Common reasons: (1) Sector concentration would exceed 40%, (2) Portfolio already has 10 positions, (3) Trade would exceed 2% single-stock risk limit. Check the 'selection_reason' field in Portfolio Dashboard for specifics.",
+      a: "Even high Scrybe Score stocks may not be selected if they violate portfolio risk controls. Common reasons: (1) Portfolio already has 10 positions, (2) Trade would exceed 2% single-stock risk limit, (3) Score below conviction threshold. Check the 'selection_reason' field in Portfolio Dashboard for specifics.",
     },
     {
       q: "Can I see stocks that weren't selected?",
-      a: "Yes! The Portfolio Dashboard shows all analyses with complete transparency. Use the 'Not Selected' tab to see high-conviction signals that didn't make the top 10, along with clear reasons why (e.g., 'High conviction, sector limit reached'). This transparency helps you understand the risk management process.",
+      a: "Yes! The Portfolio Dashboard shows all analyses with complete transparency. Use the 'Not Selected' tab to see high-conviction signals that didn't make the top 10, along with clear reasons why (e.g., 'Portfolio full', 'Below threshold'). This transparency helps you understand the risk management process.",
     },
   ];
 

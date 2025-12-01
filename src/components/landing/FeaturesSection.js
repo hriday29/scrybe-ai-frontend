@@ -21,7 +21,7 @@ const features = [
   {
     icon: Shield,
     title: 'Institutional Risk Controls',
-    description: 'Professional portfolio management: Max 10 positions, 40% sector concentration limit, 2% max risk per trade—just like institutional fund managers.',
+    description: 'Professional portfolio management: Max 10 positions, 2% max risk per trade, conviction-driven diversification—just like institutional fund managers.',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
   },

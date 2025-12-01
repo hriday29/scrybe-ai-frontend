@@ -115,7 +115,7 @@ const UserGuidePage = ({ onBack }) => {
               </li>
               <li>
                 <strong>Understand Selection Reasons:</strong> See exactly why stocks were 
-                selected ("Top conviction") or rejected ("Sector limit reached", "Portfolio full").
+                selected ("Top conviction") or rejected ("Portfolio full", "Below threshold").
               </li>
             </ol>
           </Section>
@@ -131,10 +131,10 @@ const UserGuidePage = ({ onBack }) => {
               </li>
               <li>
                 <strong>Selection Reasons:</strong> Complete transparency on why stocks were 
-                selected or rejected (sector limits, portfolio capacity, conviction threshold, market-cap tier).
+                selected or rejected (portfolio capacity, conviction threshold, single-stock risk limit, market-cap tier).
               </li>
               <li>
-                <strong>Risk Controls:</strong> Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), NSE-aware sector concentration limits (Financials max 5, IT max 2, etc.), quality score adjustments, liquidity checks.
+                <strong>Risk Controls:</strong> Market-cap adaptive position sizing (1% small-cap, 1.5% mid-cap, 2% large-cap), quality score adjustments, liquidity checks, single-stock risk limits.
               </li>
               <li>
                 <strong>Analyst Verdict:</strong> AI-generated human-readable summary of 
@@ -177,7 +177,7 @@ const UserGuidePage = ({ onBack }) => {
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Analyze Everything:</strong> Daily comprehensive analysis of all NSE stocks across all market caps and sectors, no cherry-picking or survivorship bias.</li>
               <li><strong>Select the Best:</strong> Adaptive tier system: Execute top 10, Watchlist top 50, Research all quality setups that pass strict risk controls.</li>
-              <li><strong>Risk Management First:</strong> Portfolio-level constraints (NSE-aware sector limits, market-cap adaptive position sizing, liquidity checks) protect capital like a professional fund.</li>
+              <li><strong>Risk Management First:</strong> Portfolio-level constraints (conviction-driven ranking, market-cap adaptive position sizing, liquidity checks) protect capital like a professional fund.</li>
               <li><strong>Complete Transparency:</strong> Every decision is visible—you see why 
               stocks are selected or rejected, including tier assignment and quality factors.</li>
               <li><strong>Data-Driven Decisions:</strong> No emotions, no biases, only systematic 
@@ -190,7 +190,7 @@ const UserGuidePage = ({ onBack }) => {
             <ul className="list-disc pl-6 space-y-2">
               <li>Use Scrybe AI as your research analyst, not as automated trading advice.</li>
               <li>Focus on the top 10 executing trades—these passed all institutional risk controls.</li>
-              <li>Understand rejection reasons—if "Sector limit reached", that sector is already at 40% exposure.</li>
+              <li>Understand rejection reasons—check the 'selection_reason' field to see why a high-conviction signal wasn't selected for execution.</li>
               <li>Check both Scrybe Score AND the detailed analysis before making decisions.</li>
               <li>Respect the Portfolio Dashboard's risk limits—they exist to protect capital.</li>
               <li>Monitor the "High conviction not selected" tab to understand portfolio constraints in action.</li>
@@ -233,14 +233,14 @@ const UserGuidePage = ({ onBack }) => {
               </li>
               <li>
                 <strong>Top 10 Selection:</strong> Highest-conviction trades that pass all 
-                institutional risk controls (sector limits, position sizing).
+                institutional risk controls (position sizing, single-stock limits).
               </li>
               <li>
                 <strong>Selection Reason:</strong> Transparent explanation for why each stock 
                 was selected or rejected by the Portfolio Manager.
               </li>
               <li>
-                <strong>Sector Concentration:</strong> Maximum 40% of portfolio can be in any 
+                <strong>Sector Diversity:</strong> Portfolio naturally diversified through conviction-based ranking and position count cap of 
                 single sector to ensure diversification.
               </li>
               <li>

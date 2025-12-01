@@ -108,7 +108,7 @@ const AppGuide = ({ navigateToTab }) => {
     {
       title: "The Rulebook",
       description:
-        "Detailed guide to our disciplined, institutional-grade strategy. Learn about portfolio management rules, sector concentration limits, and risk controls.",
+        "Detailed guide to our disciplined, institutional-grade strategy. Learn about portfolio management rules, conviction-driven selection, and risk controls.",
       benefit:
         "Understand the professional fund manager logic behind every decision with clear, documented trading rules.",
       targetIndex: 6,

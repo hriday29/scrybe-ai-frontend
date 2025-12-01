@@ -312,10 +312,9 @@ const AnalysisRow = ({ analysis, onStockSelect }) => {
       return '📊 Portfolio is full (10 positions maximum)';
     }
     
-    // Sector limits
-    if (reason.includes('Sector concentration') || reason.includes('sector limit')) {
-      return '📈 Too many stocks from same industry sector';
-    }
+    // *** SECTOR LIMITS REMOVED ***
+    // Sector concentration limits have been disabled
+    // This category is no longer used for signal rejection
     
     // Single stock risk limit
     if (reason.includes('Single-stock risk limit')) {
@@ -964,7 +963,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               )}
               {activeTab === 'not-selected' && (
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <span className="font-semibold">⭐ Not Selected (High Conviction):</span> These are strong buy/sell signals but weren't executed due to portfolio being full or sector limits. They're here for your review - you can decide to act on them manually.
+                  <span className="font-semibold">⭐ Not Selected (High Conviction):</span> These are strong buy/sell signals but weren't executed due to portfolio being full or other constraints. They're here for your review - you can decide to act on them manually.
                 </p>
               )}
               {activeTab === 'all' && (
