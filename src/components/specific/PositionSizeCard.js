@@ -173,19 +173,14 @@ const PositionSizeCard = ({ tradePlan, analysisData }) => {
         </div>
       </div>
 
-      {/* Method Used & Guidelines */}
+      {/* Risk Tier Guidelines */}
       <div className="mt-6 pt-6 border-t border-gray-200 dark:border-neutral-700">
         <div className="flex items-start gap-3">
           <div className="p-1.5 bg-blue-500/10 dark:bg-blue-900/20 rounded-lg mt-0.5">
             <TrendingUp className="w-4 h-4 text-blue-400" />
           </div>
           <div className="flex-1">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sizing Method</div>
-            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-              <span className="text-blue-600 dark:text-blue-400 font-medium">{sizing.position_size_method}:</span>{' '}
-              {sizing.method_reason}
-            </p>
-            <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+            <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
               <div>💡 <span className="text-gray-600 dark:text-gray-400">Conservative: Risk 0.5% per trade</span></div>
               <div>💡 <span className="text-gray-600 dark:text-gray-400">Moderate: Risk 1.0% per trade (recommended)</span></div>
               <div>💡 <span className="text-gray-600 dark:text-gray-400">Aggressive: Risk 2.0% per trade (experienced traders only)</span></div>

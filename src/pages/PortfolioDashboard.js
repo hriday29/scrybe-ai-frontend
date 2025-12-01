@@ -840,14 +840,16 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                 const sectorData = nseContext[sector] || { nse_count: 100, nse_pct: 6, max_positions: 2 };
                 const percentage = ((count / portfolio_summary.selected_for_execution) * 100).toFixed(0);
                 const isHighAllocation = percentage >= 30;
+                const exceededCap = count > sectorData.max_positions;
                 const isOptimal = count <= sectorData.max_positions && count > 0;
-                
                 return (
                   <motion.div 
                     key={sector}
                     whileHover={{ y: -4 }}
                     className={`p-5 rounded-xl border-2 transition-all cursor-default ${
-                      isHighAllocation 
+                      exceededCap
+                        ? 'bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 border-red-300 dark:border-red-700'
+                        : isHighAllocation 
                         ? 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-300 dark:border-amber-700'
                         : isOptimal
                         ? 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-300 dark:border-emerald-700'
@@ -856,22 +858,19 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                   >
                     <div className="flex items-start justify-between mb-2">
                       <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">{sector}</p>
-                      {isOptimal && <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold">✓ Optimal</span>}
+                      {exceededCap && <span className="text-red-600 dark:text-red-400 text-xs font-bold">⚠️ Over Cap</span>}
+                      {isOptimal && !exceededCap && <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold">✓ Optimal</span>}
                     </div>
-                    <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{count}/{sectorData.max_positions}</p>
-                    <div className="flex items-center justify-between mb-2 text-xs text-gray-600 dark:text-gray-400">
-                      <span>{percentage}% of portfolio</span>
-                      <span>({sectorData.nse_pct}% of NSE)</span>
-                    </div>
+                    <p className={`text-3xl font-bold ${exceededCap ? 'text-red-700 dark:text-red-300' : 'text-gray-900 dark:text-gray-100'} mb-2`}>{count}/{sectorData.max_positions}</p>
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex-1 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                         <div 
-                          className={`h-full rounded-full ${isHighAllocation ? 'bg-amber-500' : isOptimal ? 'bg-emerald-500' : 'bg-primary-500'}`}
+                          className={`h-full rounded-full ${exceededCap ? 'bg-red-500' : isHighAllocation ? 'bg-amber-500' : isOptimal ? 'bg-emerald-500' : 'bg-primary-500'}`}
                           style={{ width: `${Math.min(percentage, 100)}%` }}
                         ></div>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight">NSE: ~{sectorData.nse_count} stocks, Cap: {sectorData.max_positions} pos</p>
+                    <p className={`text-xs leading-tight ${exceededCap ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-gray-500 dark:text-gray-500'}`}>NSE: ~{sectorData.nse_count} stocks, Cap: {sectorData.max_positions} pos{exceededCap ? ` (Actual: ${count})` : ''}</p>
                   </motion.div>
                 );
               })}
@@ -963,12 +962,12 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               )}
               {activeTab === 'not-selected' && (
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <span className="font-semibold">⭐ Not Selected (High Conviction):</span> These are strong buy/sell signals but weren't executed due to portfolio being full or other constraints. They're here for your review - you can decide to act on them manually.
+                  <span className="font-semibold">⭐ Not Selected (High Conviction):</span> These are strong buy/sell signals but weren't executed due to portfolio being full or other constraints. Note: The tab count shows total not-selected analyses; the table filters to show only high-conviction signals (score ≥45) for your review. You can decide to act on them manually.
                 </p>
               )}
               {activeTab === 'all' && (
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <span className="font-semibold">📊 All Analyses:</span> Complete list of all ~2,000 stocks analyzed today. Shows every decision made by the AI - which stocks have signals, which don't, and why. Full transparency into manager's work.
+                  <span className="font-semibold">📊 All Analyses (~{total_analyzed} total):</span> Complete list of all stocks analyzed today. Shows every decision made by the AI - which stocks have signals, which don't, and why. Full transparency into manager's work.
                 </p>
               )}
             </div>
@@ -1060,14 +1059,14 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                 <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center mb-1">
                   <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                 </div>
-                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{portfolio_summary.sector_limits_reached + (portfolio_summary.single_stock_limit || 0)}</span>
+                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{(portfolio_summary.sector_limits_reached || portfolio_summary.single_stock_limit || 0)}</span>
                 <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Risk Limited</span>
               </div>
               <div className="flex flex-col items-center gap-2 border-l border-gray-200 dark:border-neutral-700">
                 <div className="w-10 h-10 rounded-lg bg-gray-500/10 dark:bg-gray-500/20 flex items-center justify-center mb-1">
                   <Activity className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </div>
-                <span className="text-2xl font-bold text-gray-600 dark:text-gray-400">{portfolio_summary.no_signal_generated}</span>
+                <span className="text-2xl font-bold text-gray-600 dark:text-gray-400">{portfolio_summary.no_signal_generated || 0}</span>
                 <span className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">HOLD Signals</span>
               </div>
             </div>

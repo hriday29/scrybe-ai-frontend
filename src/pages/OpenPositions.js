@@ -436,8 +436,11 @@ const OpenPositions = ({ onAnalyze }) => {
                                         <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Capital Deployed</p>
                                         <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">₹{(portfolioMetrics.totalCapitalDeployed / 100000).toFixed(1)}L</p>
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{openTrades.length} active positions</p>
-                                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                                            <strong>What this means:</strong> Total money currently invested across all open trades. Shows your fund's active exposure and working capital.
+                                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                                            <strong>What this means:</strong> This is the total money the AI Fund Manager has invested across all {openTrades.length} open positions. Your capital is being deployed by buying actual shares at specific prices (shown in each position's Entry column). Each position shows how many rupees are at risk if stop-losses are hit.
+                                        </p>
+                                        <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-semibold">
+                                            💡 How it works: AI analyzes ~2,000 stocks daily → selects top {openTrades.length} by conviction → sizes each position based on liquidity & risk tolerance → deploys your capital to buy those shares → monitors all positions for profit target exits or stop-loss triggers.
                                         </p>
                                     </div>
                                 </div>
@@ -454,7 +457,7 @@ const OpenPositions = ({ onAnalyze }) => {
                                         <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{portfolioMetrics.expiringPositions || 0}</p>
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">In next 3 days</p>
                                         <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                                            <strong>What this means:</strong> These trades are close to expiry. Review them to decide whether to exit for profit/loss or roll to next month.
+                                            <strong>What this means:</strong> These trades are close to their expiry date. F&O contracts expire on the last Thursday of each month. Review these positions to decide: (1) Exit and book profit/loss, (2) Roll to next month's contract, or (3) Let it expire. The AI Fund Manager will alert you as expiry approaches.
                                         </p>
                                     </div>
                                 </div>
