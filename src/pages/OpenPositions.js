@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
     TrendingUp, TrendingDown, Target, Shield, AlertCircle, 
-    Activity, Clock, Eye, RefreshCw, BarChart2
+    Activity, Clock, Eye, RefreshCw, BarChart2, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getOpenTrades } from '../api/api';
@@ -87,6 +87,8 @@ const OpenPositions = ({ onAnalyze }) => {
     const [openTrades, setOpenTrades] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [capitalBreakdown, setCapitalBreakdown] = useState({});
+    const [showCapitalBreakdown, setShowCapitalBreakdown] = useState(false);
 
     useEffect(() => {
         if (!currentUser) {
@@ -100,6 +102,35 @@ const OpenPositions = ({ onAnalyze }) => {
             try {
                 const data = await getOpenTrades(authFetch, currentUser);
                 setOpenTrades(data);
+                
+                // FIX E: Fetch capital breakdown data
+                try {
+                    const response = await authFetch('/api/fund-manager-capital-breakdown', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const breakdown = await response.json();
+                        setCapitalBreakdown(breakdown);
+                    } else {
+                        console.warn('Failed to fetch capital breakdown:', response.status);
+                        // Fallback: set empty structure
+                        setCapitalBreakdown({
+                            positions: data,
+                            distribution: { by_sector: [], by_market_cap: [], by_age_bucket: [], by_conviction: [] }
+                        });
+                    }
+                } catch (err) {
+                    console.warn('Error fetching capital breakdown:', err);
+                    // Fallback to empty structure
+                    setCapitalBreakdown({
+                        positions: data,
+                        distribution: { by_sector: [], by_market_cap: [], by_age_bucket: [], by_conviction: [] }
+                    });
+                }
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -426,7 +457,7 @@ const OpenPositions = ({ onAnalyze }) => {
                                 </div>
                             </GlassCard>
 
-                            {/* Total Capital Deployed - With Explanation */}
+                            {/* Total Capital Deployed - FIX E: With Breakdown Toggle */}
                             <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex-1">
@@ -442,6 +473,173 @@ const OpenPositions = ({ onAnalyze }) => {
                                         <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-semibold">
                                             💡 How it works: AI analyzes ~2,000 stocks daily → selects top {openTrades.length} by conviction → sizes each position based on liquidity & risk tolerance → deploys your capital to buy those shares → monitors all positions for profit target exits or stop-loss triggers.
                                         </p>
+                                        
+                                        {/* FIX E: Capital Deployment Breakdown */}
+                                        <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
+                                            <button
+                                                onClick={() => setShowCapitalBreakdown(!showCapitalBreakdown)}
+                                                className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                                            >
+                                                <ChevronDown className={`w-4 h-4 transition-transform ${showCapitalBreakdown ? 'rotate-180' : ''}`} />
+                                                {showCapitalBreakdown ? 'Hide' : 'Show'} Capital Breakdown by Sector
+                                            </button>
+                                            
+                                            {showCapitalBreakdown && capitalBreakdown.positions && capitalBreakdown.positions.length > 0 && (
+                                                <div className="mt-3 space-y-3">
+                                                    {/* By Sector Distribution */}
+                                                    {capitalBreakdown.distribution?.by_sector?.length > 0 && (
+                                                        <div className="bg-white dark:bg-neutral-900 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
+                                                            <p className="text-xs font-bold text-gray-900 dark:text-gray-100 mb-2">📊 By Sector</p>
+                                                            <div className="space-y-1.5">
+                                                                {capitalBreakdown.distribution.by_sector.map((sec, idx) => (
+                                                                    <div key={idx} className="flex items-center justify-between text-xs">
+                                                                        <span className="text-gray-700 dark:text-gray-300">{sec.sector} ({sec.positions})</span>
+                                                                        <div className="flex items-center gap-2 flex-1 ml-2">
+                                                                            <div className="flex-1 h-1.5 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                                                                                <div 
+                                                                                    className="h-full bg-blue-500"
+                                                                                    style={{ width: `${Math.min(sec.pct, 100)}%` }}
+                                                                                ></div>
+                                                                            </div>
+                                                                            <span className="text-gray-600 dark:text-gray-400 font-semibold w-12 text-right">
+                                                                                ₹{(sec.capital / 100000).toFixed(1)}L ({sec.pct.toFixed(0)}%)
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {/* By Conviction Tier Distribution */}
+                                                    {capitalBreakdown.distribution?.by_conviction?.length > 0 && (
+                                                        <div className="bg-white dark:bg-neutral-900 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
+                                                            <p className="text-xs font-bold text-gray-900 dark:text-gray-100 mb-2">⚡ By Conviction Tier</p>
+                                                            <div className="space-y-1.5">
+                                                                {capitalBreakdown.distribution.by_conviction.map((conv, idx) => (
+                                                                    <div key={idx} className="flex items-center justify-between text-xs">
+                                                                        <span className="text-gray-700 dark:text-gray-300">
+                                                                            {conv.tier === 'EXCEPTIONAL' && '⭐ EXCEPTIONAL'}
+                                                                            {conv.tier === 'STRONG' && '💪 STRONG'}
+                                                                            {conv.tier === 'MODERATE' && '📊 MODERATE'}
+                                                                            {conv.tier === 'WEAK' && '⚠️ WEAK'}
+                                                                            {' '}({conv.positions})
+                                                                        </span>
+                                                                        <div className="flex items-center gap-2 flex-1 ml-2">
+                                                                            <div className="flex-1 h-1.5 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                                                                                <div 
+                                                                                    className={`h-full ${
+                                                                                        conv.tier === 'EXCEPTIONAL' ? 'bg-red-500' :
+                                                                                        conv.tier === 'STRONG' ? 'bg-orange-500' :
+                                                                                        conv.tier === 'MODERATE' ? 'bg-yellow-500' :
+                                                                                        'bg-gray-400'
+                                                                                    }`}
+                                                                                    style={{ width: `${Math.min(conv.pct, 100)}%` }}
+                                                                                ></div>
+                                                                            </div>
+                                                                            <span className="text-gray-600 dark:text-gray-400 font-semibold w-12 text-right">
+                                                                                ₹{(conv.capital / 100000).toFixed(1)}L ({conv.pct.toFixed(0)}%)
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {/* By Age Bucket Distribution */}
+                                                    {capitalBreakdown.distribution?.by_age_bucket?.length > 0 && (
+                                                        <div className="bg-white dark:bg-neutral-900 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
+                                                            <p className="text-xs font-bold text-gray-900 dark:text-gray-100 mb-2">📅 By Position Age</p>
+                                                            <div className="space-y-1.5">
+                                                                {capitalBreakdown.distribution.by_age_bucket.map((age, idx) => (
+                                                                    <div key={idx} className="flex items-center justify-between text-xs">
+                                                                        <span className="text-gray-700 dark:text-gray-300">{age.bucket} ({age.positions})</span>
+                                                                        <div className="flex items-center gap-2 flex-1 ml-2">
+                                                                            <div className="flex-1 h-1.5 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                                                                                <div 
+                                                                                    className="h-full bg-green-500"
+                                                                                    style={{ width: `${Math.min(age.pct, 100)}%` }}
+                                                                                ></div>
+                                                                            </div>
+                                                                            <span className="text-gray-600 dark:text-gray-400 font-semibold w-12 text-right">
+                                                                                ₹{(age.capital / 100000).toFixed(1)}L ({age.pct.toFixed(0)}%)
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {/* By Market Cap Distribution */}
+                                                    {capitalBreakdown.distribution?.by_market_cap?.length > 0 && (
+                                                        <div className="bg-white dark:bg-neutral-900 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
+                                                            <p className="text-xs font-bold text-gray-900 dark:text-gray-100 mb-2">💼 By Market Cap Tier</p>
+                                                            <div className="space-y-1.5">
+                                                                {capitalBreakdown.distribution.by_market_cap.map((cap, idx) => (
+                                                                    <div key={idx} className="flex items-center justify-between text-xs">
+                                                                        <span className="text-gray-700 dark:text-gray-300">{cap.tier} ({cap.positions})</span>
+                                                                        <div className="flex items-center gap-2 flex-1 ml-2">
+                                                                            <div className="flex-1 h-1.5 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                                                                                <div 
+                                                                                    className="h-full bg-indigo-500"
+                                                                                    style={{ width: `${Math.min(cap.pct, 100)}%` }}
+                                                                                ></div>
+                                                                            </div>
+                                                                            <span className="text-gray-600 dark:text-gray-400 font-semibold w-12 text-right">
+                                                                                ₹{(cap.capital / 100000).toFixed(1)}L ({cap.pct.toFixed(0)}%)
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {/* Position-Level Detail Table */}
+                                                    <details className="group cursor-pointer">
+                                                        <summary className="flex items-center justify-between text-xs font-bold text-gray-900 dark:text-gray-100 p-2 bg-white dark:bg-neutral-900 rounded-lg border border-blue-100 dark:border-blue-800 select-none">
+                                                            📋 Individual Position Capital Breakdown ({capitalBreakdown.positions.length})
+                                                            <ChevronDown className="w-3 h-3 group-open:rotate-180 transition-transform" />
+                                                        </summary>
+                                                        <div className="mt-2 space-y-1 bg-white dark:bg-neutral-900 rounded-lg border border-blue-100 dark:border-blue-800 p-2">
+                                                            <div className="grid grid-cols-12 gap-1 text-xs font-semibold text-gray-700 dark:text-gray-300 pb-2 border-b border-blue-100 dark:border-blue-800">
+                                                                <div className="col-span-2">Ticker</div>
+                                                                <div className="col-span-2">Capital</div>
+                                                                <div className="col-span-1.5">% Port</div>
+                                                                <div className="col-span-1.5">Risk</div>
+                                                                <div className="col-span-1.5">% Risk</div>
+                                                                <div className="col-span-1.5">P&L</div>
+                                                                <div className="col-span-2">Tier</div>
+                                                            </div>
+                                                            {capitalBreakdown.positions.map((pos, idx) => (
+                                                                <div key={idx} className="grid grid-cols-12 gap-1 text-xs py-1.5 border-b border-gray-100 dark:border-neutral-800 last:border-0">
+                                                                    <div className="col-span-2 font-semibold text-blue-600 dark:text-blue-400">{pos.ticker}</div>
+                                                                    <div className="col-span-2 text-gray-700 dark:text-gray-300">₹{(pos.capital_deployed / 100000).toFixed(1)}L</div>
+                                                                    <div className="col-span-1.5 text-gray-600 dark:text-gray-400">{pos.capital_pct_of_portfolio.toFixed(1)}%</div>
+                                                                    <div className="col-span-1.5 text-gray-700 dark:text-gray-300">₹{(pos.capital_at_risk_rupees / 100000).toFixed(1)}L</div>
+                                                                    <div className="col-span-1.5 text-gray-600 dark:text-gray-400">{pos.capital_at_risk_pct.toFixed(1)}%</div>
+                                                                    <div className={`col-span-1.5 font-semibold ${pos.p_and_l_rupees >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                                                        {pos.p_and_l_rupees >= 0 ? '+' : ''}{pos.p_and_l_pct.toFixed(1)}%
+                                                                    </div>
+                                                                    <div className="col-span-2">
+                                                                        <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+                                                                            pos.conviction_tier === 'EXCEPTIONAL' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' :
+                                                                            pos.conviction_tier === 'STRONG' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400' :
+                                                                            pos.conviction_tier === 'MODERATE' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400' :
+                                                                            'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'
+                                                                        }`}>
+                                                                            {pos.conviction_tier}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </details>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </GlassCard>
