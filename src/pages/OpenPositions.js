@@ -450,7 +450,33 @@ const OpenPositions = ({ onAnalyze }) => {
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                                             {parseFloat(portfolioMetrics.portfolioHeat) < 6 ? '✓ Safe - Low risk' : parseFloat(portfolioMetrics.portfolioHeat) < 10 ? '⚠️ Moderate - Balanced risk' : '🔴 High - Aggressive risk'}
                                         </p>
-                                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        
+                                        {/* FIX F: Connect risk percentage to actual rupee amounts */}
+                                        <div className="mt-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border border-red-200 dark:border-red-700 space-y-2">
+                                            <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                <strong>💰 Capital at Risk:</strong>
+                                            </p>
+                                            <div className="space-y-1.5">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-gray-600 dark:text-gray-400">Total Deployed:</span>
+                                                    <span className="font-bold text-gray-900 dark:text-gray-100">₹{(portfolioMetrics.totalCapitalDeployed / 100000).toFixed(2)}L</span>
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-gray-600 dark:text-gray-400">Risk Percentage:</span>
+                                                    <span className="font-bold text-red-600 dark:text-red-400">{portfolioMetrics.portfolioHeat}%</span>
+                                                </div>
+                                                <div className="h-px bg-red-200 dark:bg-red-700"></div>
+                                                <div className="flex items-center justify-between text-sm font-bold">
+                                                    <span className="text-gray-900 dark:text-gray-100">If All SLs Hit:</span>
+                                                    <span className="text-red-600 dark:text-red-400">
+                                                        ₹{((portfolioMetrics.totalCapitalDeployed * parseFloat(portfolioMetrics.portfolioHeat)) / 100 / 100000).toFixed(2)}L
+                                                        {' '}<span className="text-xs text-gray-600 dark:text-gray-400">({portfolioMetrics.portfolioHeat}%)</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed mt-3">
                                             <strong>What this means:</strong> This is the total percentage of your portfolio at risk if all stop-loss levels are hit. Lower is safer, higher means more aggressive positions.
                                         </p>
                                     </div>
