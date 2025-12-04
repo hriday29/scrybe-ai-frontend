@@ -342,12 +342,13 @@ const AITrackRecord = () => {
       filtered = filtered.filter(trade => trade.signal === signalFilter);
     }
 
-    // Reason filter
+    // [REPLACEMENT AUDIT] Reason filter including replacements
     if (reasonFilter !== 'all') {
       const reasonMap = {
         'target_hit': 'target hit',
         'stop_loss_hit': 'stop-loss hit',
-        'time_exit': 'time exit'
+        'time_exit': 'time exit',
+        'position_replaced': 'position replaced'
       };
       filtered = filtered.filter(trade =>
         trade.closing_reason && trade.closing_reason.toLowerCase().includes(reasonMap[reasonFilter] || reasonFilter)
@@ -426,6 +427,17 @@ const AITrackRecord = () => {
       icon: '⚪'
     };
     const lower = reason.toLowerCase();
+    
+    // [REPLACEMENT AUDIT] Handle replacement closures with conviction tier context
+    if (lower.includes('position replaced')) {
+      return {
+        text: 'Position Replaced',
+        color: 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300 border border-blue-300 dark:border-blue-700',
+        icon: '🔄',
+        tooltip: 'Position closed and replaced with a higher-conviction signal'
+      };
+    }
+    
     if (lower.includes('target hit')) return {
       text: 'Target Hit',
       color: 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-300 border border-green-300 dark:border-green-700',
@@ -671,6 +683,7 @@ const AITrackRecord = () => {
                 <option value="target_hit">Target Hit</option>
                 <option value="stop_loss_hit">Stop-Loss Hit</option>
                 <option value="time_exit">Time Exit</option>
+                <option value="position_replaced">Position Replaced</option>
               </select>
             </div>
             <div>
@@ -873,10 +886,30 @@ const AITrackRecord = () => {
                         </td>
                         <td className="p-4 text-gray-600 dark:text-gray-400 font-semibold text-sm">{trade.days_held}</td>
                         <td className="p-4">
-                          <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5`}>
-                            <span>{reasonDisplay.icon}</span>
-                            {reasonDisplay.text}
-                          </span>
+                          <div className="group relative">
+                            <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5 cursor-help`}>
+                              <span>{reasonDisplay.icon}</span>
+                              {reasonDisplay.text}
+                            </span>
+                            
+                            {/* [REPLACEMENT AUDIT] Tooltip with full closing reason details */}
+                            {trade.closing_reason && (
+                              <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-gray-900 dark:bg-gray-950 text-white dark:text-gray-100 text-xs rounded-lg p-3 whitespace-nowrap max-w-xs z-50 border border-gray-700 dark:border-gray-800">
+                                <p className="font-semibold mb-1">Exit Reason:</p>
+                                <p className="text-gray-200 dark:text-gray-300">{trade.closing_reason}</p>
+                                
+                                {/* Show conviction scores if this was a replacement */}
+                                {trade.closing_reason.includes('replaced by') && (
+                                  <>
+                                    <p className="text-gray-400 dark:text-gray-400 mt-2 text-xs">Entry Score: {trade.entry_score ? trade.entry_score.toFixed(1) : 'N/A'}</p>
+                                    {trade.replacement_ticker && (
+                                      <p className="text-blue-300 mt-1">Replaced by: {trade.replacement_ticker}</p>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className={`p-4 font-mono font-bold text-lg ${returnColor}`}>
                           {trade.net_return_pct >= 0 ? '+' : ''}{trade.net_return_pct.toFixed(2)}%
