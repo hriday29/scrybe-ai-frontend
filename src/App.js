@@ -823,6 +823,8 @@ const AITrackRecord = () => {
                   {[
                     { key: 'ticker', label: 'Ticker' },
                     { key: 'signal', label: 'Signal' },
+                    { key: 'entry_conviction_tier', label: 'Entry Conviction' },
+                    { key: 'entry_score', label: 'Entry Score' },
                     { key: 'open_date', label: 'Open Date' },
                     { key: 'close_date', label: 'Close Date' },
                     { key: 'days_held', label: 'Days Held' },
@@ -870,12 +872,38 @@ const AITrackRecord = () => {
                         <td className="p-4">
                           <div>
                             <div className="text-gray-900 dark:text-white font-bold">{trade.ticker}</div>
-                            <div className="text-gray-600 dark:text-gray-400 text-sm">{trade.companyName}</div>
+                            <div className="text-gray-600 dark:text-gray-400 text-xs">{trade.companyName || 'N/A'}</div>
+                            {trade.is_sector_override && (
+                              <div className="text-xs text-amber-600 dark:text-amber-400 font-semibold mt-1">🔄 Sector Override</div>
+                            )}
                           </div>
                         </td>
                         <td className="p-4">
                           <span className={`px-3 py-1 rounded-lg text-sm font-bold ${signalColor}`}>
                             {trade.signal}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <div className="group relative">
+                            <span className={`px-3 py-1 rounded-lg text-xs font-bold inline-block cursor-help ${
+                              trade.entry_conviction_tier === 'EXCEPTIONAL' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' :
+                              trade.entry_conviction_tier === 'STRONG' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                              trade.entry_conviction_tier === 'MODERATE' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
+                              'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            }`}>
+                              {trade.entry_conviction_tier || 'N/A'}
+                            </span>
+                            {trade.entry_conviction_tier && (
+                              <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-gray-900 dark:bg-gray-950 text-white dark:text-gray-100 text-xs rounded-lg p-2 whitespace-nowrap z-50 border border-gray-700">
+                                <p>Tier when trade opened</p>
+                                <p className="text-gray-300 text-xs mt-1">{trade.portfolio_rank ? `Rank #${trade.portfolio_rank}` : 'No rank data'}</p>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="p-4 text-center">
+                          <span className="text-sm font-mono font-bold text-gray-900 dark:text-white">
+                            {trade.entry_score ? trade.entry_score.toFixed(1) : 'N/A'}
                           </span>
                         </td>
                         <td className="p-4 text-gray-600 dark:text-gray-400 text-sm">
@@ -890,23 +918,40 @@ const AITrackRecord = () => {
                             <span className={`px-4 py-2 rounded-xl text-xs font-bold ${reasonDisplay.color} inline-flex items-center gap-1.5 cursor-help`}>
                               <span>{reasonDisplay.icon}</span>
                               {reasonDisplay.text}
+                              {trade.replacement_ticker && <span className="ml-1 text-xs">→ {trade.replacement_ticker}</span>}
                             </span>
                             
-                            {/* [REPLACEMENT AUDIT] Tooltip with full closing reason details */}
+                            {/* Tooltip with full closing reason and replacement details */}
                             {trade.closing_reason && (
-                              <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-gray-900 dark:bg-gray-950 text-white dark:text-gray-100 text-xs rounded-lg p-3 whitespace-nowrap max-w-xs z-50 border border-gray-700 dark:border-gray-800">
-                                <p className="font-semibold mb-1">Exit Reason:</p>
-                                <p className="text-gray-200 dark:text-gray-300">{trade.closing_reason}</p>
+                              <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-gray-900 dark:bg-gray-950 text-white dark:text-gray-100 text-xs rounded-lg p-3 z-50 border border-gray-700 dark:border-gray-800 max-w-sm">
+                                <p className="font-semibold mb-2">Exit Reason:</p>
+                                <p className="text-gray-200 dark:text-gray-300 mb-3">{trade.closing_reason}</p>
                                 
-                                {/* Show conviction scores if this was a replacement */}
-                                {trade.closing_reason.includes('replaced by') && (
-                                  <>
-                                    <p className="text-gray-400 dark:text-gray-400 mt-2 text-xs">Entry Score: {trade.entry_score ? trade.entry_score.toFixed(1) : 'N/A'}</p>
-                                    {trade.replacement_ticker && (
-                                      <p className="text-blue-300 mt-1">Replaced by: {trade.replacement_ticker}</p>
+                                {/* Replacement audit trail */}
+                                {trade.replacement_ticker && (
+                                  <div className="border-t border-gray-700 pt-2 mt-2">
+                                    <p className="font-semibold text-blue-300 mb-1">Replacement Details:</p>
+                                    <p className="text-gray-300">Replaced by: <span className="font-mono">{trade.replacement_ticker}</span></p>
+                                    {trade.replacement_old_score && (
+                                      <p className="text-gray-300 text-xs mt-1">Old Score: <span className="text-yellow-300">{trade.replacement_old_score.toFixed(1)}</span></p>
                                     )}
-                                  </>
+                                    {trade.replacement_new_score && (
+                                      <p className="text-gray-300 text-xs">New Score: <span className="text-green-300">{trade.replacement_new_score.toFixed(1)}</span></p>
+                                    )}
+                                    {trade.replacement_reason && (
+                                      <p className="text-gray-400 text-xs mt-1 italic">{trade.replacement_reason}</p>
+                                    )}
+                                  </div>
                                 )}
+                                
+                                {/* Entry context summary */}
+                                <div className="border-t border-gray-700 pt-2 mt-2">
+                                  <p className="font-semibold text-indigo-300 text-xs mb-1">Entry Context:</p>
+                                  <p className="text-gray-300 text-xs">Score: <span className="font-mono">{trade.entry_score?.toFixed(1) || 'N/A'}</span> | Tier: <span className="font-mono">{trade.entry_conviction_tier || 'N/A'}</span></p>
+                                  {trade.portfolio_rank && (
+                                    <p className="text-gray-300 text-xs">Rank: <span className="font-mono">#{trade.portfolio_rank}</span></p>
+                                  )}
+                                </div>
                               </div>
                             )}
                           </div>
@@ -919,7 +964,7 @@ const AITrackRecord = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center py-20">
+                    <td colSpan="9" className="text-center py-20">
                       <div className="text-6xl mb-4">🔍</div>
                       <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No trades match your filters</div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Try adjusting your search criteria</p>
@@ -1253,15 +1298,12 @@ export default function App() {
       case "results":
         return (
           <div>
-            <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-900 dark:text-gray-100 rounded-lg transition-colors">
-              <ChevronLeft size={16} />
-              Back to List
-            </button>
             <ApexAnalysisDashboard analysisData={analysisData} handleResetAnalysis={handleResetAnalysis} />
             <div className="w-full max-w-5xl mx-auto p-4 md:p-8 space-y-8">
-              {analysisData?.news_context && analysisData.news_context.articles && analysisData.news_context.articles.length > 0 && (
+              {/* NEWS SECTION DISABLED - Commented out to save compute time */}
+              {/* {analysisData?.news_context && analysisData.news_context.articles && analysisData.news_context.articles.length > 0 && (
                 <NewsSection newsData={analysisData?.news_context} />
-              )}
+              )} */}
               <ConversationalQa analysisContext={analysisData} />
               <ConfidencePoll analysisId={analysisData?._id} />
               <TradeJournalCard analysisData={analysisData} />

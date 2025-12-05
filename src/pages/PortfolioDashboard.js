@@ -571,8 +571,30 @@ const PortfolioDashboard = ({ onStockSelect }) => {
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/portfolio-summary`);
-        if (!response.ok) throw new Error('Failed to fetch portfolio data');
+        if (!currentUser) {
+          setError('User not authenticated');
+          setLoading(false);
+          return;
+        }
+
+        // Get Firebase token
+        const token = await currentUser.getIdToken();
+
+        const response = await fetch(`${API_BASE_URL}/api/portfolio-summary`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Unauthorized - Please log in again');
+          }
+          throw new Error(`Failed to fetch portfolio data: ${response.statusText}`);
+        }
+
         const data = await response.json();
         setPortfolioData(data);
       } catch (err) {
@@ -583,7 +605,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
     };
 
     fetchPortfolioData();
-  }, []);
+  }, [currentUser]);
 
   const filteredAnalyses = useMemo(() => {
     if (!portfolioData?.all_analyses) return [];

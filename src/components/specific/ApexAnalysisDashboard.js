@@ -1,6 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
-import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers } from 'lucide-react';
+import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
 // import MarketRegimeCard from './MarketRegimeCard';
@@ -134,6 +134,12 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
+            {/* Back to List Button */}
+            <button onClick={handleResetAnalysis} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-700 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900/40 dark:hover:to-indigo-900/40 text-blue-700 dark:text-blue-300 rounded-xl shadow-lg transition-all font-semibold">
+              <ArrowLeft size={18} />
+              Back to List
+            </button>
+
             {strategy_signal && (
                 <>
                     {/* Simplified Actionable Signal Banner */}
@@ -508,7 +514,7 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
             )}
 
             {/* ========== AI ANALYSIS SUMMARY ========== */}
-            <CollapsibleSection title="AI Analysis Summary (Key Insight & Verdict)" icon={Info} defaultOpen={true}>
+            <CollapsibleSection title="AI Analysis Summary (Key Insight & Verdict)" icon={Info} defaultOpen={false}>
                 <div className="space-y-6">
                     <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-4">
                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Why these matter</h4>
@@ -544,7 +550,7 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
             )}
 
             {/* ========== EVIDENCE DASHBOARD ========== */}
-            <CollapsibleSection title="Evidence Dashboard (Technical, Options, Futures, Fundamentals)" icon={BarChart3} defaultOpen={true}>
+            <CollapsibleSection title="Evidence Dashboard (Technical, Options, Futures, Fundamentals)" icon={BarChart3} defaultOpen={false}>
                 <div className="space-y-6">
                     <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-4">
                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Why these matter</h4>
