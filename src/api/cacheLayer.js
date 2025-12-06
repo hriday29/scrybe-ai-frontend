@@ -123,7 +123,10 @@ export const getPortfolioWithCache = async (userId, apiFunc) => {
  *   )
  */
 export const getAnalysisWithCache = async (ticker, userId, apiFunc) => {
-  const today = new Date().toISOString().split('T')[0];
+  // FIX: Use IST timezone to match backend (Asia/Kolkata)
+  // Backend uses IST for decision dates, frontend must match
+  const { getTodayIST } = await import('../utils/dateUtils');
+  const today = getTodayIST();
   
   return withOfflineCache(
     `analysis_${ticker}`,
@@ -197,7 +200,9 @@ export const getMarketStatusWithCache = async (apiFunc) => {
  *   )
  */
 export const getIndexAnalysisWithCache = async (indexTicker, userId, apiFunc) => {
-  const today = new Date().toISOString().split('T')[0];
+  // FIX: Use IST timezone to match backend
+  const { getTodayIST } = await import('../utils/dateUtils');
+  const today = getTodayIST();
   
   return withOfflineCache(
     `index_analysis_${indexTicker}`,

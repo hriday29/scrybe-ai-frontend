@@ -205,3 +205,73 @@ export const getDaysBetween = (startDate, endDate = null) => {
     return 0;
   }
 };
+
+/**
+ * Get current date in IST timezone as YYYY-MM-DD string
+ * This matches backend's timezone handling (Asia/Kolkata)
+ * 
+ * CRITICAL: Use this instead of new Date().toISOString().split('T')[0]
+ * to ensure frontend and backend dates are synchronized.
+ * 
+ * @returns {string} Date string in YYYY-MM-DD format (IST timezone)
+ */
+export const getTodayIST = () => {
+  try {
+    // Get current time in IST
+    const now = new Date();
+    const istOffset = 5.5 * 60; // IST is UTC+5:30
+    const localOffset = now.getTimezoneOffset(); // Local offset from UTC in minutes
+    const istTime = new Date(now.getTime() + (istOffset + localOffset) * 60 * 1000);
+    
+    // Format as YYYY-MM-DD
+    const year = istTime.getFullYear();
+    const month = String(istTime.getMonth() + 1).padStart(2, '0');
+    const day = String(istTime.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    console.error('Error getting IST date:', error);
+    // Fallback to UTC date
+    return new Date().toISOString().split('T')[0];
+  }
+};
+
+/**
+ * Convert a date to IST timezone and return YYYY-MM-DD string
+ * @param {Date|string|number} date - Date to convert
+ * @returns {string} Date string in YYYY-MM-DD format (IST timezone)
+ */
+export const toISTDateString = (date) => {
+  try {
+    let dateObj;
+    
+    if (typeof date === 'string') {
+      dateObj = new Date(date);
+    } else if (typeof date === 'number') {
+      dateObj = new Date(date);
+    } else if (date instanceof Date) {
+      dateObj = date;
+    } else {
+      return getTodayIST();
+    }
+
+    if (isNaN(dateObj.getTime())) {
+      return getTodayIST();
+    }
+
+    // Convert to IST
+    const istOffset = 5.5 * 60;
+    const localOffset = dateObj.getTimezoneOffset();
+    const istTime = new Date(dateObj.getTime() + (istOffset + localOffset) * 60 * 1000);
+    
+    // Format as YYYY-MM-DD
+    const year = istTime.getFullYear();
+    const month = String(istTime.getMonth() + 1).padStart(2, '0');
+    const day = String(istTime.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    console.error('Error converting to IST date string:', error);
+    return getTodayIST();
+  }
+};

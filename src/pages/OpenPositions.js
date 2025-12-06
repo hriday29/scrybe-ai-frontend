@@ -105,24 +105,13 @@ const OpenPositions = ({ onAnalyze }) => {
                 
                 // FIX E: Fetch capital breakdown data
                 try {
-                    const response = await authFetch('/api/fund-manager-capital-breakdown', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
+                    const { API_BASE_URL } = await import('../apiConfig');
+                    const breakdownData = await authFetch(
+                        `${API_BASE_URL}/api/fund-manager-capital-breakdown`,
+                        currentUser
+                    );
                     
-                    if (response.ok) {
-                        const breakdown = await response.json();
-                        setCapitalBreakdown(breakdown);
-                    } else {
-                        console.warn('Failed to fetch capital breakdown:', response.status);
-                        // Fallback: set empty structure
-                        setCapitalBreakdown({
-                            positions: data,
-                            distribution: { by_sector: [], by_market_cap: [], by_age_bucket: [], by_conviction: [] }
-                        });
-                    }
+                    setCapitalBreakdown(breakdownData);
                 } catch (err) {
                     console.warn('Error fetching capital breakdown:', err);
                     // Fallback to empty structure
