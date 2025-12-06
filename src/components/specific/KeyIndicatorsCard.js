@@ -173,20 +173,18 @@ const KeyIndicatorsCard = ({ analysisData }) => {
 
     // 7. Bollinger Band Position (Price Context)
     if (technicalData.bollinger_bands_interpretation && 
-        technicalData.bollinger_bands_interpretation.position) {
-        const position = technicalData.bollinger_bands_interpretation.position;
+        technicalData.bollinger_bands_interpretation.price_position) {
+        const position = technicalData.bollinger_bands_interpretation.price_position;
         let interpretation = '';
 
-        if (position.includes('above upper')) {
+        if (position.includes('Above Upper')) {
             interpretation = 'Price is above the upper band (extended move)';
-        } else if (position.includes('below lower')) {
+        } else if (position.includes('Below Lower')) {
             interpretation = 'Price is below the lower band (extended move)';
-        } else if (position.includes('near upper')) {
-            interpretation = 'Price is approaching the upper band';
-        } else if (position.includes('near lower')) {
-            interpretation = 'Price is approaching the lower band';
-        } else {
+        } else if (position.includes('Inside')) {
             interpretation = 'Price is within normal range (between bands)';
+        } else {
+            interpretation = position;
         }
 
         indicators.push({
@@ -224,28 +222,46 @@ const KeyIndicatorsCard = ({ analysisData }) => {
 
     // 9. Relative Strength vs NIFTY (Benchmark Comparison)
     if (technicalData.relative_strength_vs_benchmark && 
-        technicalData.relative_strength_vs_benchmark !== 'N/A') {
+        technicalData.relative_strength_vs_benchmark !== 'N/A' &&
+        technicalData.relative_strength_vs_benchmark !== 'Data Not Available') {
         const rs = technicalData.relative_strength_vs_benchmark;
         let interpretation = '';
+        let displayValue = rs;
         
-        if (typeof rs === 'object' && rs['5D_relative_performance']) {
-            const rsValue = parseFloat(rs['5D_relative_performance']);
-            if (rsValue > 2) {
-                interpretation = 'Significantly outperforming NIFTY index';
-            } else if (rsValue > 0) {
-                interpretation = 'Outperforming NIFTY index';
-            } else if (rsValue > -2) {
-                interpretation = 'Underperforming NIFTY index';
-            } else {
-                interpretation = 'Significantly underperforming NIFTY index';
-            }
+        // Backend returns string like "Outperforming (5.2% vs NIFTY's 3.1%)"
+        if (typeof rs === 'string') {
+            // Extract stock performance from the string
+            const match = rs.match(/([\-\+]?\d+\.\d+)%/);
+            if (match) {
+                const stockPerf = parseFloat(match[1]);
+                const niftyMatch = rs.match(/NIFTY's ([\-\+]?\d+\.\d+)%/);
+                
+                if (niftyMatch) {
+                    const niftyPerf = parseFloat(niftyMatch[1]);
+                    const relativePerf = stockPerf - niftyPerf;
+                    
+                    if (relativePerf > 2) {
+                        interpretation = 'Significantly outperforming NIFTY index';
+                    } else if (relativePerf > 0) {
+                        interpretation = 'Outperforming NIFTY index';
+                    } else if (relativePerf > -2) {
+                        interpretation = 'Underperforming NIFTY index';
+                    } else {
+                        interpretation = 'Significantly underperforming NIFTY index';
+                    }
+                    
+                    displayValue = `${relativePerf > 0 ? '+' : ''}${relativePerf.toFixed(2)}% vs NIFTY`;
+                } else {
+                    interpretation = rs.includes('Outperforming') ? 'Performing better than benchmark' : 'Performing worse than benchmark';
+                }
 
-            indicators.push({
-                name: 'Relative Strength (5D)',
-                value: `${rsValue > 0 ? '+' : ''}${rsValue.toFixed(2)}%`,
-                interpretation: interpretation,
-                category: 'Context'
-            });
+                indicators.push({
+                    name: 'Relative Strength (5D)',
+                    value: displayValue,
+                    interpretation: interpretation,
+                    category: 'Context'
+                });
+            }
         }
     }
 
