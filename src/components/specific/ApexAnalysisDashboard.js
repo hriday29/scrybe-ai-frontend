@@ -14,6 +14,8 @@ import FuturesBasisCard from './FuturesBasisCard';
 import TradeChecklistCard from './TradeChecklistCard';
 import PatternContextBlock from './PatternContextBlock';
 import KeyIndicatorsCard from './KeyIndicatorsCard';
+import SupportResistanceCard from './SupportResistanceCard';
+import FundamentalSnapshotCard from './FundamentalSnapshotCard';
 import CollapsibleSection from '../common/CollapsibleSection';
 import { useAuth } from '../../context/AuthContext';
 
@@ -183,6 +185,12 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
 
             {/* Key Indicators - Readings Only Section */}
             <KeyIndicatorsCard analysisData={analysisData} />
+
+            {/* Support & Resistance Zones - Observation Only Section */}
+            <SupportResistanceCard analysisData={analysisData} />
+
+            {/* Fundamental Snapshot - Key Financial Metrics Section */}
+            <FundamentalSnapshotCard analysisData={analysisData} />
 
             {/* ===== UNIFIED TRADE OPPORTUNITY OVERVIEW ===== */}
             <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 space-y-6">
