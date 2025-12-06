@@ -142,6 +142,17 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
               Back to List
             </button>
 
+            <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{ticker?.replace('.NS', '')}</h1>
+                <p className="text-lg text-slate-600 dark:text-slate-400">{companyName || 'N/A'}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">
+                    Prediction date and time: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+                </p>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Prediction For - The next trading day
+                </p>
+            </div>
+
             {strategy_signal && (
                 <>
                     {/* Pattern Context Block - Data-Driven Pattern Analysis */}
@@ -153,17 +164,6 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                     />
                 </>
             )}
-
-            <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{ticker?.replace('.NS', '')}</h1>
-                <p className="text-lg text-slate-600 dark:text-slate-400">{companyName || 'N/A'}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">
-                    Prediction date and time: {new Date(last_updated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
-                </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Prediction For - The next trading day
-                </p>
-            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className={`text-center p-6 rounded-lg border ${getSignalStyle(signal)}`}>
