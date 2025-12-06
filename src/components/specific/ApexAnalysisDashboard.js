@@ -12,6 +12,7 @@ import PriceActionCard from './PriceActionCard';
 import VolatilityCard from './VolatilityCard';
 import FuturesBasisCard from './FuturesBasisCard';
 import TradeChecklistCard from './TradeChecklistCard';
+import PatternContextBlock from './PatternContextBlock';
 import CollapsibleSection from '../common/CollapsibleSection';
 import { useAuth } from '../../context/AuthContext';
 
@@ -184,34 +185,13 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                         </div>
                     </div>
                     
-                    {/* Educational Note for Mean-Reversion Trades (Bearish Pattern → BUY Signal) */}
-                    {strategy_signal.type && strategy_signal.type.includes('Short Pattern') && signal === 'BUY' && (
-                        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-5">
-                            <div className="flex items-start gap-3">
-                                <div className="text-amber-600 dark:text-amber-400 text-2xl">💡</div>
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-amber-800 dark:text-amber-300 mb-2">Wait, a bearish pattern but BUY signal? Here's why:</h3>
-                                    <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed mb-3">
-                                        This is called a <strong>"mean-reversion trade"</strong> or <strong>"buy-the-dip"</strong> strategy. The stock showed a bearish pattern (like Three Black Crows), 
-                                        which means it dropped sharply. But our AI analyzed the bigger picture and found:
-                                    </p>
-                                    <ul className="space-y-2 text-amber-800 dark:text-amber-300 text-sm list-disc list-inside">
-                                        <li><strong>Oversold conditions:</strong> The stock fell too far too fast (RSI below 30)</li>
-                                        <li><strong>Strong fundamentals:</strong> The company's business is still healthy</li>
-                                        <li><strong>Market context:</strong> Overall market trend is positive, supporting a bounce</li>
-                                    </ul>
-                                    <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed mt-3">
-                                        <strong>The Strategy:</strong> When panic selling exhausts itself and a good company is unfairly beaten down, 
-                                        smart traders step in to buy at discount prices before it recovers. This is a <em>contrarian</em> approach - 
-                                        buying when others are fearful, but only when data supports a rebound.
-                                    </p>
-                                    <p className="text-amber-700 dark:text-amber-400 text-xs mt-3 italic">
-                                        📊 The Scrybe Score of +{Math.abs(scrybeScore)} reflects confidence in this bounce, NOT the bearish pattern itself.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    {/* Pattern Context Block - Data-Driven Pattern Analysis */}
+                    <PatternContextBlock
+                        analysisData={analysisData}
+                        signal={signal}
+                        scrybeScore={scrybeScore}
+                        marketContext={marketContext}
+                    />
                 </>
             )}
 
