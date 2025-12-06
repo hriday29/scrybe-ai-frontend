@@ -110,7 +110,8 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
         technical_analysis,
         options_sentiment_analysis,
         fundamental_proxy_analysis,
-        volatility_futures_data
+        volatility_futures_data,
+        market_context = null
     } = analysisData;
     
     const safe_options = options_sentiment_analysis || {};
@@ -190,7 +191,7 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                         analysisData={analysisData}
                         signal={signal}
                         scrybeScore={scrybeScore}
-                        marketContext={marketContext}
+                        marketContext={market_context}
                     />
                 </>
             )}
