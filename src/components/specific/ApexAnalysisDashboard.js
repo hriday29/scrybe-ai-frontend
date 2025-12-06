@@ -16,6 +16,7 @@ import PatternContextBlock from './PatternContextBlock';
 import KeyIndicatorsCard from './KeyIndicatorsCard';
 import SupportResistanceCard from './SupportResistanceCard';
 import FundamentalSnapshotCard from './FundamentalSnapshotCard';
+import AIObservationSummary from './AIObservationSummary';
 import CollapsibleSection from '../common/CollapsibleSection';
 import { useAuth } from '../../context/AuthContext';
 
@@ -165,6 +166,9 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                         scrybeScore={scrybeScore}
                         marketContext={market_context}
                     />
+
+                    {/* AI Market Observation Summary - Dynamic Analytical Overview */}
+                    <AIObservationSummary analysisData={analysisData} />
                 </>
             )}
 
