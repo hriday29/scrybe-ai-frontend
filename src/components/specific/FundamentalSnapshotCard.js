@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { TrendingUp, DollarSign, Users, BarChart3, Shield, Award } from 'lucide-react';
+import { TrendingUp, Users, BarChart3, Shield, Award, Building2 } from 'lucide-react';
 
 const FundamentalSnapshotCard = ({ analysisData }) => {
     if (!analysisData) return null;
@@ -113,7 +113,7 @@ const FundamentalSnapshotCard = ({ analysisData }) => {
                 <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-200 dark:border-indigo-700 rounded-lg p-6 mb-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <DollarSign size={32} className="text-indigo-600 dark:text-indigo-400" />
+                            <Building2 size={32} className="text-indigo-600 dark:text-indigo-400" />
                             <div>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Market Capitalization</p>
                                 <p className="text-4xl font-bold text-gray-900 dark:text-gray-100">
