@@ -1,6 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
-import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Megaphone, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers, ArrowLeft } from 'lucide-react';
+import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
 // import MarketRegimeCard from './MarketRegimeCard';
@@ -144,48 +144,6 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
 
             {strategy_signal && (
                 <>
-                    {/* Simplified Actionable Signal Banner */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-6 shadow-lg">
-                        <div className="flex items-start gap-4">
-                            <div className="flex-shrink-0 mt-1">
-                                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-xl flex items-center justify-center">
-                                    <Megaphone size={24} className="text-blue-600 dark:text-blue-400" />
-                                </div>
-                            </div>
-
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-3 mb-3">
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Strategy Signal Detected</h2>
-                                    <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                        strategy_signal.signal === 'BUY'
-                                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300'
-                                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300'
-                                    }`}>
-                                        {strategy_signal.signal === 'BUY' ? '✅ BUY' : '⏸️ HOLD'}
-                                    </div>
-                                </div>
-
-                                <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-3">
-                                    This stock qualified for our <span className="font-semibold text-blue-700 dark:text-blue-300">{strategy_signal.type}</span> trading strategy.
-                                </p>
-
-                                {strategy_signal.signal === 'HOLD' && strategy_signal.veto_reason && (
-                                    <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
-                                        <div className="flex items-start gap-3">
-                                            <div className="text-amber-600 dark:text-amber-400 mt-0.5">⚠️</div>
-                                            <div>
-                                                <p className="font-semibold text-amber-800 dark:text-amber-300 mb-1">Signal Override</p>
-                                                <p className="text-amber-700 dark:text-amber-300 text-sm">
-                                                    Despite passing the strategy filter, our AI Portfolio Manager chose not to execute this trade because: <span className="font-medium">{strategy_signal.veto_reason}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    
                     {/* Pattern Context Block - Data-Driven Pattern Analysis */}
                     <PatternContextBlock
                         analysisData={analysisData}
