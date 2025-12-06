@@ -24,6 +24,13 @@ const KeyIndicatorsCard = ({ analysisData }) => {
     const technicalData = analysisData.technical_analysis || {};
     const volatilityData = analysisData.volatility_futures_data || {};
 
+    // Debug logging to see what data is available
+    console.log('KeyIndicatorsCard Debug:');
+    console.log('- Bollinger_Band_Width_Percent:', technicalData.Bollinger_Band_Width_Percent);
+    console.log('- bollinger_bands_interpretation:', technicalData.bollinger_bands_interpretation);
+    console.log('- relative_strength_vs_benchmark:', technicalData.relative_strength_vs_benchmark);
+    console.log('- futures_spot_basis_percent:', volatilityData.futures_spot_basis_percent);
+
     // Build indicators array dynamically from available data
     const indicators = [];
 
@@ -277,7 +284,7 @@ const KeyIndicatorsCard = ({ analysisData }) => {
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-neutral-700">
                 <Activity size={24} className="text-blue-600 dark:text-blue-400" />
                 <div>
-                    <h2 className="font-bold text-2xl text-gray-900 dark:text-gray-100">Key Indicators — Readings Only</h2>
+                    <h2 className="font-bold text-2xl text-gray-900 dark:text-gray-100">Key Indicators</h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Current technical readings and neutral market observations</p>
                 </div>
             </div>
