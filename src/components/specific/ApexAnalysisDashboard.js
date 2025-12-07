@@ -1,6 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
-import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers } from 'lucide-react';
+import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
 // import MarketRegimeCard from './MarketRegimeCard';
@@ -99,7 +99,7 @@ const TradePlanCard = ({ plan }) => (
 // =========================================================================
 
 
-const ApexAnalysisDashboard = ({ analysisData }) => {
+const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
     const { currentUser } = useAuth();
     if (!analysisData) { return <div className="text-center p-8 text-slate-600 dark:text-slate-400">No analysis data available.</div>; }
 
@@ -141,6 +141,19 @@ const ApexAnalysisDashboard = ({ analysisData }) => {
     return (
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
             <div>
+                {/* Back Button - Inline with header */}
+                {handleResetAnalysis && (
+                    <button
+                        onClick={handleResetAnalysis}
+                        className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors mb-4 text-sm font-medium group"
+                        aria-label="Back to list"
+                    >
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                        <span>Back to List</span>
+                    </button>
+                )}
+                
+                {/* Stock Header */}
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{ticker?.replace('.NS', '')}</h1>
                 <p className="text-lg text-slate-600 dark:text-slate-400">{companyName || 'N/A'}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">

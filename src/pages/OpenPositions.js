@@ -143,13 +143,7 @@ const OpenPositions = ({ onAnalyze }) => {
             : 0,
         totalCapitalDeployed: openTrades.length > 0
             ? openTrades.reduce((sum, t) => sum + (t.capital_deployed || (t.entry_price * 100)), 0)
-            : 0,
-        expiringPositions: openTrades.filter(t => {
-            if (!t.expiry_date) return false;
-            const expiryDate = new Date(t.expiry_date);
-            const daysToExpiry = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
-            return daysToExpiry <= 3 && daysToExpiry > 0;
-        }).length
+            : 0
     };
 
     const renderTradeCockpit = () => {
@@ -198,9 +192,17 @@ const OpenPositions = ({ onAnalyze }) => {
                         <Activity className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">No Active Positions</h3>
-                    <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-                        The AI is not currently tracking any active trades. Check the Portfolio Manager
-                        to see all analyzed stocks and understand why no positions meet the execution criteria today.
+                    <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-4">
+                        The Portfolio Manager has not selected any positions for execution today. This could be due to:
+                    </p>
+                    <ul className="text-gray-600 dark:text-gray-400 text-sm text-left max-w-md mx-auto space-y-2 mb-6">
+                        <li>• No signals meeting the minimum conviction threshold (≥45)</li>
+                        <li>• Sector concentration limits reached</li>
+                        <li>• Portfolio already at max 10 positions</li>
+                        <li>• Market conditions not favorable for new entries</li>
+                    </ul>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        Check the <span className="font-semibold text-primary-600 dark:text-primary-400">Portfolio Manager</span> page to review all analyzed stocks and selection criteria.
                     </p>
                 </GlassCard>
             );
@@ -233,15 +235,15 @@ const OpenPositions = ({ onAnalyze }) => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                 <div>
                                     <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">📍 Entry → Current → Target</p>
-                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Shows where we entered, where price is now, and where profit target is</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Entry price, current market price, and profit target price</p>
                                 </div>
                                 <div>
                                     <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">⏱️ Days Held</p>
-                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">How long this position has been open. Days left shows when it expires</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">How long this position has been open (typical hold: 7-15 days)</p>
                                 </div>
                                 <div>
                                     <p className="text-indigo-800 dark:text-indigo-200 font-semibold mb-1">🎯 R/R Ratio</p>
-                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Risk-to-Reward: How much we make vs what we could lose (1:3 = ₹1 risk for ₹3 profit)</p>
+                                    <p className="text-indigo-700 dark:text-indigo-300 text-xs">Risk-to-Reward: Potential profit vs potential loss (1:2.5 = ₹1 risk for ₹2.5 profit)</p>
                                 </div>
                             </div>
                         </div>
@@ -270,8 +272,6 @@ const OpenPositions = ({ onAnalyze }) => {
                             {openTrades.map((trade, index) => {
                                 const isProfit = trade.pnl_percent >= 0;
                                 const entryDate = new Date(trade.entry_date);
-                                const expiryDate = trade.expiry_date ? new Date(trade.expiry_date) : null;
-                                const daysToExpiry = expiryDate ? Math.max(0, Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24))) : null;
                                 
                                 return (
                                     <motion.tr 
@@ -299,9 +299,8 @@ const OpenPositions = ({ onAnalyze }) => {
                                             <SignalBadge signal={trade.signal} />
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800">
-                                                <BarChart2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                                                <span className="text-purple-700 dark:text-purple-300 font-semibold text-sm">{trade.strategy || 'VST'}</span>
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800">
+                                                <span className="text-indigo-700 dark:text-indigo-300 font-semibold text-xs">{trade.strategy || 'APEX_SWING'}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
@@ -315,16 +314,9 @@ const OpenPositions = ({ onAnalyze }) => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            <div className="flex flex-col items-center gap-1">
-                                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
-                                                    <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                                                    <span className="text-blue-700 dark:text-blue-300 font-semibold text-sm">{trade.days_held}d</span>
-                                                </div>
-                                                {daysToExpiry !== null && (
-                                                    <span className={`text-xs font-medium ${daysToExpiry <= 2 ? 'text-red-600 dark:text-red-400' : daysToExpiry <= 5 ? 'text-amber-600 dark:text-amber-400' : 'text-gray-600 dark:text-gray-400'}`}>
-                                                        {daysToExpiry}d left
-                                                    </span>
-                                                )}
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+                                                <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                                                <span className="text-blue-700 dark:text-blue-300 font-semibold text-sm">{trade.days_held}d</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 w-48">
@@ -395,38 +387,38 @@ const OpenPositions = ({ onAnalyze }) => {
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 py-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Header Section */}
-                    <div className="mb-10">
+                    <div className="mb-8">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-2 h-8 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
+                            <div className="w-1.5 h-10 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
                             <div>
-                                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                                    Scrybe Fund Dashboard
+                                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                                    Fund Dashboard
                                 </h1>
-                                <p className="text-gray-600 dark:text-gray-400 text-base mt-1">
-                                    Real-time monitoring of active positions & trade execution
+                                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                                    Real-time monitoring of active positions & execution
                                 </p>
                             </div>
                         </div>
 
                         {/* Fund Manager Overview - What's Happening */}
-                        <div className="mb-8 p-5 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-xl border border-green-200 dark:border-green-800">
+                        <div className="mb-6 p-5 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-xl border border-green-200 dark:border-green-800">
                             <div className="flex items-start gap-3">
                                 <div className="w-10 h-10 rounded-lg bg-green-500/20 dark:bg-green-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span className="text-base">📈</span>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-green-900 dark:text-green-100 font-semibold mb-1">Fund Manager's Live Execution</p>
+                                    <p className="text-green-900 dark:text-green-100 font-semibold mb-1">Live Trade Execution</p>
                                     <p className="text-green-800 dark:text-green-200 text-sm leading-relaxed">
-                                        This is your live fund dashboard where the AI Fund Manager executes trades approved by the Portfolio Manager. Each position shows current P&L, how close we are to profit targets, and when positions expire. The manager monitors all metrics below to ensure optimal execution and risk management.
+                                        This dashboard shows your active positions selected by the Portfolio Manager. Each position displays current P&L, entry/target/stop-loss prices, and position age. The AI monitors all metrics to ensure optimal risk management.
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Portfolio Risk Dashboard - NSE ENHANCED */}
+                    {/* Portfolio Risk Dashboard */}
                     {openTrades.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
                             {/* Total Capital at Risk - With Explanation */}
                             <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-red-50 to-rose-100/50 dark:from-red-950/30 dark:to-rose-900/20 border-red-200 dark:border-red-800">
                                 <div className="flex items-start justify-between mb-4">
@@ -483,10 +475,10 @@ const OpenPositions = ({ onAnalyze }) => {
                                         <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">₹{(portfolioMetrics.totalCapitalDeployed / 100000).toFixed(1)}L</p>
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{openTrades.length} active positions</p>
                                         <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                                            <strong>What this means:</strong> This is the total money the AI Fund Manager has invested across all {openTrades.length} open positions. Your capital is being deployed by buying actual shares at specific prices (shown in each position's Entry column). Each position shows how many rupees are at risk if stop-losses are hit.
+                                            <strong>What this means:</strong> Total capital invested across {openTrades.length} positions. Each position shows the entry price and number of shares. Your capital is deployed in actual stock purchases (not F&O contracts).
                                         </p>
                                         <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-semibold">
-                                            💡 How it works: AI analyzes ~2,000 stocks daily → selects top {openTrades.length} by conviction → sizes each position based on liquidity & risk tolerance → deploys your capital to buy those shares → monitors all positions for profit target exits or stop-loss triggers.
+                                            💡 How it works: AI analyzes ~1,900 NSE stocks daily → Portfolio Manager selects top opportunities by conviction → positions sized by market-cap, quality & liquidity → capital deployed to buy shares → monitors for target/stop-loss exits.
                                         </p>
                                         
                                         {/* FIX E: Capital Deployment Breakdown */}
@@ -659,18 +651,18 @@ const OpenPositions = ({ onAnalyze }) => {
                                 </div>
                             </GlassCard>
 
-                            {/* Expiry Timeline Alert - With Explanation */}
+                            {/* Positions Held Too Long Alert */}
                             <GlassCard variant="elevated" className="p-6 bg-gradient-to-br from-amber-50 to-orange-100/50 dark:from-amber-950/30 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex-1">
                                         <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center mb-3">
                                             <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                                         </div>
-                                        <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Positions Expiring Soon</p>
-                                        <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{portfolioMetrics.expiringPositions || 0}</p>
-                                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">In next 3 days</p>
+                                        <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">Positions Near Max Hold</p>
+                                        <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{openTrades.filter(t => t.days_held >= 12).length || 0}</p>
+                                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Held 12+ days (target: 7-15 days)</p>
                                         <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                                            <strong>What this means:</strong> These trades are close to their expiry date. F&O contracts expire on the last Thursday of each month. Review these positions to decide: (1) Exit and book profit/loss, (2) Roll to next month's contract, or (3) Let it expire. The AI Fund Manager will alert you as expiry approaches.
+                                            <strong>What this means:</strong> Positions held longer than typical 7-day target. Review these for: (1) Take profit if near target, (2) Cut loss if signal weakens, or (3) Continue holding if momentum remains strong. AI monitors and alerts when action needed.
                                         </p>
                                     </div>
                                 </div>
@@ -712,7 +704,7 @@ const OpenPositions = ({ onAnalyze }) => {
 
                     {/* Portfolio Metrics */}
                     {openTrades.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                             <StatCard
                                 icon={BarChart2}
                                 label="Active Positions"

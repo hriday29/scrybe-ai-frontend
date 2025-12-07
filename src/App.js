@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ErrorDisplay, SkeletonLoader } from './pages/StockAnalysis.js';
 import { Tab } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BarChart3, Filter, Download, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, BarChart3, Filter, Download, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Activity, AlertTriangle } from 'lucide-react';
 import { signInWithGoogle, signInWithTwitter, signOut } from './firebase';
 import { getAnalysis, getTrackRecord } from './api/api.js';
 
@@ -537,36 +537,74 @@ const AITrackRecord = () => {
   };
 
   if (error) return (
-    <div className="text-center p-12 max-w-2xl mx-auto">
-      <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8">
-        <div className="text-red-600 dark:text-red-400 text-xl font-semibold mb-2">Error loading track record</div>
-        <p className="text-red-500 dark:text-red-400">{error}</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 flex items-center justify-center py-8 px-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-8 text-center shadow-lg max-w-2xl">
+        <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
+          <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Unable to Load Track Record</h3>
+        <p className="text-red-600 dark:text-red-400 font-medium mb-4">{error}</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
+          This could be due to a temporary connection issue. Please try again.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl"
+        >
+          <Activity className="w-4 h-4" />
+          Retry
+        </button>
       </div>
     </div>
   );
 
   if (!trackRecordData) return (
-    <div className="text-center p-12">
-      <div className="relative inline-block mb-4">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-neutral-800"></div>
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 dark:border-t-blue-400 border-r-transparent border-b-transparent border-l-transparent absolute top-0 left-0"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 flex items-center justify-center py-8 px-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-12 text-center shadow-lg max-w-md">
+        <div className="relative inline-block mb-6">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-neutral-800"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 dark:border-t-blue-400 border-r-transparent border-b-transparent border-l-transparent absolute top-0 left-0"></div>
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Loading Track Record...</h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">Fetching all historical trades and calculating performance metrics</p>
       </div>
-      <div className="text-gray-600 dark:text-gray-400 font-medium">Loading AI Track Record...</div>
     </div>
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <SectionTitle
-          title="AI Performance Analytics"
-          subtitle="Comprehensive analysis of Scrybe AI's trading performance with advanced filtering and insights."
-        />
-      </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1.5 h-12 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></div>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                AI Track Record
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                Complete transparency of historical performance
+              </p>
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/20 dark:bg-blue-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-base">📊</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-blue-900 dark:text-blue-100 font-semibold mb-1">Verified Historical Performance</p>
+                <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
+                  Every trade executed by Scrybe AI is logged with exact entry/exit prices, timestamps, and closing reasons. Filter by date range, signal type, exit reason, and more to analyze performance patterns.
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
       {/* Performance Summary Cards */}
       {performanceMetrics && (
@@ -574,34 +612,39 @@ const AITrackRecord = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
         >
-          <GlassCard className="p-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">{performanceMetrics.totalTrades}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Trades</div>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{performanceMetrics.winRate.toFixed(1)}%</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Win Rate</div>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <div className={`text-2xl font-bold ${performanceMetrics.avgReturn >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              {performanceMetrics.avgReturn >= 0 ? '+' : ''}{performanceMetrics.avgReturn.toFixed(2)}%
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Avg Return</div>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{performanceMetrics.avgDaysHeld.toFixed(0)}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Avg Days Held</div>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{performanceMetrics.bestTrade.net_return_pct.toFixed(2)}%</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Best Trade</div>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <div className="text-2xl font-bold text-red-600 dark:text-red-400">{performanceMetrics.worstTrade.net_return_pct.toFixed(2)}%</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Worst Trade</div>
-          </GlassCard>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+            <span className="text-xl">🎯</span>
+            Performance Overview
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <GlassCard className="p-5 text-center hover:shadow-lg transition-shadow">
+              <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1">{performanceMetrics.totalTrades}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Total Trades</div>
+            </GlassCard>
+            <GlassCard className="p-5 text-center hover:shadow-lg transition-shadow bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
+              <div className="text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400 mb-1">{performanceMetrics.winRate.toFixed(1)}%</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Win Rate</div>
+            </GlassCard>
+            <GlassCard className={`p-5 text-center hover:shadow-lg transition-shadow ${performanceMetrics.avgReturn >= 0 ? 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800' : 'bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 border-red-200 dark:border-red-800'}`}>
+              <div className={`text-2xl md:text-3xl font-bold mb-1 ${performanceMetrics.avgReturn >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                {performanceMetrics.avgReturn >= 0 ? '+' : ''}{performanceMetrics.avgReturn.toFixed(2)}%
+              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Avg Return</div>
+            </GlassCard>
+            <GlassCard className="p-5 text-center hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+              <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{performanceMetrics.avgDaysHeld.toFixed(0)}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Avg Days Held</div>
+            </GlassCard>
+            <GlassCard className="p-5 text-center hover:shadow-lg transition-shadow bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
+              <div className="text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400 mb-1">+{performanceMetrics.bestTrade.net_return_pct.toFixed(2)}%</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Best Trade</div>
+            </GlassCard>
+            <GlassCard className="p-5 text-center hover:shadow-lg transition-shadow bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 border-red-200 dark:border-red-800">
+              <div className="text-2xl md:text-3xl font-bold text-red-600 dark:text-red-400 mb-1">{performanceMetrics.worstTrade.net_return_pct.toFixed(2)}%</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold">Worst Trade</div>
+            </GlassCard>
+          </div>
         </motion.div>
       )}
 
@@ -657,9 +700,13 @@ const AITrackRecord = () => {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-neutral-900 rounded-xl p-5 border border-gray-200 dark:border-neutral-800 shadow-lg"
         >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wide">Advanced Filters</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal</label>
               <select
@@ -1021,7 +1068,7 @@ const AITrackRecord = () => {
       {/* Export Modal */}
       {showExportModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 max-w-md w-full shadow-2xl border border-gray-200 dark:border-neutral-800">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Export Track Record</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Export {filteredData?.length || 0} trades to CSV file. This includes all filtered results.
@@ -1032,13 +1079,13 @@ const AITrackRecord = () => {
                   exportToCSV();
                   setShowExportModal(false);
                 }}
-                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded-lg transition-colors"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg transition-colors font-semibold shadow-lg"
               >
                 Export CSV
               </button>
               <button
                 onClick={() => setShowExportModal(false)}
-                className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg transition-colors"
+                className="flex-1 bg-gray-200 dark:bg-neutral-700 hover:bg-gray-300 dark:hover:bg-neutral-600 text-gray-800 dark:text-gray-200 py-2.5 px-4 rounded-lg transition-colors font-semibold"
               >
                 Cancel
               </button>
@@ -1046,6 +1093,7 @@ const AITrackRecord = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

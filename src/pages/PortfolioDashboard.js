@@ -259,7 +259,7 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-green-700 dark:text-green-300 text-xs font-semibold uppercase mb-1">Manager's Decision</p>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{trade.selection_reason}</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-normal break-words">{trade.selection_reason}</p>
             </div>
           </div>
         </div>
@@ -433,7 +433,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                   Scrybe AI doesn't just analyze stocks—it manages a portfolio like an institutional fund manager. 
-                  Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">all NSE stocks</span>, 
+                  Every day, our AI analyzes <span className="text-gray-900 dark:text-gray-100 font-semibold">~1,900 NSE stocks</span>, 
                   but only executes the <span className="text-green-600 dark:text-green-400 font-semibold">top 10 highest-conviction opportunities</span> that 
                   pass strict risk controls.
                 </p>
@@ -448,8 +448,8 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                 <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5 border border-gray-200 dark:border-neutral-700">
                   <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">📊 Step 1: Daily Analysis</h4>
                   <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">NSE stocks screened</span> daily using quantitative filters</li>
-                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">~{totalAnalyzed} candidates</span> pass initial momentum/trend screens</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">~1,900 NSE stocks screened</span> daily using quantitative filters</li>
+                    <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">All candidates</span> analyzed by AI Committee of Experts</li>
                     <li>• Each candidate analyzed by AI "Committee of Experts":</li>
                     <li className="ml-4">→ Technical Analyst (charts, indicators, momentum)</li>
                     <li className="ml-4">→ Fundamental Analyst (valuation, growth, quality)</li>
@@ -465,7 +465,7 @@ const InstitutionalEducationDrawer = ({ isOpen, onClose, totalAnalyzed }) => {
                     <li>• <span className="text-gray-900 dark:text-gray-100 font-semibold">Global ranking</span> by conviction across all analyzed stocks</li>
                     <li>• Portfolio Manager applies <span className="text-gray-900 dark:text-gray-100 font-semibold">3 risk gates:</span></li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 10 concurrent positions</span></li>
-                    <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 40% per sector</span> (4 stocks max)</li>
+                    <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">NSE-proportional sector caps</span> (e.g., 5 in Financials, 3 in Materials, 1 in Telecom)</li>
                     <li className="ml-4">→ <span className="text-yellow-600 dark:text-yellow-400">Max 2% risk per position</span></li>
                     <li>• Top 10 that pass all gates = <span className="text-green-600 dark:text-green-400 font-semibold">EXECUTED</span></li>
                     <li>• Others = <span className="text-gray-600 dark:text-gray-400">Available for review</span></li>
@@ -677,19 +677,27 @@ const PortfolioDashboard = ({ onStockSelect }) => {
       )} */}
       <div className="max-w-7xl mx-auto">
         {/* Header Section - Institutional Grade */}
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-2 h-8 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                  Scrybe Portfolio Manager
-                </h1>
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-1.5 h-10 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                    Portfolio Manager
+                  </h1>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                    Institutional-grade AI portfolio management
+                  </p>
+                </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-base ml-5">
-                AI-powered institutional-grade portfolio construction and risk management
-              </p>
             </div>
+            {display_timestamp && (
+              <div className="bg-gray-100 dark:bg-neutral-800 px-4 py-2 rounded-lg border border-gray-200 dark:border-neutral-700">
+                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Analysis Date</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-gray-100">{prediction_for_date_short || display_timestamp}</p>
+              </div>
+            )}
           </div>
 
           {/* Manager Overview - What's Happening */}
@@ -701,7 +709,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
               <div className="flex-1">
                 <p className="text-blue-900 dark:text-blue-100 font-semibold mb-1">How Our Manager Works</p>
                 <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
-                  Our AI analyzes ~2,000 NSE stocks daily to find the best trading opportunities. It ranks them by conviction strength and selects the top performers based on your risk tolerance. 
+                  Our AI analyzes ~1,900 NSE stocks daily to find the best trading opportunities. It ranks them by conviction strength and selects the top performers based on institutional risk controls. 
                   Each trade shown below has been automatically sized based on market-cap, quality, and liquidity to maximize returns while protecting your capital. You can review every decision we made.
                 </p>
               </div>
@@ -709,47 +717,47 @@ const PortfolioDashboard = ({ onStockSelect }) => {
           </div>
 
           {/* Key Stats Summary Bar - Manager's Daily Work */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">📊</div>
-                <div className="flex-1">
-                  <p className="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold mb-1">Daily Analysis</p>
-                  <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">~{total_analyzed}</p>
-                  <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">Stocks screened</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <GlassCard variant="elevated" className="p-4 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl flex-shrink-0">📊</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold mb-0.5">Daily Analysis</p>
+                  <p className="text-xl md:text-2xl font-bold text-blue-900 dark:text-blue-100 truncate">~{total_analyzed}</p>
+                  <p className="text-xs text-blue-700 dark:text-blue-300">Stocks screened</p>
                 </div>
               </div>
             </GlassCard>
             
-            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/30 dark:to-emerald-900/20 border-emerald-200 dark:border-emerald-800">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">✅</div>
-                <div className="flex-1">
-                  <p className="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold mb-1">Executing Now</p>
-                  <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">{portfolio_summary.selected_for_execution}</p>
-                  <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-1">Active positions</p>
+            <GlassCard variant="elevated" className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/30 dark:to-emerald-900/20 border-emerald-200 dark:border-emerald-800">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl flex-shrink-0">✅</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold mb-0.5">Executing Now</p>
+                  <p className="text-xl md:text-2xl font-bold text-emerald-900 dark:text-emerald-100 truncate">{portfolio_summary.selected_for_execution}</p>
+                  <p className="text-xs text-emerald-700 dark:text-emerald-300">Active positions</p>
                 </div>
               </div>
             </GlassCard>
             
-            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/30 dark:to-amber-900/20 border-amber-200 dark:border-amber-800">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">⭐</div>
-                <div className="flex-1">
-                  <p className="text-xs text-amber-600 dark:text-amber-400 uppercase tracking-wider font-semibold mb-1">High Conviction</p>
-                  <p className="text-2xl font-bold text-amber-900 dark:text-amber-100">{portfolio_summary.high_conviction_not_selected}</p>
-                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">Strong buy signals</p>
+            <GlassCard variant="elevated" className="p-4 bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/30 dark:to-amber-900/20 border-amber-200 dark:border-amber-800">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl flex-shrink-0">⭐</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-amber-600 dark:text-amber-400 uppercase tracking-wider font-semibold mb-0.5">High Conviction</p>
+                  <p className="text-xl md:text-2xl font-bold text-amber-900 dark:text-amber-100 truncate">{portfolio_summary.high_conviction_not_selected}</p>
+                  <p className="text-xs text-amber-700 dark:text-amber-300">Strong signals</p>
                 </div>
               </div>
             </GlassCard>
             
-            <GlassCard variant="elevated" className="p-5 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 border-purple-200 dark:border-purple-800">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">🎯</div>
-                <div className="flex-1">
-                  <p className="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider font-semibold mb-1">Sectors</p>
-                  <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">{Object.keys(sector_breakdown).length}</p>
-                  <p className="text-xs text-purple-700 dark:text-purple-300 mt-1">Diversified</p>
+            <GlassCard variant="elevated" className="p-4 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 border-purple-200 dark:border-purple-800">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl flex-shrink-0">🎯</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider font-semibold mb-0.5">Sectors</p>
+                  <p className="text-xl md:text-2xl font-bold text-purple-900 dark:text-purple-100 truncate">{Object.keys(sector_breakdown).length}</p>
+                  <p className="text-xs text-purple-700 dark:text-purple-300">Diversified</p>
                 </div>
               </div>
             </GlassCard>
@@ -773,28 +781,25 @@ const PortfolioDashboard = ({ onStockSelect }) => {
         {/* Institutional Portfolio Management - Now in Drawer */}
         <motion.button
           onClick={() => setEducationDrawerOpen(true)}
-          whileHover={{ y: -2 }}
+          whileHover={{ y: -2, scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full mb-12 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-xl border-2 border-primary-200 dark:border-primary-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all group overflow-hidden"
+          className="w-full mb-8 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 dark:from-primary-600 dark:to-secondary-600 dark:hover:from-primary-500 dark:hover:to-secondary-500 rounded-xl shadow-lg hover:shadow-xl transition-all group overflow-hidden"
         >
-          <div className="p-8 flex items-center justify-between">
+          <div className="p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <div className="flex flex-col">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institutional Portfolio Management</h2>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Learn how Scrybe AI manages portfolios like an institutional fund manager</p>
+              <div className="text-left">
+                <p className="text-white font-bold text-lg mb-1">How Portfolio Manager Works</p>
+                <p className="text-white/90 text-sm">Learn about institutional-grade AI portfolio management</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-primary-600 dark:text-primary-400 font-semibold">
-              <span>Learn More</span>
-              <motion.span
-                animate={{ x: [0, 4, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                →
-              </motion.span>
+            <div className="flex items-center gap-2 text-white">
+              <span className="text-sm font-semibold group-hover:translate-x-1 transition-transform">Learn More</span>
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </div>
           </div>
         </motion.button>
@@ -899,7 +904,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             </div>
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
               <p className="text-sm text-blue-900 dark:text-blue-100">
-                <span className="font-semibold">📊 NSE Scale Context:</span> Portfolio adapts position count limits based on sector size in the NSE universe (~1900 stocks analyzed daily). Financials (~400 stocks, 25% of NSE) gets max 5 positions; Telecom (~35 stocks, 2% of NSE) gets max 1. This maintains proportional exposure while protecting capital.
+                <span className="font-semibold">📊 NSE Scale Context:</span> Portfolio adapts position limits based on sector size in the NSE universe (~1900 stocks analyzed daily). Large sectors get higher caps: Financials (~400 stocks, 21%) allows 5 positions; Industrials (~150 stocks, 8%) and Materials (~80 stocks, 4%) allow 3 positions each; Other (~675 stocks, 35%) allows 3 positions. Small sectors like Telecom (~5 stocks, 0.3%) are capped at 1 position. This maintains proportional exposure while preventing over-concentration.
               </p>
             </div>
           </GlassCard>
@@ -907,24 +912,24 @@ const PortfolioDashboard = ({ onStockSelect }) => {
 
         {/* Executed Trades Section */}
         {executed_trades.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <div className="mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Active Positions</h2>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">Top {executed_trades.length} highest conviction trades executing</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Active Positions</h2>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Top {executed_trades.length} highest conviction trades</p>
                 </div>
               </div>
-              <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800">
-                <span className="text-emerald-700 dark:text-emerald-300 font-semibold text-sm">{executed_trades.length}/{portfolio_summary.max_positions} slots filled</span>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 w-fit">
+                <span className="text-emerald-700 dark:text-emerald-300 font-semibold text-sm">{executed_trades.length}/{portfolio_summary.max_positions} filled</span>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {executed_trades.map((trade) => (
-                <ExecutedTradeCard key={trade._id} trade={trade} rank={trade.portfolio_rank || trade.global_rank} onStockSelect={onStockSelect} />
+              {executed_trades.map((trade, index) => (
+                <ExecutedTradeCard key={trade._id} trade={trade} rank={index + 1} onStockSelect={onStockSelect} />
               ))}
             </div>
           </div>

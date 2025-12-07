@@ -54,12 +54,12 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
   }
 
   return (
-    <div className="rounded-2xl p-5 mb-6 bg-orange-50 border border-orange-200 shadow-soft-lg dark:bg-orange-900/30 dark:border-orange-600/40">
+    <div className="rounded-xl p-6 mb-6 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 border border-amber-200 shadow-md hover:shadow-lg transition-shadow duration-300 dark:from-amber-900/20 dark:via-orange-900/20 dark:to-yellow-900/20 dark:border-amber-700/40">
       <div className="flex items-start gap-4">
         {/* Icon */}
-        <div className="flex-shrink-0 mt-1">
-          <div className="bg-orange-100 p-3 rounded-xl shadow-inner dark:bg-orange-800/40">
-            <CalendarX className="w-6 h-6 text-orange-600 dark:text-orange-300" />
+        <div className="flex-shrink-0">
+          <div className="bg-gradient-to-br from-amber-100 to-orange-100 p-3 rounded-xl shadow-sm dark:from-amber-800/40 dark:to-orange-800/40">
+            <CalendarX className="w-7 h-7 text-amber-600 dark:text-amber-300" />
           </div>
         </div>
 
@@ -67,26 +67,26 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-orange-700 font-bold text-lg mb-1 flex items-center gap-1 dark:text-orange-200">
+              <h3 className="text-amber-900 font-bold text-xl mb-2 flex items-center gap-2 dark:text-amber-100">
                 <span>🏖️ Market is Closed Today</span>
               </h3>
-              <p className="text-sm text-orange-800/90 mb-3 dark:text-orange-200/90">
+              <p className="text-sm text-amber-800 mb-4 dark:text-amber-200/90">
                 {holidayReason === 'Weekend' ? (
                   <>It's the weekend! Markets are closed for trading.</>
                 ) : (
                   <>Today is a market holiday ({holidayReason}).</>
                 )}
               </p>
-              <div className="flex items-center gap-2 bg-white border border-orange-200 rounded-lg px-3 py-2 inline-flex shadow-sm dark:bg-orange-900/40 dark:border-orange-600/40">
-                <span className="text-xs font-medium text-orange-600/90 dark:text-orange-300">Next Trading Day:</span>
-                <span className="text-xs font-semibold text-orange-800 dark:text-orange-100">{nextTradingDay}</span>
+              <div className="flex items-center gap-2 bg-white border border-amber-300 rounded-lg px-4 py-2.5 inline-flex shadow-sm dark:bg-amber-900/30 dark:border-amber-600/40">
+                <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Next Trading Day:</span>
+                <span className="text-sm font-bold text-amber-900 dark:text-amber-100">{nextTradingDay}</span>
               </div>
             </div>
 
             {/* Dismiss Button */}
             <button
               onClick={handleDismiss}
-              className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors p-1 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-800/30"
+              className="flex-shrink-0 text-amber-600 hover:text-amber-800 transition-all duration-200 p-1.5 rounded-lg hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-800/30 dark:hover:text-amber-200"
               aria-label="Dismiss holiday banner"
               title="Dismiss (will show again tomorrow)"
             >
@@ -95,10 +95,13 @@ const HolidayBanner = ({ isHoliday, holidayReason, nextTradingDay }) => {
           </div>
 
           {/* Additional Info */}
-          <div className="mt-4 pt-4 border-t border-orange-100 dark:border-orange-700/40">
-            <p className="text-xs text-orange-700/80 dark:text-orange-200/80">
-              ℹ️ <strong>Note:</strong> Analysis shown is from the last trading day. Fresh predictions will be available on the next trading day.
-            </p>
+          <div className="mt-4 pt-4 border-t border-amber-200/60 dark:border-amber-700/40">
+            <div className="flex items-start gap-2">
+              <span className="text-amber-600 dark:text-amber-400 text-base mt-0.5">ℹ️</span>
+              <p className="text-xs text-amber-800 leading-relaxed dark:text-amber-200/90">
+                <strong className="font-semibold">Note:</strong> Analysis shown is from the last trading day. Fresh predictions will be available on the next trading day.
+              </p>
+            </div>
           </div>
         </div>
       </div>
