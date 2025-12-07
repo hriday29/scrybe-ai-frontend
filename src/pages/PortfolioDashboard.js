@@ -856,7 +856,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                   'Infrastructure': { nse_count: 75, nse_pct: 5, max_positions: 2 },
                   'Materials': { nse_count: 110, nse_pct: 7, max_positions: 3 },
                   'Utilities': { nse_count: 45, nse_pct: 3, max_positions: 1 },
-                  'Other': { nse_count: 270, nse_pct: 17, max_positions: 5 }
+                  'Other': { nse_count: 270, nse_pct: 17, max_positions: 4 }
                 };
                 
                 const sectorData = nseContext[sector] || { nse_count: 100, nse_pct: 6, max_positions: 2 };
