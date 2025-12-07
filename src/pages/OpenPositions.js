@@ -111,6 +111,7 @@ const OpenPositions = ({ onAnalyze }) => {
                         currentUser
                     );
                     
+                    console.log('Capital Breakdown Data:', breakdownData);
                     setCapitalBreakdown(breakdownData);
                 } catch (err) {
                     console.warn('Error fetching capital breakdown:', err);
@@ -491,8 +492,17 @@ const OpenPositions = ({ onAnalyze }) => {
                                                 {showCapitalBreakdown ? 'Hide' : 'Show'} Capital Breakdown by Sector
                                             </button>
                                             
-                                            {showCapitalBreakdown && capitalBreakdown.positions && capitalBreakdown.positions.length > 0 && (
+                                            {showCapitalBreakdown && (
                                                 <div className="mt-3 space-y-3">
+                                                    {/* Debug info */}
+                                                    {(!capitalBreakdown.positions || capitalBreakdown.positions.length === 0) && (
+                                                        <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-800">
+                                                            <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                                                                No capital breakdown data available. Positions: {capitalBreakdown.positions?.length || 0}
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                    
                                                     {/* By Sector Distribution */}
                                                     {capitalBreakdown.distribution?.by_sector?.length > 0 && (
                                                         <div className="bg-white dark:bg-neutral-900 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
