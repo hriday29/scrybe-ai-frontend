@@ -262,40 +262,44 @@ export default function TrustMetricsShowcase() {
           {/* Collapsed State - Compact Banner */}
           <motion.button
             onClick={() => setExpanded(!expanded)}
-            className="w-full py-4 flex flex-col md:flex-row items-center justify-between gap-3 hover:bg-white/5 rounded-xl transition-all group px-4"
+            className="w-full py-5 flex flex-col md:flex-row items-center justify-between gap-4 hover:bg-white/5 rounded-2xl transition-all group px-6"
           >
             {/* Left Side - Key Metrics */}
-            <div className="flex items-center gap-4 md:gap-8 text-white flex-wrap justify-center md:justify-start">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <Award className="w-4 h-4 text-blue-400" />
-                <span className="text-xs font-semibold">BACKTESTING RESULTS</span>
+            <div className="flex items-center gap-3 md:gap-6 text-white flex-wrap justify-center md:justify-start">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl border border-blue-400/30 shadow-lg">
+                <Award className="w-5 h-5 text-blue-300" />
+                <span className="text-sm font-bold tracking-wide">VERIFIED BACKTEST</span>
               </div>
               
-              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
-                <TrendingUp className="w-5 h-5 text-green-400" />
+              <div className="flex items-center gap-3 px-5 py-3 bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm rounded-xl border-2 border-green-400/40 hover:border-green-400/60 transition-all shadow-xl">
+                <TrendingUp className="w-6 h-6 text-green-400" />
                 <div>
-                  <div className="text-2xl font-bold">+7.59%</div>
-                  <div className="text-xs opacity-60">Sep 2025</div>
+                  <div className="text-3xl font-extrabold text-green-400">+7.59%</div>
+                  <div className="text-xs font-medium text-green-300/80">September 2025</div>
                 </div>
               </div>
 
-              <div className="hidden md:block w-px h-10 bg-white/20" />
+              <div className="hidden md:block w-0.5 h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent" />
 
-              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
-                <Clock className="w-4 h-4 text-blue-400" />
+              <div className="flex items-center gap-3 px-4 py-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 hover:border-blue-400/40 transition-all">
+                <div className="bg-blue-500/20 p-2 rounded-lg">
+                  <Clock className="w-5 h-5 text-blue-300" />
+                </div>
                 <div>
-                  <div className="text-lg font-bold">&lt;15s</div>
-                  <div className="text-xs opacity-60">Analysis</div>
+                  <div className="text-xl font-bold">&lt;15s</div>
+                  <div className="text-xs text-gray-300">Fast Analysis</div>
                 </div>
               </div>
 
-              <div className="hidden md:block w-px h-10 bg-white/20" />
+              <div className="hidden md:block w-0.5 h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent" />
 
-              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/30 transition-all">
-                <BarChart3 className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center gap-3 px-4 py-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 hover:border-purple-400/40 transition-all">
+                <div className="bg-purple-500/20 p-2 rounded-lg">
+                  <BarChart3 className="w-5 h-5 text-purple-300" />
+                </div>
                 <div>
-                  <div className="text-lg font-bold">~2000</div>
-                  <div className="text-xs opacity-60">Stocks/Day</div>
+                  <div className="text-xl font-bold">~2,000</div>
+                  <div className="text-xs text-gray-300">Stocks Screened</div>
                 </div>
               </div>
             </div>
