@@ -24,35 +24,51 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
             transition={{ duration: 0.6 }}
             className="text-left"
           >
-            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-semibold mb-6 shadow-sm border border-primary-200 dark:border-primary-700">
               <Sparkles className="w-4 h-4" />
               Institutional-Grade AI Analysis
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
-              AI-Powered Analysis for{' '}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight mb-4">
+              AI-Powered Stock Selection for{' '}
               <span className="bg-gradient-to-r from-primary-500 to-secondary-500 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent">
-                NSE Universe
+                NSE India
               </span>
             </h1>
             
-            <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-              Scrybe AI analyzes all stocks in the NSE daily using our proprietary Scrybe Score system, 
-              selecting only the top 10 highest-conviction trades with institutional risk controls.
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl font-medium">
+              Daily AI analysis of <span className="font-bold text-gray-800 dark:text-gray-200">~2,000 NSE stocks</span> distilled into{' '}
+              <span className="font-bold text-primary-600 dark:text-primary-400">Top 10 highest-conviction trades</span>{' '}
+              using our proprietary Scrybe Score system and institutional risk management.
             </p>
 
             {/* Key Points */}
-            <div className="mt-8 space-y-3">
+            <div className="mt-8 space-y-4">
               {[
-                { icon: Brain, text: 'Daily analysis of NSE stocks with AI-powered scoring' },
-                { icon: TrendingUp, text: 'Top 10 selection based on technical + fundamental analysis' },
-                { icon: Shield, text: 'Professional risk management: 2% max risk per trade' },
+                { 
+                  icon: Brain, 
+                  text: 'Daily AI analysis of entire NSE universe',
+                  subtext: '~2,000 stocks screened with 15+ technical indicators'
+                },
+                { 
+                  icon: TrendingUp, 
+                  text: 'Top 10 highest-conviction trades only',
+                  subtext: 'Institutional Grade Analysis • Scrybe Score • Market Regime Detection'
+                },
+                { 
+                  icon: Shield, 
+                  text: 'Institutional risk management built-in',
+                  subtext: '2% max risk per trade • Portfolio diversification'
+                },
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                <div key={idx} className="flex items-start gap-4 group">
+                  <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm border border-primary-200 dark:border-primary-700">
+                    <item.icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">{item.text}</span>
+                  <div>
+                    <span className="text-base font-semibold text-gray-800 dark:text-gray-200 block">{item.text}</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{item.subtext}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -61,16 +77,49 @@ const HeroSection = ({ onGetStarted, onWatchDemo }) => {
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <button
                 onClick={onGetStarted}
-                className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                className="group px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden"
               >
-                Start Free Trial
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Start Free Trial
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
               <button
                 onClick={onWatchDemo}
-                className="px-8 py-4 bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl border-2 border-gray-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
+                className="group px-8 py-4 bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl border-2 border-gray-200 dark:border-neutral-700 hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-lg"
               >
-                See Live Demo
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  See Live Demo
+                </span>
               </button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">No credit card required</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Real-time NSE data</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Updated daily</span>
+              </div>
             </div>
           </motion.div>
 
