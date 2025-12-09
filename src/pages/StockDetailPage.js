@@ -36,11 +36,13 @@ const StockDetailPage = ({ ticker, onBackClick }) => {
 
     return (
         <div>
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-6 shadow-lg mb-8">
-                <button onClick={onBackClick} className="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors">
-                    <ArrowLeft size={16} className="mr-2" />Back to List
-                </button>
-            </div>
+            <button 
+                onClick={onBackClick} 
+                className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors mb-4 text-sm font-medium group"
+            >
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                <span>Back to List</span>
+            </button>
 
             <ApexAnalysisDashboard analysisData={analysis} />
         </div>

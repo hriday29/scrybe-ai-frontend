@@ -861,7 +861,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
                   'Infrastructure': { nse_count: 75, nse_pct: 5, max_positions: 2 },
                   'Materials': { nse_count: 110, nse_pct: 7, max_positions: 3 },
                   'Utilities': { nse_count: 45, nse_pct: 3, max_positions: 1 },
-                  'Other': { nse_count: 655, nse_pct: 34, max_positions: 3 }
+                  'Other': { nse_count: 655, nse_pct: 34, max_positions: 5 }
                 };
                 
                 const sectorData = nseContext[sector] || { nse_count: 100, nse_pct: 6, max_positions: 2 };
@@ -904,7 +904,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             </div>
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
               <p className="text-sm text-blue-900 dark:text-blue-100">
-                <span className="font-semibold">📊 NSE Scale Context:</span> Portfolio adapts position limits based on sector size in the NSE universe (~1900 stocks analyzed daily). Large sectors get higher caps: Financials (~400 stocks, 21%) allows 5 positions; Industrials (~150 stocks, 8%) and Materials (~80 stocks, 4%) allow 3 positions each; Other (~675 stocks, 35%) allows 3 positions. Small sectors like Telecom (~5 stocks, 0.3%) are capped at 1 position. This maintains proportional exposure while preventing over-concentration.
+                <span className="font-semibold">📊 NSE Scale Context:</span> Portfolio adapts position limits based on sector size in the NSE universe (~1900 stocks analyzed daily). Large sectors get higher caps: Financials (~400 stocks, 21%) and Other (~655 stocks, 34%) allow 5 positions each; Industrials, Healthcare, Consumer, and Materials allow 3 positions each. Small sectors like Telecom (~35 stocks, 2%) are capped at 1 position. This maintains proportional exposure while preventing over-concentration.
               </p>
             </div>
           </GlassCard>
