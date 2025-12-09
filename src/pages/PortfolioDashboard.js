@@ -190,22 +190,22 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
               <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">📈 Shares to Buy</p>
-              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing.shares || 'N/A'}</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing?.shares || 'N/A'}</p>
               <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">@ ₹{trade.entry_price?.toFixed(2)} each</p>
             </div>
             <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
               <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">💰 Capital Required</p>
-              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">₹{trade.position_sizing.capital_deployed?.toLocaleString('en-IN') || 'N/A'}</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">₹{trade.position_sizing?.capital_deployed?.toLocaleString('en-IN') || 'N/A'}</p>
               <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">From your fund</p>
             </div>
             <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-indigo-100 dark:border-indigo-800">
               <p className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-1">📊 Portfolio Weight</p>
-              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing.portfolio_percentage?.toFixed(2)}%</p>
+              <p className="text-indigo-900 dark:text-indigo-100 font-bold text-base">{trade.position_sizing?.portfolio_percentage?.toFixed(2) || 'N/A'}%</p>
               <p className="text-indigo-600 dark:text-indigo-400 text-xs mt-1">Of total portfolio</p>
             </div>
             <div className="bg-white dark:bg-neutral-800 rounded p-2.5 border border-rose-100 dark:border-rose-800">
               <p className="text-rose-600 dark:text-rose-400 text-xs font-semibold mb-1">⚠️ Maximum Risk</p>
-              <p className="text-rose-700 dark:text-rose-300 font-bold text-base">₹{trade.position_sizing.risk_amount?.toLocaleString('en-IN') || 'N/A'}</p>
+              <p className="text-rose-700 dark:text-rose-300 font-bold text-base">₹{trade.position_sizing?.risk_amount?.toLocaleString('en-IN') || 'N/A'}</p>
               <p className="text-rose-600 dark:text-rose-400 text-xs mt-1">If stop loss hit</p>
             </div>
           </div>
@@ -954,7 +954,7 @@ const PortfolioDashboard = ({ onStockSelect }) => {
             <div className="flex gap-3 mb-6 flex-wrap">
               {[
                 { id: 'executed', label: 'Executed', count: executed_trades.length, color: 'emerald' },
-                { id: 'not-selected', label: 'Not Selected', count: portfolioData.all_analyses.filter(a => !a.is_executed && a.signal !== 'HOLD').length, color: 'amber' },
+                { id: 'not-selected', label: 'Not Selected (Top 100)', count: Math.min(100, portfolioData.all_analyses.filter(a => !a.is_executed && (a.scrybeScore >= 45 || a.scrybeScore <= -45)).length), color: 'amber' },
                 { id: 'all', label: 'All Analyses', count: total_analyzed, color: 'blue' }
               ].map(tab => (
                 <button

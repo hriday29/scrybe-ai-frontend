@@ -111,13 +111,32 @@ const OpenPositions = ({ onAnalyze }) => {
                         currentUser
                     );
                     
-                    console.log('Capital Breakdown Data:', breakdownData);
-                    setCapitalBreakdown(breakdownData);
+                    console.log('✅ Capital Breakdown Data:', breakdownData);
+                    console.log('   Positions count:', breakdownData?.positions?.length || 0);
+                    console.log('   Total capital:', breakdownData?.total_capital_deployed || 0);
+                    
+                    // CRITICAL FIX: Ensure proper structure even if backend returns unexpected format
+                    if (breakdownData && typeof breakdownData === 'object') {
+                        setCapitalBreakdown(breakdownData);
+                    } else {
+                        console.warn('⚠️ Invalid breakdown structure, using fallback');
+                        setCapitalBreakdown({
+                            positions: data,
+                            total_capital_deployed: 0,
+                            total_capital_at_risk: 0,
+                            portfolio_metrics: { positions_count: data.length, avg_return_pct: 0, avg_position_age_days: 0 },
+                            distribution: { by_sector: [], by_market_cap: [], by_age_bucket: [], by_conviction: [] }
+                        });
+                    }
                 } catch (err) {
-                    console.warn('Error fetching capital breakdown:', err);
-                    // Fallback to empty structure
+                    console.error('❌ Error fetching capital breakdown:', err);
+                    console.error('   Error details:', err.message);
+                    // Fallback to using open trades data
                     setCapitalBreakdown({
                         positions: data,
+                        total_capital_deployed: 0,
+                        total_capital_at_risk: 0,
+                        portfolio_metrics: { positions_count: data.length, avg_return_pct: 0, avg_position_age_days: 0 },
                         distribution: { by_sector: [], by_market_cap: [], by_age_bucket: [], by_conviction: [] }
                     });
                 }
@@ -393,7 +412,7 @@ const OpenPositions = ({ onAnalyze }) => {
                             <div className="w-1.5 h-10 bg-gradient-to-b from-primary-500 to-primary-600 rounded-full"></div>
                             <div>
                                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                                    Fund Dashboard
+                                    Scrybe Fund Dashboard
                                 </h1>
                                 <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                                     Real-time monitoring of active positions & execution

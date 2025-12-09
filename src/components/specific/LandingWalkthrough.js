@@ -50,7 +50,7 @@ const LandingWalkthrough = ({
       description:
         "Every trading day, Scrybe AI analyzes all stocks in the NSE universe. Using our proprietary 'Scrybe Score' system (-100 to +100), the AI evaluates each stock's technical setup, fundamentals, and market context to identify the best opportunities in the Indian equity market.",
       links: [
-        { text: "Launch Portfolio Manager", action: () => handleLaunchAndNavigate(2) },
+        { text: "Launch Scrybe Portfolio Manager", action: () => handleLaunchAndNavigate(2) },
         { text: "Read the Full Strategy", action: onUserGuideOpen },
       ],
     },
@@ -62,7 +62,7 @@ const LandingWalkthrough = ({
         "Out of all daily analyses, only the top 10 highest-conviction trades that pass institutional risk controls are selected for execution. Our Portfolio Manager enforces strict rules: max 10 positions, 2% max risk per stock, and conviction-driven diversification—just like professional fund managers.",
       links: [
         { text: "See a Live Demo", action: onDemoOpen },
-        { text: "View Fund Dashboard", action: () => handleLaunchAndNavigate(3) },
+        { text: "View Scrybe Fund Dashboard", action: () => handleLaunchAndNavigate(3) },
       ],
     },
     {

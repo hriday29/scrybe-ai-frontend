@@ -38,7 +38,7 @@ const AppGuide = ({ navigateToTab }) => {
       }
     },
     {
-      title: "Portfolio Manager",
+      title: "Scrybe Portfolio Manager",
       description:
         "Institutional-grade portfolio construction and management. View all daily analyzed stocks with the AI's top 10 highest-conviction trades selected for execution. Complete transparency into portfolio decisions, sector allocation, and risk controls.",
       benefit:
@@ -55,7 +55,7 @@ const AppGuide = ({ navigateToTab }) => {
       }
     },
     {
-      title: "Fund Dashboard",
+      title: "Scrybe Fund Dashboard",
       description:
         "Real-time monitoring dashboard of your active positions. Track entry prices, targets, stop-losses, and live P&L with institutional-grade position tracking and execution management.",
       benefit:
