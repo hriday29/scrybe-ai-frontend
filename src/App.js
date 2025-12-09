@@ -817,7 +817,9 @@ const AITrackRecord = () => {
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <div className="font-bold text-lg text-gray-900 dark:text-white">{trade.ticker}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">{trade.companyName}</div>
+                      {trade.companyName && (
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{trade.companyName}</div>
+                      )}
                     </div>
                     <span className={`inline-block px-3 py-1 rounded-lg text-xs font-semibold ${signalColor}`}>
                       {trade.signal}
@@ -919,7 +921,9 @@ const AITrackRecord = () => {
                         <td className="p-4">
                           <div>
                             <div className="text-gray-900 dark:text-white font-bold">{trade.ticker}</div>
-                            <div className="text-gray-600 dark:text-gray-400 text-xs">{trade.companyName || 'N/A'}</div>
+                            {trade.companyName && (
+                              <div className="text-gray-600 dark:text-gray-400 text-xs">{trade.companyName}</div>
+                            )}
                             {trade.is_sector_override && (
                               <div className="text-xs text-amber-600 dark:text-amber-400 font-semibold mt-1">🔄 Sector Override</div>
                             )}
