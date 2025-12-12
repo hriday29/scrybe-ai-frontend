@@ -144,6 +144,7 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
     const scoreText = scrybeScore > 0 ? `+${scrybeScore}` : scrybeScore;
 
     return (
+        <>
         <div className="w-full max-w-5xl mx-auto p-4 md:p-8 animate-fadeIn space-y-8">
             <div>
                 {/* Back Button - Inline with header */}
@@ -714,6 +715,7 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
             signal={signal}
             scrybeScore={scrybeScore}
         />
+        </>
     );
 };
 
