@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Brain, Activity, Shield, Info } from 'lucide-react';
+import { TrendingUp, Brain, Activity, Shield, Info } from 'lucide-react';
 import Modal from '../ui/Modal';
 
 /**
@@ -71,25 +71,17 @@ const ScoreBreakdownModal = ({ isOpen, onClose, scoreBreakdown, signal, scrybeSc
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} size="lg">
-      <div className="relative">
+    <Modal open={isOpen} onClose={onClose} maxWidth="max-w-3xl" showClose={true}>
+      <div className="relative max-h-[80vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-start justify-between mb-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <Brain className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              AI Score Breakdown
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Understanding how our AI arrived at this decision
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-          </button>
+        <div className="mb-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+            <Brain className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            AI Score Breakdown
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Understanding how our AI arrived at this decision
+          </p>
         </div>
 
         {/* Final Score & Signal */}
