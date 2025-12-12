@@ -2,6 +2,11 @@
 // Set to true to enable payment gating, false to disable
 export const PAYMENT_GATING_ENABLED = false;
 
+// Profile lock configuration - locks user to profile page only
+// When enabled, users can ONLY access the profile page and cannot navigate anywhere else
+// Set to true to lock users to profile page, false to allow normal navigation
+export const PROFILE_LOCK_ENABLED = false;
+
 // Payment configuration
 export const PAYMENT_CONFIG = {
   enabled: PAYMENT_GATING_ENABLED,
