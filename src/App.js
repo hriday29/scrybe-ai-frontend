@@ -60,7 +60,7 @@ import NewLegalNotice from './pages/legal/NewLegalNotice.js';
 import { useAuth } from './context/AuthContext.js';
 import ProfilePage from './pages/ProfilePage.js';
 import { isPaymentComplete } from './utils/paymentStatus.js';
-import { PROFILE_LOCK_ENABLED } from './config/payment.js';
+import { PROFILE_LOCK_ENABLED } from './config/payment';
 import { API_BASE_URL } from './apiConfig.js';
 import { apexDemoData } from './utils/demoData.js';
 import { MAINTENANCE_CONFIG } from './config/maintenance.js';
