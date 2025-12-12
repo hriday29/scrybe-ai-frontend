@@ -71,7 +71,7 @@ const ScoreBreakdownModal = ({ isOpen, onClose, scoreBreakdown, signal, scrybeSc
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal open={isOpen} onClose={onClose} size="lg">
       <div className="relative">
         {/* Header */}
         <div className="flex items-start justify-between mb-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
