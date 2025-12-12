@@ -1,5 +1,6 @@
 // src/components/specific/ApexAnalysisDashboard.js
 
+import { useState } from 'react';
 import { Target, ShieldAlert, CheckCircle, XCircle, Info, TrendingUp, Rss, BarChart, BarChart3, Zap, Activity, Calculator, Layers, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Market-wide indicators moved to main dashboard (App.js)
@@ -19,6 +20,7 @@ import FundamentalSnapshotCard from './FundamentalSnapshotCard';
 import AIObservationSummary from './AIObservationSummary';
 import CollapsibleSection from '../common/CollapsibleSection';
 import { useAuth } from '../../context/AuthContext';
+import ScoreBreakdownModal from './ScoreBreakdownModal';
 
 // =========================================================================
 // Helper & Display Components
@@ -101,6 +103,8 @@ const TradePlanCard = ({ plan }) => (
 
 const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
     const { currentUser } = useAuth();
+    const [showScoreBreakdown, setShowScoreBreakdown] = useState(false);
+    
     if (!analysisData) { return <div className="text-center p-8 text-slate-600 dark:text-slate-400">No analysis data available.</div>; }
 
     const {
@@ -115,7 +119,8 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
         options_sentiment_analysis,
         fundamental_proxy_analysis,
         volatility_futures_data,
-        market_context = null
+        market_context = null,
+        score_breakdown = null
     } = analysisData;
     
     const safe_options = options_sentiment_analysis || {};
@@ -182,7 +187,18 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className={`text-center p-6 rounded-lg border ${getSignalStyle(signal)}`}>
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2">Signal</p>
-                    <p className="text-3xl font-bold">{signal}</p>
+                    <div className="flex items-center justify-center gap-2">
+                        <p className="text-3xl font-bold">{signal}</p>
+                        {score_breakdown && (
+                            <button
+                                onClick={() => setShowScoreBreakdown(true)}
+                                className="p-1.5 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 rounded-full transition-colors"
+                                title="View Score Breakdown"
+                            >
+                                <Info className="w-5 h-5" />
+                            </button>
+                        )}
+                    </div>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                     <p className="text-sm font-semibold uppercase tracking-wider mb-2 text-slate-600 dark:text-slate-400">Scrybe Score</p>
@@ -689,6 +705,15 @@ const ApexAnalysisDashboard = ({ analysisData, handleResetAnalysis }) => {
                 </div>
             </div>
         </div>
+        
+        {/* Score Breakdown Modal */}
+        <ScoreBreakdownModal
+            isOpen={showScoreBreakdown}
+            onClose={() => setShowScoreBreakdown(false)}
+            scoreBreakdown={score_breakdown}
+            signal={signal}
+            scrybeScore={scrybeScore}
+        />
     );
 };
 

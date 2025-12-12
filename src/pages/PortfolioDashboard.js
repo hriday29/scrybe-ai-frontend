@@ -3,13 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertTriangle, CheckCircle, 
   XCircle, Filter, Search, ArrowUpCircle, ArrowDownCircle,
-  PieChart, BarChart3, Activity, Eye, Target, Shield, X, BookOpen, Info
+  PieChart, BarChart3, Activity, Eye, Target, Shield, X, BookOpen
 } from 'lucide-react';
 import { API_BASE_URL } from '../apiConfig';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
 import PaymentManager from '../components/specific/PaymentManager';
-import ScoreBreakdownModal from '../components/specific/ScoreBreakdownModal';
 import { useAuth } from '../context/AuthContext';
 
 const GlassCard = ({ className = '', children, onClick, variant = 'default' }) => {
@@ -121,17 +120,10 @@ const SignalBadge = ({ signal, size = 'md' }) => {
 };
 
 const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
-  const [showScoreBreakdown, setShowScoreBreakdown] = useState(false);
-
   const handleClick = () => {
     if (onStockSelect) {
       onStockSelect(trade.ticker);
     }
-  };
-
-  const handleBreakdownClick = (e) => {
-    e.stopPropagation();
-    setShowScoreBreakdown(true);
   };
 
   const riskReward = trade.target && trade.entry_price && trade.stop_loss
@@ -139,8 +131,7 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
     : null;
 
   return (
-    <>
-      <GlassCard variant="elevated" className="p-6 group" onClick={handleClick}>
+    <GlassCard variant="elevated" className="p-6 group" onClick={handleClick}>
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -157,15 +148,6 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
           </div>
           <div className="flex items-center gap-2">
             <SignalBadge signal={trade.signal} size="lg" />
-            {trade.score_breakdown && (
-              <button
-                onClick={handleBreakdownClick}
-                className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 transition-colors group/btn"
-                title="View AI Score Breakdown"
-              >
-                <Info className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-              </button>
-            )}
           </div>
         </div>
       
@@ -288,18 +270,6 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
       {/* Hover Effect Indicator */}
       <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-primary-500 dark:group-hover:border-primary-400 transition-all pointer-events-none"></div>
     </GlassCard>
-
-    {/* Score Breakdown Modal */}
-    {trade.score_breakdown && (
-      <ScoreBreakdownModal
-        isOpen={showScoreBreakdown}
-        onClose={() => setShowScoreBreakdown(false)}
-        scoreBreakdown={trade.score_breakdown}
-        signal={trade.signal}
-        scrybeScore={trade.scrybe_score}
-      />
-    )}
-  </>
   );
 };
 
