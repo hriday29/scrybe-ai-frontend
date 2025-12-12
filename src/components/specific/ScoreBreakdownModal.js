@@ -72,7 +72,7 @@ const ScoreBreakdownModal = ({ isOpen, onClose, scoreBreakdown, signal, scrybeSc
 
   return (
     <Modal open={isOpen} onClose={onClose} maxWidth="max-w-3xl" showClose={true}>
-      <div className="relative max-h-[80vh] overflow-y-auto">
+      <div className="relative max-h-[80vh] overflow-y-auto pr-8">
         {/* Header */}
         <div className="mb-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
           <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
