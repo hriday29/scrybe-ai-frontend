@@ -60,6 +60,7 @@ import NewLegalNotice from './pages/legal/NewLegalNotice.js';
 import { useAuth } from './context/AuthContext.js';
 import ProfilePage from './pages/ProfilePage.js';
 import { isPaymentComplete } from './utils/paymentStatus.js';
+import { PROFILE_LOCK_ENABLED } from './config/payment.js';
 import { API_BASE_URL } from './apiConfig.js';
 import { apexDemoData } from './utils/demoData.js';
 import { MAINTENANCE_CONFIG } from './config/maintenance.js';
@@ -1403,7 +1404,7 @@ export default function App() {
                   key={label}
                   title={tooltip}
                   className={({ selected }) =>
-                    `px-6 py-2.5 text-md font-medium rounded-xl transition-all outline-none border focus-visible:ring-2 focus-visible:ring-primary-300 ${
+                    `px-6 py-2.5 text-md font-medium rounded-xl transition-all outline-none border focus:outline-none focus-visible:ring-0 select-none ${
                       selected
                         ? "bg-primary-50 text-primary-700 border-primary-200"
                         : "bg-white text-gray-600 hover:bg-gray-50 border-transparent"
@@ -1668,7 +1669,8 @@ export default function App() {
               {view === "app" ? (
                 <>
                   {/* Payment gating: show ProfilePage if not paid */}
-                  {currentUser && !isPaymentComplete(currentUser) ? (
+                  {/* Profile lock: lock user to profile page only when PROFILE_LOCK_ENABLED is true */}
+                  {currentUser && (!isPaymentComplete(currentUser) || PROFILE_LOCK_ENABLED) ? (
                     <ProfilePage />
                   ) : (
                     <>
