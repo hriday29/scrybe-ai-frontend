@@ -9,6 +9,7 @@ import { API_BASE_URL } from '../apiConfig';
 import MarketRegimeCard from '../components/specific/MarketRegimeCard';
 import SectorHeatmapCard from '../components/specific/SectorHeatmapCard';
 import PaymentManager from '../components/specific/PaymentManager';
+import MilestoneTracker from '../components/MilestoneTracker';
 import { useAuth } from '../context/AuthContext';
 
 const GlassCard = ({ className = '', children, onClick, variant = 'default' }) => {
@@ -266,6 +267,12 @@ const ExecutedTradeCard = ({ trade, rank, onStockSelect }) => {
           </div>
         </div>
       )}
+
+      {/* Milestone Tracker - Price Movement Milestones (25%, 50%, 75%) */}
+      <MilestoneTracker 
+        trade={trade} 
+        currentPrice={trade.current_price || trade.entry_price}
+      />
 
       {/* Hover Effect Indicator */}
       <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-primary-500 dark:group-hover:border-primary-400 transition-all pointer-events-none"></div>
